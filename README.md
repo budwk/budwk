@@ -56,9 +56,9 @@ https://wizzer.cn/donation  赞助者
 |[wk-nb-service-wx](wk-nb-service-wx) |微信管理模块,dubbo服务端,NB项目,微信及微信支付功能演示|
 |[wk-nb-service-slog](wk-nb-service-slog) |SLog日志服务,dubbo服务端,NB项目|
 |[wk-nb-task](wk-nb-task) |定时任务模块,dubbo服务端,NB项目,支持quartz集群|
-|[wk-nb-api-open](wk-nb-api-openi) |API Sign/JWT Token示例,dubbo消费端,NB项目,Mvc|
+|[wk-nb-api-open](wk-nb-api-open) |API Sign/JWT Token示例,dubbo消费端,NB项目,Mvc|
 |[wk-nb-api-daemon](wk-nb-api-daemon) |应用管理服务守护API,dubbo消费端,NB项目,Mvc|
-|[wk-nb-web-admin](wk-nb-web-vue) |WEB管理后台Vue.js混合版,dubbo消费端,NB项目,Mvc|
+|[wk-nb-web-admin](wk-nb-web-admin) |WEB管理后台API服务,dubbo消费端,NB项目,Mvc|
 
 ## 技术选型
 ### 后端技术
