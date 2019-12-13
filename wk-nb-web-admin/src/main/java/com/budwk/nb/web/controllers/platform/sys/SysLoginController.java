@@ -131,6 +131,7 @@ public class SysLoginController {
                             .add("loginCount", count + 1)
                     , Cnd.where("id", "=", user.getId()));
             Sys_log sysLog = new Sys_log();
+            sysLog.setId(R.UU32());
             sysLog.setType("info");
             sysLog.setTag("用户登陆");
             sysLog.setSrc(this.getClass().getName() + "#doLogin");
@@ -139,6 +140,9 @@ public class SysLoginController {
             sysLog.setUserAgent(req.getHeader("User-Agent"));
             sysLog.setCreatedBy(user.getId());
             sysLog.setUpdatedBy(user.getId());
+            sysLog.setCreatedAt(Times.now().getTime());
+            sysLog.setUpdatedAt(Times.now().getTime());
+            sysLog.setDelFlag(false);
             sysLog.setUsername(user.getUsername());
             sysLog.setLoginname(user.getLoginname());
             sLogServer.async(sysLog);
@@ -199,6 +203,7 @@ public class SysLoginController {
             currentUser.logout();
             if (user != null) {
                 Sys_log sysLog = new Sys_log();
+                sysLog.setId(R.UU32());
                 sysLog.setType("info");
                 sysLog.setTag("用户登出");
                 sysLog.setSrc(this.getClass().getName() + "#logout");
@@ -206,6 +211,9 @@ public class SysLoginController {
                 sysLog.setIp(Lang.getIP(req));
                 sysLog.setCreatedBy(user.getId());
                 sysLog.setUpdatedBy(user.getId());
+                sysLog.setCreatedAt(Times.now().getTime());
+                sysLog.setUpdatedAt(Times.now().getTime());
+                sysLog.setDelFlag(false);
                 sysLog.setLoginname(user.getLoginname());
                 sysLog.setUsername(user.getUsername());
                 sLogServer.async(sysLog);

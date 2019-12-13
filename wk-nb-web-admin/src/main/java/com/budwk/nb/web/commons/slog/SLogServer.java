@@ -11,6 +11,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
+import org.nutz.lang.Times;
+import org.nutz.lang.random.R;
 import org.nutz.lang.segment.CharSegment;
 import org.nutz.lang.util.ClassMetaReader;
 import org.nutz.lang.util.Context;
@@ -218,6 +220,7 @@ public class SLogServer implements Runnable {
             }
 
         }
+        sysLog.setId(R.UU32());
         sysLog.setType(type);
         sysLog.setTag(tag);
         sysLog.setSrc(source);
@@ -229,7 +232,9 @@ public class SLogServer implements Runnable {
             sysLog.setUserAgent(Mvcs.getReq().getHeader("User-Agent"));
         }
         sysLog.setCreatedBy(StringUtil.getPlatformUid());
+        sysLog.setCreatedAt(Times.now().getTime());
         sysLog.setUpdatedBy(StringUtil.getPlatformUid());
+        sysLog.setUpdatedAt(Times.now().getTime());
         sysLog.setDelFlag(false);
         sysLog.setLoginname(StringUtil.getPlatformLoginname());
         sysLog.setUsername(StringUtil.getPlatformUsername());
