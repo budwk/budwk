@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/../wk-module/target/classes" />
+    <output-test url="file://$MODULE_DIR$/../wk-module/target/test-classes" />
+    <content url="file://$MODULE_DIR$/src/main/resources">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/../wk-module">
+      <sourceFolder url="file://$MODULE_DIR$/../wk-module/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../wk-module/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+      <excludeFolder url="file://$MODULE_DIR$/../wk-module/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="wk-common" />
+    <orderEntry type="library" name="Maven: org.nutz:nutz-integration-json4excel:1.r.68-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.nutz:nutz:1.r.68-SNAPSHOT" level="project" />
+  </component>
+</module>
