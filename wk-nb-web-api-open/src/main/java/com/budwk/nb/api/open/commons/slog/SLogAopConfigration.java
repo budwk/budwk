@@ -1,4 +1,4 @@
-package com.budwk.nb.web.commons.slog;
+package com.budwk.nb.api.open.commons.slog;
 
 import com.budwk.nb.commons.annotation.SLog;
 import org.nutz.aop.MethodInterceptor;
