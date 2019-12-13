@@ -2,9 +2,9 @@ package com.budwk.nb.web.controllers.platform.sys;
 
 import com.budwk.nb.sys.models.Sys_dict;
 import com.budwk.nb.sys.services.SysDictService;
-import com.budwk.nb.web.commons.slog.annotation.SLog;
-import com.budwk.nb.web.commons.utils.StringUtil;
-import com.budwk.nb.framework.base.Result;
+import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.commons.base.Result;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;

@@ -1,9 +1,9 @@
 package com.budwk.nb.web.commons.ext.wx;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.app.web.commons.base.Globals;
-import com.budwk.nb.app.wx.modules.models.Wx_config;
-import com.budwk.nb.app.wx.modules.services.WxConfigService;
+import com.budwk.nb.web.commons.base.Globals;
+import com.budwk.nb.wx.models.Wx_config;
+import com.budwk.nb.wx.services.WxConfigService;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

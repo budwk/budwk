@@ -1,19 +1,19 @@
 var chain={
 	"default" : {
 		"ps" : [
-			  "com.budwk.nb.web.admin.commons.processor.LogTimeProcessor",
-			  "com.budwk.nb..web.admin.commons.processor.GlobalsSettingProcessor",
+			  "com.budwk.nb.web.commons.processor.LogTimeProcessor",
+			  "com.budwk.nb.web.commons.processor.GlobalsSettingProcessor",
 			  "org.nutz.mvc.impl.processor.UpdateRequestAttributesProcessor",
 		      "org.nutz.mvc.impl.processor.EncodingProcessor",
 		      "org.nutz.mvc.impl.processor.ModuleProcessor",
-			  "com.budwk.nb.web.admin.commons.processor.WkUserTokenProcessor",
-			  "com.budwk.nb.web.admin.commons.processor.WkShiroProcessor",
-              "com.budwk.nb.web.admin.commons.processor.XssSqlFilterProcessor",
+			  "com.budwk.nb.web.commons.processor.WkUserTokenProcessor",
+			  "com.budwk.nb.web.commons.processor.WkShiroProcessor",
+              "com.budwk.nb.web.commons.processor.XssSqlFilterProcessor",
 		      "org.nutz.mvc.impl.processor.ActionFiltersProcessor",
 		      "org.nutz.mvc.impl.processor.AdaptorProcessor",
 		      "org.nutz.mvc.impl.processor.MethodInvokeProcessor",
 			  "org.nutz.mvc.impl.processor.ViewProcessor"
 		],
-		"error" : 'com.budwk.nb.web.admin.commons.processor.WkFailProcessor'
+		"error" : 'com.budwk.nb.web.commons.processor.WkFailProcessor'
 	}
 };

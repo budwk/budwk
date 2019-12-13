@@ -1,7 +1,7 @@
 package com.budwk.nb.web.commons.shiro.filter;
 
 
-import com.budwk.nb.app.web.commons.shiro.token.PlatformCaptchaToken;
+import com.budwk.nb.web.commons.shiro.token.PlatformCaptchaToken;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;

@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.processor;
 
-import com.budwk.nb.framework.base.Result;
+import com.budwk.nb.commons.base.Result;
 import org.nutz.integration.shiro.NutShiro;
 import org.nutz.ioc.IocException;
 import org.nutz.log.Log;

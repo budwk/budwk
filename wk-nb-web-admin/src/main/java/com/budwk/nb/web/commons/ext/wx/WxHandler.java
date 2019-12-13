@@ -1,8 +1,8 @@
 package com.budwk.nb.web.commons.ext.wx;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.app.wx.modules.models.*;
-import com.budwk.nb.app.wx.modules.services.*;
+import com.budwk.nb.wx.models.*;
+import com.budwk.nb.wx.services.*;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.nutz.dao.Chain;

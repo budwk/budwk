@@ -71,7 +71,7 @@ public class SLogServer implements Runnable {
         try {
             sLogSerivce.create(syslog);
         } catch (Throwable e) {
-            log.info("create syslog sync fail", e);
+            log.error("create syslog sync fail", e);
         }
     }
 

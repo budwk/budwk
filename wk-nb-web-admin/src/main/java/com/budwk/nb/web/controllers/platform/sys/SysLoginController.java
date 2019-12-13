@@ -60,8 +60,6 @@ public class SysLoginController {
     private SLogServer sLogServer;
     @Inject
     private RedisService redisService;
-    @Inject
-    private StringUtil stringUtil;
 
     @Inject("java:$conf.getInt('shiro.session.cache.redis.ttl')")
     private int RedisKeySessionTTL;
@@ -145,7 +143,7 @@ public class SysLoginController {
             sysLog.setLoginname(user.getLoginname());
             sLogServer.async(sysLog);
             long now = Times.getTS();
-            String userToken = stringUtil.generateUserToken(user.getId(), now, "budwk.com");
+            String userToken = StringUtil.generateUserToken(user.getId(), now, "budwk.com");
             session.setAttribute("userToken", userToken);
             session.setAttribute("userId", user.getId());
             redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":" + userToken, RedisKeySessionTTL, session.getId());

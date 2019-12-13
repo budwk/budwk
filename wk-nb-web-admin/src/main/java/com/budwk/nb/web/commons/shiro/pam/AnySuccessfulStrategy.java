@@ -1,7 +1,7 @@
 package com.budwk.nb.web.commons.shiro.pam;
 
-import com.budwk.nb.app.web.commons.shiro.exception.CaptchaEmptyException;
-import com.budwk.nb.app.web.commons.shiro.exception.CaptchaIncorrectException;
+import com.budwk.nb.web.commons.shiro.exception.CaptchaEmptyException;
+import com.budwk.nb.web.commons.shiro.exception.CaptchaIncorrectException;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.pam.AbstractAuthenticationStrategy;
 import org.apache.shiro.realm.Realm;

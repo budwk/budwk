@@ -1,10 +1,10 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.app.sys.modules.models.Sys_msg;
-import com.budwk.nb.app.sys.modules.models.Sys_msg_user;
-import com.budwk.nb.app.sys.modules.services.SysMsgService;
-import com.budwk.nb.app.sys.modules.services.SysMsgUserService;
+import com.budwk.nb.sys.models.Sys_msg;
+import com.budwk.nb.sys.models.Sys_msg_user;
+import com.budwk.nb.sys.services.SysMsgService;
+import com.budwk.nb.sys.services.SysMsgUserService;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.integration.jedis.pubsub.PubSubService;

@@ -1,13 +1,13 @@
 package com.budwk.nb.web.commons.ext.wx;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.app.wx.modules.models.Wx_tpl_id;
-import com.budwk.nb.app.wx.modules.models.Wx_tpl_log;
-import com.budwk.nb.app.wx.modules.models.Wx_user;
-import com.budwk.nb.app.wx.modules.services.WxConfigService;
-import com.budwk.nb.app.wx.modules.services.WxTplIdService;
-import com.budwk.nb.app.wx.modules.services.WxTplLogService;
-import com.budwk.nb.app.wx.modules.services.WxUserService;
+import com.budwk.nb.wx.models.Wx_tpl_id;
+import com.budwk.nb.wx.models.Wx_tpl_log;
+import com.budwk.nb.wx.models.Wx_user;
+import com.budwk.nb.wx.services.WxConfigService;
+import com.budwk.nb.wx.services.WxTplIdService;
+import com.budwk.nb.wx.services.WxTplLogService;
+import com.budwk.nb.wx.services.WxUserService;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
