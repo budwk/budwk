@@ -49,16 +49,17 @@ https://wizzer.cn/donation  赞助者
 ## 目录结构
 | 模块名称                                     | 介绍                                     |
 | ---------------------------------------- | ---------------------------------------- |
-|[wk-common](wk-common) |框架公共模块,工具类,枚举类,常量类,接口类等|
-|[wk-model](wk-model) |POJO类|
-|[wk-nb-service-sys](wk-nb-service-sys) |系统管理模块,dubbo服务端,NB项目,权限体系|
-|[wk-nb-service-cms](wk-nb-service-cms) |CMS管理模块,dubbo服务端,NB项目,ig主键生成器及wkcache方法缓存演示|
-|[wk-nb-service-wx](wk-nb-service-wx) |微信管理模块,dubbo服务端,NB项目,微信及微信支付功能演示|
-|[wk-nb-service-slog](wk-nb-service-slog) |SLog日志服务,dubbo服务端,NB项目|
-|[wk-nb-task](wk-nb-task) |定时任务模块,dubbo服务端,NB项目,支持quartz集群|
-|[wk-nb-api-open](wk-nb-api-open) |API Sign/JWT Token示例,dubbo消费端,NB项目,Mvc|
-|[wk-nb-api-daemon](wk-nb-api-daemon) |应用管理服务守护API,dubbo消费端,NB项目,Mvc|
-|[wk-nb-web-admin](wk-nb-web-admin) |WEB管理后台API服务,dubbo消费端,NB项目,Mvc|
+|[wk-code-generator](wk-code-generator) |代码生成器|
+|[wk-common](wk-common) |框架公共模块,工具类,枚举类,常量类等|
+|[wk-module](wk-module) |POJO类,接口类|
+|[wk-nb-service-sys](wk-nb-service-sys) |系统管理模块,dubbo服务端,组织架构/权限管理等|
+|[wk-nb-service-cms](wk-nb-service-cms) |CMS管理模块,dubbo服务端,ig主键生成器及wkcache方法缓存演示|
+|[wk-nb-service-wx](wk-nb-service-wx) |微信管理模块,dubbo服务端,微信及微信支付功能演示|
+|[wk-nb-service-slog](wk-nb-service-slog) |SLog日志服务,dubbo服务端|
+|[wk-nb-task](wk-nb-task) |定时任务模块,dubbo服务端,支持基于数据库的集群|
+|[wk-nb-web-admin](wk-nb-web-admin) |WEB管理后台API服务,dubbo消费端,Mvc Http API|
+|[wk-nb-web-api-daemon](wk-nb-api-daemon) |应用管理服务守护API,dubbo消费端,Mvc Http API|
+|[wk-nb-web-api-open](wk-nb-api-open) |API Sign/JWT Token示例,dubbo消费端,Mvc Http API|
 
 ## 技术选型
 ### 后端技术

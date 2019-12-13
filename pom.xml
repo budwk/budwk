@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <name>budwk-nutzboot</name>
     <modules>
+        <module>wk-code-generator</module>
         <module>wk-common</module>
         <module>wk-module</module>
         <module>wk-nb-service-sys</module>
@@ -12,8 +13,8 @@
         <module>wk-nb-service-wx</module>
         <module>wk-nb-service-slog</module>
         <module>wk-nb-task</module>
-        <module>wk-nb-api-open</module>
-        <module>wk-nb-api-daemon</module>
+        <module>wk-nb-web-api-open</module>
+        <module>wk-nb-web-api-daemon</module>
         <module>wk-nb-web-admin</module>
     </modules>
     <groupId>com.budwk.nb</groupId>

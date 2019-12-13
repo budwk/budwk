@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>wk-nb-api-daemon</artifactId>
+    <artifactId>wk-nb-web-api-open</artifactId>
 
 
 </project>
