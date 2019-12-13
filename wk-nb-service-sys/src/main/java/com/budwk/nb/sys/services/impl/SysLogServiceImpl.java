@@ -1,10 +1,10 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.sys.models.Sys_log;
-import com.budwk.nb.app.sys.services.SysLogService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
-import com.budwk.nb.common.base.page.Pagination;
+import com.budwk.nb.sys.models.Sys_log;
+import com.budwk.nb.sys.services.SysLogService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.commons.base.page.Pagination;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Cnd;

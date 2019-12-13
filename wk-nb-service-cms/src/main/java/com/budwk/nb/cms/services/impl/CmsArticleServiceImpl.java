@@ -1,10 +1,10 @@
 package com.budwk.nb.cms.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.cms.models.Cms_article;
-import com.budwk.nb.app.cms.services.CmsArticleService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
-import com.budwk.nb.common.base.page.Pagination;
+import com.budwk.nb.cms.models.Cms_article;
+import com.budwk.nb.cms.services.CmsArticleService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.commons.base.page.Pagination;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;

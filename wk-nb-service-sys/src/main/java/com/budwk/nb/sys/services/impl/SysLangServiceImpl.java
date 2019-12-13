@@ -1,10 +1,10 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.sys.models.Sys_lang;
-import com.budwk.nb.app.sys.services.SysLangLocalService;
-import com.budwk.nb.app.sys.services.SysLangService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
+import com.budwk.nb.sys.models.Sys_lang;
+import com.budwk.nb.sys.services.SysLangLocalService;
+import com.budwk.nb.sys.services.SysLangService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;

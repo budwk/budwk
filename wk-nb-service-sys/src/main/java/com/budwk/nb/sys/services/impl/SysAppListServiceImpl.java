@@ -1,9 +1,9 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.sys.models.Sys_app_list;
-import com.budwk.nb.app.sys.services.SysAppListService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
+import com.budwk.nb.sys.models.Sys_app_list;
+import com.budwk.nb.sys.services.SysAppListService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;

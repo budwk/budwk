@@ -1,9 +1,9 @@
 package com.budwk.nb.cms.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.cms.models.Cms_channel;
-import com.budwk.nb.app.cms.services.CmsChannelService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
+import com.budwk.nb.cms.models.Cms_channel;
+import com.budwk.nb.cms.services.CmsChannelService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;

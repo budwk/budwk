@@ -1,9 +1,9 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.sys.models.Sys_api;
-import com.budwk.nb.app.sys.services.SysApiService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
+import com.budwk.nb.sys.models.Sys_api;
+import com.budwk.nb.sys.services.SysApiService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;

@@ -1,13 +1,13 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.sys.models.Sys_menu;
-import com.budwk.nb.app.sys.models.Sys_role;
-import com.budwk.nb.app.sys.models.Sys_user;
-import com.budwk.nb.app.sys.services.SysMenuService;
-import com.budwk.nb.app.sys.services.SysRoleService;
-import com.budwk.nb.app.sys.services.SysUserService;
-import com.budwk.nb.common.base.service.BaseServiceImpl;
+import com.budwk.nb.sys.models.Sys_menu;
+import com.budwk.nb.sys.models.Sys_role;
+import com.budwk.nb.sys.models.Sys_user;
+import com.budwk.nb.sys.services.SysMenuService;
+import com.budwk.nb.sys.services.SysRoleService;
+import com.budwk.nb.sys.services.SysUserService;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
