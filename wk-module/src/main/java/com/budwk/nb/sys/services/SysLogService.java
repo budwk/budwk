@@ -1,9 +1,8 @@
 package com.budwk.nb.sys.services;
 
-import com.budwk.nb.sys.models.Sys_log;
-import com.budwk.nb.commons.base.service.BaseService;
 import com.budwk.nb.commons.base.page.Pagination;
-import org.nutz.dao.Cnd;
+import com.budwk.nb.commons.base.service.BaseService;
+import com.budwk.nb.sys.models.Sys_log;
 
 /**
  * Created by wizzer on 2016/12/22.
@@ -15,27 +14,19 @@ public interface SysLogService extends BaseService<Sys_log> {
      * @param syslog
      */
     void fastInsertSysLog(Sys_log syslog);
-    /**
-     * 查询日期
-     *
-     * @param tablaeName 分表名称
-     * @param pageNumber 页码
-     * @param pageSize   页大小
-     * @param cnd        查询条件
-     * @return
-     */
-    Pagination data(String tablaeName, int pageNumber, int pageSize, Cnd cnd);
 
     /**
-     * 多月日志条件查询
+     * 分页查询日志
      *
-     * @param date          时间范围
      * @param type          日志类型
-     * @param pageOrderName 排序字段名称
+     * @param loginname     用户名
+     * @param startTime     开始时间
+     * @param endTime       结束时间
+     * @param pageOrderName 排序字段
      * @param pageOrderBy   排序方式
      * @param pageNumber    页码
      * @param pageSize      页大小
      * @return
      */
-    Pagination data(String[] date, String type, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize);
+    Pagination list(String type, String loginname, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize);
 }

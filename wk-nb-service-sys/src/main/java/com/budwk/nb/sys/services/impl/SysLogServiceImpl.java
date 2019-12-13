@@ -1,22 +1,23 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.budwk.nb.commons.base.page.Pagination;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_log;
 import com.budwk.nb.sys.services.SysLogService;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
-import com.budwk.nb.commons.base.page.Pagination;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.nutz.aop.interceptor.async.Async;
-import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
-import org.nutz.dao.pager.Pager;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wizzer on 2016/12/22.
@@ -75,52 +76,25 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
     }
 
 
-    /**
-     * 查询日期
-     *
-     * @param tablaeName 分表名称
-     * @param pageNumber 页码
-     * @param pageSize   页大小
-     * @param cnd        查询条件
-     * @return
-     */
-    public Pagination data(String tablaeName, int pageNumber, int pageSize, Cnd cnd) {
-        Pager pager = this.logDao(tablaeName).createPager(pageNumber, pageSize);
-        List<Sys_log> list = this.logDao(tablaeName).query(this.getEntityClass(), cnd, pager);
-        pager.setRecordCount(this.logDao(tablaeName).count(this.getEntityClass(), cnd));
-        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
-    }
-
-    /**
-     * 多月日志条件查询
-     *
-     * @param date          时间范围
-     * @param type          日志类型
-     * @param pageOrderName 排序字段名称
-     * @param pageOrderBy   排序方式
-     * @param pageNumber    页码
-     * @param pageSize      页大小
-     * @return
-     */
-    public Pagination data(String[] date, String type, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
+    public Pagination list(String type, String loginname, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         String tableName = Times.format("yyyyMM", new Date());
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("select sl.* from (");
-        if (date == null || date.length == 0) {
+        if (startTime == 0 && endTime == 0) {
             stringBuilder.append(" select * from sys_log_" + tableName);
             if (Strings.isNotBlank(type)) {
                 stringBuilder.append(" where type='" + type + "'");
             }
         } else {
-            int m1 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(date[0])));
-            int m2 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(date[1])));
+            int m1 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(startTime)));
+            int m2 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(endTime)));
             if (m1 == m2) {
                 stringBuilder.append(" select * from sys_log_" + m1 + " where 1=1 ");
                 if (Strings.isNotBlank(type)) {
                     stringBuilder.append(" and type='" + type + "'");
                 }
-                stringBuilder.append(" and createdAt>=" + Times.D(date[0]).getTime());
-                stringBuilder.append(" and createdAt<=" + Times.D(date[1]).getTime());
+                stringBuilder.append(" and createdAt>=" + startTime);
+                stringBuilder.append(" and createdAt<=" + endTime);
             } else {
                 for (int i = m1; i < m2 + 1; i++) {
                     if (this.dao().exists("sys_log_" + i)) {
@@ -128,8 +102,8 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                         if (Strings.isNotBlank(type)) {
                             stringBuilder.append(" and type='" + type + "'");
                         }
-                        stringBuilder.append(" and createdAt>=" + Times.D(date[0]).getTime());
-                        stringBuilder.append(" and createdAt<=" + Times.D(date[1]).getTime());
+                        stringBuilder.append(" and createdAt>=" + startTime);
+                        stringBuilder.append(" and createdAt<=" + endTime);
                         if (i < m2) {
                             stringBuilder.append(" UNION ALL ");
                         }
@@ -143,4 +117,5 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
         }
         return this.listPage(pageNumber, pageSize, Sqls.create(stringBuilder.toString()));
     }
+
 }
