@@ -87,8 +87,13 @@ public class SysTaskController {
         try {
             task.setCreatedBy(StringUtil.getPlatformUid());
             Sys_task sysTask = sysTaskService.insert(task);
-            taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron(),
-                    sysTask.getNote(), sysTask.getData());
+            try {
+                taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron(),
+                        sysTask.getNote(), sysTask.getData());
+            } catch (Exception ex) {
+                sysTaskService.delete(sysTask.getId());
+                return Result.error().addMsg(ex.getMessage());
+            }
             return Result.success();
         } catch (Exception e) {
             log.error(e);
@@ -150,7 +155,6 @@ public class SysTaskController {
     public Object changeDisabled(@Param("id") String id, @Param("path") String path, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             Sys_task sysTask = sysTaskService.fetch(id);
-            sysTaskService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
             if (disabled) {
                 try {
                     if (taskPlatformService.isExist(sysTask.getId(), sysTask.getId())) {
@@ -158,6 +162,7 @@ public class SysTaskController {
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage());
+                    return Result.error().addMsg(e.getMessage());
                 }
                 req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on") + " " + sysTask.getName());
             } else {
@@ -168,9 +173,11 @@ public class SysTaskController {
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage());
+                    return Result.error().addMsg(e.getMessage());
                 }
                 req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off") + " " + sysTask.getName());
             }
+            sysTaskService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
             return Result.success();
         } catch (Exception e) {
             log.error(e);

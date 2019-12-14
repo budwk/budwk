@@ -29,6 +29,6 @@ public class TestJob implements Job {
         String taskId = context.getJobDetail().getKey().getName();
         String hi = data.getString("hi");
         log.info("Test Job hi::" + hi);
-        sysTaskService.update(Chain.make("exeAt", (int) (System.currentTimeMillis() / 1000)).add("exeResult", "执行成功"), Cnd.where("id", "=", taskId));
+        sysTaskService.update(Chain.make("exeAt", System.currentTimeMillis()).add("exeResult", "执行成功"), Cnd.where("id", "=", taskId));
     }
 }

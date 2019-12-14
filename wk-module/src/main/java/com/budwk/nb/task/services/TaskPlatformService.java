@@ -25,7 +25,7 @@ public interface TaskPlatformService {
      * @param comment
      * @param dataMap
      */
-    void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap);
+    void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) throws Exception;
 
     /**
      * 删除任务

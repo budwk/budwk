@@ -46,7 +46,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param comment
      * @param dataMap
      */
-    public void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) {
+    public void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) throws Exception{
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
         qj.setJobGroup(jobGroup);
