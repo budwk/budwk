@@ -1,7 +1,7 @@
 package com.budwk.nb.task.commons.ext.job;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.app.sys.modules.services.SysTaskService;
+import com.budwk.nb.sys.services.SysTaskService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;

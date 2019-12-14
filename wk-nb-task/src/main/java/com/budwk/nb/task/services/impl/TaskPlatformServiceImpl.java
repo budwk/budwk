@@ -1,7 +1,7 @@
 package com.budwk.nb.task.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.budwk.nb.app.task.modules.services.TaskPlatformService;
+import com.budwk.nb.task.services.TaskPlatformService;
 import org.nutz.integration.quartz.QuartzJob;
 import org.nutz.integration.quartz.QuartzManager;
 import org.nutz.ioc.loader.annotation.Inject;
