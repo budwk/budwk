@@ -338,7 +338,7 @@ public class SysDictController {
     @Ok("json")
     @POST
     @RequiresPermissions("sys.config.dict.update")
-    @SLog(tag = "修改字典")
+    @SLog(tag = "启用禁用字典")
     public Object changeDisabled(@Param("id") String id, @Param("path") String path, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             sysDictService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
