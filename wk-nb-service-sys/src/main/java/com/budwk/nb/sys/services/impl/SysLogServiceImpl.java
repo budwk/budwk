@@ -13,6 +13,9 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
+import org.nutz.lang.util.NutMap;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +31,7 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
     public SysLogServiceImpl(Dao dao) {
         super(dao);
     }
-
+    private static final Log log = Logs.get();
     /**
      * 按月分表的dao实例
      */
@@ -115,7 +118,8 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
         if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
             stringBuilder.append(" order by sl." + pageOrderName + " " + pageOrderBy);
         }
-        return this.listPage(pageNumber, pageSize, Sqls.create(stringBuilder.toString()));
+        // 使用listPage 字段名全是小写,这里使用 listPageMap 区分大小写做到与mongodb返回的字段一致,这样不影响前端排序
+        return this.listPageMap(pageNumber, pageSize, Sqls.create(stringBuilder.toString()));
     }
 
 }

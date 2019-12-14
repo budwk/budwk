@@ -197,7 +197,6 @@ public class SysLoginController {
     @GET
     public Object logout(HttpSession session, HttpServletRequest req) {
         try {
-            String userToken = Strings.sNull(session.getAttribute("userToken"));
             Subject currentUser = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) currentUser.getPrincipal();
             currentUser.logout();
@@ -208,6 +207,7 @@ public class SysLoginController {
                 sysLog.setTag("用户登出");
                 sysLog.setSrc(this.getClass().getName() + "#logout");
                 sysLog.setMsg("成功退出系统！");
+                sysLog.setUserAgent(req.getHeader("User-Agent"));
                 sysLog.setIp(Lang.getIP(req));
                 sysLog.setCreatedBy(user.getId());
                 sysLog.setUpdatedBy(user.getId());
