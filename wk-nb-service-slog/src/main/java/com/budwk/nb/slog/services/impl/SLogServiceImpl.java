@@ -8,6 +8,7 @@ import com.budwk.nb.sys.models.Sys_log;
 import com.budwk.nb.sys.services.SysLogService;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -31,14 +32,15 @@ public class SLogServiceImpl implements SLogSerivce {
     @Inject
     @Reference
     private SysLogService sysLogService;
-
-    @Inject
+    @Inject("refer:$ioc")
+    private Ioc ioc;
     private ZMoDB zMoDB;
 
     private ZMoCo zMoCo;
 
     public void init() {
         if ("mongo".equals(dbType)) {
+            this.zMoDB = ioc.get(ZMoDB.class);
             this.zMoCo = zMoDB.cc(Sys_log.class.getSimpleName(), false);
         }
     }
