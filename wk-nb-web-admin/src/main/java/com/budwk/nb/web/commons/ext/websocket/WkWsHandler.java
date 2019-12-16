@@ -1,7 +1,10 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
+import com.budwk.nb.commons.constants.RedisConstant;
+import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
@@ -13,6 +16,8 @@ public class WkWsHandler extends SimpleWsHandler {
     private static final Log log = Logs.get();
     @Inject
     private WkNotifyService wkNotifyService;
+    @Inject
+    private RedisService redisService;
 
     /**
      * 获取通知 对应的消息是  {action:"msg", room:"superadmin"}
@@ -32,7 +37,11 @@ public class WkWsHandler extends SimpleWsHandler {
      */
     @Override
     public void join(NutMap req) {
-        join(req.getString("room"));
+        String sessionId=redisService.get(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + req.getString("uid","") + ":" + req.getString("token",""));
+        // 增加用户是否登陆的判断,防止越权获取信息
+        if(Strings.isNotBlank(sessionId)){
+            join(req.getString("room"));
+        }
     }
 
     /**
@@ -46,7 +55,7 @@ public class WkWsHandler extends SimpleWsHandler {
     @Override
     public void join(String room) {
         if (!Strings.isBlank(room)) {
-            room = prefix + room;
+            room = RedisConstant.REDIS_KEY_ADMIN_WS_ROME + room;
             log.debugf("session(id=%s) join room(name=%s)", session.getId(), room);
             roomProvider.join(room, session.getId());
         }
@@ -55,7 +64,7 @@ public class WkWsHandler extends SimpleWsHandler {
     @Override
     public void left(String room) {
         if (!Strings.isBlank(room)) {
-            room = prefix + room;
+            room = RedisConstant.REDIS_KEY_ADMIN_WS_ROME + room;
             log.debugf("session(id=%s) left room(name=%s)", session.getId(), room);
             roomProvider.left(room, session.getId());
         }

@@ -14,9 +14,11 @@ import java.util.Set;
 public class WkJedisRoomProvider implements WsRoomProvider {
     private static final Log log = Logs.get();
     protected JedisAgent jedisAgent;
+    protected int RedisKeySessionTTL;
 
-    public WkJedisRoomProvider(JedisAgent jedisAgent) {
+    public WkJedisRoomProvider(JedisAgent jedisAgent, int RedisKeySessionTTL) {
         this.jedisAgent = jedisAgent;
+        this.RedisKeySessionTTL = RedisKeySessionTTL;
     }
 
     public Set<String> wsids(String room) {
@@ -28,14 +30,13 @@ public class WkJedisRoomProvider implements WsRoomProvider {
     public void join(String room, String wsid) {
         try (Jedis jedis = jedisAgent.getResource()) {
             jedis.sadd(room, wsid);
-            jedis.expire(room,3600*2);//每次加入的时候时间有效期重置?
+            jedis.expire(room, RedisKeySessionTTL);
         }
     }
 
     public void left(String room, String wsid) {
         try (Jedis jedis = jedisAgent.getResource()) {
-            //jedis.srem(room, wsid);
-            jedis.expire(room,60*3);
+            jedis.srem(room, wsid);
         }
     }
 }

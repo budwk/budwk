@@ -1,5 +1,6 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
+import com.budwk.nb.commons.constants.RedisConstant;
 import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.integration.jedis.pubsub.PubSub;
 import org.nutz.integration.jedis.pubsub.PubSubService;
@@ -27,16 +28,18 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     protected JedisAgent jedisAgent;
     @Inject("refer:$ioc")
     protected Ioc ioc;
+    @Inject("java:$conf.getInt('shiro.session.cache.redis.ttl')")
+    private int RedisKeySessionTTL;
 
     public WsHandler createHandler(Session session, EndpointConfig config) {
         return ioc.get(WkWsHandler.class);
     }
 
     public void init() {
-        roomPrefix = "wsroom:";
-        roomProvider = new WkJedisRoomProvider(jedisAgent);
+        roomPrefix = RedisConstant.REDIS_KEY_ADMIN_WS_ROME;
+        roomProvider = new WkJedisRoomProvider(jedisAgent,RedisKeySessionTTL);
         try (Jedis jedis = jedisAgent.getResource()) {
-            for (String key : jedis.keys(roomPrefix + "*")) {
+            for (String key : jedis.keys(RedisConstant.REDIS_KEY_ADMIN_WS_ROME + "*")) {
                 switch (jedis.type(key)) {
                     case "none":
                         break;
@@ -47,13 +50,12 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
                 }
             }
         }
-        pubSubService.reg(roomPrefix + "*", this);
+        pubSubService.reg(RedisConstant.REDIS_KEY_ADMIN_WS_ROME + "*", this);
     }
 
 
     public void onMessage(String channel, String message) {
-        if (log.isDebugEnabled())
-            log.debugf("GET PubSub channel=%s msg=%s", channel, message);
+        log.debugf("GET PubSub channel=%s msg=%s", channel, message);
         each(channel, (index, session, length) -> session.getAsyncRemote().sendText(message));
     }
 }
