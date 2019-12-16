@@ -104,7 +104,7 @@ public class SysLoginController {
             Sys_user user = (Sys_user) subject.getPrincipal();
             int count = user.getLoginCount() == null ? 0 : user.getLoginCount();
             //如果启用了用户单一登录
-            if ("true".equals(Globals.MyConfig.getOrDefault("AppPlatformUserSessionOnlyOne", "false"))) {
+            if ("true".equals(Globals.MyConfig.getOrDefault("AppWebUserOnlyOne", "false"))) {
                 try {
                     //把其他在线用户踢下线
                     Set<String> set = redisService.keys(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");

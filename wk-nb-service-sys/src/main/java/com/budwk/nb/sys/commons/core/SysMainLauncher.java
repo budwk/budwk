@@ -88,12 +88,12 @@ public class SysMainLauncher {
             conf.setNote("文件访问路径");
             dao.insert(conf);
             conf = new Sys_config();
-            conf.setConfigKey("AppPlatformUserSessionOnlyOne");
+            conf.setConfigKey("AppWebUserOnlyOne");
             conf.setConfigValue("true");
             conf.setNote("用户单一登陆");
             dao.insert(conf);
             conf = new Sys_config();
-            conf.setConfigKey("AppPlatformWebNotification");
+            conf.setConfigKey("AppWebBrowserNotice");
             conf.setConfigValue("false");
             conf.setNote("启用浏览器通知");
             dao.insert(conf);

@@ -9,6 +9,7 @@ import com.budwk.nb.sys.services.SysLangLocalService;
 import com.budwk.nb.sys.services.SysUnitService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
 import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.commons.base.Result;
@@ -96,6 +97,7 @@ public class SysUserController {
                     return Result.success().addData(
                             NutMap.NEW()
                                     .addv("lang", sysLangLocalService.getLocal())
+                                    .addv("conf", Globals.MyConfig)
                                     .addv("user", user)
                                     .addv("token", Strings.sNull(session.getAttribute("userToken")))
                                     .addv("menus", sysUserService.getMenusAndButtons(user.getId()))
