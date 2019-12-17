@@ -90,7 +90,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   项目根目录执行 `mvn clean install -Dmaven.test.skip=true`
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
 *   在项目根目录执行 `mvn -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
-*   启动顺序是 sys --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
+*   启动顺序是 sys --> slog --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
 *   正常启动后访问 `http://127.0.0.1:8080/sysadmin` 用户名 superadmin 密码 1
 *   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [wizzer.cn 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
 

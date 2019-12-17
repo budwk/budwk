@@ -61,10 +61,8 @@ public class Globals {
                 case "AppUploadBase":
                     Globals.AppUploadBase = sysConfig.getConfigValue();
                     break;
-                default:
-                    Globals.MyConfig.put(sysConfig.getConfigKey(), sysConfig.getConfigValue());
-                    break;
             }
+            Globals.MyConfig.put(sysConfig.getConfigKey(), sysConfig.getConfigValue());
         }
     }
 
