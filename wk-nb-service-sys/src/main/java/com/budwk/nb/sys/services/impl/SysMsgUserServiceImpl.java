@@ -1,9 +1,9 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_msg_user;
 import com.budwk.nb.sys.services.SysMsgUserService;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMsgUserService.class)
-@CacheDefaults(cacheName = "sys_msg_user")
+@CacheDefaults(cacheName = "sys_msg_user", cacheLiveTime = 300)
 public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> implements SysMsgUserService {
     public SysMsgUserServiceImpl(Dao dao) {
         super(dao);
@@ -29,7 +29,7 @@ public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> impleme
      * @param loginname
      * @return
      */
-    @CacheResult(cacheKey = "${args[0]}_getUnreadNum")
+    @CacheResult(cacheKey = "${loginname}_getUnreadNum")
     public int getUnreadNum(String loginname) {
         int size = this.count(Cnd.where("delFlag", "=", false).and("loginname", "=", loginname)
                 .and("status", "=", 0));
@@ -44,13 +44,13 @@ public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> impleme
      * @param pageSize
      * @return
      */
-    @CacheResult(cacheKey = "${args[0]}_getUnreadList")
+    @CacheResult(cacheKey = "${loginname}_getUnreadList")
     public List<Sys_msg_user> getUnreadList(String loginname, int pageNumber, int pageSize) {
         return this.query(Cnd.where("delFlag", "=", false).and("loginname", "=", loginname)
                 .desc("createdAt"), "msg", Cnd.orderBy().desc("sendAt"), new Pager().setPageNumber(pageNumber).setPageSize(pageSize));
     }
 
-    @CacheRemove(cacheKey = "${args[0]}_*")
+    @CacheRemove(cacheKey = "${loginname}_*")
     //可以通过el表达式加 * 通配符来批量删除一批缓存
     public void deleteCache(String loginname) {
 

@@ -44,6 +44,7 @@ public class WkNotifyService {
         map.put("action", "notify");
         map.put("title", innerMsg.getTitle());
         map.put("id", innerMsg.getId());
+        map.put("url", innerMsg.getUrl());
         map.put("type", innerMsg.getType().getKey());
         String msg = Json.toJson(map, JsonFormat.compact());
         if ("system".equals(innerMsg.getType())) {//系统消息发送给所有在线用户
@@ -86,6 +87,7 @@ public class WkNotifyService {
             for (Sys_msg_user msgUser : list) {
                 mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType())
                         .addv("title", msgUser.getMsg().getTitle())
+                        .addv("url", msgUser.getMsg().getUrl())
                         .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(msgUser.getMsg().getSendAt()))));
             }
             innerMsg(loginname, size, mapList);
