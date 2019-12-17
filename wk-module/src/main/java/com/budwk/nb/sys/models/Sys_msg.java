@@ -1,6 +1,7 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import com.budwk.nb.sys.enums.SysMsgTypeEnum;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -23,7 +24,7 @@ public class Sys_msg extends BaseModel implements Serializable {
     @Column
     @Comment("消息类型")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    private String type;
+    private SysMsgTypeEnum type;
 
     @Column
     @Comment("消息标题")
@@ -56,11 +57,11 @@ public class Sys_msg extends BaseModel implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
+    public SysMsgTypeEnum getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(SysMsgTypeEnum type) {
         this.type = type;
     }
 

@@ -1,6 +1,5 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
-import com.budwk.nb.commons.constants.RedisConstant;
 import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.integration.jedis.pubsub.PubSub;
 import org.nutz.integration.jedis.pubsub.PubSubService;
@@ -36,10 +35,9 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     }
 
     public void init() {
-        roomPrefix = RedisConstant.REDIS_KEY_ADMIN_WS_ROME;
-        roomProvider = new WkJedisRoomProvider(jedisAgent,RedisKeySessionTTL);
+        roomProvider = new WkJedisRoomProvider(jedisAgent, RedisKeySessionTTL);
         try (Jedis jedis = jedisAgent.getResource()) {
-            for (String key : jedis.keys(RedisConstant.REDIS_KEY_ADMIN_WS_ROME + "*")) {
+            for (String key : jedis.keys("wsroom:*")) {
                 switch (jedis.type(key)) {
                     case "none":
                         break;
@@ -50,7 +48,7 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
                 }
             }
         }
-        pubSubService.reg(RedisConstant.REDIS_KEY_ADMIN_WS_ROME + "*", this);
+        pubSubService.reg("wsroom:*", this);
     }
 
 

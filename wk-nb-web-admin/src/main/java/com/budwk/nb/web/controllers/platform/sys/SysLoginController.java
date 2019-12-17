@@ -109,13 +109,14 @@ public class SysLoginController {
                     //把其他在线用户踢下线
                     Set<String> set = redisService.keys(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
                     for (String key : set) {
+                        String userToken = key.substring(key.lastIndexOf(":") + 1);
                         String sessionId = Strings.sNull(redisService.get(key));
                         if (!sessionId.equals(session.getId())) {
                             try {
                                 Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
                                 if (oldSession != null) {
                                     //通知其他用户被踢下线
-                                    wkNotifyService.offline(user.getLoginname(), sessionId);
+                                    wkNotifyService.offline(user.getLoginname(), userToken);
                                     oldSession.stop();
                                     webSessionManager.getSessionDAO().delete(oldSession);
                                 }

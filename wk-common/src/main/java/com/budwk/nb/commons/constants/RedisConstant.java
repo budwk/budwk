@@ -11,5 +11,4 @@ public class RedisConstant {
     public final static String REDIS_KEY_LOGIN_ADMIN_CAPTCHA="admin:login:captcha:";
     public final static String REDIS_KEY_LOGIN_ADMIN_SESSION="admin:login:session:";
     public final static String REDIS_KEY_ADMIN_PUBSUB="admin:pubsub:";
-    public final static String REDIS_KEY_ADMIN_WS_ROME="admin:ws:room:";
 }

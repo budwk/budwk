@@ -12,7 +12,6 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
-import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
@@ -39,19 +38,13 @@ public class WkNotifyService {
     @Inject
     private RedisService redisService;
 
-    private static NutMap typeMap = NutMap.NEW().addv("system", "系统消息").addv("user", "用户消息");
-
     @Async
     public void notify(Sys_msg innerMsg, String rooms[]) {
-        String url = "/platform/sys/msg/user/all";
-        if (Strings.isNotBlank(innerMsg.getUrl())) {
-            url = innerMsg.getUrl();
-        }
         NutMap map = new NutMap();
         map.put("action", "notify");
-        map.put("title", "您有新的消息");
-        map.put("body", innerMsg.getTitle());
-        map.put("url", url);
+        map.put("title", innerMsg.getTitle());
+        map.put("id", innerMsg.getId());
+        map.put("type", innerMsg.getType().getKey());
         String msg = Json.toJson(map, JsonFormat.compact());
         if ("system".equals(innerMsg.getType())) {//系统消息发送给所有在线用户
             Set<String> keys = redisService.keys("wsroom:*");
@@ -71,11 +64,11 @@ public class WkNotifyService {
     @Async
     public void innerMsg(String room, int size, List<NutMap> list) {
         NutMap map = new NutMap();
-        map.put("action", "innerMsg");
+        map.put("action", "notice");
         map.put("size", size);//未读消息数
         map.put("list", list);//最新3条消息列表  type--系统消息/用户消息  title--标题  time--时间戳
         String msg = Json.toJson(map, JsonFormat.compact());
-        log.debug("msg::::" + msg);
+        log.debugf("room=%s,msg=%s", room, msg);
         Set<String> keys = redisService.keys("wsroom:" + room + ":*");
         for (String key : keys) {
             pubSubService.fire(key, msg);
@@ -91,14 +84,9 @@ public class WkNotifyService {
             List<Sys_msg_user> list = sysMsgUserService.getUnreadList(loginname, 1, 5);
             List<NutMap> mapList = new ArrayList<>();
             for (Sys_msg_user msgUser : list) {
-                String url = "/platform/sys/msg/user/all/detail/" + msgUser.getMsgId();
-                if (Strings.isNotBlank(msgUser.getMsg().getUrl())) {
-                    url = msgUser.getMsg().getUrl();
-                }
-                mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", typeMap.getString(msgUser.getMsg().getType()))
+                mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType())
                         .addv("title", msgUser.getMsg().getTitle())
-                        .addv("url", url)
-                        .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(1000 * msgUser.getMsg().getSendAt()))));
+                        .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(msgUser.getMsg().getSendAt()))));
             }
             innerMsg(loginname, size, mapList);
         } catch (Exception e) {
@@ -107,28 +95,27 @@ public class WkNotifyService {
     }
 
     @Async
-    public void offline(String loginname, String httpSessionId) {
+    public void offline(String room, String userToken) {
         NutMap map = new NutMap();
         map.put("action", "offline");
-        map.put("title", "");
-        map.put("body", "");
-        map.put("url", "");
         String msg = Json.toJson(map, JsonFormat.compact());
         try {
-            pubSubService.fire("wsroom:" + loginname + ":" + httpSessionId, msg);
-            redisService.expire("wsroom:" + loginname + ":" + httpSessionId, 60 * 3);
+            room = "wsroom:" + room + ":" + userToken;
+            log.debugf("offline room(name=%s)", room);
+            pubSubService.fire(room, msg);
+            redisService.expire(room, 60 * 3);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
-
-    @Async
-    public void offlineNoMsg(String loginname, String httpSessionId) {
-        try {
-            redisService.expire("wsroom:" + loginname + ":" + httpSessionId, 60 * 3);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-    }
+//
+//    @Async
+//    public void offlineNoMsg(String loginname, String httpSessionId) {
+//        try {
+//            redisService.expire(RedisConstant.REDIS_KEY_ADMIN_WS_ROME + loginname + ":" + httpSessionId, 60 * 3);
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        }
+//    }
 
 }
