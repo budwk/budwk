@@ -25,7 +25,8 @@ import java.util.Date;
  * Created by Wizzer on 2016/7/5.
  */
 @IocBean
-@At("/open/file/upload")
+@At("/api/{version}/open/file/upload")
+@ApiVersion("1.0.0")
 public class UploadController {
     private static final Log log = Logs.get();
     @Inject
@@ -130,14 +131,14 @@ public class UploadController {
                 String url = filePath + fileName;
                 if ("ftp".equals(UploadType)) {
                     if (ftpService.upload(filePath, fileName, tf.getInputStream())) {
-                        return Result.success("system.error.upload.success", url);
+                        return Result.success("system.error.upload.success", NutMap.NEW().addv("file_type", suffixName).addv("file_name", tf.getSubmittedFileName()).addv("file_size", tf.getSize()).addv("file_url", url));
                     } else {
                         return Result.error("system.error.upload.ftp");
                     }
                 } else {
                     String staticPath = conf.get("jetty.staticPath", "/files");
                     Files.write(staticPath + url, tf.getInputStream());
-                    return Result.success("system.error.upload.success", url);
+                    return Result.success("system.error.upload.success", NutMap.NEW().addv("file_type", suffixName).addv("file_name", tf.getSubmittedFileName()).addv("file_size", tf.getSize()).addv("file_url", url));
                 }
             }
         } catch (Exception e) {

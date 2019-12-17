@@ -86,7 +86,7 @@ public class WkNotifyService {
             List<Sys_msg_user> list = sysMsgUserService.getUnreadList(loginname, 1, 5);
             List<NutMap> mapList = new ArrayList<>();
             for (Sys_msg_user msgUser : list) {
-                mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType())
+                mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType().getValue())
                         .addv("title", msgUser.getMsg().getTitle())
                         .addv("url", msgUser.getMsg().getUrl())
                         .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(msgUser.getMsg().getSendAt()))));

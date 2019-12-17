@@ -1,20 +1,20 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.commons.base.page.Pagination;
 import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.models.Sys_unit;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysLangLocalService;
 import com.budwk.nb.sys.services.SysUnitService;
 import com.budwk.nb.sys.services.SysUserService;
-import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
-import com.budwk.nb.commons.utils.StringUtil;
-import com.budwk.nb.commons.base.Result;
-import com.budwk.nb.commons.base.page.Pagination;
-import com.alibaba.dubbo.config.annotation.Reference;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -131,6 +131,33 @@ public class SysUserController {
             Sys_user user = (Sys_user) subject.getPrincipal();
             if (user != null)//替换当前用户session里的值
                 user.setThemeConfig(themeConfig);
+            return Result.success();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return Result.error();
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/user/set_user_avatar 设置用户头像
+     * @apiName set_user_avatar
+     * @apiGroup SYS_USER
+     * @apiPermission 登陆用户
+     * @apiVersion 1.0.0
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
+    @At("/set_user_avatar")
+    @Ok("json")
+    @POST
+    @RequiresAuthentication
+    public Object setUserAvatar(@Param("avatar") String avatar) {
+        try {
+            sysUserService.update(Chain.make("avatar", avatar), Cnd.where("id", "=", StringUtil.getPlatformUid()));
+            Subject subject = SecurityUtils.getSubject();
+            Sys_user user = (Sys_user) subject.getPrincipal();
+            if (user != null)//替换当前用户session里的值
+                user.setAvatar(avatar);
             return Result.success();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
