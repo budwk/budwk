@@ -9,6 +9,7 @@ import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysMsgUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -80,7 +81,7 @@ public class SysMsgController {
     @At
     @POST
     @Ok("json:full")
-    @RequiresPermissions("sys.config.lang")
+    @RequiresPermissions("sys.manage.msg")
     public Object list(@Param("type") String type, @Param("title") String title, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -110,4 +111,39 @@ public class SysMsgController {
         }
     }
 
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/get_user_view_list 消息发送对象列表
+     * @apiName get_user_view_list
+     * @apiGroup SYS_MSG
+     * @apiPermission sys.manage.msg
+     * @apiVersion 1.0.0
+     * @apiParam {String} type    消息类型
+     * @apiParam {String} id      消息ID
+     * @apiParam {String} pageNo   页码
+     * @apiParam {String} pageSize   页大小
+     * @apiParam {String} pageOrderName   排序字段
+     * @apiParam {String} pageOrderBy   排序方式
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     * @apiSuccess {Object} data  多语言字符串
+     */
+    @At("/get_user_view_list")
+    @POST
+    @Ok("json:full")
+    @RequiresPermissions("sys.manage.msg")
+    public Object getUserViewList(@Param("type") String type, @Param("id") String id, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+        try {
+            String sql = "SELECT a.loginname,a.username,a.mobile,a.email,a.disabled,a.unitid,b.name as unitname,c.status,c.readat FROM sys_user a,sys_unit b,sys_msg_user c WHERE a.unitid=b.id \n" +
+                    "and a.loginname=c.loginname and c.msgId='" + id + "' ";
+            if (Strings.isNotBlank(type) && "unread".equals(type)) {
+                sql += " and c.status=0 ";
+            }
+            if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
+                sql += " order by a." + pageOrderName + " " + PageUtil.getOrder(pageOrderBy);
+            }
+            return Result.success().addData(sysMsgService.listPage(pageNo, pageSize, Sqls.create(sql)));
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
 }
