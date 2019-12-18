@@ -1,9 +1,12 @@
 package com.budwk.nb.sys.enums;
 
+import org.nutz.json.JsonShape;
+
 /**
  * 系统消息类型
  * Created by wizzer.cn on 2019/12/17
  */
+@JsonShape(JsonShape.Type.OBJECT) //此注解用于Json和实体类的相互转换,必须加
 public enum SysMsgTypeEnum {
 
     SYSTEM("system", "enums.sys.msg.type.system"),
