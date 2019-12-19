@@ -168,7 +168,7 @@ public class SysParamController {
     public Object delete(String configKey, HttpServletRequest req) {
         try {
             if (Strings.sBlank(configKey).startsWith("App")) {
-                return Result.error("系统参数不可删除");
+                return Result.error("sys.manage.param.delete.not");
             }
             if (sysConfigService.delete(configKey) > 0) {
                 pubSubService.fire(RedisConstant.REDIS_KEY_ADMIN_PUBSUB, "sys_param");

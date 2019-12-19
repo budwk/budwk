@@ -1,10 +1,12 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.base.page.Pagination;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.sys.enums.SysMsgTypeEnum;
+import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysMsgUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -17,8 +19,10 @@ import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +95,6 @@ public class SysMsgController {
             if (Strings.isNotBlank(title)) {
                 cnd.and(Cnd.likeEX("title", title));
             }
-            cnd.and("delFlag", "=", false);
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
                 cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
             }
@@ -142,6 +145,38 @@ public class SysMsgController {
                 sql += " order by a." + pageOrderName + " " + PageUtil.getOrder(pageOrderBy);
             }
             return Result.success().addData(sysMsgService.listPage(pageNo, pageSize, Sqls.create(sql)));
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/delete/:id 删除消息
+     * @apiName delete
+     * @apiGroup SYS_MSG
+     * @apiPermission sys.manage.msg
+     * @apiVersion 1.0.0
+     * @apiParam {String} id      消息ID
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     * @apiSuccess {Object} data  多语言字符串
+     */
+    @At("/delete/?")
+    @Ok("json")
+    @DELETE
+    @RequiresPermissions("sys.manage.msg.delete")
+    @SLog(tag = "站内消息")
+    public Object delete(String id, HttpServletRequest req) {
+        try {
+            Sys_msg msg = sysMsgService.fetch(id);
+            if (msg == null) {
+                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.error.noData"));
+                return Result.error("system.error.noData");
+            }
+            req.setAttribute("_slog_msg", msg.getTitle());
+            sysMsgService.deleteMsg(id);
+            sysMsgUserService.clearCache();
+            return Result.success();
         } catch (Exception e) {
             return Result.error();
         }
