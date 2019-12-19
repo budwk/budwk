@@ -151,41 +151,4 @@ public class PubFileUploadController {
         }
     }
 
-    @AdaptBy(type = UploadAdaptor.class, args = {"ioc:imageUpload"})
-    @POST
-    @At("/ck_image")
-    @Ok("json")
-    @RequiresAuthentication
-    //AdaptorErrorContext必须是最后一个参数
-    public Object ckImage(@Param("upload") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
-        try {
-            if (err != null && err.getAdaptorErr() != null) {
-                return Result.error("system.error.upload.file");
-            } else if (tf == null) {
-                return Result.error("system.error.upload.empty");
-            } else {
-                String suffixName = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().lastIndexOf(".")).toLowerCase();
-                String filePath = Globals.AppUploadBase + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
-                String fileName = R.UU32() + suffixName;
-                String url = filePath + fileName;
-                if ("ftp".equals(UploadType)) {
-                    if (ftpService.upload(filePath, fileName, tf.getInputStream())) {
-                        return NutMap.NEW().addv("uploaded", true).addv("uploaded", Globals.AppFileDomain + url);
-                    } else {
-                        return Result.error("system.error.upload.ftp");
-                    }
-                } else {
-                    String staticPath = conf.get("jetty.staticPath", "/files");
-                    Files.write(staticPath + url, tf.getInputStream());
-                    return NutMap.NEW().addv("uploaded", true).addv("uploaded", Globals.AppFileDomain + url);
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Result.error();
-        } catch (Throwable e) {
-            log.error(e.getMessage(), e);
-            return Result.error("system.error.upload.filetype");
-        }
-    }
 }
