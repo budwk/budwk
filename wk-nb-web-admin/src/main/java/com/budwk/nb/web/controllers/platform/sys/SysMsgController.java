@@ -5,10 +5,14 @@ import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.base.page.Pagination;
 import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.sys.enums.SysMsgTypeEnum;
 import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysMsgUserService;
+import com.budwk.nb.sys.services.SysUserService;
+import com.budwk.nb.web.commons.ext.websocket.WkNotifyService;
+import com.budwk.nb.web.commons.utils.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -16,6 +20,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
+import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -42,6 +47,13 @@ public class SysMsgController {
     @Inject
     @Reference
     private SysMsgUserService sysMsgUserService;
+    @Inject
+    @Reference
+    private SysUserService sysUserService;
+    @Inject
+    private WkNotifyService wkNotifyService;
+    @Inject
+    private ShiroUtil shiroUtil;
 
     /**
      * @api {get} /api/1.0.0/platform/sys/msg/get_type 获取消息类型
@@ -80,7 +92,7 @@ public class SysMsgController {
      * @apiParam {String} pageOrderBy   排序方式
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言字符串
+     * @apiSuccess {Object} data  分页数据
      */
     @At
     @POST
@@ -128,7 +140,7 @@ public class SysMsgController {
      * @apiParam {String} pageOrderBy   排序方式
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言字符串
+     * @apiSuccess {Object} data  分页数据
      */
     @At("/get_user_view_list")
     @POST
@@ -175,6 +187,74 @@ public class SysMsgController {
             }
             req.setAttribute("_slog_msg", msg.getTitle());
             sysMsgService.deleteMsg(id);
+            sysMsgUserService.clearCache();
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/select_user_list 查询用户列表
+     * @apiName select_user_list
+     * @apiGroup SYS_MSG
+     * @apiPermission sys.manage.msg
+     * @apiVersion 1.0.0
+     * @apiParam {String} searchName    查询字段
+     * @apiParam {String} searchKeyword  查询内容
+     * @apiParam {String} pageNo   页码
+     * @apiParam {String} pageSize   页大小
+     * @apiParam {String} pageOrderName   排序字段
+     * @apiParam {String} pageOrderBy   排序方式
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     * @apiSuccess {Object} data  分页数据
+     */
+    @At("/select_user_list")
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
+    @RequiresPermissions("sys.manage.msg")
+    public Object selectUserList(@Param("searchName") String searchName, @Param("searchKeyword") String searchKeyword, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+        try {
+            Cnd cnd = Cnd.NEW();
+            if (!shiroUtil.hasRole("sysadmin")) {
+                cnd.and("unitid", "=", StringUtil.getPlatformUserUnitid());
+            }
+            if (Strings.isNotBlank(searchName) && Strings.isNotBlank(searchKeyword)) {
+                cnd.and(searchName, "like", "%" + searchKeyword + "%");
+            }
+            if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
+                cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
+            }
+            return Result.success().addData(sysUserService.listPageLinks(pageNo, pageSize, cnd, "unit"));
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/create 发送消息
+     * @apiName create
+     * @apiGroup SYS_MSG
+     * @apiPermission sys.manage.msg
+     * @apiVersion 1.0.0
+     * @apiParam {Object} nutMap 表单对象
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     * @apiSuccess {Object} data  分页数据
+     */
+    @At("/create")
+    @Ok("json")
+    @RequiresPermissions("sys.manage.msg.create")
+    @SLog(tag = "发送消息", msg = "${msg.title}")
+    public Object create(@Param("..") Sys_msg msg, @Param("users") String[] users, HttpServletRequest req) {
+        try {
+            msg.setSendAt(Times.now().getTime());
+            msg.setCreatedBy(StringUtil.getPlatformUid());
+            msg.setUpdatedBy(StringUtil.getPlatformUid());
+            Sys_msg sys_msg = sysMsgService.saveMsg(msg, users);
+            if (sys_msg != null) {
+                wkNotifyService.notify(sys_msg, users);
+            }
             sysMsgUserService.clearCache();
             return Result.success();
         } catch (Exception e) {

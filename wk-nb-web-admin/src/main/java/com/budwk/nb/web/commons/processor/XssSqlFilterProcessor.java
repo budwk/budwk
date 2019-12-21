@@ -31,7 +31,7 @@ public class XssSqlFilterProcessor extends AbstractProcessor {
     public void init(NutConfig config, ActionInfo ai) throws Throwable {
         try {
             conf = config.getIoc().get(PropertiesProxy.class, "conf");
-            ignoreList = conf.getList("system.xsssql.ignore.urls", ",") == null ? new ArrayList<>() : conf.getList("system.xsssql.ignore.urls", ",");
+            ignoreList = conf.getList("budwk.xsssql.ignore.urls", ",") == null ? new ArrayList<>() : conf.getList("budwk.xsssql.ignore.urls", ",");
         } catch (Exception e) {
         }
     }
