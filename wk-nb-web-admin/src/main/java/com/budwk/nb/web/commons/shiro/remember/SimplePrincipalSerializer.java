@@ -12,7 +12,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Creates A GZIPed rememberMe cookie, based on the patch for SHIRO-226 (https://issues.apache.org/jira/browse/SHIRO-226)
- * Created by wizzer on 2017/1/18.
+ * @author wizzer(wizzer@qq.com) on 2017/1/18.
  */
 
 public class SimplePrincipalSerializer implements Serializer<PrincipalCollection> {
@@ -21,6 +21,7 @@ public class SimplePrincipalSerializer implements Serializer<PrincipalCollection
      */
     private static final int MAGIC = 0x0BADBEEF;
 
+    @Override
     public byte[] serialize(PrincipalCollection pc) throws SerializationException {
         ByteArrayOutputStream ba = new ByteArrayOutputStream();
 
@@ -53,6 +54,7 @@ public class SimplePrincipalSerializer implements Serializer<PrincipalCollection
         return ba.toByteArray();
     }
 
+    @Override
     public PrincipalCollection deserialize(byte[] serialized) throws SerializationException {
         ByteArrayInputStream ba = new ByteArrayInputStream(serialized);
 
@@ -62,10 +64,10 @@ public class SimplePrincipalSerializer implements Serializer<PrincipalCollection
             SimplePrincipalCollection pc = new SimplePrincipalCollection();
 
             // Check magic number
-            if (in.readInt() != MAGIC)
+            if (in.readInt() != MAGIC) {
                 throw new SerializationException(
                         "Not valid magic number while deserializing stored PrincipalCollection - possibly obsolete cookie.");
-
+            }
             int numRealms = in.readShort();
 
             // realms loop

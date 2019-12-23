@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/7/3.
+ * @author wizzer(wizzer@qq.com) on 2016/7/3.
  */
 @IocBean(name = "wxHandler")
 public class WxHandler extends AbstractWxHandler {
@@ -62,6 +62,7 @@ public class WxHandler extends AbstractWxHandler {
     @Inject
     private WxService wxService;
 
+    @Override
     public boolean check(String signature, String timestamp, String nonce, String key) {
         Wx_config appInfo = wxConfigService.fetch(Cnd.where("id", "=", key));
         if (appInfo != null) {
@@ -73,6 +74,7 @@ public class WxHandler extends AbstractWxHandler {
         return false;
     }
 
+    @Override
     public WXBizMsgCrypt getMsgCrypt() {
         if (this.msgCrypt == null) {
             try {
@@ -86,7 +88,12 @@ public class WxHandler extends AbstractWxHandler {
         return this.msgCrypt;
     }
 
-    // 用户发送的是文本的时候调用这个方法
+    /**
+     * 用户发送的是文本的时候调用这个方法
+     * @param msg
+     * @return
+     */
+    @Override
     public WxOutMsg text(WxInMsg msg) {
         Wx_reply reply = wxReplyService.fetch(Cnd.where("wxid", "=", msg.getExtkey()).and("type", "=", "keyword").and("keyword", "=", msg.getContent()));
         if (reply != null) {
@@ -125,6 +132,7 @@ public class WxHandler extends AbstractWxHandler {
         return Wxs.respText(null, "您的留言已收到！");
     }
 
+    @Override
     public WxOutMsg eventClick(WxInMsg msg) {
         String eventKey = msg.getEventKey();
         log.debug("eventKey: " + eventKey);
@@ -159,8 +167,9 @@ public class WxHandler extends AbstractWxHandler {
 
     @Override
     public WxOutMsg eventSubscribe(WxInMsg msg) {
-        if (api == null)
+        if (api == null) {
             api = wxService.getWxApi2(msg.getExtkey());
+        }
         Wx_user usr = wxUserService.fetch(Cnd.where("openid", "=", msg.getFromUserName()));
         WxResp resp = api.user_info(msg.getFromUserName(), "zh_CN");
         if (usr == null) {

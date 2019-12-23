@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * 签名工具类
- * Created by wizzer on 2018/6/28.
+ * @author wizzer(wizzer@qq.com) on 2018/6/28.
  */
 public class SignUtil {
 

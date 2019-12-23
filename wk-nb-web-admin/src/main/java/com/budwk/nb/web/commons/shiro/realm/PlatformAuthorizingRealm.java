@@ -32,7 +32,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 /**
- * Created by wizzer on 2017/1/11.
+ * @author wizzer(wizzer@qq.com) on 2017/1/11.
  */
 @IocBean(name = "platformRealm")
 public class PlatformAuthorizingRealm extends AuthorizingRealm {
@@ -45,6 +45,10 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
     private SysRoleService sysRoleService;
     @Inject
     private RedisService redisService;
+    /**
+     * 密码输错3次要求验证码
+     */
+    private static final int CAPTCAH_ERR_COUNT = 3;
 
     protected SysUserService getUserService() {
         return sysUserService;
@@ -69,17 +73,17 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
             }
             Session session = SecurityUtils.getSubject().getSession(true);
             int errCount = NumberUtils.toInt(Strings.sNull(session.getAttribute("platformErrCount")));
-            if (errCount > 2) {
+            if (errCount > (CAPTCAH_ERR_COUNT - 1)) {
                 //输错三次显示验证码窗口
                 if (Strings.isBlank(captcha)) {
                     throw Lang.makeThrow(CaptchaEmptyException.class, "Captcha is empty");
                 }
-                String _captcha = getRedisService().get(RedisConstant.REDIS_KEY_LOGIN_ADMIN_CAPTCHA + session.getId());
-                if (!authcToken.getCaptcha().equalsIgnoreCase(_captcha)) {
+                String captchaCache = getRedisService().get(RedisConstant.REDIS_KEY_LOGIN_ADMIN_CAPTCHA + session.getId());
+                if (!authcToken.getCaptcha().equalsIgnoreCase(captchaCache)) {
                     throw Lang.makeThrow(CaptchaIncorrectException.class, "Captcha is error");
                 }
             }
-            Sys_user user = getUserService().fetch(Cnd.where("loginname", "=", loginname).and("delFlag","=",false));
+            Sys_user user = getUserService().fetch(Cnd.where("loginname", "=", loginname).and("delFlag", "=", false));
             if (Lang.isEmpty(user)) {
                 throw Lang.makeThrow(UnknownAccountException.class, "Account [ %s ] not found", loginname);
             }
@@ -111,8 +115,9 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
                 SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
                 info.addRoles(getUserService().getRoleCodeList(user));
                 for (Sys_role role : user.getRoles()) {
-                    if (!role.isDisabled())
+                    if (!role.isDisabled()) {
                         info.addStringPermissions(getRoleService().getPermissionNameList(role));
+                    }
                 }
                 return info;
             } else {

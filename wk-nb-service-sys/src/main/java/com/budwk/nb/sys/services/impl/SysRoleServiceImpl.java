@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysRoleService.class)
@@ -39,6 +39,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
     @Inject
     private SysUserService sysUserService;
 
+    @Override
     @CacheResult
     public List<Sys_menu> getMenusAndButtons(String roleId) {
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and" +
@@ -48,6 +49,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         return sysMenuService.listEntity(sql);
     }
 
+    @Override
     @CacheResult
     public List<Sys_menu> getDatas(String roleId) {
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and" +
@@ -57,6 +59,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         return sysMenuService.listEntity(sql);
     }
 
+    @Override
     @CacheResult
     public List<Sys_menu> getDatas() {
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and a.type='data' order by a.location ASC,a.path asc");
@@ -70,6 +73,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
      * @return
      */
     //如果传参是对象,那么要取字符串做为cacheKey值,因为对象的标识是变动的
+    @Override
     @CacheResult(cacheKey = "${args[0].id}_getPermissionNameList")
     public List<String> getPermissionNameList(Sys_role role) {
         dao().fetchLinks(role, "menus");
@@ -82,6 +86,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         return list;
     }
 
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void del(String roleid) {
         this.dao().clear("sys_user_role", Cnd.where("roleId", "=", roleid));
@@ -89,6 +94,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         this.delete(roleid);
     }
 
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void del(String[] roleids) {
         this.dao().clear("sys_user_role", Cnd.where("roleId", "in", roleids));
@@ -102,6 +108,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
      * @param menuIds
      * @param roleId
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void saveMenu(String[] menuIds, String roleId) {
         this.clear("sys_role_menu", Cnd.where("roleId", "=", roleId));
@@ -126,6 +133,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
      * @param pid
      * @return
      */
+    @Override
     @CacheResult
     public List<Sys_menu> getRoleMenus(String roleId, String pid) {
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
@@ -145,6 +153,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
      * @param pid
      * @return
      */
+    @Override
     @CacheResult
     public boolean hasChildren(String roleId, String pid) {
         Sql sql = Sqls.create("select count(*) from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
@@ -168,6 +177,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
      * @param sysUnit
      * @return
      */
+    @Override
     public Pagination userSearch(String roleId, String keyword, boolean isAdmin, Sys_unit sysUnit) {
         Sql sql;
         if (DB.ORACLE.name().equals(this.dao().getJdbcExpert().getDatabaseType()) || DB.DM.name().equals(this.dao().getJdbcExpert().getDatabaseType())) {
@@ -188,6 +198,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         return this.listPage(1, 10, sql);
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

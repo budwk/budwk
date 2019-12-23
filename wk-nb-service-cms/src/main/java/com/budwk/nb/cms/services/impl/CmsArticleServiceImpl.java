@@ -12,6 +12,9 @@ import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2018/3/16.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=CmsArticleService.class)
 @CacheDefaults(cacheName = "cms_article")
@@ -20,16 +23,19 @@ public class CmsArticleServiceImpl extends BaseServiceImpl<Cms_article> implemen
         super(dao);
     }
 
+    @Override
     @CacheResult
     public Pagination getListPage(int pageNumber, int pageSize, Condition cnd) {
         return this.listPage(pageNumber, pageSize, cnd);
     }
 
+    @Override
     @CacheResult
     public Cms_article getArticle(Condition cnd) {
         return this.fetch(cnd);
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

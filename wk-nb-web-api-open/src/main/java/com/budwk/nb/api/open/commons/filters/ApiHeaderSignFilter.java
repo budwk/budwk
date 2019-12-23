@@ -19,11 +19,12 @@ import java.util.Map;
 
 /**
  * 通过 Header 参数实现的Sign签名验证拦截器
- * Created by wizzer on 2018/6/28.
+ * @author wizzer(wizzer@qq.com) on 2018/6/28.
  */
 public class ApiHeaderSignFilter implements ActionFilter {
     private static final Log log = Logs.get();
 
+    @Override
     public View match(ActionContext context) {
         try {
             ApiSignServer apiSignServer = context.getIoc().get(ApiSignServer.class);
@@ -49,8 +50,9 @@ public class ApiHeaderSignFilter implements ActionFilter {
         while (names.hasMoreElements()) {
             String paramName = names.nextElement();
             //过滤掉非签名参数
-            if ("appid".equals(paramName) || "sign".equals(paramName) || "nonce".equals(paramName) || "timestamp".equals(paramName))
+            if ("appid".equals(paramName) || "sign".equals(paramName) || "nonce".equals(paramName) || "timestamp".equals(paramName)) {
                 map.put(paramName, request.getHeader(paramName));
+            }
         }
         return map;
     }

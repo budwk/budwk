@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.slog.services.SLogSerivce;
 import com.budwk.nb.sys.models.Sys_log;
-import org.nutz.Nutz;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.el.El;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -14,35 +14,24 @@ import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.lang.random.R;
 import org.nutz.lang.segment.CharSegment;
-import org.nutz.lang.util.ClassMetaReader;
 import org.nutz.lang.util.Context;
 import org.nutz.lang.util.MethodParamNamesScaner;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * @author wizzer(wizzer@qq.com) on 2016/6/22.
  */
-@IocBean(create = "init", depose = "close")
-public class SLogServer implements Runnable {
+@IocBean
+public class SLogServer {
 
     private static final Log log = Logs.get();
-
-    ExecutorService es;
-
-    LinkedBlockingQueue<Sys_log> queue;
-
+    private static final int STATCK_TRACE_EL_NUMBER = 2;
     @Inject
     @Reference(check = false)
     protected SLogSerivce sLogSerivce;
@@ -52,16 +41,9 @@ public class SLogServer implements Runnable {
      *
      * @param syslog 日志对象
      */
+    @Async
     public void async(Sys_log syslog) {
-        LinkedBlockingQueue<Sys_log> queue = this.queue;
-        if (queue != null)
-            try {
-                boolean re = queue.offer(syslog, 50, TimeUnit.MILLISECONDS);
-                if (!re) {
-                    log.info("syslog queue is full, drop it ...");
-                }
-            } catch (InterruptedException e) {
-            }
+        this.sync(syslog);
     }
 
     /**
@@ -74,22 +56,6 @@ public class SLogServer implements Runnable {
             sLogSerivce.create(syslog);
         } catch (Throwable e) {
             log.info("create syslog sync fail", e);
-        }
-    }
-
-    public void run() {
-        while (true) {
-            LinkedBlockingQueue<Sys_log> queue = this.queue;
-            if (queue == null)
-                break;
-            try {
-                Sys_log sysLog = queue.poll(1, TimeUnit.SECONDS);
-                if (sysLog != null) {
-                    sync(sysLog);
-                }
-            } catch (InterruptedException e) {
-                break;
-            }
         }
     }
 
@@ -114,29 +80,10 @@ public class SLogServer implements Runnable {
                     boolean async,
                     Object[] args, Object re, Method method, Object obj,
                     Throwable e) {
-        String _msg = null;
+        String slogMsg = null;
         if (seg.hasKey()) {
             Context ctx = Lang.context();
-            List<String> names = null;
-            if (Nutz.majorVersion() == 1 && Nutz.minorVersion() < 60) {
-                Class<?> klass = obj.getClass();
-                if (klass.getName().endsWith("$$NUTZAOP"))
-                    klass = klass.getSuperclass();
-                String key = klass.getName();
-                if (caches.containsKey(key))
-                    names = caches.get(key).get(ClassMetaReader.getKey(method));
-                else {
-                    try {
-                        Map<String, List<String>> tmp = MethodParamNamesScaner.getParamNames(klass);
-                        names = tmp.get(ClassMetaReader.getKey(method));
-                        caches.put(key, tmp);
-                    } catch (IOException e1) {
-                        log.debug("error when reading param name");
-                    }
-                }
-            } else {
-                names = MethodParamNamesScaner.getParamNames(method);
-            }
+            List<String> names = MethodParamNamesScaner.getParamNames(method);
             if (names != null) {
                 for (int i = 0; i < names.size() && i < args.length; i++) {
                     ctx.set(names.get(i), args[i]);
@@ -148,61 +95,42 @@ public class SLogServer implements Runnable {
             ctx.set("return", re);
             ctx.set("req", Mvcs.getReq());
             ctx.set("resp", Mvcs.getResp());
-            Context _ctx = Lang.context();
             for (String key : seg.keys()) {
-                _ctx.set(key, els.get(key).eval(ctx));
+                ctx.set(key, els.get(key).eval(ctx));
             }
-            _msg = seg.render(_ctx).toString();
+            slogMsg = seg.render(ctx).toString();
         } else {
-            _msg = seg.getOrginalString();
-            if (Strings.isBlank(_msg)) {
-                _msg = Strings.sNull(Mvcs.getReq().getAttribute("_slog_msg"));
+            slogMsg = seg.getOrginalString();
+            if (Strings.isBlank(slogMsg)) {
+                slogMsg = Strings.sNull(Mvcs.getReq().getAttribute("_slog_msg"));
             }
         }
-        String _param = "";
-        String _result = "";
+        String dbParam = "";
+        String dbResult = "";
         if (param && args != null) {
             try {
-                _param = Json.toJson(args);
+                dbParam = Json.toJson(args);
             } catch (Exception e1) {
-                _param = "Json Serialization error";
+                dbParam = "Json Serialization error";
             }
         }
         if (result && re != null) {
             try {
-                _result = Json.toJson(re);
+                dbResult = Json.toJson(re);
             } catch (Exception e1) {
-                _param = "Json Serialization error";
+                dbParam = "Json Serialization error";
             }
         }
-        log(type, tag, source, _msg, async, _param, _result);
+        log(type, tag, source, slogMsg, async, dbParam, dbResult);
     }
 
 
     public void log(String type, String tag, String source, String msg, boolean async, String param, String result) {
         Sys_log slog = makeLog(type, tag, source, msg, param, result);
-        if (async)
+        if (async) {
             async(slog);
-        else
+        } else {
             sync(slog);
-    }
-
-    protected static Map<String, Map<String, List<String>>> caches = new HashMap<String, Map<String, List<String>>>();
-
-    public void init() {
-        queue = new LinkedBlockingQueue<Sys_log>();
-        int c = Runtime.getRuntime().availableProcessors();
-        es = Executors.newFixedThreadPool(c);
-        for (int i = 0; i < c; i++) {
-            es.submit(this);
-        }
-    }
-
-    public void close() throws InterruptedException {
-        queue = null; // 触发关闭
-        if (es != null && !es.isShutdown()) {
-            es.shutdown();
-            es.awaitTermination(5, TimeUnit.SECONDS);
         }
     }
 
@@ -213,7 +141,7 @@ public class SLogServer implements Runnable {
         }
         if (source == null) {
             StackTraceElement[] tmp = Thread.currentThread().getStackTrace();
-            if (tmp.length > 2) {
+            if (tmp.length > STATCK_TRACE_EL_NUMBER) {
                 source = tmp[2].getClassName() + "#" + tmp[2].getMethodName();
             } else {
                 source = "main";

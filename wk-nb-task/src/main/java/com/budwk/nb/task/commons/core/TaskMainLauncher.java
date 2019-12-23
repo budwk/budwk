@@ -27,7 +27,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * @author wizzer(wizzer@qq.com) on 2018/3/19.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.budwk.nb")
@@ -101,11 +101,13 @@ public class TaskMainLauncher {
         try {
             MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
             ObjectName objectName = new ObjectName("com.alibaba.druid:type=MockDriver");
-            if (mbeanServer.isRegistered(objectName))
+            if (mbeanServer.isRegistered(objectName)) {
                 mbeanServer.unregisterMBean(objectName);
+            }
             objectName = new ObjectName("com.alibaba.druid:type=DruidDriver");
-            if (mbeanServer.isRegistered(objectName))
+            if (mbeanServer.isRegistered(objectName)) {
                 mbeanServer.unregisterMBean(objectName);
+            }
         } catch (Exception ex) {
         }
     }

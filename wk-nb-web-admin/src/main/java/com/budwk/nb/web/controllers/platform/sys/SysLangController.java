@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by wizzer.cn on 2019/11/15
+ * @author wizzer(wizzer@qq.com) on 2019/11/15
  */
 @IocBean
 @At("/api/{version}/platform/sys/lang")

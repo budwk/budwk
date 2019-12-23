@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * @author wizzer(wizzer@qq.com) on 2016/6/21.
  */
 public abstract class BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -23,11 +23,13 @@ public abstract class BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String createdBy;
 
+    /**
+     * Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
+     * budwk v6是13位时间戳哦,不再是11位
+     */
     @Column
     @Comment("创建时间")
     @PrevInsert(now = true)
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
-    //是13位时间戳哦,不是11位
     private Long createdAt;
 
     @Column
@@ -37,12 +39,14 @@ public abstract class BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String updatedBy;
 
+    /**
+     * Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
+     * budwk v6是13位时间戳哦,不再是11位
+     */
     @Column
     @Comment("修改时间")
     @PrevInsert(now = true)
     @PrevUpdate(now = true)
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
-    //是13位时间戳哦,不是11位
     private Long updatedAt;
 
     @Column

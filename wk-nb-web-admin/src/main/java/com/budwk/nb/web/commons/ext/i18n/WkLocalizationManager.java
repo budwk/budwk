@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * 多语言字符串
- * Created by wizzer on 2019/10/29
+ * @author wizzer(wizzer@qq.com) on 2019/10/29
  */
 @IocBean
 public class WkLocalizationManager implements LocalizationManager {
@@ -25,24 +25,32 @@ public class WkLocalizationManager implements LocalizationManager {
 
     protected Map<String, NutMessageMap> msgs = new HashMap<String, NutMessageMap>();
 
+    @Override
     public void setDefaultLocal(String local) {
         this.defaultLocal = local;
     }
 
+    @Override
     public String getDefaultLocal() {
         return defaultLocal;
     }
 
+    @Override
     public Set<String> getLocals() {
         return msgs.keySet();
     }
 
-    // 如果要动态替换msg, 例如从数据库读取
-    // 请实现一个NutMessageMap的子类, 覆盖其get方法, 替换为动态实现
+    /**
+     * 替换为动态实现
+     * @param local
+     * @return
+     */
+    @Override
     public NutMessageMap getMessageMap(String local) {
         return sysLangService.getLang(local);
     }
 
+    @Override
     public String getMessage(String local, String key) {
         System.out.println("local:::" + local);
         System.out.println("key:::" + key);
@@ -50,8 +58,9 @@ public class WkLocalizationManager implements LocalizationManager {
         if (defaultLocal != null && map == null) {
             map = getMessageMap(defaultLocal);
         }
-        if (map == null)
+        if (map == null) {
             return key;
+        }
         return (String) map.getOrDefault(key, key);
     }
 }

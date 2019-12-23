@@ -8,7 +8,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/7/2.
+ * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
 @Table("wx_mass_news")
 public class Wx_mass_news extends BaseModel implements Serializable {
@@ -60,20 +60,29 @@ public class Wx_mass_news extends BaseModel implements Serializable {
     @ColDefine(type = ColType.TEXT)
     private String digest;
 
+    /**
+     * 1为显示，0为不显示
+     */
     @Column
     @Comment("显示封面")
     @ColDefine(type = ColType.INT)
-    private Integer show_cover_pic;//1为显示，0为不显示
+    private Integer show_cover_pic;
 
+    /**
+     * 0不打开，1打开
+     */
     @Column
     @Comment("是否打开评论")
     @ColDefine(type = ColType.INT)
-    private Integer need_open_comment;//0不打开，1打开
+    private Integer need_open_comment;
 
+    /**
+     * 0所有人可评论，1粉丝才可评论
+     */
     @Column
     @Comment("是否粉丝才可评论")
     @ColDefine(type = ColType.INT)
-    private Integer only_fans_can_comment;//0所有人可评论，1粉丝才可评论
+    private Integer only_fans_can_comment;
 
     @Column
     @Comment("排序字段")

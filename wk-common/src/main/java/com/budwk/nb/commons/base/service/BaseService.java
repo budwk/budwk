@@ -15,10 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 public interface BaseService<T> {
 
+    /**
+     * 获取dao对象
+     * @return
+     */
     Dao dao();
 
     /**
@@ -407,21 +411,22 @@ public interface BaseService<T> {
 
     /**
      * 清空表
-     *
+     * @param tableName 表名
      * @return
      */
     int clear(String tableName);
 
     /**
      * 按条件清除一组数据
-     *
+     * @param cnd 查询条件
      * @return
      */
     int clear(Condition cnd);
 
     /**
      * 按条件清除一组数据
-     *
+     * @param tableName 表名
+     * @param cnd 查询条件
      * @return
      */
     int clear(String tableName, Condition cnd);
@@ -460,8 +465,8 @@ public interface BaseService<T> {
 
     /**
      * 根据条件进行伪删除
-     *
-     * @param cnd
+     * @param tableName 表名
+     * @param cnd 查询条件
      * @return
      */
     int vDelete(String tableName, Condition cnd);
@@ -528,6 +533,7 @@ public interface BaseService<T> {
     List<T> query();
 
     /**
+     * 关联查询全部数据
      * @param cnd      查询条件
      * @param linkName 关联字段，支持正则 ^(a|b)$
      * @return

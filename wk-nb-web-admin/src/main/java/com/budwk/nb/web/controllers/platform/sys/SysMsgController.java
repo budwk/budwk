@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.base.page.Pagination;
+import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.sys.enums.SysMsgTypeEnum;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer.cn on 2019/12/18
+ * @author wizzer(wizzer@qq.com) on 2019/12/18
  */
 @IocBean
 @At("/api/{version}/platform/sys/msg")
@@ -216,7 +217,7 @@ public class SysMsgController {
     public Object selectUserList(@Param("searchName") String searchName, @Param("searchKeyword") String searchKeyword, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
-            if (!shiroUtil.hasRole("sysadmin")) {
+            if (!shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 cnd.and("unitid", "=", StringUtil.getPlatformUserUnitid());
             }
             if (Strings.isNotBlank(searchName) && Strings.isNotBlank(searchKeyword)) {

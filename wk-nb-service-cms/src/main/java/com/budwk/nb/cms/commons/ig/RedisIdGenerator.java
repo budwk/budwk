@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/17.
+ * @author wizzer(wizzer@qq.com) on 2018/3/17.
  */
 
 @IocBean
@@ -19,6 +19,7 @@ public class RedisIdGenerator implements IdGenerator {
 
     @Inject
     protected JedisAgent jedisAgent;
+    private final static int ID_LENGTH = 16;
 
     public RedisIdGenerator() {
     }
@@ -27,22 +28,25 @@ public class RedisIdGenerator implements IdGenerator {
         this.jedisAgent = jedisAgent;
     }
 
+    @Override
     public String next(String tableName, String prefix) {
         String key = prefix.toUpperCase();
-        if (key.length() > 16) {
-            key = key.substring(0, 16);
+        if (key.length() > ID_LENGTH) {
+            key = key.substring(0, ID_LENGTH);
         }
         try (Jedis jedis = jedisAgent.getResource()) {
-            String ym = Times.format("yyyyMM",new Date());
-            String id = String.valueOf(jedis.incr("nutzwk:ig:" + tableName.toUpperCase() + ym));
+            String ym = Times.format("yyyyMM", new Date());
+            String id = String.valueOf(jedis.incr("budwk:ig:cms:" + tableName.toUpperCase() + ym));
             return key + ym + Strings.alignRight(id, 10, '0');
         }
     }
 
+    @Override
     public Object run(List<Object> fetchParam) {
         return next((String) fetchParam.get(0), (String) fetchParam.get(1));
     }
 
+    @Override
     public String fetchSelf() {
         return "ig";
     }

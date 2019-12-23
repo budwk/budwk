@@ -15,6 +15,9 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.List;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMsgUserService.class)
 @CacheDefaults(cacheName = "sys_msg_user", cacheLiveTime = 300)
@@ -29,6 +32,7 @@ public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> impleme
      * @param loginname
      * @return
      */
+    @Override
     @CacheResult(cacheKey = "${loginname}_getUnreadNum")
     public int getUnreadNum(String loginname) {
         int size = this.count(Cnd.where("delFlag", "=", false).and("loginname", "=", loginname)
@@ -44,18 +48,24 @@ public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> impleme
      * @param pageSize
      * @return
      */
+    @Override
     @CacheResult(cacheKey = "${loginname}_getUnreadList")
     public List<Sys_msg_user> getUnreadList(String loginname, int pageNumber, int pageSize) {
         return this.query(Cnd.where("delFlag", "=", false).and("loginname", "=", loginname)
                 .desc("createdAt"), "msg", Cnd.orderBy().desc("sendAt"), new Pager().setPageNumber(pageNumber).setPageSize(pageSize));
     }
 
+    /**
+     * 可以通过el表达式加 * 通配符来批量删除一批缓存
+     * @param loginname 用户名
+     */
+    @Override
     @CacheRemove(cacheKey = "${loginname}_*")
-    //可以通过el表达式加 * 通配符来批量删除一批缓存
     public void deleteCache(String loginname) {
 
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
 
 /**
- * Created by wizzer on 2018/3/17.
+ * @author wizzer(wizzer@qq.com) on 2018/3/17.
  */
 public class StringUtil {
+    private static final String PATH_SEPARATOR = "?";
+    private static final int PATH_LENGTH = 4;
+
     /**
      * 获取平台当前登录用户的所在单位
      *
@@ -86,8 +89,8 @@ public class StringUtil {
      * @return
      */
     public static String getPath(String p) {
-        if (Strings.sNull(p).contains("?")) {
-            return p.substring(0, p.indexOf("?"));
+        if (Strings.sNull(p).contains(PATH_SEPARATOR)) {
+            return p.substring(0, p.indexOf(PATH_SEPARATOR));
         }
         return Strings.sNull(p);
     }
@@ -99,8 +102,8 @@ public class StringUtil {
      * @return
      */
     public static String getParentId(String s) {
-        if (!Strings.isEmpty(s) && s.length() > 4) {
-            return s.substring(0, s.length() - 4);
+        if (!Strings.isEmpty(s) && s.length() > PATH_LENGTH) {
+            return s.substring(0, s.length() - PATH_LENGTH);
         }
         return "";
     }

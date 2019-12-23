@@ -1,7 +1,7 @@
 package com.budwk.nb.commons.constants;
 
 /**
- * Created by wizzer.cn on 2019/12/13
+ * @author wizzer(wizzer@qq.com) on 2019/12/13
  */
 public class RedisConstant {
     public final static String REDIS_KEY_API_SIGN_DEPLOY_NONCE="api:sign:deploy:nonce:";
@@ -11,4 +11,5 @@ public class RedisConstant {
     public final static String REDIS_KEY_LOGIN_ADMIN_CAPTCHA="admin:login:captcha:";
     public final static String REDIS_KEY_LOGIN_ADMIN_SESSION="admin:login:session:";
     public final static String REDIS_KEY_ADMIN_PUBSUB="admin:pubsub:";
+    public final static String REDIS_KEY_WX_TOKEN="wx:token:";
 }

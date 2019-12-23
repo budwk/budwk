@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/8/5.
+ * @author wizzer(wizzer@qq.com) on 2016/8/5.
  */
 @Table("wx_tpl_log")
 public class Wx_tpl_log extends BaseModel implements Serializable {
@@ -39,10 +39,13 @@ public class Wx_tpl_log extends BaseModel implements Serializable {
     @ColDefine(type = ColType.TEXT)
     private String content;
 
+    /**
+     * 0 默认 1 成功 2 失败
+     */
     @Column
     @Comment("发送状态")
     @ColDefine(type = ColType.INT)
-    private int status;//0 默认 1 成功 2 失败
+    private int status;
 
     @Column
     @Comment("发送结果")

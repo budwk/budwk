@@ -9,12 +9,13 @@ import org.nutz.mvc.impl.processor.AbstractProcessor;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Wizzer.cn on 2015/7/2.
+ * @author wizzer(wizzer@qq.com) on 2015/7/2.
  */
 public class LogTimeProcessor extends AbstractProcessor {
 
     private static final Log log = Logs.get();
 
+    @Override
     public void process(ActionContext ac) throws Throwable {
         if (log.isDebugEnabled()) {
             Stopwatch sw = Stopwatch.begin();

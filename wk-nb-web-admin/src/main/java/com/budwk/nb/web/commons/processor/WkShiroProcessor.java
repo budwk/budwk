@@ -14,7 +14,7 @@ import org.nutz.mvc.impl.processor.AbstractProcessor;
 
 /**
  * Shiro权限验证
- * Created by wizzer on 2016/6/24.
+ * @author wizzer(wizzer@qq.com) on 2016/6/24.
  */
 public class WkShiroProcessor extends AbstractProcessor {
 
@@ -28,14 +28,19 @@ public class WkShiroProcessor extends AbstractProcessor {
         interceptor = new NutShiroMethodInterceptor();
     }
 
+    @Override
     public void init(NutConfig config, ActionInfo ai) throws Throwable {
-        if (init) // 禁止重复初始化,常见于ioc注入且使用了单例
+        // 禁止重复初始化,常见于ioc注入且使用了单例
+        if (init)
+        {
             throw new IllegalStateException("this Processor have bean inited!!");
+        }
         super.init(config, ai);
         match = NutShiro.match(ai.getMethod());
         init = true;
     }
 
+    @Override
     public void process(ActionContext ac) throws Throwable {
         if (match) {
             try {

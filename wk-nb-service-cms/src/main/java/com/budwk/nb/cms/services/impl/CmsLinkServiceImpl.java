@@ -29,6 +29,7 @@ public class CmsLinkServiceImpl extends BaseServiceImpl<Cms_link> implements Cms
     @Inject
     private CmsLinkClassService cmsLinkClassService;
 
+    @Override
     @CacheResult
     public List<Cms_link> getLinkList(String code, int size) {
         List<Cms_link> links = new ArrayList<>();
@@ -42,6 +43,7 @@ public class CmsLinkServiceImpl extends BaseServiceImpl<Cms_link> implements Cms
         return links;
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

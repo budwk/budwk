@@ -8,7 +8,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * @author wizzer(wizzer@qq.com) on 2016/6/21.
  */
 @Table("sys_unit")
 @TableIndexes({@Index(name = "INDEX_SYS_UNIT_PATH", fields = {"path"}, unique = true),

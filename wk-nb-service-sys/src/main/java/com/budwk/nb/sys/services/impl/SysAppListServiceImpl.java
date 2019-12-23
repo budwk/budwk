@@ -12,7 +12,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import java.util.List;
 
 /**
- * Created by wizzer on 2019/2/27.
+ * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysAppListService.class)
@@ -21,6 +21,7 @@ public class SysAppListServiceImpl extends BaseServiceImpl<Sys_app_list> impleme
         super(dao);
     }
 
+    @Override
     public List<String> getAppNameList() {
         Sql sql = Sqls.create("SELECT DISTINCT appName FROM sys_app_list");
         sql.setCallback(Sqls.callback.strs());

@@ -18,6 +18,9 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.List;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=CmsChannelService.class)
 @CacheDefaults(cacheName = "cms_channel")
@@ -32,13 +35,16 @@ public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implemen
      * @param channel
      * @param pid
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void save(Cms_channel channel, String pid) {
         String path = "";
         if (!Strings.isEmpty(pid)) {
             Cms_channel pp = this.fetch(pid);
             path = pp.getPath();
-        } else pid = "";
+        } else {
+            pid = "";
+        }
         channel.setPath(getSubPath("cms_channel", "path", path));
         channel.setParentId(pid);
         dao().insert(channel);
@@ -52,6 +58,7 @@ public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implemen
      *
      * @param channel
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteAndChild(Cms_channel channel) {
         dao().execute(Sqls.create("delete from cms_channel where path like @path").setParam("path", channel.getPath() + "%"));
@@ -64,6 +71,7 @@ public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implemen
         }
     }
 
+    @Override
     @CacheResult
     public Cms_channel getChannel(String id, String code) {
         if (Strings.isNotBlank(code)) {
@@ -72,19 +80,22 @@ public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implemen
         return this.fetch(id);
     }
 
+    @Override
     @CacheResult
     public boolean hasChannel(String code) {
         return this.count(Cnd.where("code", "=", code).and("disabled","=",false)) > 0;
     }
 
 
+    @Override
     @CacheResult
     public List<Cms_channel> listChannel(String parentId, String parentCode) {
         Cnd cnd = Cnd.NEW();
         if (Strings.isNotBlank(parentCode)) {
             Cms_channel channel = this.fetch(Cnd.where("code", "=", parentCode));
-            if (channel != null)
+            if (channel != null) {
                 cnd.and("parentId", "=", channel.getId()).and("disabled", "=", false);
+            }
         } else {
             cnd.and("parentId", "=", Strings.sNull(parentId)).and("disabled", "=", false);
         }
@@ -92,6 +103,7 @@ public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implemen
         return this.query(cnd);
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

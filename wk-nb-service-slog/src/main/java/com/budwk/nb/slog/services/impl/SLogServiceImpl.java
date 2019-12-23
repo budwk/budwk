@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer.cn on 2019/12/13
+ * @author wizzer(wizzer@qq.com) on 2019/12/13
  */
 @IocBean(create = "init")
 @Service(interfaceClass = SLogSerivce.class)
@@ -45,6 +45,7 @@ public class SLogServiceImpl implements SLogSerivce {
         }
     }
 
+    @Override
     public void create(Sys_log log) {
         if ("db".equals(dbType)) {
             sysLogService.fastInsertSysLog(log);
@@ -54,6 +55,7 @@ public class SLogServiceImpl implements SLogSerivce {
         }
     }
 
+    @Override
     public Pagination list(String type, String loginname, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         if ("db".equals(dbType)) {
             return sysLogService.list(type, loginname, startTime, endTime, pageOrderName, pageOrderBy, pageNumber, pageSize);

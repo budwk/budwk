@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer.cn on 2019/11/26
+ * @author wizzer(wizzer@qq.com) on 2019/11/26
  */
 @IocBean
 @At("/api/{version}/platform/sys/dict")

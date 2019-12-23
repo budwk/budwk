@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Wizzer on 2016/7/18.
+ * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
 @Table("cms_link_class")
 @TableIndexes({@Index(name = "INDEX_CMS_LINK_CLASS", fields = {"code"}, unique = true)})

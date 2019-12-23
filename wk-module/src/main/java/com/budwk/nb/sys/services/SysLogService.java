@@ -5,7 +5,7 @@ import com.budwk.nb.commons.base.service.BaseService;
 import com.budwk.nb.sys.models.Sys_log;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 public interface SysLogService extends BaseService<Sys_log> {
     /**

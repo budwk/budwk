@@ -6,6 +6,9 @@ import com.budwk.nb.commons.base.service.BaseService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/3/16.
+ */
 public interface SysDictService extends BaseService<Sys_dict> {
     /**
      * 通过code获取名称

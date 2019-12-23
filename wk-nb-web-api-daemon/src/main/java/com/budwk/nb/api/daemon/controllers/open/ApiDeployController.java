@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * 应用管理服务端接口
- * Created by wizzer on 2019/3/8.
+ * @author wizzer(wizzer@qq.com) on 2019/3/8.
  */
 @IocBean
 @At("/open/api/deploy")
@@ -57,11 +57,11 @@ public class ApiDeployController {
     @Ok("json")
     @POST
     public Object task(@Param("apps") String[] apps, @Param("hostname") String hostname, @Param("timestamp") long timestamp,
-                       @Param("mem_total") long mem_total, @Param("mem_used") long mem_used,
-                       @Param("mem_free") long mem_free, @Param("mem_percent") double mem_percent,
-                       @Param("cpu_percent") double cpu_percent, @Param("net_sent") long net_sent, @Param("net_recv") long net_recv,
-                       @Param("net_tcp") long net_tcp, @Param("hdd_total") long hdd_total, @Param("hdd_used") long hdd_used,
-                       @Param("hdd_free") long hdd_free, @Param("hdd_percent") double hdd_percent) {
+                       @Param("mem_total") long memTotal, @Param("mem_used") long memUsed,
+                       @Param("mem_free") long memFree, @Param("mem_percent") double memPercent,
+                       @Param("cpu_percent") double cpuPercent, @Param("net_sent") long netSent, @Param("net_recv") long netRecv,
+                       @Param("net_tcp") long netTcp, @Param("hdd_total") long hddTotal, @Param("hdd_used") long hddUsed,
+                       @Param("hdd_free") long hddFree, @Param("hdd_percent") double hddPercent) {
         try {
             List<Sys_app_task> list = sysAppTaskService.query(Cnd.where("name", "in", apps).and("hostName", "=", hostname).and("status", "=", 0));
             List<String> ids = new ArrayList<>();
@@ -73,18 +73,18 @@ public class ApiDeployController {
             long now3 = Times.getTS() - 3 * 60;
             sysAppTaskService.update(Chain.make("status", 3).add("pushAt", Times.getTS()).add("pushResult", "任务超时"),
                     Cnd.where("name", "in", apps).and("hostName", "=", hostname).and("status", "=", 1).and("opAt", "<", now3));
-            NutMap map = NutMap.NEW().addv("mem_total", mem_total)
-                    .addv("mem_used", mem_used)
-                    .addv("mem_free", mem_free)
-                    .addv("mem_percent", mem_percent)
-                    .addv("cpu_percent", cpu_percent)
-                    .addv("net_sent", net_sent)
-                    .addv("net_recv", net_recv)
-                    .addv("net_tcp", net_tcp)
-                    .addv("hdd_total", hdd_total)
-                    .addv("hdd_used", hdd_used)
-                    .addv("hdd_free", hdd_free)
-                    .addv("hdd_percent", hdd_percent)
+            NutMap map = NutMap.NEW().addv("mem_total", memTotal)
+                    .addv("mem_used", memUsed)
+                    .addv("mem_free", memFree)
+                    .addv("mem_percent", memPercent)
+                    .addv("cpu_percent", cpuPercent)
+                    .addv("net_sent", netSent)
+                    .addv("net_recv", netRecv)
+                    .addv("net_tcp", netTcp)
+                    .addv("hdd_total", hddTotal)
+                    .addv("hdd_used", hddUsed)
+                    .addv("hdd_free", hddFree)
+                    .addv("hdd_percent", hddPercent)
                     .addv("timestamp", timestamp);
             redisService.setex("logback:deploy:" + hostname + ":" + timestamp, 10 * 60, Json.toJson(map, JsonFormat.compact()));
             return Result.success("获取成功").addData(list);

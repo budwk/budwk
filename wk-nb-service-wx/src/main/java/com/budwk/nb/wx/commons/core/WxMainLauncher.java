@@ -15,7 +15,7 @@ import java.sql.DriverManager;
 import java.util.Enumeration;
 
 /**
- * Created by wizzer on 2018/3/17.
+ * @author wizzer(wizzer@qq.com) on 2018/3/17.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.budwk.nb")

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<T> {
     private static int DEFAULT_PAGE_NUMBER = 10;
@@ -35,6 +35,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return 实体的Entity
      */
+    @Override
     public Entity<T> getEntity() {
         return super.getEntity();
     }
@@ -44,6 +45,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return 实体类型
      */
+    @Override
     public Class<T> getEntityClass() {
         return super.getEntityClass();
     }
@@ -54,6 +56,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public int count(Condition cnd) {
         return this.dao().count(this.getEntityClass(), cnd);
     }
@@ -63,6 +66,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public int count() {
         return this.dao().count(this.getEntityClass());
     }
@@ -74,6 +78,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public int count(String tableName, Condition cnd) {
         return this.dao().count(tableName, cnd);
     }
@@ -84,6 +89,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param tableName
      * @return
      */
+    @Override
     public int count(String tableName) {
         return this.dao().count(tableName);
     }
@@ -94,8 +100,10 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public int count(Sql sql) {
         sql.setCallback(new SqlCallback() {
+            @Override
             public Object invoke(Connection conn, ResultSet rs, Sql sql)
                     throws SQLException {
                 int rsvalue = 0;
@@ -115,6 +123,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public T fetch(long id) {
         return this.dao().fetch(this.getEntityClass(), id);
     }
@@ -125,6 +134,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public T fetch(String id) {
         return this.dao().fetch(this.getEntityClass(), id);
     }
@@ -136,6 +146,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param regex 为null查询全部,支持通配符 ^(a|b)$
      * @return
      */
+    @Override
     public <T> T fetchLinks(T obj, String regex) {
         return this.dao().fetchLinks(obj, regex);
     }
@@ -148,6 +159,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd   关联字段的过滤(排序,条件语句,分页等)
      * @return
      */
+    @Override
     public <T> T fetchLinks(T obj, String regex, Condition cnd) {
         return this.dao().fetchLinks(obj, regex, cnd);
     }
@@ -158,6 +170,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd 查询条件
      * @return 实体, 如不存在则为null
      */
+    @Override
     public T fetch(Condition cnd) {
         return dao().fetch(getEntityClass(), cnd);
     }
@@ -168,6 +181,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param pks 键值
      * @return 对象 T
      */
+    @Override
     public T fetchx(Object... pks) {
         return dao().fetchx(getEntityClass(), pks);
     }
@@ -178,6 +192,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param pks 键值
      * @return 对象 T
      */
+    @Override
     public boolean exists(Object... pks) {
         return null != fetchx(pks);
     }
@@ -194,6 +209,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *            注意：如果是集合，数组或者 Map，所有的对象必须类型相同，否则可能会出错
      * @return 插入后的对象
      */
+    @Override
     public <T> T insert(T obj) {
         return this.dao().insert(obj);
     }
@@ -208,6 +224,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @return 插入后的对象
      * @see org.nutz.dao.Dao#insert(Object)
      */
+    @Override
     public <T> T insert(T obj, FieldFilter filter) {
         return this.dao().insert(obj, filter);
     }
@@ -218,6 +235,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param obj 对象
      * @return 原对象
      */
+    @Override
     public <T> T insertOrUpdate(T obj) {
         return this.dao().insertOrUpdate(obj);
     }
@@ -230,6 +248,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param updateFieldFilter 更新时的字段过滤,可以是null
      * @return 原对象
      */
+    @Override
     public <T> T insertOrUpdate(T obj, FieldFilter insertFieldFilter, FieldFilter updateFieldFilter) {
         return this.dao().insertOrUpdate(obj, insertFieldFilter, updateFieldFilter);
     }
@@ -240,6 +259,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param tableName 表名
      * @param chain     数据名值链
      */
+    @Override
     public void insert(String tableName, Chain chain) {
         this.dao().insert(tableName, chain);
     }
@@ -250,6 +270,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param obj
      * @return
      */
+    @Override
     public <T> T fastInsert(T obj) {
         return this.dao().fastInsert(obj);
     }
@@ -266,6 +287,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @see org.nutz.dao.entity.annotation.Many
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
+    @Override
     public <T> T insertWith(T obj, String regex) {
         return this.dao().insertWith(obj, regex);
     }
@@ -280,6 +302,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @see org.nutz.dao.entity.annotation.Many
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
+    @Override
     public <T> T insertLinks(T obj, String regex) {
         return this.dao().insertLinks(obj, regex);
     }
@@ -292,6 +315,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @return 对象自身
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
+    @Override
     public <T> T insertRelation(T obj, String regex) {
         return this.dao().insertRelation(obj, regex);
     }
@@ -302,6 +326,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param obj
      * @return
      */
+    @Override
     public int update(Object obj) {
         return this.dao().update(obj);
     }
@@ -312,6 +337,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param obj
      * @return
      */
+    @Override
     public int updateIgnoreNull(Object obj) {
         return this.dao().updateIgnoreNull(obj);
     }
@@ -323,6 +349,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public int update(Chain chain, Condition cnd) {
         return this.dao().update(this.getEntityClass(), chain, cnd);
     }
@@ -335,6 +362,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public int update(String tableName, Chain chain, Condition cnd) {
         return this.dao().update(tableName, chain, cnd);
     }
@@ -351,6 +379,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @see org.nutz.dao.entity.annotation.Many
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
+    @Override
     public <T> T updateWith(T obj, String regex) {
         return this.dao().updateWith(obj, regex);
     }
@@ -365,6 +394,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @see org.nutz.dao.entity.annotation.Many
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
+    @Override
     public <T> T updateLinks(T obj, String regex) {
         return this.dao().updateLinks(obj, regex);
     }
@@ -383,6 +413,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @return 共有多少条数据被更新
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
+    @Override
     public int updateRelation(Class<?> classOfT, String regex, Chain chain, Condition cnd) {
         return this.dao().updateRelation(classOfT, regex, chain, cnd);
     }
@@ -393,6 +424,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param obj 需要更新的对象, 必须有version属性
      * @return 若更新成功, 大于0, 否则小于0
      */
+    @Override
     public int updateWithVersion(Object obj) {
         return this.dao().updateWithVersion(obj);
     }
@@ -404,6 +436,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param fieldFilter 需要过滤的字段设置
      * @return 若更新成功, 大于0, 否则小于0
      */
+    @Override
     public int updateWithVersion(Object obj, FieldFilter fieldFilter) {
         return this.dao().updateWithVersion(obj, fieldFilter);
     }
@@ -420,6 +453,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param fieldName   参考字段的Java属性名.默认是"version",可以是任意数值字段
      * @return 若更新成功, 返回值大于0, 否则小于等于0
      */
+    @Override
     public int updateAndIncrIfMatch(Object obj, FieldFilter fieldFilter, String fieldName) {
         return this.dao().updateAndIncrIfMatch(obj, fieldFilter, fieldName);
     }
@@ -429,6 +463,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public int getMaxId() {
         return this.dao().getMaxId(this.getEntityClass());
     }
@@ -439,6 +474,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public int delete(long id) {
         return this.dao().delete(this.getEntityClass(), id);
     }
@@ -449,6 +485,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public int delete(int id) {
         return this.dao().delete(this.getEntityClass(), id);
     }
@@ -459,6 +496,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public int delete(String id) {
         return this.dao().delete(this.getEntityClass(), id);
     }
@@ -468,6 +506,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @param ids
      */
+    @Override
     public void delete(Integer[] ids) {
         this.dao().clear(this.getEntityClass(), Cnd.where("id", "in", ids));
     }
@@ -477,6 +516,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @param ids
      */
+    @Override
     public void delete(Long[] ids) {
         this.dao().clear(this.getEntityClass(), Cnd.where("id", "in", ids));
     }
@@ -486,6 +526,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @param ids
      */
+    @Override
     public void delete(String[] ids) {
         this.dao().clear(this.getEntityClass(), Cnd.where("id", "in", ids));
     }
@@ -495,6 +536,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @param ids
      */
+    @Override
     public void delete(List<String> ids) {
         this.dao().clear(this.getEntityClass(), Cnd.where("id", "in", ids));
     }
@@ -504,6 +546,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public int clear() {
         return this.dao().clear(this.getEntityClass());
     }
@@ -513,6 +556,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public int clear(String tableName) {
         return this.dao().clear(tableName);
     }
@@ -522,6 +566,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public int clear(Condition cnd) {
         return this.dao().clear(this.getEntityClass(), cnd);
     }
@@ -531,6 +576,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public int clear(String tableName, Condition cnd) {
         return this.dao().clear(tableName, cnd);
     }
@@ -541,6 +587,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public int vDelete(String id) {
         return this.dao().update(this.getEntityClass(), Chain.make("delFlag", true), Cnd.where("id", "=", id));
     }
@@ -551,6 +598,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param ids
      * @return
      */
+    @Override
     public int vDelete(String[] ids) {
         return this.dao().update(this.getEntityClass(), Chain.make("delFlag", true), Cnd.where("id", "in", ids));
     }
@@ -561,6 +609,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param ids
      * @return
      */
+    @Override
     public int vDelete(List<String> ids) {
         return this.dao().update(this.getEntityClass(), Chain.make("delFlag", true), Cnd.where("id", "in", ids));
     }
@@ -571,6 +620,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public int vDelete(Condition cnd) {
         return this.dao().update(this.getEntityClass(), Chain.make("delFlag", true), cnd);
     }
@@ -581,6 +631,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public int vDelete(String tableName, Condition cnd) {
         return this.dao().update(tableName, Chain.make("delFlag", true), cnd);
     }
@@ -592,6 +643,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public T getField(String fieldName, long id) {
         return Daos.ext(this.dao(), FieldFilter.create(this.getEntityClass(), fieldName))
                 .fetch(this.getEntityClass(), id);
@@ -604,6 +656,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param id
      * @return
      */
+    @Override
     public T getField(String fieldName, int id) {
         return Daos.ext(this.dao(), FieldFilter.create(this.getEntityClass(), fieldName))
                 .fetch(this.getEntityClass(), id);
@@ -617,6 +670,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param name
      * @return
      */
+    @Override
     public T getField(String fieldName, String name) {
         return Daos.ext(this.dao(), FieldFilter.create(this.getEntityClass(), fieldName))
                 .fetch(this.getEntityClass(), name);
@@ -629,6 +683,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public T getField(String fieldName, Condition cnd) {
         return Daos.ext(this.dao(), FieldFilter.create(this.getEntityClass(), fieldName))
                 .fetch(this.getEntityClass(), cnd);
@@ -641,6 +696,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public List<T> query(String fieldName, Condition cnd) {
         return Daos.ext(this.dao(), FieldFilter.create(this.getEntityClass(), fieldName))
                 .query(this.getEntityClass(), cnd);
@@ -653,6 +709,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *            只有在调用这个函数的时候， cnd.limit 才会生效
      * @return 对象列表
      */
+    @Override
     public List<T> query(Condition cnd) {
         return dao().query(getEntityClass(), cnd);
     }
@@ -663,6 +720,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      *
      * @return
      */
+    @Override
     public List<T> query() {
         return dao().query(getEntityClass(), null);
     }
@@ -675,6 +733,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param linkName 关联字段，支持正则 ^(a|b)$
      * @return
      */
+    @Override
     public List<T> query(Condition cnd, String linkName) {
         List<T> list = this.dao().query(this.getEntityClass(), cnd);
         if (!Strings.isBlank(linkName)) {
@@ -691,6 +750,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param linkCnd  关联条件
      * @return
      */
+    @Override
     public List<T> query(Condition cnd, String linkName, Condition linkCnd) {
         List<T> list = this.dao().query(this.getEntityClass(), cnd);
         if (!Strings.isBlank(linkName)) {
@@ -705,6 +765,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param linkName 关联字段，支持正则 ^(a|b)$
      * @return
      */
+    @Override
     public List<T> query(String linkName) {
         return this.query(null, linkName);
     }
@@ -718,6 +779,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param pager    分页对象
      * @return
      */
+    @Override
     public List<T> query(Condition cnd, String linkName, Pager pager) {
         List<T> list = this.dao().query(this.getEntityClass(), cnd, pager);
         if (!Strings.isBlank(linkName)) {
@@ -735,6 +797,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param pager    分页对象
      * @return
      */
+    @Override
     public List<T> query(Condition cnd, String linkName, Condition linkCnd, Pager pager) {
         List<T> list = this.dao().query(this.getEntityClass(), cnd, pager);
         if (!Strings.isBlank(linkName)) {
@@ -750,6 +813,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param pager 分页对象
      * @return
      */
+    @Override
     public List<T> query(Condition cnd, Pager pager) {
         return this.dao().query(getEntityClass(), cnd, pager);
     }
@@ -762,6 +826,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd             查询条件
      * @return
      */
+    @Override
     public NutMap query(String keyColumnName, String valueColumnName, Condition cnd) {
         NutMap nutMap = NutMap.NEW();
         List<Record> list = this.dao().query(this.getEntity().getTableName(), cnd);
@@ -780,6 +845,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd             查询条件
      * @return
      */
+    @Override
     public NutMap query(String tableName, String keyColumnName, String valueColumnName, Condition cnd) {
         NutMap nutMap = NutMap.NEW();
         List<Record> list = this.dao().query(tableName, cnd);
@@ -797,12 +863,14 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param value
      * @return
      */
+    @Override
     public String getSubPath(String tableName, String colName, String value) {
         final String val = Strings.sNull(value);
         Sql sql = Sqls.create("select " + colName + " from " + tableName
                 + " where " + colName + " like '" + val + "____' order by "
                 + colName + " desc");
         sql.setCallback(new SqlCallback() {
+            @Override
             public Object invoke(Connection conn, ResultSet rs, Sql sql)
                     throws SQLException {
                 String rsvalue = val + "0001";
@@ -828,6 +896,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param path
      * @return
      */
+    @Override
     public String getParentPath(String path) {
         return !Strings.isEmpty(path) && path.length() > 4 ? path.substring(0, path.length() - 4) : "";
     }
@@ -838,6 +907,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public Sql execute(Sql sql) {
         return this.dao().execute(sql);
     }
@@ -849,6 +919,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public List<Record> list(Sql sql) {
         sql.setCallback(Sqls.callback.records());
         this.dao().execute(sql);
@@ -862,6 +933,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public List<T> listEntity(Sql sql) {
         sql.setEntity(getEntity());
         sql.setCallback(Sqls.callback.entities());
@@ -875,6 +947,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public Map getMap(Sql sql) {
         sql.setCallback(new SqlCallback() {
             @Override
@@ -897,6 +970,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public NutMap getNutMap(Sql sql) {
         sql.setCallback(new SqlCallback() {
             @Override
@@ -920,6 +994,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, Condition cnd) {
         return listPage(pageNumber, DEFAULT_PAGE_NUMBER, cnd);
     }
@@ -931,6 +1006,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, Sql sql) {
         return listPage(pageNumber, DEFAULT_PAGE_NUMBER, sql);
     }
@@ -943,6 +1019,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, int pageSize, Sql sql) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -960,6 +1037,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param countSql   统计语句
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, Sql sql, Sql countSql) {
         return listPage(pageNumber, DEFAULT_PAGE_NUMBER, sql, countSql);
     }
@@ -971,6 +1049,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param countSql   统计语句
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, int pageSize, Sql sql, Sql countSql) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -991,6 +1070,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public Pagination listPageMap(Integer pageNumber, Sql sql) {
         return listPageMap(pageNumber, DEFAULT_PAGE_NUMBER, sql);
     }
@@ -1003,6 +1083,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param sql
      * @return
      */
+    @Override
     public Pagination listPageMap(Integer pageNumber, int pageSize, Sql sql) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -1020,6 +1101,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param countSql   统计语句
      * @return
      */
+    @Override
     public Pagination listPageMap(Integer pageNumber, Sql sql, Sql countSql) {
         return listPageMap(pageNumber, DEFAULT_PAGE_NUMBER, sql, countSql);
     }
@@ -1031,6 +1113,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param countSql   统计语句
      * @return
      */
+    @Override
     public Pagination listPageMap(Integer pageNumber, int pageSize, Sql sql, Sql countSql) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -1052,6 +1135,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, String tableName, Condition cnd) {
         return listPage(pageNumber, DEFAULT_PAGE_NUMBER, tableName, cnd);
     }
@@ -1064,6 +1148,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, int pageSize, Condition cnd) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -1082,6 +1167,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param fieldName  支持通配符 ^(a|b)$
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, int pageSize, Condition cnd, String fieldName) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -1100,6 +1186,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param linkName   支持通配符 ^(a|b)$
      * @return
      */
+    @Override
     public Pagination listPageLinks(Integer pageNumber, int pageSize, Condition cnd, String linkName) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -1120,6 +1207,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param subCnd     子查询条件
      * @return
      */
+    @Override
     public Pagination listPageLinks(Integer pageNumber, int pageSize, Condition cnd, String linkName, Condition subCnd) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
@@ -1127,10 +1215,11 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
         List<T> list = this.dao().query(this.getEntityClass(), cnd, pager);
         pager.setRecordCount(this.dao().count(this.getEntityClass(), cnd));
         if (!Strings.isBlank(linkName)) {
-            if (subCnd != null)
+            if (subCnd != null) {
                 this.dao().fetchLinks(list, linkName, subCnd);
-            else
+            } else {
                 this.dao().fetchLinks(list, linkName);
+            }
         }
         return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
     }
@@ -1144,6 +1233,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd
      * @return
      */
+    @Override
     public Pagination listPage(Integer pageNumber, int pageSize, String tableName, Condition cnd) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);

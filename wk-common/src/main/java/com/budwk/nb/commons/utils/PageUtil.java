@@ -3,7 +3,7 @@ package com.budwk.nb.commons.utils;
 import org.nutz.lang.util.NutMap;
 
 /**
- * Created by wizzer on 2018.09
+ * @author wizzer(wizzer@qq.com) on 2018.09
  */
 public class PageUtil {
     public static String getOrder(String key) {

@@ -17,7 +17,7 @@ import org.nutz.mvc.annotation.Param;
 
 /**
  * 获取多语言标识符
- * Created by wizzer on 2019/11/13
+ * @author wizzer(wizzer@qq.com) on 2019/11/13
  */
 @IocBean
 @At("/api/{version}/open/language")
@@ -84,8 +84,9 @@ public class ApiLangController {
     @Ok("json")
     public Object setLang(@Param("lang") String lang) {
         try {
-            if (Strings.isNotBlank(lang))
+            if (Strings.isNotBlank(lang)) {
                 Mvcs.setLocalizationKey(lang);
+            }
             return Result.success();
         } catch (Exception e) {
             log.error(e);

@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/7/3.
+ * @author wizzer(wizzer@qq.com) on 2016/7/3.
  */
 @IocBean
 @At("/open/pay/wx/back")
@@ -36,7 +36,8 @@ public class WxPayBackController {
         NutMap res = Xmls.xmlToMap(Streams.readAndClose(reader));
         log.debug("res::" + Json.toJson(res));
         Map<String, Object> map = new HashMap<>();
-        map.put("return_code", "SUCCESS");//FAIL
+        // FAIL = 失败
+        map.put("return_code", "SUCCESS");
         return Xmls.mapToXml(map);
     }
 

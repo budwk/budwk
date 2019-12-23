@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/7/30.
+ * @author wizzer(wizzer@qq.com) on 2016/7/30.
  */
 @Table("sys_task")
 public class Sys_task extends BaseModel implements Serializable {

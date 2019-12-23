@@ -18,7 +18,7 @@ import org.nutz.mvc.upload.UploadAdaptor;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by wizzer on 2018/4/4.
+ * @author wizzer(wizzer@qq.com) on 2018/4/4.
  */
 @IocBean
 @At("/open/api/file")
@@ -36,7 +36,8 @@ public class ApiFileTestController {
     public Object upload1(@Param("Filedata") TempFile tf, @Param("..") NutMap params, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             log.debug("params::" + Json.toJson(params));
-            params.remove("Filedata");//Filedata不参与签名
+            // Filedata不参与签名
+            params.remove("Filedata");
             Result result = apiSignServer.checkSign(params);
             if (result == null) {
                 return Result.error("签名出错");
@@ -51,7 +52,6 @@ public class ApiFileTestController {
             } else {
                 long fileId = tmpFilePool.getFileId(tf.getFile());
                 //获取临时文件ID,在表单提交的API里通过此ID获取文件
-                //tmpFilePool.getFile(fileId,"jpg");
                 String suffix = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf("."));
                 return Result.success("上传成功",
                         NutMap.NEW().addv("file_id", fileId)
@@ -79,7 +79,6 @@ public class ApiFileTestController {
             } else {
                 long fileId = tmpFilePool.getFileId(tf.getFile());
                 //获取临时文件ID,在表单提交的API里通过此ID获取文件
-                //tmpFilePool.getFile(fileId,"jpg");
                 String suffix = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf("."));
                 return Result.success("上传成功",
                         NutMap.NEW().addv("file_id", fileId)

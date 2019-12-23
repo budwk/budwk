@@ -10,7 +10,7 @@ import org.nutz.lang.Strings;
 
 /**
  * session动作监听
- * Created by wizzer on 2018/7/5.
+ * @author wizzer(wizzer@qq.com) on 2018/7/5.
  */
 @IocBean
 public class WebSessionListener implements SessionListener {

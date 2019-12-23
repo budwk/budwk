@@ -15,6 +15,9 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMsgService.class)
 public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMsgService {
@@ -34,6 +37,7 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
      * @param users
      * @return
      */
+    @Override
     public Sys_msg saveMsg(Sys_msg sysMsg, String[] users) {
         Sys_msg dbMsg = this.insert(sysMsg);
         if (dbMsg != null) {
@@ -70,6 +74,7 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
         return dbMsg;
     }
 
+    @Override
     public void deleteMsg(String id) {
         this.vDelete(id);
         sysMsgUserService.vDelete(Cnd.where("msgId", "=", id));

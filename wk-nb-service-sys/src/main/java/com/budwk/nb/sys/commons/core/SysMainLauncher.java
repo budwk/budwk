@@ -1,5 +1,6 @@
 package com.budwk.nb.sys.commons.core;
 
+import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.sys.models.*;
 import org.nutz.boot.NbApp;
 import org.nutz.dao.Chain;
@@ -22,7 +23,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/16.
+ * @author wizzer(wizzer@qq.com) on 2018/3/16.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.budwk.nb")
@@ -39,11 +40,9 @@ public class SysMainLauncher {
     }
 
     public void init() {
-        //通过POJO类创建表结构
+        // 通过POJO类创建表结构
         try {
             Daos.createTablesInPackage(dao, "com.budwk.nb.app.sys", false);
-            //通过POJO类修改表结构
-            //Daos.migration(dao, "com.budwk.nb.app.sys", true, false);
         } catch (Exception e) {
             log.error(e);
         }
@@ -821,7 +820,7 @@ public class SysMainLauncher {
             dao.insert(role);
             role = new Sys_role();
             role.setName("系统管理员");
-            role.setCode("sysadmin");
+            role.setCode(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME);
             role.setNote("System Admin");
             role.setUnitid("");
             role.setMenus(menuList);
@@ -830,10 +829,8 @@ public class SysMainLauncher {
             //初始化用户
             Sys_user user = new Sys_user();
             user.setId("5f8cebd7022c409a94e90da1d840b8bb");
-            user.setLoginname("superadmin");
+            user.setLoginname(PlatformConstant.PLATFORM_DEFAULT_SUPERADMIN_NAME);
             user.setUsername("超级管理员");
-            //String slat=R.UU32();
-            //new Sha256Hash("1",ByteSource.Util.bytes(s), 1024).toHex();
             user.setSalt("r5tdr01s7uglfokpsdmtu15602");
             user.setPassword("1bba9287ebc50b766bff84273d11ccefaa7a8da95d078960f05f116e9d970fb0");
             user.setLoginIp("127.0.0.1");

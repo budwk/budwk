@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer.cn on 2019/11/22
+ * @author wizzer(wizzer@qq.com) on 2019/11/22
  */
 @IocBean
 @At("/api/{version}/platform/sys/menu")

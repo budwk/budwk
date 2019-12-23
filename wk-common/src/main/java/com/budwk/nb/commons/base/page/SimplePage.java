@@ -3,6 +3,9 @@ package com.budwk.nb.commons.base.page;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2016/6/21.
+ */
 public class SimplePage implements java.io.Serializable, Paginable {
     private static final long serialVersionUID = 1L;
     public static final int DEF_COUNT = 10;
@@ -61,6 +64,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 获得页码
      */
+    @Override
     public int getPageNo() {
         return pageNo;
     }
@@ -68,6 +72,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 每页几条数据
      */
+    @Override
     public int getPageSize() {
         return pageSize;
     }
@@ -75,6 +80,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 总共几条数据
      */
+    @Override
     public int getTotalCount() {
         return totalCount;
     }
@@ -82,6 +88,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 总共几页
      */
+    @Override
     public int getTotalPage() {
         int totalPage = totalCount / pageSize;
         if (totalPage == 0 || totalCount % pageSize != 0) {
@@ -93,6 +100,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 是否第一页
      */
+    @Override
     public boolean isFirstPage() {
         return pageNo <= 1;
     }
@@ -100,6 +108,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 是否最后一页
      */
+    @Override
     public boolean isLastPage() {
         return pageNo >= getTotalPage();
     }
@@ -107,6 +116,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 下一页页码
      */
+    @Override
     public int getNextPage() {
         if (isLastPage()) {
             return pageNo;
@@ -118,6 +128,7 @@ public class SimplePage implements java.io.Serializable, Paginable {
     /**
      * 上一页页码
      */
+    @Override
     public int getPrePage() {
         if (isFirstPage()) {
             return pageNo;

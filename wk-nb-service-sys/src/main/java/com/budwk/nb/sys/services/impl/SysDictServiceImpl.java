@@ -36,6 +36,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param code
      * @return
      */
+    @Override
     @CacheResult
     public String getNameByCode(String code) {
         Sys_dict dict = this.fetch(Cnd.where("code", "=", code));
@@ -48,6 +49,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param id
      * @return
      */
+    @Override
     @CacheResult
     public String getNameById(String id) {
         Sys_dict dict = this.fetch(id);
@@ -60,6 +62,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param path
      * @return
      */
+    @Override
     @CacheResult
     public List<Sys_dict> getSubListByPath(String path) {
         return this.query(Cnd.where("path", "like", Strings.sNull(path) + "____").asc("location"));
@@ -71,6 +74,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param id
      * @return
      */
+    @Override
     @CacheResult
     public List<Sys_dict> getSubListById(String id) {
         return this.query(Cnd.where("parentId", "=", Strings.sNull(id)).asc("location"));
@@ -82,6 +86,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param code
      * @return
      */
+    @Override
     @CacheResult
     public List<Sys_dict> getSubListByCode(String code) {
         Sys_dict dict = this.fetch(Cnd.where("code", "=", code));
@@ -94,6 +99,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param path
      * @return
      */
+    @Override
     @CacheResult
     public Map getSubMapByPath(String path) {
         return this.getMap(Sqls.create("select code,name from sys_dict where path like @path order by location asc").setParam("path", path + "____"));
@@ -105,6 +111,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param id
      * @return
      */
+    @Override
     @CacheResult
     public Map getSubMapById(String id) {
         return this.getMap(Sqls.create("select code,name from sys_dict where parentId = @id order by location asc").setParam("id", id));
@@ -116,6 +123,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param code
      * @return
      */
+    @Override
     @CacheResult
     public Map getSubMapByCode(String code) {
         Sys_dict dict = this.fetch(Cnd.where("code", "=", code));
@@ -128,6 +136,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param dict
      * @param pid
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void save(Sys_dict dict, String pid) {
         String path = "";
@@ -148,6 +157,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      *
      * @param dict
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteAndChild(Sys_dict dict) {
         dao().execute(Sqls.create("delete from sys_dict where path like @path").setParam("path", dict.getPath() + "%"));
@@ -159,6 +169,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
         }
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

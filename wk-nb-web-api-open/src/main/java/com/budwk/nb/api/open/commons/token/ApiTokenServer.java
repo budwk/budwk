@@ -11,6 +11,9 @@ import java.io.*;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @IocBean
 public class ApiTokenServer {
     @Inject
@@ -37,7 +40,8 @@ public class ApiTokenServer {
             ObjectOutputStream oos = new ObjectOutputStream(bao);
             oos.writeObject(key);
             obj = bao.toByteArray();
-            redisService.setex((RedisConstant.REDIS_KEY_API_TOKEN_NONCE + appid).getBytes(), 7202, obj);//2小时零2秒后自动删除
+            // 2小时零2秒后自动删除
+            redisService.setex((RedisConstant.REDIS_KEY_API_TOKEN_NONCE + appid).getBytes(), 7202, obj);
         }
         return key;
     }

@@ -9,11 +9,11 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by wizzer on 2016/6/24.
+ * @author wizzer(wizzer@qq.com) on 2016/6/24.
  */
 public class DateUtil {
     private static final Locale DEFAULT_LOCALE = Locale.CHINA;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 获取当前时间(HH:mm:ss)
@@ -49,7 +49,9 @@ public class DateUtil {
      * @return
      */
     public static String formatDateTime(Date date) {
-        if (date == null) return "";
+        if (date == null) {
+            return "";
+        }
         return DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss", DEFAULT_LOCALE);
     }
 
@@ -61,7 +63,9 @@ public class DateUtil {
      * @return
      */
     public static String format(Date date, String f) {
-        if (date == null) return "";
+        if (date == null) {
+            return "";
+        }
         return DateFormatUtils.format(date, f, DEFAULT_LOCALE);
     }
 
@@ -87,28 +91,28 @@ public class DateUtil {
     }
 
     /**
-     * 通过字符串时间获取时间戳 nutzwk5.0改为long
+     * 通过字符串时间获取时间戳 budwk v6 时间戳不除以1000
      *
      * @param date
      * @return
      */
     public static long getTime(String date) {
         try {
-            return Times.parse(sdf, date).getTime() / 1000;
+            return Times.parse(YYYY_MM_DD_HH_MM_SS, date).getTime();
         } catch (ParseException e) {
             return 0;
         }
     }
 
     /**
-     * 通过字符串时间获取时间戳 nutzwk5.0改为long
+     * 通过字符串时间获取时间戳 budwk v6 时间戳不除以1000
      *
      * @param date
      * @return
      */
     public static long getTime(SimpleDateFormat sdf, String date) {
         try {
-            return Times.parse(sdf, date).getTime() / 1000;
+            return Times.parse(sdf, date).getTime();
         } catch (ParseException e) {
             return 0;
         }

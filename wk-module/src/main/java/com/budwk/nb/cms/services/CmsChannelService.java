@@ -5,6 +5,9 @@ import com.budwk.nb.commons.base.service.BaseService;
 
 import java.util.List;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 public interface CmsChannelService extends BaseService<Cms_channel> {
     /**
      * 添加栏目

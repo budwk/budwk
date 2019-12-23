@@ -10,7 +10,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.Modules;
 
 /**
- * Created by wizzer on 2018/4/4.
+ * @author wizzer(wizzer@qq.com) on 2018/4/4.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.budwk.nb")

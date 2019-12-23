@@ -1,5 +1,8 @@
 package com.budwk.nb.commons.base.page;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2016/6/21.
+ */
 public interface Paginable {
 
 	/**
@@ -46,11 +49,13 @@ public interface Paginable {
 
 	/**
 	 * 返回下页的页号
+	 * @return
 	 */
 	public int getNextPage();
 
 	/**
 	 * 返回上页的页号
+	 * @return
 	 */
 	public int getPrePage();
 

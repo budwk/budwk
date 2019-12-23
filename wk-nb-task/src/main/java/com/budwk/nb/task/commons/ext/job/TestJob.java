@@ -14,7 +14,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 /**
- * Created by Wizzer.cn on 2015/6/27.
+ * @author wizzer(wizzer@qq.com) on 2015/6/27.
  */
 @IocBean
 public class TestJob implements Job {
@@ -24,6 +24,7 @@ public class TestJob implements Job {
     @Reference
     protected SysTaskService sysTaskService;
 
+    @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap data = context.getJobDetail().getJobDataMap();
         String taskId = context.getJobDetail().getKey().getName();

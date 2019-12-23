@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * @author wizzer(wizzer@qq.com) on 2016/6/22.
  */
 @IocBean(name = "$aop_syslog")
 public class SLogAopConfigration extends SimpleAopMaker<SLog> {
@@ -20,14 +20,17 @@ public class SLogAopConfigration extends SimpleAopMaker<SLog> {
     @Inject("refer:$ioc")
     protected Ioc ioc;
 
+    @Override
     public List<? extends MethodInterceptor> makeIt(SLog slog, Method method, Ioc ioc) {
         return Arrays.asList(new SLogAopInterceptor(ioc, slog, method));
     }
 
+    @Override
     public String[] getName() {
         return new String[0];
     }
 
+    @Override
     public boolean has(String name) {
         return false;
     }

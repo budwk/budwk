@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * 多语言区域
- * Created by wizzer on 2019/10/29
+ * @author wizzer(wizzer@qq.com) on 2019/10/29
  */
 @Table("sys_lang_local")
 public class Sys_lang_local extends BaseModel implements Serializable {

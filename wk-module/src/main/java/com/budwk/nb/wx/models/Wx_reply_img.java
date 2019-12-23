@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2018/11/7.
+ * @author wizzer(wizzer@qq.com) on 2018/11/7.
  */
 @Table("wx_reply_img")
 public class Wx_reply_img extends BaseModel implements Serializable {

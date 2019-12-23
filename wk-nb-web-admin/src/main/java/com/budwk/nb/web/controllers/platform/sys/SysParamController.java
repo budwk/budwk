@@ -22,7 +22,7 @@ import org.nutz.mvc.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by wizzer.cn on 2019/12/10
+ * @author wizzer(wizzer@qq.com) on 2019/12/10
  */
 @IocBean
 @At("/api/{version}/platform/sys/param")

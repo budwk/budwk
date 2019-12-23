@@ -8,17 +8,20 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/7/18.
+ * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
 @Table("cms_article")
 public class Cms_article extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
+    /**
+     * @PrevInsert(els = {@EL("ig(view.tableName,'')")})
+     * 主键生成器示例
+     */
     @Column
     @Name
     @Comment("ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     @PrevInsert(els = {@EL("uuid()")})
-    //@PrevInsert(els = {@EL("ig(view.tableName,'')")}) 主键生成器示例
     private String id;
 
     @Column
@@ -72,12 +75,10 @@ public class Cms_article extends BaseModel implements Serializable {
 
     @Column
     @Comment("发布时间")
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
     private Long publishAt;
 
     @Column
     @Comment("截至时间")
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
     private Long endAt;
 
     @Column

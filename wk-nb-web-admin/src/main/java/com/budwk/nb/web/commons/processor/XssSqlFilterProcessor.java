@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * SQL XSS拦截
- * Created by wizzer on 2016/7/1.
+ * @author wizzer(wizzer@qq.com) on 2016/7/1.
  * Updated by 黄川 huchuc@vip.qq.com on 2019/12/2.
  */
 public class XssSqlFilterProcessor extends AbstractProcessor {
@@ -28,6 +28,7 @@ public class XssSqlFilterProcessor extends AbstractProcessor {
     private PropertiesProxy conf;
     private List<String> ignoreList;
 
+    @Override
     public void init(NutConfig config, ActionInfo ai) throws Throwable {
         try {
             conf = config.getIoc().get(PropertiesProxy.class, "conf");
@@ -36,6 +37,7 @@ public class XssSqlFilterProcessor extends AbstractProcessor {
         }
     }
 
+    @Override
     public void process(ActionContext ac) throws Throwable {
         if (checkUrl(ac) && checkParams(ac)) {
             NutShiro.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(Mvcs.getMessage(ac.getRequest(), "system.paramserror")));
@@ -52,7 +54,8 @@ public class XssSqlFilterProcessor extends AbstractProcessor {
     private boolean checkParams(ActionContext ac) {
         HttpServletRequest req = ac.getRequest();
         Iterator<String[]> values = req.getParameterMap().values().iterator();
-        Iterator<String[]> values2 = req.getParameterMap().values().iterator();// 因为是游标所以要重新获取
+        // 因为是游标所以要重新获取
+        Iterator<String[]> values2 = req.getParameterMap().values().iterator();
         boolean isError = false;
         String regExSql = "select,update,and,or,delete,insert,trancate,char,chr,into,substr,declare,exec,count,drop,execute";
         String regExXss = "script,iframe";

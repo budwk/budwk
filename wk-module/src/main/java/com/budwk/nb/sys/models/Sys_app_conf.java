@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 应用管理--配置文件表
- * Created by wizzer on 2019/2/27.
+ * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
 @Table("sys_app_conf")
 public class Sys_app_conf extends BaseModel implements Serializable {

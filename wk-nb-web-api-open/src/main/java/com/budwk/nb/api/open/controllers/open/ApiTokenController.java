@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by wizzer on 2018/4/4.
+ * @author wizzer(wizzer@qq.com) on 2018/4/4.
  */
 @IocBean
 @At("/open/api/token")
@@ -39,9 +39,11 @@ public class ApiTokenController {
             Date date = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(date);
-            c.add(Calendar.HOUR, +2);//设置token有效期为2小时
+            // 设置token有效期为2小时
+            c.add(Calendar.HOUR, +2);
             date = c.getTime();
-            resmap.addv("expires", 7200);//同时把有效期秒数传递给客户端
+            // 同时把有效期秒数传递给客户端
+            resmap.addv("expires", 7200);
             resmap.addv("token", apiTokenServer.generateToken(date, appid));
             return Result.success("获取token成功", resmap);
         } catch (Exception e) {

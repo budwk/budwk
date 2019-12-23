@@ -18,7 +18,7 @@ import org.nutz.mvc.annotation.*;
 import javax.servlet.ServletContext;
 
 /**
- * Created by wizzer on 2018/3/16.
+ * @author wizzer(wizzer@qq.com) on 2018/3/16.
  */
 @IocBean(create = "init")
 @Modules(packages = "com.budwk.nb")
@@ -34,10 +34,16 @@ public class WebMainLauncher {
     private PropertiesProxy conf;
     @Inject
     private JedisAgent jedisAgent;
+    /**
+     * 注入一下为了进行初始化
+     */
     @Inject
-    private Globals globals;//注入一下为了初始化
+    private Globals globals;
+    /**
+     * 注入一下为了进行初始化
+     */
     @Inject
-    private WebPubSub webPubSub;//注入一下为了初始化
+    private WebPubSub webPubSub;
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);

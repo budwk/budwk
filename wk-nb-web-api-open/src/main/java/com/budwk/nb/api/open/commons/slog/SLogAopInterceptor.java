@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * @author wizzer(wizzer@qq.com) on 2016/6/22.
  */
 public class SLogAopInterceptor implements MethodInterceptor {
     private static final Log log = Logs.get();
@@ -45,14 +45,15 @@ public class SLogAopInterceptor implements MethodInterceptor {
         this.ioc = ioc;
         this.source = method.getDeclaringClass().getName() + "#" + method.getName();
         this.tag = slog.tag();
-        SLog _s = method.getDeclaringClass().getAnnotation(SLog.class);
-        if (_s != null) {
-            this.tag = _s.tag() + "," + this.tag;
+        SLog tmpSlog = method.getDeclaringClass().getAnnotation(SLog.class);
+        if (tmpSlog != null) {
+            this.tag = tmpSlog.tag() + "," + this.tag;
         }
         this.type = slog.type();
         this.async = slog.async();
     }
 
+    @Override
     public void filter(InterceptorChain chain) throws Throwable {
         try {
             chain.doChain();
@@ -64,8 +65,9 @@ public class SLogAopInterceptor implements MethodInterceptor {
     }
 
     protected void doLog(String t, CharSegment seg, InterceptorChain chain, Throwable e) {
-        if (sLogServer == null)
+        if (sLogServer == null) {
             sLogServer = ioc.get(SLogServer.class);
+        }
         try {
             sLogServer.log(t,
                     type,

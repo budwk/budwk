@@ -19,7 +19,7 @@ import org.nutz.weixin.spi.WxResp;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/8/6.
+ * @author wizzer(wizzer@qq.com) on 2016/8/6.
  */
 @IocBean
 public class TplService {
@@ -63,8 +63,12 @@ public class TplService {
             }
             l.setContent(Json.toJson(data));
             if (wxResp.errcode() == 0) {
-                l.setStatus(1);//发送成功
-            } else l.setStatus(2);//发送失败
+                // 发送成功
+                l.setStatus(1);
+            } else {
+                // 发送失败
+                l.setStatus(2);
+            }
             Wx_tpl_log rl = wxTplLogService.insert(l);
             return rl == null ? null : rl.getId();
         }

@@ -8,11 +8,12 @@ import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.impl.processor.AbstractProcessor;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * @author wizzer(wizzer@qq.com) on 2016/6/22.
  */
 public class GlobalsSettingProcessor extends AbstractProcessor {
     private static final Log log = Logs.get();
 
+    @Override
     @SuppressWarnings("rawtypes")
     public void process(ActionContext ac) throws Throwable {
         // 如果url中有语言属性则设置

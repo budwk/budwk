@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Created by wizzer on 2018/3/17.
+ * @author wizzer(wizzer@qq.com) on 2018/3/17.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.budwk.nb")
@@ -43,6 +43,11 @@ public class CmsMainLauncher {
     private PropertiesProxy conf;
     @Inject
     private JedisAgent jedisAgent;
+    /**
+     * 主键生成规则，演示功能
+     */
+    private static Pattern CMS_ID_PATTERN = Pattern.compile("^.*[\\d]{16}$");
+    private static String DB_MYSQL = "mysql";
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
@@ -71,7 +76,7 @@ public class CmsMainLauncher {
         long a = System.currentTimeMillis();
         try (Jedis jedis = jedisAgent.getResource()) {
             Sql sql;
-            if ("mysql".equalsIgnoreCase(dao.getJdbcExpert().getDatabaseType())) {
+            if (DB_MYSQL.equalsIgnoreCase(dao.getJdbcExpert().getDatabaseType())) {
                 sql = Sqls.create("SELECT table_name FROM information_schema.columns WHERE table_schema='" + conf.get("ig.db.name", "") + "' AND column_name='id'");
             } else {
                 //oracle mssql该怎么写呢,等你来添加...
@@ -85,10 +90,10 @@ public class CmsMainLauncher {
                 List<Record> list = dao.query(tableName, Cnd.NEW().desc("id"), new Pager().setPageSize(1).setPageNumber(1));
                 if (list.size() > 0) {
                     String id = list.get(0).getString("id");
-                    if (Strings.isMatch(Pattern.compile("^.*[\\d]{16}$"), id)) {
+                    if (Strings.isMatch(CMS_ID_PATTERN, id)) {
                         String ym = id.substring(id.length() - 16, id.length() - 10);
-                        if (Strings.isBlank(jedis.get("nutzwk:ig:" + tableName.toUpperCase() + ym))) {
-                            jedis.set("nutzwk:ig:" + tableName.toUpperCase() + ym, String.valueOf(Long.valueOf(id.substring(id.length() - 10, id.length()))));
+                        if (Strings.isBlank(jedis.get("budwk:ig:cms:" + tableName.toUpperCase() + ym))) {
+                            jedis.set("budwk:ig:cms:" + tableName.toUpperCase() + ym, String.valueOf(Long.valueOf(id.substring(id.length() - 10, id.length()))));
                         }
                     }
                 }
@@ -117,4 +122,5 @@ public class CmsMainLauncher {
             }
         }
     }
+
 }

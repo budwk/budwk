@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * 应用管理服务端接口签名
- * Created by wizzer on 2019/3/8.
+ * @author wizzer(wizzer@qq.com) on 2019/3/8.
  */
 @IocBean
 public class DeploySignUtil {
@@ -25,6 +25,10 @@ public class DeploySignUtil {
     private PropertiesProxy conf;
     @Inject
     private RedisService redisService;
+    /**
+     * 签名验证有效时间：一分钟
+     */
+    private static final int TIMEOUT_ONE_MINIUTE = 60000;
 
     public Result checkSign(Map<String, Object> paramMap) {
         try {
@@ -37,11 +41,13 @@ public class DeploySignUtil {
             if (Strings.isBlank(mo_appid) || Strings.isBlank(mo_appkey)) {
                 return Result.error(1, "appid不正确");
             }
-            if (Times.getTS() - Long.valueOf(timestamp) > 60 * 1000) {//时间戳相差大于1分钟则为无效的
+            // 时间戳相差大于1分钟则为无效的
+            if (Times.getTS() - Long.valueOf(timestamp) > TIMEOUT_ONE_MINIUTE) {
                 return Result.error(2, "timestamp不正确");
             }
             String nonceCache = redisService.get(RedisConstant.REDIS_KEY_API_SIGN_DEPLOY_NONCE + appid + "_" + nonce);
-            if (Strings.isNotBlank(nonceCache)) {//如果一分钟内nonce是重复的则为无效,让nonce只能使用一次
+            // 如果一分钟内nonce是重复的则为无效,让nonce只能使用一次
+            if (Strings.isNotBlank(nonceCache)) {
                 return Result.error(3, "nonce不正确");
 
             }

@@ -15,6 +15,9 @@ import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2018/3/16.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysApiService.class)
 @CacheDefaults(cacheName = "sys_api")
@@ -31,6 +34,7 @@ public class SysApiServiceImpl extends BaseServiceImpl<Sys_api> implements SysAp
         return appid;
     }
 
+    @Override
     public void createAppkey(String name, String userId) throws Exception {
         String appid = getAppid();
         Sys_api sysApi = new Sys_api();
@@ -41,21 +45,30 @@ public class SysApiServiceImpl extends BaseServiceImpl<Sys_api> implements SysAp
         sysApi.setCreatedBy(userId);
         sysApi.setUpdatedBy(userId);
         this.insert(sysApi);
-        this.getAppkey(appid);//调用生成缓存
+        // 调用一下以便生成缓存
+        this.getAppkey(appid);
     }
 
+    @Override
     public void deleteAppkey(String appid) throws Exception {
         this.delete(appid);
         this.deleteCache(appid);
     }
 
+    @Override
     public void updateAppkey(String appid, boolean disabled) throws Exception {
         this.update(Chain.make("disabled", disabled), Cnd.where("appid", "=", appid));
         this.deleteCache(appid);
-        this.getAppkey(appid);//调用生成缓存
+        // 调用一下以便生成缓存
+        this.getAppkey(appid);
     }
 
-    //注意这个cacheKey 是和 web-api 对应一致的,便于直接从redis取值,而不用依赖sys模块
+    /**
+     *  注意这个cacheKey 是和 web-api 对应一致的,便于直接从redis取值,而不用依赖sys模块
+     * @param appid appid
+     * @return
+     */
+    @Override
     @CacheResult(cacheKey = "${appid}_appkey")
     public String getAppkey(String appid) {
         Sys_api sysApi = this.fetch(Cnd.where("appid", "=", appid).and("disabled", "=", false));
@@ -65,12 +78,14 @@ public class SysApiServiceImpl extends BaseServiceImpl<Sys_api> implements SysAp
         return "";
     }
 
+    @Override
     @CacheRemove(cacheKey = "${appid}_*")
     //可以通过el表达式加 * 通配符来批量删除一批缓存
     public void deleteCache(String appid) {
 
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

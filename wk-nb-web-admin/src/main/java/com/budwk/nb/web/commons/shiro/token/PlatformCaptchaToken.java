@@ -3,7 +3,7 @@ package com.budwk.nb.web.commons.shiro.token;
 import org.apache.shiro.authc.UsernamePasswordToken;
 
 /**
- * Created by wizzer on 2017/1/11.
+ * @author wizzer(wizzer@qq.com) on 2017/1/11.
  */
 public class PlatformCaptchaToken extends UsernamePasswordToken {
 

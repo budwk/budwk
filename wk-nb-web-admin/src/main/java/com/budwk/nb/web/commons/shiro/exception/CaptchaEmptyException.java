@@ -3,7 +3,7 @@ package com.budwk.nb.web.commons.shiro.exception;
 import org.apache.shiro.authc.AuthenticationException;
 
 /**
- * Created by wizzer on 2017/1/10.
+ * @author wizzer(wizzer@qq.com) on 2017/1/10.
  */
 public class CaptchaEmptyException extends AuthenticationException {
 

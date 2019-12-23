@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysUserService.class)
@@ -42,14 +42,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     @Inject
     private SysRoleService sysRoleService;
 
+    @Override
     @CacheResult(cacheKey = "${user.id}_getRoles")
     public List<NutMap> getRoles(Sys_user user) {
         this.dao().fetchLinks(user, "roles");
         List<NutMap> roleNameList = new ArrayList<>();
         for (Sys_role role : user.getRoles()) {
-            if (!role.isDisabled())
+            if (!role.isDisabled()) {
                 roleNameList.add(NutMap.NEW().addv("code", role.getCode())
                         .addv("name", role.getName()));
+            }
         }
         return roleNameList;
     }
@@ -59,13 +61,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
      * @param user
      * @return
      */
+    @Override
     @CacheResult(cacheKey = "${args[0].id}_getRoleCodeList")
     public List<String> getRoleCodeList(Sys_user user) {
         dao().fetchLinks(user, "roles");
         List<String> roleNameList = new ArrayList<String>();
         for (Sys_role role : user.getRoles()) {
-            if (!role.isDisabled())
+            if (!role.isDisabled()) {
                 roleNameList.add(role.getCode());
+            }
         }
         return roleNameList;
     }
@@ -75,6 +79,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
      * @param userId
      * @return
      */
+    @Override
     @CacheResult(cacheKey = "${userId}_getMenusAndButtons")
     public List<Sys_menu> getMenusAndButtons(String userId) {
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
@@ -89,6 +94,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
      * @param pid
      * @return
      */
+    @Override
     public List<Sys_menu> getRoleMenus(String userId, String pid) {
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
                 "$m and b.roleId in(select c.roleId from sys_user_role c,sys_role d where c.roleId=d.id and c.userId=@userId and d.disabled=@f) and a.disabled=@f order by a.location ASC,a.path asc");
@@ -108,6 +114,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
      * @param pid
      * @return
      */
+    @Override
     public boolean hasChildren(String userId, String pid) {
         Sql sql = Sqls.create("select count(*) from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
                 "$m and b.roleId in(select c.roleId from sys_user_role c,sys_role d where c.roleId=d.id and c.userId=@userId and d.disabled=@f) and a.disabled=@f order by a.location ASC,a.path asc");
@@ -126,6 +133,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
      *
      * @param userId
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteById(String userId) {
         dao().clear("sys_user_unit", Cnd.where("userId", "=", userId));
@@ -138,6 +146,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
      *
      * @param userIds
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteByIds(String[] userIds) {
         dao().clear("sys_user_unit", Cnd.where("userId", "in", userIds));
@@ -145,11 +154,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         dao().clear("sys_user", Cnd.where("id", "in", userIds));
     }
 
+    @Override
     @CacheRemove(cacheKey = "${userId}_*")
     public void deleteCache(String userId) {
 
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

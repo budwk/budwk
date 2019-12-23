@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 应用管理--应用实例表
- * Created by wizzer on 2019/2/27.
+ * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
 @Table("sys_app_list")
 public class Sys_app_list extends BaseModel implements Serializable {

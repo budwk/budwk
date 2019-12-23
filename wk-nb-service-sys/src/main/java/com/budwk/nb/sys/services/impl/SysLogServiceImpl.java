@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysLogService.class)
@@ -73,12 +73,14 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
         return dao;
     }
 
+    @Override
     @Async
     public void fastInsertSysLog(Sys_log syslog) {
         logDao().insert(syslog);
     }
 
 
+    @Override
     public Pagination list(String type, String loginname, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         String tableName = Times.format("yyyyMM", new Date());
         StringBuilder stringBuilder = new StringBuilder();

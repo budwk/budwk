@@ -4,6 +4,9 @@ import com.budwk.nb.sys.models.Sys_lang;
 import com.budwk.nb.commons.base.service.BaseService;
 import org.nutz.mvc.impl.NutMessageMap;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 public interface SysLangService extends BaseService<Sys_lang> {
     /**
      * 获取多语言字符串

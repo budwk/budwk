@@ -11,7 +11,7 @@ import org.nutz.log.Logs;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * @author wizzer(wizzer@qq.com) on 2018/3/19.
  */
 @IocBean
 public class Globals {
@@ -24,9 +24,10 @@ public class Globals {
         List<Sys_task> taskList = sysTaskService.query();
         for (Sys_task sysTask : taskList) {
             try {
-                if (!sysTask.isDisabled())//不存在则新建
+                if (!sysTask.isDisabled()) {
                     taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron()
                             , sysTask.getNote(), sysTask.getData());
+                }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }

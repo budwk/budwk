@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 
 /**
- * Created by wizzer on 2016/8/6.
+ * @author wizzer(wizzer@qq.com) on 2016/8/6.
  */
 @IocBean
 @At("/public/wx/wechat")

@@ -6,7 +6,7 @@ import com.budwk.nb.commons.base.service.BaseService;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/23.
+ * @author wizzer(wizzer@qq.com) on 2016/12/23.
  */
 public interface SysConfigService extends BaseService<Sys_config> {
     /**

@@ -12,7 +12,7 @@ import java.beans.PropertyDescriptor;
 import java.util.Collection;
 
 /**
- * Created by wizzer on 2017/1/16.
+ * @author wizzer(wizzer@qq.com) on 2017/1/16.
  */
 @IocBean
 public class ShiroUtil {

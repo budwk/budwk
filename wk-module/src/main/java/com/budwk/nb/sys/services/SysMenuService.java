@@ -7,22 +7,24 @@ import org.nutz.lang.util.NutMap;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 public interface SysMenuService extends BaseService<Sys_menu> {
     /**
      * 保存菜单
      *
-     * @param menu
-     * @param pid
+     * @param menu  菜单对象
+     * @param pid   父节点ID
+     * @param datas 数据权限
      */
     void save(Sys_menu menu, String pid, List<NutMap> datas);
 
     /**
      * 编辑菜单
      *
-     * @param menu
-     * @param pid
+     * @param menu  菜单对象
+     * @param pid   父节点ID
+     * @param datas 数据权限
      */
     void edit(Sys_menu menu, String pid, List<NutMap> datas);
 

@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.base.page.Pagination;
+import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.commons.constants.RedisConstant;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
@@ -48,7 +49,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by wizzer.cn on 2019/11/21
+ * @author wizzer(wizzer@qq.com) on 2019/11/21
  */
 @IocBean
 @At("/api/{version}/platform/sys/user")
@@ -129,8 +130,10 @@ public class SysUserController {
             sysUserService.update(Chain.make("themeConfig", themeConfig), Cnd.where("id", "=", StringUtil.getPlatformUid()));
             Subject subject = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) subject.getPrincipal();
-            if (user != null)//替换当前用户session里的值
+            // 替换当前用户session里的值
+            if (user != null) {
                 user.setThemeConfig(themeConfig);
+            }
             return Result.success();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -156,8 +159,10 @@ public class SysUserController {
             sysUserService.update(Chain.make("avatar", avatar), Cnd.where("id", "=", StringUtil.getPlatformUid()));
             Subject subject = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) subject.getPrincipal();
-            if (user != null)//替换当前用户session里的值
+            // 替换当前用户session里的值
+            if (user != null) {
                 user.setAvatar(avatar);
+            }
             return Result.success();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -230,8 +235,10 @@ public class SysUserController {
             if (old.equals(user.getPassword())) {
                 String salt = R.UU32();
                 String hashedPasswordBase64 = new Sha256Hash(newPassword, ByteSource.Util.bytes(salt), 1024).toHex();
-                user.setSalt(salt);//替换当前用户session里的值
-                user.setPassword(hashedPasswordBase64);//替换当前用户session里的值
+                // 替换当前用户session里的值
+                user.setSalt(salt);
+                // 替换当前用户session里的值
+                user.setPassword(hashedPasswordBase64);
                 sysUserService.update(Chain.make("salt", salt)
                                 .add("password", hashedPasswordBase64)
                         , Cnd.where("id", "=", user.getId()));
@@ -328,7 +335,7 @@ public class SysUserController {
     public Object list(@Param("unitid") String unitid, @Param("loginname") String loginname, @Param("username") String username, @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 if (Strings.isNotBlank(unitid) && !"root".equals(unitid)) {
                     cnd.and("unitid", "=", unitid);
                 }
@@ -339,8 +346,9 @@ public class SysUserController {
                     if (unit == null || !unit.getPath().startsWith(user.getUnit().getPath())) {
                         //防止有人越级访问
                         return Result.error("system.error.invalid");
-                    } else
+                    } else {
                         cnd.and("unitid", "=", unitid);
+                    }
                 } else {
                     cnd.and("unitid", "=", user.getUnitid());
                 }
@@ -398,7 +406,7 @@ public class SysUserController {
     public Object getUnitTree(HttpServletRequest req) {
         try {
             Cnd cnd = Cnd.NEW();
-            if (!shiroUtil.hasRole("sysadmin")) {
+            if (!shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 Sys_user user = (Sys_user) shiroUtil.getPrincipal();
                 if (user != null) {
                     cnd.and("path", "like", user.getUnit().getPath() + "%");
@@ -464,7 +472,7 @@ public class SysUserController {
             int userCount = sysUserService.count(Cnd.where("delFlag", "=", false).and("disabled", "=", false));
             if (userCount == 1) {
                 Sys_user user = sysUserService.fetch(id);
-                if (user != null && "superadmin".equals(user.getLoginname()) && disabled) {
+                if (user != null && PlatformConstant.PLATFORM_DEFAULT_SUPERADMIN_NAME.equals(user.getLoginname()) && disabled) {
                     // 只有一个启用用户时,超级管理员不可禁用
                     return Result.error("sys.manage.user.superadmin.disable");
                 }
@@ -676,7 +684,7 @@ public class SysUserController {
             if (user == null) {
                 return Result.error("system.error.noData");
             }
-            if ("superadmin".equals(user.getLoginname())) {
+            if (PlatformConstant.PLATFORM_DEFAULT_SUPERADMIN_NAME.equals(user.getLoginname())) {
                 // 超级管理员不可删除
                 return Result.error("sys.manage.user.superadmin.delete");
             }
@@ -709,7 +717,7 @@ public class SysUserController {
             if (ids == null) {
                 return Result.error("system.error.invalid");
             }
-            Sys_user user = sysUserService.fetch(Cnd.where("loginname", "=", "superadmin"));
+            Sys_user user = sysUserService.fetch(Cnd.where("loginname", "=", PlatformConstant.PLATFORM_DEFAULT_SUPERADMIN_NAME));
             for (String s : ids) {
                 if (s.equals(user.getId())) {
                     // 超级管理员不可删除,但有多个用户时可以禁用
@@ -761,7 +769,7 @@ public class SysUserController {
                 }
             }
             Cnd cnd = Cnd.NEW();
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 if (Strings.isNotBlank(unitid) && !"root".equals(unitid)) {
                     cnd.and("unitid", "=", unitid);
                 }
@@ -772,8 +780,9 @@ public class SysUserController {
                     if (unit == null || !unit.getPath().startsWith(user.getUnit().getPath())) {
                         //防止有人越级访问
                         throw Lang.makeThrow(Mvcs.getMessage(req, "system.error.invalid"));
-                    } else
+                    } else {
                         cnd.and("unitid", "=", unitid);
+                    }
                 } else {
                     cnd.and("unitid", "=", user.getUnitid());
                 }

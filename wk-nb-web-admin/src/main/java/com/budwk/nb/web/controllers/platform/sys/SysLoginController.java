@@ -45,7 +45,7 @@ import java.awt.image.BufferedImage;
 import java.util.Set;
 
 /**
- * Created by wizzer.cn on 2019/10/29
+ * @author wizzer(wizzer@qq.com) on 2019/10/29
  */
 @IocBean
 @At("/api/{version}/platform/login")
@@ -238,7 +238,7 @@ public class SysLoginController {
     @At("/captcha")
     @Ok("raw:png")
     public BufferedImage captcha(HttpSession session, @Param("w") int w, @Param("h") int h) {
-        if (w * h < 1) { //长或宽为0?重置为默认长宽.
+        if (w * h < 1) {
             w = 200;
             h = 60;
         }

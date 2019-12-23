@@ -1,5 +1,6 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.models.Sys_role;
 import com.budwk.nb.sys.models.Sys_unit;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer.cn on 2019/11/27
+ * @author wizzer(wizzer@qq.com) on 2019/11/27
  */
 @IocBean
 @At("/api/{version}/platform/sys/role")
@@ -87,7 +88,7 @@ public class SysRoleController {
             if (Strings.isNotBlank(code)) {
                 cnd.and(Cnd.likeEX("code", code));
             }
-            if (!shiroUtil.hasRole("sysadmin")) {
+            if (!shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 cnd.and("unitid", "=", StringUtil.getPlatformUserUnitid());
             }
             cnd.and("delFlag", "=", false);
@@ -118,7 +119,7 @@ public class SysRoleController {
     public Object getAllMenu(HttpServletRequest req) {
         try {
             List<Sys_menu> list;
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 list = sysMenuService.query(Cnd.orderBy().asc("location").asc("path"));
             } else {
                 list = sysUserService.getMenusAndButtons(StringUtil.getPlatformUid());
@@ -171,11 +172,11 @@ public class SysRoleController {
         try {
             List<Sys_unit> list = new ArrayList<>();
             List<NutMap> treeList = new ArrayList<>();
-            if (Strings.isBlank(pid) && shiroUtil.hasRole("sysadmin")) {
+            if (Strings.isBlank(pid) && shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 NutMap sys = NutMap.NEW().addv("value", "system").addv("label", Mvcs.getMessage(req, "sys.manage.role.form.systemrole")).addv("leaf", true);
                 treeList.add(sys);
             }
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 Cnd cnd = Cnd.NEW();
                 if (Strings.isBlank(pid)) {
                     cnd.and("parentId", "=", "").or("parentId", "is", null);
@@ -237,8 +238,9 @@ public class SysRoleController {
                 return Result.error("sys.manage.role.form.code.hasExist");
             }
             String[] ids = StringUtils.split(menuIds, ",");
-            if ("system".equals(role.getUnitid()))
+            if ("system".equals(role.getUnitid())) {
                 role.setUnitid("");
+            }
             role.setCreatedBy(StringUtil.getPlatformUid());
             role.setUpdatedBy(StringUtil.getPlatformUid());
             Sys_role r = sysRoleService.insert(role);
@@ -271,7 +273,7 @@ public class SysRoleController {
     @SLog(tag = "启用禁用角色")
     public Object changeDisabled(@Param("id") String id, @Param("code") String code, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
-            if ("sysadmin".equals(code)) {
+            if (PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME.equals(code)) {
                 return Result.error("system.error.disabled.notAllow");
             }
             sysRoleService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
@@ -311,7 +313,7 @@ public class SysRoleController {
                 req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.error.noData"));
                 return Result.error("system.error.noData");
             }
-            if ("sysadmin".equals(role.getCode()) || "public".equals(role.getCode())) {
+            if (PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME.equals(role.getCode()) || PlatformConstant.PLATFORM_ROLE_PUBLIC_NAME.equals(role.getCode())) {
                 return Result.error("system.error.delete.notAllow");
             }
             sysRoleService.del(roleId);
@@ -377,7 +379,7 @@ public class SysRoleController {
             // 角色已拥有的权限
             List<Sys_menu> hasList = sysRoleService.getMenusAndButtons(roleId);
             List<Sys_menu> list;
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 // 超级管理员加载所有权限
                 list = sysMenuService.query(Cnd.orderBy().asc("location").asc("path"));
             } else {
@@ -453,7 +455,7 @@ public class SysRoleController {
     public Object userSearch(@Param("query") String keyword, @Param("roleId") String roleId) {
         try {
             Sys_user user = (Sys_user) shiroUtil.getPrincipal();
-            return Result.success().addData(sysRoleService.userSearch(roleId, keyword, shiroUtil.hasRole("sysadmin"), user.getUnit()));
+            return Result.success().addData(sysRoleService.userSearch(roleId, keyword, shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME), user.getUnit()));
         } catch (Exception e) {
             return Result.error();
         }
@@ -553,8 +555,8 @@ public class SysRoleController {
                 req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.error.noData"));
                 return Result.error("system.error.noData");
             }
-            String superadminId = sysUserService.fetch(Cnd.where("loginname", "=", "superadmin")).getId();
-            String sysadminRoleid = sysRoleService.fetch(Cnd.where("code", "=", "sysadmin")).getId();
+            String superadminId = sysUserService.fetch(Cnd.where("loginname", "=", PlatformConstant.PLATFORM_DEFAULT_SUPERADMIN_NAME)).getId();
+            String sysadminRoleid = sysRoleService.fetch(Cnd.where("code", "=", PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)).getId();
             String[] ids = StringUtils.split(users, ",");
             if (Lang.contains(ids, superadminId) && roleId.equals(sysadminRoleid)) {
                 return Result.error("sys.manage.role.do.delsuperadmin");
@@ -620,8 +622,9 @@ public class SysRoleController {
                     return Result.error("sys.manage.role.form.code.hasExist");
                 }
             }
-            if ("system".equals(role.getUnitid()))
+            if ("system".equals(role.getUnitid())) {
                 role.setUnitid("");
+            }
             role.setUpdatedBy(StringUtil.getPlatformUid());
             sysRoleService.updateIgnoreNull(role);
             sysRoleService.clearCache();

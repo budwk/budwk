@@ -15,7 +15,7 @@ import org.nutz.log.Logs;
 
 /**
  * 订阅发布用于更新所有实例的 Globals变量
- * Created by wizzer on 2018/3/18.
+ * @author wizzer(wizzer@qq.com) on 2018/3/18.
  */
 @IocBean(create = "init")
 public class WebPubSub implements PubSub {
@@ -45,6 +45,8 @@ public class WebPubSub implements PubSub {
                 break;
             case "sys_wx":
                 Globals.initWx();
+                break;
+            default:
                 break;
         }
     }

@@ -19,11 +19,13 @@ public class CmsSiteServiceImpl extends BaseServiceImpl<Cms_site> implements Cms
         super(dao);
     }
 
+    @Override
     @CacheResult
     public Cms_site getSite(String code) {
         return this.fetch(Cnd.where("id", "=", code));
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

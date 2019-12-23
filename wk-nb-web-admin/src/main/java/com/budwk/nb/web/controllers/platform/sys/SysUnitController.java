@@ -1,5 +1,6 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.sys.models.Sys_unit;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysUnitService;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer.cn on 2019/11/21
+ * @author wizzer(wizzer@qq.com) on 2019/11/21
  */
 @IocBean
 @At("/api/{version}/platform/sys/unit")
@@ -60,7 +61,7 @@ public class SysUnitController {
     public Object getChild(@Param("pid") String pid, HttpServletRequest req) {
         List<Sys_unit> list = new ArrayList<>();
         List<NutMap> treeList = new ArrayList<>();
-        if (shiroUtil.hasRole("sysadmin")) {
+        if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
             Cnd cnd = Cnd.NEW();
             if (Strings.isBlank(pid)) {
                 cnd.and("parentId", "=", "").or("parentId", "is", null);
@@ -114,7 +115,7 @@ public class SysUnitController {
                 NutMap root = NutMap.NEW().addv("value", "root").addv("label", Mvcs.getMessage(req, "sys.manage.unit.form.noselect")).addv("leaf", true);
                 treeList.add(root);
             }
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 Cnd cnd = Cnd.NEW();
                 if (Strings.isBlank(pid)) {
                     cnd.and("parentId", "=", "").or("parentId", "is", null);
@@ -288,7 +289,7 @@ public class SysUnitController {
     public Object getSortTree(HttpServletRequest req) {
         try {
             Cnd cnd = Cnd.NEW();
-            if (!shiroUtil.hasRole("sysadmin")) {
+            if (!shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 Sys_user user = (Sys_user) shiroUtil.getPrincipal();
                 if (user != null) {
                     cnd.and("path", "like", user.getUnit().getPath() + "%");
@@ -346,7 +347,7 @@ public class SysUnitController {
         try {
             String[] unitIds = StringUtils.split(ids, ",");
             int i = 0;
-            if (shiroUtil.hasRole("sysadmin")) {
+            if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
                 sysUnitService.update(Chain.make("location", 0), Cnd.NEW());
             }
             for (String id : unitIds) {

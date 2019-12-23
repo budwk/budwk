@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by wizzer on 2016/7/3.
+ * @author wizzer(wizzer@qq.com) on 2016/7/3.
  */
 @IocBean
 @At("/open/weixin")

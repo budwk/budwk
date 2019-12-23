@@ -34,9 +34,11 @@ public class OffsetPager extends Pager implements Serializable {
     /**
      * 覆盖超类的计算得到的offset
      */
+    @Override
     public int getOffset() {
-        if (offset > -1)
+        if (offset > -1) {
             return offset;
+        }
         return super.getOffset();
     }
 

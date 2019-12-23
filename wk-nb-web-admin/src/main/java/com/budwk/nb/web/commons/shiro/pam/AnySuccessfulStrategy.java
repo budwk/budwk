@@ -10,6 +10,9 @@ import org.nutz.lang.Lang;
 
 import java.util.Collection;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2016/6/22.
+ */
 @IocBean(name = "authenticationStrategy")
 public class AnySuccessfulStrategy extends AbstractAuthenticationStrategy {
 
@@ -18,6 +21,7 @@ public class AnySuccessfulStrategy extends AbstractAuthenticationStrategy {
      * merge} implementation to return only the first {@code info} object it
      * encounters, ignoring all subsequent ones.
      */
+    @Override
     public AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token) throws AuthenticationException {
         return null;
     }
@@ -32,6 +36,7 @@ public class AnySuccessfulStrategy extends AbstractAuthenticationStrategy {
      * mandates that only the info from the first successfully authenticated
      * realm be used.
      */
+    @Override
     protected AuthenticationInfo merge(AuthenticationInfo info, AuthenticationInfo aggregate) {
         if (aggregate != null && !Lang.isEmpty(aggregate.getPrincipals())) {
             return aggregate;

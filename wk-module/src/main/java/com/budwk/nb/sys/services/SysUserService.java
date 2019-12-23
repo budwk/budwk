@@ -8,7 +8,7 @@ import org.nutz.lang.util.NutMap;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 public interface SysUserService extends BaseService<Sys_user> {
     /**

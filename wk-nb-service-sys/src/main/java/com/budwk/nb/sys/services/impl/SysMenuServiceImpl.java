@@ -1,10 +1,10 @@
 package com.budwk.nb.sys.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.services.SysMenuService;
 import com.budwk.nb.sys.services.SysRoleService;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMenuService.class)
@@ -42,13 +42,16 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
      * @param menu
      * @param pid
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void save(Sys_menu menu, String pid, List<NutMap> datas) {
         String path = "";
         if (!Strings.isEmpty(pid)) {
             Sys_menu pp = this.fetch(pid);
             path = pp.getPath();
-        } else pid = "";
+        } else {
+            pid = "";
+        }
         menu.setPath(getSubPath(this.getEntity().getTableName(), "path", path));
         menu.setParentId(pid);
         dao().insert(menu);
@@ -69,8 +72,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
                 m.setPath(getSubPath(this.getEntity().getTableName(), "path", menu.getPath()));
                 m.setCreatedBy(menu.getCreatedBy());
                 m.setUpdatedBy(menu.getUpdatedBy());
-                if (Strings.isNotBlank(m.getPermission()))
+                if (Strings.isNotBlank(m.getPermission())) {
                     this.insert(m);
+                }
             }
         }
     }
@@ -81,6 +85,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
      * @param menu
      * @param pid
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void edit(Sys_menu menu, String pid, List<NutMap> datas) {
         this.updateIgnoreNull(menu);
@@ -109,8 +114,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
                     m.setPath(getSubPath("sys_menu", "path", menu.getPath()));
                     m.setCreatedBy(menu.getCreatedBy());
                     m.setUpdatedBy(menu.getUpdatedBy());
-                    if (Strings.isNotBlank(m.getPermission()))
+                    if (Strings.isNotBlank(m.getPermission())) {
                         this.insert(m);
+                    }
                     notInIds.add(m.getId());
                 }
             }
@@ -126,6 +132,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
      *
      * @param menu
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteAndChild(Sys_menu menu) {
         dao().execute(Sqls.create("delete from sys_menu where path like @path").setParam("path", menu.getPath() + "%"));
@@ -138,17 +145,20 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
         }
     }
 
+    @Override
     @CacheResult
     public Sys_menu getLeftMenu(String href) {
         return this.fetch(Cnd.where("href", "=", href));
     }
 
+    @Override
     @CacheResult
     public Sys_menu getLeftPathMenu(List<String> list) {
         return this.fetch(Cnd.where("href", "in", list).desc("href").desc("path"));
     }
 
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
         sysRoleService.clearCache();

@@ -12,7 +12,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import java.util.List;
 
 /**
- * Created by wizzer on 2019/2/27.
+ * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysAppConfService.class)
@@ -21,6 +21,7 @@ public class SysAppConfServiceImpl extends BaseServiceImpl<Sys_app_conf> impleme
         super(dao);
     }
 
+    @Override
     public List<String> getConfNameList() {
         Sql sql = Sqls.create("SELECT DISTINCT confName FROM sys_app_conf");
         sql.setCallback(Sqls.callback.strs());

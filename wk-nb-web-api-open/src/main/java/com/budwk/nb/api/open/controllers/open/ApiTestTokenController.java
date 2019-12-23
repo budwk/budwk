@@ -8,7 +8,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
 /**
- * Created by wizzer on 2018/4/4.
+ * @author wizzer(wizzer@qq.com) on 2018/4/4.
  */
 @IocBean
 @At("/open/api/test")

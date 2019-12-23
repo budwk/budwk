@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * 签名验证服务
- * Created by wizzer on 2019/10/28
+ * @author wizzer(wizzer@qq.com) on 2019/10/28
  */
 @IocBean
 public class ApiSignServer {
@@ -30,8 +30,10 @@ public class ApiSignServer {
     private SysApiService sysApiService;
     @Inject
     private RedisService redisService;
-    @Inject
-    private SignUtil signUtil;
+    /**
+     * 签名验证有效时间：一分钟
+     */
+    private static final int TIMEOUT_ONE_MINIUTE = 60000;
 
     public Result checkSign(Map<String, Object> paramMap) {
         try {
@@ -43,14 +45,16 @@ public class ApiSignServer {
             if (Strings.isBlank(appid) || Strings.isBlank(appkey)) {
                 return Result.error(500301, "system.api.error.appid");
             }
-            if (Times.getTS() - Long.valueOf(timestamp) > 60 * 1000) {//时间戳相差大于1分钟则为无效的
+            // 时间戳相差大于1分钟则为无效的
+            if (Times.getTS() - Long.valueOf(timestamp) > TIMEOUT_ONE_MINIUTE) {
                 return Result.error(500302, "system.api.error.timestamp");
             }
             String nonceCache = redisService.get(RedisConstant.REDIS_KEY_API_SIGN_OPEN_NONCE + appid + "_" + nonce);
-            if (Strings.isNotBlank(nonceCache)) {//如果一分钟内nonce是重复的则为无效,让nonce只能使用一次
+            // 如果一分钟内nonce是重复的则为无效,让nonce只能使用一次
+            if (Strings.isNotBlank(nonceCache)) {
                 return Result.error(500303, "system.api.error.nonce");
             }
-            if (!signUtil.createSign(appkey, paramMap).equalsIgnoreCase(sign)) {
+            if (SignUtil.createSign(appkey, paramMap).equalsIgnoreCase(sign)) {
                 return Result.error(500304, "system.api.error.sigin");
             }
             //nonce保存到缓存

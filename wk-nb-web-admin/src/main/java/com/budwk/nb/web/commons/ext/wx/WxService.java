@@ -1,6 +1,7 @@
 package com.budwk.nb.web.commons.ext.wx;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.constants.RedisConstant;
 import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.wx.models.Wx_config;
 import com.budwk.nb.wx.services.WxConfigService;
@@ -15,7 +16,7 @@ import org.nutz.weixin.spi.WxApi2;
 import redis.clients.jedis.JedisPool;
 
 /**
- * Created by wizzer on 2018/3/17.
+ * @author wizzer(wizzer @ qq.com) on 2018/3/17.
  */
 @IocBean
 public class WxService {
@@ -30,8 +31,8 @@ public class WxService {
         WxApi2Impl wxApi2 = Globals.WxMap.getAs(wxid, WxApi2Impl.class);
         if (wxApi2 == null) {
             Wx_config appInfo = wxConfigService.fetch(Cnd.where("id", "=", wxid));
-            RedisAccessTokenStore redisAccessTokenStore = new RedisAccessTokenStore();//如果是集群部署请启用RedisAccessTokenStore
-            redisAccessTokenStore.setTokenKey("nutzwk:wx:token:" + wxid);
+            RedisAccessTokenStore redisAccessTokenStore = new RedisAccessTokenStore();
+            redisAccessTokenStore.setTokenKey(RedisConstant.REDIS_KEY_WX_TOKEN + wxid);
             redisAccessTokenStore.setJedisPool(jedisPool);
             wxApi2 = new WxApi2Impl();
             wxApi2.setAppid(appInfo.getAppid());

@@ -16,7 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by wizzer on 2017/1/10.
+ * @author wizzer(wizzer@qq.com) on 2017/1/10.
  */
 @IocBean(name = "platformAuthc")
 public class PlatformAuthenticationFilter extends FormAuthenticationFilter implements ActionFilter {
@@ -40,6 +40,7 @@ public class PlatformAuthenticationFilter extends FormAuthenticationFilter imple
         return new PlatformCaptchaToken(username, password, rememberMe, host, captcha);
     }
 
+    @Override
     public View match(ActionContext actionContext) {
         HttpServletRequest request = actionContext.getRequest();
         AuthenticationToken authenticationToken = createToken(request);

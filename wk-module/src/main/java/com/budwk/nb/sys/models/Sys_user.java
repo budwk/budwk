@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * @author wizzer(wizzer@qq.com) on 2016/6/21.
  */
 @Table("sys_user")
 @J4EName("用户数据")
@@ -31,11 +31,14 @@ public class Sys_user extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 120)
     private String loginname;
 
+    /**
+     *  transient 修饰符可让此字段不在对象里显示
+     */
     @Column
     @Comment("密码")
     @J4EIgnore
     @ColDefine(type = ColType.VARCHAR, width = 100)
-    private String password;// transient 修饰符可让此字段不在对象里显示
+    private String password;
 
     @Column
     @Comment("密码盐")
@@ -55,9 +58,12 @@ public class Sys_user extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String avatar;
 
+    /**
+     * 通过session计算获得
+     */
     @Comment("是否在线")
     @J4EIgnore
-    private boolean userOnline;//通过session计算获得
+    private boolean userOnline;
 
     @Column
     @Comment("是否禁用")

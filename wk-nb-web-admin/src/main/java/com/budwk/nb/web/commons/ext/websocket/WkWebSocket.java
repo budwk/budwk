@@ -17,8 +17,11 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @ServerEndpoint(value = "/websocket", configurator = NutWsConfigurator.class)
-@IocBean(create = "init") // 使用NutWsConfigurator的必备条件
+@IocBean(create = "init")
 public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     protected static final Log log = Logs.get();
     @Inject
@@ -28,14 +31,15 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     @Inject("refer:$ioc")
     protected Ioc ioc;
     @Inject("java:$conf.getInt('shiro.session.cache.redis.ttl')")
-    private int RedisKeySessionTTL;
+    private int REDIS_KEY_SESSION_TTL;
 
+    @Override
     public WsHandler createHandler(Session session, EndpointConfig config) {
         return ioc.get(WkWsHandler.class);
     }
 
     public void init() {
-        roomProvider = new WkJedisRoomProvider(jedisAgent, RedisKeySessionTTL);
+        roomProvider = new WkJedisRoomProvider(jedisAgent, REDIS_KEY_SESSION_TTL);
         try (Jedis jedis = jedisAgent.getResource()) {
             for (String key : jedis.keys("wsroom:*")) {
                 switch (jedis.type(key)) {
@@ -43,8 +47,8 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
                         break;
                     case "set":
                         break;
-//                    default:
-//                        jedis.del(key);
+                    default:
+                        break;
                 }
             }
         }
@@ -52,6 +56,7 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     }
 
 
+    @Override
     public void onMessage(String channel, String message) {
         log.debugf("GET PubSub channel=%s msg=%s", channel, message);
         each(channel, (index, session, length) -> session.getAsyncRemote().sendText(message));

@@ -9,20 +9,20 @@ import com.budwk.nb.commons.base.page.Pagination;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 public interface SysRoleService extends BaseService<Sys_role> {
     /**
      * 通过角色ID获取菜单及数据权限
      *
-     * @param roleId
+     * @param roleId 角色ID
      * @return
      */
     List<Sys_menu> getMenusAndButtons(String roleId);
 
     /**
      * 通过角色ID获取菜单数据
-     *
+     * @param roleId 角色ID
      * @return
      */
     List<Sys_menu> getDatas(String roleId);

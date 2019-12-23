@@ -3,7 +3,7 @@ package com.budwk.nb.task.services;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * @author wizzer(wizzer@qq.com) on 2018/3/19.
  */
 public interface TaskPlatformService {
     /**
@@ -15,15 +15,17 @@ public interface TaskPlatformService {
      */
     boolean isExist(String jobName, String jobGroup);
 
+
     /**
      * 添加新任务
      *
-     * @param jobName
-     * @param jobGroup
-     * @param className
-     * @param cron
-     * @param comment
-     * @param dataMap
+     * @param jobName   任务标识
+     * @param jobGroup  任务组
+     * @param className 类名
+     * @param cron      表达式
+     * @param comment   任务备注
+     * @param dataMap   传递参数
+     * @throws Exception
      */
     void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) throws Exception;
 
@@ -43,9 +45,9 @@ public interface TaskPlatformService {
 
     /**
      * 获取cron表达式最近执行时间
-     *
-     * @param cronExpression
+     * @param cronExpression 表达式
      * @return
+     * @throws Exception
      */
     List<String> getCronExeTimes(String cronExpression) throws Exception;
 }

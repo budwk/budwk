@@ -2,6 +2,9 @@ package com.budwk.nb.commons.annotation;
 
 import java.lang.annotation.*;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

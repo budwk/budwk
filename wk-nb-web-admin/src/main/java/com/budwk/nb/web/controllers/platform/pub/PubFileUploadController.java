@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
- * Created by wizzer.cn on 2019/12/19
+ * @author wizzer(wizzer@qq.com) on 2019/12/19
  */
 @IocBean
 @At("/api/{version}/platform/pub/file/upload")
@@ -36,13 +36,16 @@ public class PubFileUploadController {
     private PropertiesProxy conf;
     @Inject("java:$conf.get('system.upload.type')")
     private String UploadType;
+    private final static String UPLOAD_TYPE_FTP = "ftp";
 
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
     @POST
     @At
     @Ok("json")
     @RequiresAuthentication
-    //AdaptorErrorContext必须是最后一个参数
+    /**
+     * AdaptorErrorContext必须是最后一个参数
+     */
     public Object file(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {
@@ -54,7 +57,7 @@ public class PubFileUploadController {
                 String filePath = Globals.AppUploadBase + "/file/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 String fileName = R.UU32() + suffixName;
                 String url = filePath + fileName;
-                if ("ftp".equals(UploadType)) {
+                if (UPLOAD_TYPE_FTP.equals(UploadType)) {
                     if (ftpService.upload(filePath, fileName, tf.getInputStream())) {
                         return Result.success("system.error.upload.success", NutMap.NEW().addv("file_type", suffixName).addv("file_name", tf.getSubmittedFileName()).addv("file_size", tf.getSize()).addv("file_url", url));
                     } else {
@@ -80,7 +83,9 @@ public class PubFileUploadController {
     @At
     @Ok("json")
     @RequiresAuthentication
-    //AdaptorErrorContext必须是最后一个参数
+    /**
+     * AdaptorErrorContext必须是最后一个参数
+     */
     public Object video(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {
@@ -92,7 +97,7 @@ public class PubFileUploadController {
                 String filePath = Globals.AppUploadBase + "/video/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 String fileName = R.UU32() + suffixName;
                 String url = filePath + fileName;
-                if ("ftp".equals(UploadType)) {
+                if (UPLOAD_TYPE_FTP.equals(UploadType)) {
                     if (ftpService.upload(filePath, fileName, tf.getInputStream())) {
                         return Result.success("system.error.upload.success", NutMap.NEW().addv("file_type", suffixName).addv("file_name", tf.getSubmittedFileName()).addv("file_size", tf.getSize()).addv("file_url", url));
                     } else {
@@ -118,7 +123,9 @@ public class PubFileUploadController {
     @At
     @Ok("json")
     @RequiresAuthentication
-    //AdaptorErrorContext必须是最后一个参数
+    /**
+     * AdaptorErrorContext必须是最后一个参数
+     */
     public Object image(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {
@@ -130,7 +137,7 @@ public class PubFileUploadController {
                 String filePath = Globals.AppUploadBase + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 String fileName = R.UU32() + suffixName;
                 String url = filePath + fileName;
-                if ("ftp".equals(UploadType)) {
+                if (UPLOAD_TYPE_FTP.equals(UploadType)) {
                     if (ftpService.upload(filePath, fileName, tf.getInputStream())) {
                         return Result.success("system.error.upload.success", NutMap.NEW().addv("file_type", suffixName).addv("file_name", tf.getSubmittedFileName()).addv("file_size", tf.getSize()).addv("file_url", url));
                     } else {

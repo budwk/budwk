@@ -4,6 +4,9 @@ import org.nutz.lang.Lang;
 
 import java.util.List;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2016/6/21.
+ */
 public class Pagination extends SimplePage implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 

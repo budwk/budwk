@@ -19,6 +19,9 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.List;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/16.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysLangLocalService.class)
 @CacheDefaults(cacheName = "sys_lang_local")
@@ -30,23 +33,27 @@ public class SysLangLocalServiceImpl extends BaseServiceImpl<Sys_lang_local> imp
     @Inject
     private SysLangService sysLangService;
 
+    @Override
     @CacheResult
     public List<Sys_lang_local> getLocal() {
         return this.query("^(name|locale)$", Cnd.where("disabled", "=", false).asc("location"));
     }
 
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void clearLocal(String locale) {
         this.clear(Cnd.where("locale", "=", locale));
         sysLangService.clear(Cnd.where("locale", "=", locale));
     }
 
+    @Override
     @CacheResult
     public String getLocalJson() {
         return Json.toJson(this.query(Cnd.where("disabled", "=", false).asc("location")),
                 JsonFormat.full().setActived("locale|name"));
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/7/18.
+ * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
 @Table("cms_link")
 public class Cms_link extends BaseModel implements Serializable {

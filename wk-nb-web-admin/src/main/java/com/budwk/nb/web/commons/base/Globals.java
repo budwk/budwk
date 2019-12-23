@@ -11,27 +11,27 @@ import org.nutz.lang.util.NutMap;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/19.
+ * @author wizzer(wizzer@qq.com) on 2016/12/19.
  */
 @IocBean(create = "init")
 public class Globals {
-    //项目路径
+    // 项目路径
     public static String AppRoot = "";
-    //项目目录
+    // 项目目录
     public static String AppBase = "";
-    //项目名称
+    // 项目名称
     public static String AppName = "NutzWk v6";
-    //项目短名称
+    // 项目短名称
     public static String AppShrotName = "v6";
-    //项目域名
+    // 项目域名
     public static String AppDomain = "http://127.0.0.1";
-    //文件访问域名
+    // 文件访问域名
     public static String AppFileDomain = "";
-    //文件上传路径
+    // 文件上传路径
     public static String AppUploadBase = "/upload";
-    //系统自定义参数
+    // 系统自定义参数
     public static NutMap MyConfig = NutMap.NEW();
-    //微信map
+    // 微信map
     public static NutMap WxMap = NutMap.NEW();
     @Inject
     @Reference
@@ -60,6 +60,8 @@ public class Globals {
                     break;
                 case "AppUploadBase":
                     Globals.AppUploadBase = sysConfig.getConfigValue();
+                    break;
+                default:
                     break;
             }
             Globals.MyConfig.put(sysConfig.getConfigKey(), sysConfig.getConfigValue());

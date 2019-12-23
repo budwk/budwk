@@ -16,7 +16,7 @@ import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=SysUnitService.class)
@@ -32,6 +32,7 @@ public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements Sys
      * @param unit
      * @param pid
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void save(Sys_unit unit, String pid) {
         String path = "";
@@ -52,6 +53,7 @@ public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements Sys
      *
      * @param unit
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteAndChild(Sys_unit unit) {
         dao().execute(Sqls.create("delete from sys_unit where path like @path").setParam("path", unit.getPath() + "%"));
@@ -65,6 +67,7 @@ public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements Sys
         }
     }
 
+    @Override
     @CacheRemoveAll
     public void clearCache() {
 

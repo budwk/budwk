@@ -4,12 +4,18 @@ import org.nutz.json.JsonShape;
 
 /**
  * 系统消息类型
- * Created by wizzer.cn on 2019/12/17
+ * @author wizzer(wizzer@qq.com) on 2019/12/17
+ * JsonShape注解用于Json和实体类的相互转换,必须加
  */
-@JsonShape(JsonShape.Type.OBJECT) //此注解用于Json和实体类的相互转换,必须加
+@JsonShape(JsonShape.Type.OBJECT)
 public enum SysMsgTypeEnum {
-
+    /**
+     * system
+     */
     SYSTEM("system", "enums.sys.msg.type.system"),
+    /**
+     * user
+     */
     USER("user", "enums.sys.msg.type.user");
 
     private String value;

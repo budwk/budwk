@@ -11,7 +11,7 @@ import org.nutz.log.Logs;
 import javax.servlet.ServletContext;
 
 /**
- * Created by wizzer.cn on 2019/12/13
+ * @author wizzer(wizzer@qq.com) on 2019/12/13
  */
 @IocBean(create = "init")
 public class SLogMainLauncher {

@@ -9,7 +9,7 @@ import org.nutz.mvc.Mvcs;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/12/21.
+ * @author wizzer(wizzer@qq.com) on 2016/12/21.
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;

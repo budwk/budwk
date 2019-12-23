@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/7/2.
+ * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
 @Table("wx_user")
 @TableIndexes({@Index(name = "INDEX_WX_USER_OPENID", fields = {"openid"}, unique = true)})
@@ -46,7 +46,6 @@ public class Wx_user extends BaseModel implements Serializable {
 
     @Column
     @Comment("关注时间")
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
     private Long subscribeAt;
 
     @Column

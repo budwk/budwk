@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * API密钥管理
- * Created by wizzer on 2019/2/26.
+ * @author wizzer(wizzer@qq.com) on 2019/2/26.
  */
 @Table("sys_api")
 public class Sys_api extends BaseModel implements Serializable {

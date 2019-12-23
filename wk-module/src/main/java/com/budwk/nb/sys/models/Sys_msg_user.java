@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2018/6/29.
+ * @author wizzer(wizzer@qq.com) on 2018/6/29.
  */
 @Table("sys_msg_user")
 public class Sys_msg_user extends BaseModel implements Serializable {
@@ -29,14 +29,19 @@ public class Sys_msg_user extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 120)
     private String loginname;
 
+    /**
+     * 0--未读  1--已读
+     */
     @Column
     @Comment("消息状态")
     @ColDefine(type = ColType.INT)
-    private int status;//0--未读  1--已读
+    private int status;
 
+    /**
+     * Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
+     */
     @Column
     @Comment("读取时间")
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
     private Long readAt;
 
     @One(field = "msgId")

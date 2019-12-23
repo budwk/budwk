@@ -16,20 +16,22 @@ import org.nutz.mvc.impl.processor.AbstractProcessor;
 
 /**
  * userToken处理,转给shiro来判断请求权限
- * Created by wizzer on 2019/10/29
+ * @author wizzer(wizzer@qq.com) on 2019/10/29
  */
 public class WkUserTokenProcessor extends AbstractProcessor {
     private static final Log log = Logs.get();
     private RedisService redisService;
     private PropertiesProxy conf;
-    private int RedisKeySessionTTL;
+    private int REDIS_KEY_SESSION_TTL;
 
+    @Override
     public void init(NutConfig config, ActionInfo ai) throws Throwable {
         redisService = config.getIoc().get(RedisService.class);
         conf = config.getIoc().get(PropertiesProxy.class, "conf");
-        RedisKeySessionTTL = conf.getInt("shiro.session.cache.redis.ttl");
+        REDIS_KEY_SESSION_TTL = conf.getInt("shiro.session.cache.redis.ttl");
     }
 
+    @Override
     public void process(ActionContext ac) throws Throwable {
         String userToken = ac.getRequest().getHeader("X-Token");
         String userId = ac.getRequest().getHeader("X-Id");
@@ -49,7 +51,7 @@ public class WkUserTokenProcessor extends AbstractProcessor {
             String session_userToken = Strings.sNull(ac.getRequest().getSession().getAttribute("userToken"));
             String session_userId = Strings.sNull(ac.getRequest().getSession().getAttribute("userId"));
             if (Strings.isNotBlank(session_userToken) && Strings.isNotBlank(session_userId)) {
-                redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + session_userId + ":" + session_userToken, RedisKeySessionTTL, nowSessionId);
+                redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + session_userId + ":" + session_userToken, REDIS_KEY_SESSION_TTL, nowSessionId);
             }
 
         } catch (Exception e) {

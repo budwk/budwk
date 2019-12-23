@@ -8,7 +8,7 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
- * Created by wizzer on 2019/2/27.
+ * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysAppTaskService.class)

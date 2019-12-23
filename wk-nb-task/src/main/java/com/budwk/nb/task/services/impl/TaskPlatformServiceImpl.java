@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * @author wizzer(wizzer@qq.com) on 2018/3/19.
  */
 @IocBean
 @Service(interfaceClass = TaskPlatformService.class)
@@ -32,6 +32,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param jobGroup
      * @return
      */
+    @Override
     public boolean isExist(String jobName, String jobGroup) {
         return quartzManager.exist(new JobKey(jobName, jobGroup));
     }
@@ -46,6 +47,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param comment
      * @param dataMap
      */
+    @Override
     public void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) throws Exception{
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
@@ -64,6 +66,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param jobGroup
      * @return
      */
+    @Override
     public boolean delete(String jobName, String jobGroup) {
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
@@ -74,6 +77,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
     /**
      * 清除任务
      */
+    @Override
     public void clear() {
         quartzManager.clear();
     }
@@ -84,6 +88,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param cronExpression
      * @return
      */
+    @Override
     public List<String> getCronExeTimes(String cronExpression) throws Exception {
         List<String> list = new ArrayList<>();
         CronTriggerImpl cronTriggerImpl = new CronTriggerImpl();

@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/8/5.
+ * @author wizzer(wizzer@qq.com) on 2016/8/5.
  */
 @Table("wx_tpl_list")
 @TableIndexes({@Index(name = "INDEX_WX_TPL_LIST", fields = {"template_id","wxid"}, unique = true)})

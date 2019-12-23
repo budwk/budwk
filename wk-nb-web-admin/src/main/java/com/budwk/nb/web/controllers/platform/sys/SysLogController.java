@@ -14,7 +14,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
 /**
- * Created by wizzer.cn on 2019/12/11
+ * @author wizzer(wizzer@qq.com) on 2019/12/11
  */
 @IocBean
 @At("/api/{version}/platform/sys/log")

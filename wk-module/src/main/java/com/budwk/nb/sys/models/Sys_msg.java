@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/6/29.
+ * @author wizzer(wizzer@qq.com) on 2018/6/29.
  */
 @Table("sys_msg")
 public class Sys_msg extends BaseModel implements Serializable {
@@ -43,7 +43,6 @@ public class Sys_msg extends BaseModel implements Serializable {
 
     @Column
     @Comment("发送时间")
-    //Long不要用ColDefine定义,兼容oracle/mysql,支持2038年以后的时间戳
     private Long sendAt;
 
     @Many(field = "msgId")

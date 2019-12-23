@@ -9,7 +9,7 @@ import redis.clients.jedis.Jedis;
 import java.util.Set;
 
 /**
- * Created by wizzer on 2018/7/5.
+ * @author wizzer(wizzer@qq.com) on 2018/7/5.
  */
 public class WkJedisRoomProvider implements WsRoomProvider {
     private static final Log log = Logs.get();

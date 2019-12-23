@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 应用管理--推送任务表
- * Created by wizzer on 2019/2/27.
+ * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
 @Table("sys_app_task")
 public class Sys_app_task extends BaseModel implements Serializable {
@@ -46,20 +46,29 @@ public class Sys_app_task extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String processId;
 
+    /**
+     *  主机名 如果是推送给全部主机则为多条
+     */
     @Column
     @Comment("推送主机")
     @ColDefine(type = ColType.VARCHAR, width = 255)
-    private String hostName;//主机名 如果是推送给全部主机则为多条
+    private String hostName;
 
+    /**
+     * 只为展示用
+     */
     @Column
     @Comment("主机IP")
     @ColDefine(type = ColType.VARCHAR, width = 255)
-    private String hostAddress;//只为展示用
+    private String hostAddress;
 
+    /**
+     * 0-待执行,1-执行中,2-执行成功,3-执行失败,4-撤销任务
+     */
     @Column
     @Comment("推送状态")
     @ColDefine(type = ColType.INT, width = 1)
-    private Integer status;//0-待执行,1-执行中,2-执行成功,3-执行失败,4-撤销任务
+    private Integer status;
 
     @Column
     @Comment("反馈时间")

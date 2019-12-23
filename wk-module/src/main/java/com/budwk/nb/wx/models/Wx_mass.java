@@ -7,7 +7,7 @@ import org.nutz.dao.interceptor.annotation.PrevInsert;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/7/1.
+ * @author wizzer(wizzer@qq.com) on 2016/7/1.
  */
 @Table("wx_mass")
 public class Wx_mass extends BaseModel implements Serializable {
@@ -29,18 +29,24 @@ public class Wx_mass extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String name;
 
+    /**
+     * text image news
+     */
     @Column
     @Comment("群发类型")
     @ColDefine(type = ColType.VARCHAR, width = 20)
-    private String type;//text image news
+    private String type;
 
     @Column
     @Comment("媒体文件ID")
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String media_id;
 
+    /**
+     * type=image 时有效
+     */
     @Column
-    @Comment("图片地址")//type=image
+    @Comment("图片地址")
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String picurl;
 

@@ -13,6 +13,9 @@ import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=WxMenuService.class)
 public class WxMenuServiceImpl extends BaseServiceImpl<Wx_menu> implements WxMenuService {
@@ -26,13 +29,16 @@ public class WxMenuServiceImpl extends BaseServiceImpl<Wx_menu> implements WxMen
      * @param menu
      * @param pid
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void save(Wx_menu menu, String pid) {
         String path = "";
         if (!Strings.isEmpty(pid)) {
             Wx_menu pp = this.fetch(pid);
             path = pp.getPath();
-        } else pid = "";
+        } else {
+            pid = "";
+        }
         menu.setPath(getSubPath("wx_menu", "path", path));
         menu.setParentId(pid);
         dao().insert(menu);
@@ -46,6 +52,7 @@ public class WxMenuServiceImpl extends BaseServiceImpl<Wx_menu> implements WxMen
      *
      * @param menu
      */
+    @Override
     @Aop(TransAop.READ_COMMITTED)
     public void deleteAndChild(Wx_menu menu) {
         dao().execute(Sqls.create("delete from wx_menu where path like @path").setParam("path", menu.getPath() + "%"));

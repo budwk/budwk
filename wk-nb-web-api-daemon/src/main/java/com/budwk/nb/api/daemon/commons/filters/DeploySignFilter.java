@@ -1,7 +1,7 @@
 package com.budwk.nb.api.daemon.commons.filters;
 
 /**
- * Created by wizzer.cn on 2019/12/13
+ * @author wizzer(wizzer@qq.com) on 2019/12/13
  */
 
 import com.budwk.nb.api.daemon.commons.utils.DeploySignUtil;
@@ -22,11 +22,12 @@ import java.util.Map;
 
 /**
  * 应用管理服务端接口签名
- * Created by wizzer on 2019/3/8.
+ * @author wizzer(wizzer@qq.com) on 2019/3/8.
  */
 public class DeploySignFilter implements ActionFilter {
     private static final Log log = Logs.get();
 
+    @Override
     public View match(ActionContext context) {
         try {
             DeploySignUtil deploySignUtil = context.getIoc().get(DeploySignUtil.class);

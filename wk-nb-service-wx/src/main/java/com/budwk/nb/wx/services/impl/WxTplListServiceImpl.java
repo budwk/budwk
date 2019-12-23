@@ -7,6 +7,9 @@ import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+/**
+ * @author wizzer(wizzer@qq.com) on 2019/3/16.
+ */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=WxTplListService.class)
 public class WxTplListServiceImpl extends BaseServiceImpl<Wx_tpl_list> implements WxTplListService {

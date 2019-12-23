@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * 多语言字符串
- * Created by wizzer on 2019/10/29
+ * @author wizzer(wizzer@qq.com) on 2019/10/29
  */
 @Table("sys_lang")
 @TableIndexes({@Index(name = "INDEX_SYS_LANG_LOCALE", fields = {"locale"}, unique = false)})

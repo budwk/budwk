@@ -19,11 +19,12 @@ import java.util.Map;
 
 /**
  * Sign签名验证拦截器,如果不使用JWT可以直接用这个拦截器
- * Created by wizzer on 2016/8/11.
+ * @author wizzer(wizzer@qq.com) on 2016/8/11.
  */
 public class ApiSignFilter implements ActionFilter {
     private static final Log log = Logs.get();
 
+    @Override
     public View match(ActionContext context) {
         try {
             ApiSignServer apiSignServer = context.getIoc().get(ApiSignServer.class);
