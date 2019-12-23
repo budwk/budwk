@@ -31,11 +31,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.budwk.nb.app</groupId>
-            <artifactId>wk-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-core</artifactId>
             <version>${nutzboot.version}</version>
