@@ -90,6 +90,7 @@ public class WkNotifyService {
             List<NutMap> mapList = new ArrayList<>();
             for (Sys_msg_user msgUser : list) {
                 mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType().getValue())
+                        .addv("typeText", msgUser.getMsg().getType().getText())
                         .addv("title", msgUser.getMsg().getTitle())
                         .addv("url", msgUser.getMsg().getUrl())
                         .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(msgUser.getMsg().getSendAt()))));
