@@ -477,7 +477,7 @@ public class SysRoleController {
     @Ok("json:full")
     @RequiresPermissions("sys.manage.role")
     public Object userList(@Param("roleId") String roleId, @Param("searchName") String searchName, @Param("searchKeyword") String searchKeyword,
-                           @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+                           @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Sql sql = Sqls.create("SELECT a.*,c.name as unitname FROM sys_user a,sys_user_role b,sys_unit c WHERE a.unitid=c.id and a.id=b.userId and b.roleId=@roleId $s $o");
             sql.params().set("roleId", roleId);
@@ -488,7 +488,7 @@ public class SysRoleController {
                 sql.vars().set("o", " order by a." + pageOrderName + " " + PageUtil.getOrder(pageOrderBy));
 
             }
-            return Result.success().addData(sysUserService.listPage(pageNumber, pageSize, sql));
+            return Result.success().addData(sysUserService.listPage(pageNo, pageSize, sql));
         } catch (Exception e) {
             return Result.error();
         }
