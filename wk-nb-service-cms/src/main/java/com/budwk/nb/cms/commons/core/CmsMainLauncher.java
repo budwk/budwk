@@ -60,7 +60,7 @@ public class CmsMainLauncher {
         CustomMake.me().register("ig", ioc.get(RedisIdGenerator.class));
         //通过POJO类创建表结构
         try {
-            Daos.createTablesInPackage(dao, "com.budwk.nb.app.cms", false);
+            Daos.createTablesInPackage(dao, "com.budwk.nb.cms", false);
             //通过POJO类修改表结构
             //Daos.migration(dao, "com.budwk.nb.app.cms", true, false);
         } catch (Exception e) {

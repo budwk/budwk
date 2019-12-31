@@ -34,7 +34,7 @@ public class WxMainLauncher {
     public void init() {
         //通过POJO类创建表结构
         try {
-            Daos.createTablesInPackage(dao, "com.budwk.nb.app.wx", false);
+            Daos.createTablesInPackage(dao, "com.budwk.nb.wx", false);
             //通过POJO类修改表结构
             //Daos.migration(dao, "com.budwk.nb.app.wx", true, false);
         } catch (Exception e) {

@@ -42,7 +42,7 @@ public class SysMainLauncher {
     public void init() {
         // 通过POJO类创建表结构
         try {
-            Daos.createTablesInPackage(dao, "com.budwk.nb.app.sys", false);
+            Daos.createTablesInPackage(dao, "com.budwk.nb.sys", false);
         } catch (Exception e) {
             log.error(e);
         }
