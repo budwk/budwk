@@ -47,6 +47,8 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
                     sys_msg_user.setMsgId(dbMsg.getId());
                     sys_msg_user.setStatus(0);
                     sys_msg_user.setLoginname(loginname);
+                    sys_msg_user.setCreatedBy(dbMsg.getCreatedBy());
+                    sys_msg_user.setUpdatedBy(dbMsg.getUpdatedBy());
                     sysMsgUserService.insert(sys_msg_user);
                 }
             }
@@ -64,6 +66,8 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
                         Sys_msg_user sys_msg_user = new Sys_msg_user();
                         sys_msg_user.setMsgId(dbMsg.getId());
                         sys_msg_user.setStatus(0);
+                        sys_msg_user.setCreatedBy(dbMsg.getCreatedBy());
+                        sys_msg_user.setUpdatedBy(dbMsg.getUpdatedBy());
                         sys_msg_user.setLoginname(user.getLoginname());
                         sysMsgUserService.insert(sys_msg_user);
                     }

@@ -14,9 +14,11 @@ import com.budwk.nb.sys.services.SysMsgUserService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.web.commons.ext.websocket.WkNotifyService;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -34,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/12/18
+ * @author wizzer(wizzer @ qq.com) on 2019/12/18
  */
 @IocBean
 @At("/api/{version}/platform/sys/msg")
@@ -257,6 +259,154 @@ public class SysMsgController {
                 wkNotifyService.notify(sys_msg, users);
             }
             sysMsgUserService.clearCache();
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/my_msg_list 查询当前用户消息列表
+     * @apiName my_msg_list
+     * @apiGroup SYS_MSG
+     * @apiPermission logon
+     * @apiVersion 1.0.0
+     * @apiParam {String} type    消息类型
+     * @apiParam {String} status  读取状态
+     * @apiParam {String} pageNo   页码
+     * @apiParam {String} pageSize   页大小
+     * @apiParam {String} pageOrderName   排序字段
+     * @apiParam {String} pageOrderBy   排序方式
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     * @apiSuccess {Object} data  分页数据
+     */
+    @At
+    @POST
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
+    @RequiresAuthentication
+    public Object my_msg_list(@Param("status") String status, @Param("type") String type, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+        try {
+            Cnd cnd = Cnd.NEW();
+            if (Strings.isNotBlank(status) && "read".equals(status)) {
+                cnd.and("a.status", "=", 1);
+            }
+            if (Strings.isNotBlank(status) && "unread".equals(status)) {
+                cnd.and("a.status", "=", 0);
+            }
+            cnd.and("a.loginname", "=", StringUtil.getPlatformLoginname());
+            cnd.and("a.delFlag", "=", false);
+            cnd.desc("a.createdAt");
+            if (Strings.isNotBlank(type) && !"all".equals(type)) {
+                cnd.and("b.type", "=", type);
+            }
+            Sql sql = Sqls.create("SELECT b.type,b.title,b.sendat,a.* FROM sys_msg b LEFT JOIN sys_msg_user a ON b.id=a.msgid $condition");
+            sql.setCondition(cnd);
+            Sql sqlCount = Sqls.create("SELECT count(*) FROM sys_msg b LEFT JOIN sys_msg_user a ON b.id=a.msgid $condition");
+            sqlCount.setCondition(cnd);
+            return Result.success().addData(sysMsgService.listPage(pageNo, pageSize, sql, sqlCount));
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/status/read_more 标记已读
+     * @apiName read
+     * @apiGroup SYS_MSG
+     * @apiPermission logon
+     * @apiVersion 1.0.0
+     * @apiParam {String} ids    消息编号
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
+    @At("/status/read_more")
+    @Ok("json")
+    @POST
+    @RequiresAuthentication
+    @SLog(tag = "站内消息")
+    public Object read_more(@Param("ids") String[] ids, HttpServletRequest req) {
+        try {
+            sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()));
+            sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
+            req.setAttribute("_slog_msg", String.format("标为已读IDS:%s", ids));
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/status/read_all 全部已读
+     * @apiName read_all
+     * @apiGroup SYS_MSG
+     * @apiPermission logon
+     * @apiVersion 1.0.0
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
+    @At("/status/read_all")
+    @Ok("json")
+    @RequiresAuthentication
+    @SLog(tag = "站内消息", msg = "全部已读")
+    public Object readAll(HttpServletRequest req) {
+        try {
+            sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()));
+            sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/get 获取消息
+     * @apiName get
+     * @apiGroup SYS_MSG
+     * @apiPermission logon
+     * @apiVersion 1.0.0
+     * @apiParam {String} ids    消息编号
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
+    @At("/get/?")
+    @Ok("json")
+    @RequiresAuthentication
+    public Object get(String id, HttpServletRequest req) {
+        try {
+            // 判断是否有权限查看
+            int num = sysMsgUserService.count(Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()));
+            if (num > 0) {
+                return Result.success().addData(sysMsgService.fetch(id));
+            }
+            return Result.error("sys.manage.msg.detail.notallow");
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    /**
+     * @api {post} /api/1.0.0/platform/sys/msg/status/read_one/:id 标记已读
+     * @apiName read_one
+     * @apiGroup SYS_MSG
+     * @apiPermission logon
+     * @apiVersion 1.0.0
+     * @apiParam {String} id    消息编号
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
+    @At("/status/read_one/?")
+    @Ok("json")
+    @RequiresAuthentication
+    @SLog(tag = "站内消息")
+    public Object read_one(String id, HttpServletRequest req) {
+        try {
+            sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()));
+            sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
+            req.setAttribute("_slog_msg", String.format("标为已读ID:%s", id));
             return Result.success();
         } catch (Exception e) {
             return Result.error();

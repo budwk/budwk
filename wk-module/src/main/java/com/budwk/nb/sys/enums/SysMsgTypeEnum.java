@@ -12,11 +12,11 @@ public enum SysMsgTypeEnum {
     /**
      * system
      */
-    SYSTEM("system", "enums.sys.msg.type.system"),
+    SYSTEM("SYSTEM", "enums.sys.msg.type.system"),
     /**
      * user
      */
-    USER("user", "enums.sys.msg.type.user");
+    USER("USER", "enums.sys.msg.type.user");
 
     private String value;
     private String text;
