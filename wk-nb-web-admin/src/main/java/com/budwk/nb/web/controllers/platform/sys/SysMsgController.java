@@ -328,7 +328,7 @@ public class SysMsgController {
     public Object read_more(@Param("ids") String[] ids, HttpServletRequest req) {
         try {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
-                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()));
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
             req.setAttribute("_slog_msg", String.format("标为已读IDS:%s", ids));
             return Result.success("system.success");
@@ -353,7 +353,7 @@ public class SysMsgController {
     public Object readAll(HttpServletRequest req) {
         try {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
-                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()));
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
             return Result.success();
         } catch (Exception e) {
@@ -404,7 +404,7 @@ public class SysMsgController {
     public Object read_one(String id, HttpServletRequest req) {
         try {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
-                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()));
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
             req.setAttribute("_slog_msg", String.format("标为已读ID:%s", id));
             return Result.success();
