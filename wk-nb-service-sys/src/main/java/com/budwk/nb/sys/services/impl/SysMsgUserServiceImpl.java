@@ -52,6 +52,7 @@ public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> impleme
     @CacheResult(cacheKey = "${loginname}_getUnreadList")
     public List<Sys_msg_user> getUnreadList(String loginname, int pageNumber, int pageSize) {
         return this.query(Cnd.where("delFlag", "=", false).and("loginname", "=", loginname)
+                .and("status","=",0)
                 .desc("createdAt"), "msg", Cnd.orderBy().desc("sendAt"), new Pager().setPageNumber(pageNumber).setPageSize(pageSize));
     }
 
