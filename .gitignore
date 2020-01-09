@@ -1,5 +1,10 @@
 # Compiled class file
 *.class
+.project
+.vscode/
+.settings/
+.idea/
+.git/
 
 # Log file
 *.log

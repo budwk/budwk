@@ -32,7 +32,7 @@ public interface SysApiService extends BaseService<Sys_api> {
      * @param disabled true为禁用
      * @throws Exception
      */
-    void updateAppkey(String appid, boolean disabled) throws Exception;
+    void updateAppkey(String appid, boolean disabled, String userId) throws Exception;
 
     /**
      * 通过appid获取appkey

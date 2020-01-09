@@ -6,10 +6,12 @@ import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.wx.models.Wx_config;
 import com.budwk.nb.wx.services.WxConfigService;
 import org.nutz.dao.Cnd;
+import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.weixin.at.impl.JedisAgenAccessTokenStore;
 import org.nutz.weixin.at.impl.RedisAccessTokenStore;
 import org.nutz.weixin.impl.WxApi2Impl;
 import org.nutz.weixin.spi.WxApi2;
@@ -25,15 +27,13 @@ public class WxService {
     @Reference
     private WxConfigService wxConfigService;
     @Inject
-    private JedisPool jedisPool;
+    private JedisAgent jedisAgent;
 
     public synchronized WxApi2 getWxApi2(String wxid) {
         WxApi2Impl wxApi2 = Globals.WxMap.getAs(wxid, WxApi2Impl.class);
         if (wxApi2 == null) {
             Wx_config appInfo = wxConfigService.fetch(Cnd.where("id", "=", wxid));
-            RedisAccessTokenStore redisAccessTokenStore = new RedisAccessTokenStore();
-            redisAccessTokenStore.setTokenKey(RedisConstant.REDIS_KEY_WX_TOKEN + wxid);
-            redisAccessTokenStore.setJedisPool(jedisPool);
+            JedisAgenAccessTokenStore redisAccessTokenStore = new JedisAgenAccessTokenStore(RedisConstant.REDIS_KEY_WX_TOKEN + wxid, jedisAgent);
             wxApi2 = new WxApi2Impl();
             wxApi2.setAppid(appInfo.getAppid());
             wxApi2.setAppsecret(appInfo.getAppsecret());
