@@ -63,12 +63,12 @@ public class SysMainLauncher {
             //初始化配置表
             Sys_config conf = new Sys_config();
             conf.setConfigKey("AppName");
-            conf.setConfigValue("NutzWk-V6");
+            conf.setConfigValue("BudWk-V6");
             conf.setNote("系统名称");
             dao.insert(conf);
             conf = new Sys_config();
             conf.setConfigKey("AppShrotName");
-            conf.setConfigValue("NutzWk");
+            conf.setConfigValue("BudWk");
             conf.setNote("系统短名称");
             dao.insert(conf);
             conf = new Sys_config();

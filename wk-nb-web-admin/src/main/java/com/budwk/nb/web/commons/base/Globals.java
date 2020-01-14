@@ -20,7 +20,7 @@ public class Globals {
     // 项目目录
     public static String AppBase = "";
     // 项目名称
-    public static String AppName = "NutzWk v6";
+    public static String AppName = "BudWk v6";
     // 项目短名称
     public static String AppShrotName = "v6";
     // 项目域名

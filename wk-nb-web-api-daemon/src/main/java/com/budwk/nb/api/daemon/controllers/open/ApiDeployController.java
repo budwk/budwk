@@ -1,18 +1,19 @@
 package com.budwk.nb.api.daemon.controllers.open;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.api.daemon.commons.filters.DeploySignFilter;
+import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.sys.models.Sys_app_conf;
 import com.budwk.nb.sys.models.Sys_app_list;
 import com.budwk.nb.sys.models.Sys_app_task;
 import com.budwk.nb.sys.services.SysAppConfService;
 import com.budwk.nb.sys.services.SysAppListService;
 import com.budwk.nb.sys.services.SysAppTaskService;
-import com.budwk.nb.api.daemon.commons.filters.DeploySignFilter;
-import com.budwk.nb.commons.base.Result;
-import com.alibaba.dubbo.config.annotation.Reference;
 import org.nutz.boot.starter.ftp.FtpService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.integration.jedis.RedisService;
+import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -26,19 +27,24 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 应用管理服务端接口
+ *
  * @author wizzer(wizzer@qq.com) on 2019/3/8.
  */
-@IocBean
+@IocBean(create = "init")
 @At("/open/api/deploy")
 @Filters({@By(type = DeploySignFilter.class)})
 public class ApiDeployController {
     private final static Log log = Logs.get();
+    @Inject
+    private PropertiesProxy conf;
     @Inject
     @Reference
     private SysAppTaskService sysAppTaskService;
@@ -52,6 +58,13 @@ public class ApiDeployController {
     private FtpService ftpService;
     @Inject
     private RedisService redisService;
+    private boolean ftpEnabled;
+    private String filePath;
+
+    public void init() {
+        filePath = conf.get("budwk.upload.path", conf.get("jetty.staticPath"));
+        ftpEnabled = conf.getBoolean("ftp.enabled", false);
+    }
 
     @At("/task")
     @Ok("json")
@@ -115,7 +128,12 @@ public class ApiDeployController {
                 response.setHeader("Content-Type", "application/java-archive");
                 response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
                 response.setContentLengthLong(sysAppList.getFileSize());
-                ftpService.download(sysAppList.getFilePath(), response.getOutputStream());
+                if (ftpEnabled) {
+                    ftpService.download(sysAppList.getFilePath(), response.getOutputStream());
+                } else {
+                    FileInputStream fileInputStream = new FileInputStream(new File(filePath + "/" + sysAppList.getFilePath()));
+                    Streams.writeAndClose(response.getOutputStream(), fileInputStream);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
