@@ -85,7 +85,7 @@ public class ApiDeployController {
             //大于3分钟将任务设置为超时
             long now3 = Times.getTS() - 3 * 60;
             sysAppTaskService.update(Chain.make("status", 3).add("pushAt", Times.getTS()).add("pushResult", "任务超时"),
-                    Cnd.where("name", "in", apps).and("hostName", "=", hostname).and("status", "=", 1).and("opAt", "<", now3));
+                    Cnd.where("name", "in", apps).and("hostName", "=", hostname).and("status", "=", 1).and("createdAt", "<", now3));
             NutMap map = NutMap.NEW().addv("mem_total", memTotal)
                     .addv("mem_used", memUsed)
                     .addv("mem_free", memFree)
