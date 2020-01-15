@@ -101,7 +101,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 *   内置配置文件启动  `nohup java -jar wk-nb-service-sys.jar &` 带参数 `-Dnutz.profiles.active=prod` 可加载 application-prod.properties 文件
 *   外置配置文件启动  `nohup java -Dnutz.boot.configure.properties.dir=/data/nutzwk/sys/ -jar wk-nb-service-sys.jar &` 此时加载文件夹所有 *.properties 配置文件
-*   生产环境可以使用 [PythonWk](https://github.com/Wizzercn/PythonWk) 进行部署,登陆后台运维中心可在线更新jar包及配置文件等
+*   生产环境可以使用 [budwk-daemon-python](https://github.com/budwk/budwk-daemon-python) 进行部署,登陆后台运维中心可在线更新jar包及配置文件等
 
 # 鸣谢
 
