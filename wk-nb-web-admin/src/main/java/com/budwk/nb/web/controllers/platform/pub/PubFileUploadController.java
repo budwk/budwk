@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/12/19
+ * @author wizzer(wizzer @ qq.com) on 2019/12/19
  */
 @IocBean
 @At("/api/{version}/platform/pub/file/upload")
@@ -38,6 +38,16 @@ public class PubFileUploadController {
     private String UploadType;
     private final static String UPLOAD_TYPE_FTP = "ftp";
 
+    /**
+     * @api {post} /api/1.0.0/platform/pub/file/upload/file 上传文件
+     * @apiName file
+     * @apiGroup PLATFORM_PUB
+     * @apiPermission 登陆用户
+     * @apiVersion 1.0.0
+     * @apiParam {String} Filedata    文件参数名
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
     @POST
     @At
@@ -78,6 +88,16 @@ public class PubFileUploadController {
         }
     }
 
+    /**
+     * @api {post} /api/1.0.0/platform/pub/file/upload/video 上传视频文件
+     * @apiName video
+     * @apiGroup PLATFORM_PUB
+     * @apiPermission 登陆用户
+     * @apiVersion 1.0.0
+     * @apiParam {String} Filedata    文件参数名
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:videoUpload"})
     @POST
     @At
@@ -118,6 +138,16 @@ public class PubFileUploadController {
         }
     }
 
+    /**
+     * @api {post} /api/1.0.0/platform/pub/file/upload/video 上传图片文件
+     * @apiName image
+     * @apiGroup PLATFORM_PUB
+     * @apiPermission 登陆用户
+     * @apiVersion 1.0.0
+     * @apiParam {String} Filedata    文件参数名
+     * @apiSuccess {Number} code  0
+     * @apiSuccess {String} msg   操作成功
+     */
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:imageUpload"})
     @POST
     @At

@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/11/21
+ * @author wizzer(wizzer @ qq.com) on 2019/11/21
  */
 @IocBean
 @At("/api/{version}/platform/sys/user")
@@ -127,6 +127,9 @@ public class SysUserController {
     @RequiresAuthentication
     public Object setUserThemeConfig(@Param("themeConfig") String themeConfig) {
         try {
+            if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.error("system.error.demo");
+            }
             sysUserService.update(Chain.make("themeConfig", themeConfig), Cnd.where("id", "=", StringUtil.getPlatformUid()));
             Subject subject = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) subject.getPrincipal();
@@ -156,6 +159,9 @@ public class SysUserController {
     @RequiresAuthentication
     public Object setUserAvatar(@Param("avatar") String avatar) {
         try {
+            if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.error("system.error.demo");
+            }
             sysUserService.update(Chain.make("avatar", avatar), Cnd.where("id", "=", StringUtil.getPlatformUid()));
             Subject subject = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) subject.getPrincipal();
@@ -184,6 +190,9 @@ public class SysUserController {
     @RequiresAuthentication
     public Object doChangeInfo(@Param("username") String username, @Param("email") String email, @Param("mobile") String mobile, @Param("avatar") String avatar, HttpServletRequest req) {
         try {
+            if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.error("system.error.demo");
+            }
             Subject subject = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) subject.getPrincipal();
             if (user != null) {
@@ -229,6 +238,9 @@ public class SysUserController {
     @RequiresAuthentication
     public Object doChangePassword(@Param("oldPassword") String oldPassword, @Param("newPassword") String newPassword, HttpServletRequest req) {
         try {
+            if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.error("system.error.demo");
+            }
             Subject subject = SecurityUtils.getSubject();
             Sys_user user = (Sys_user) subject.getPrincipal();
             String old = new Sha256Hash(oldPassword, user.getSalt(), 1024).toHex();

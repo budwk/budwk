@@ -12,6 +12,7 @@ import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysMsgUserService;
 import com.budwk.nb.sys.services.SysUserService;
+import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.web.commons.ext.websocket.WkNotifyService;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -32,6 +33,7 @@ import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -269,7 +271,7 @@ public class SysMsgController {
      * @api {post} /api/1.0.0/platform/sys/msg/my_msg_list 查询当前用户消息列表
      * @apiName my_msg_list
      * @apiGroup SYS_MSG
-     * @apiPermission logon
+     * @apiPermission 登陆用户
      * @apiVersion 1.0.0
      * @apiParam {String} type    消息类型
      * @apiParam {String} status  读取状态
@@ -314,7 +316,7 @@ public class SysMsgController {
      * @api {post} /api/1.0.0/platform/sys/msg/status/read_more 标记已读
      * @apiName read
      * @apiGroup SYS_MSG
-     * @apiPermission logon
+     * @apiPermission 登陆用户
      * @apiVersion 1.0.0
      * @apiParam {String} ids    消息编号
      * @apiSuccess {Number} code  0
@@ -327,10 +329,13 @@ public class SysMsgController {
     @SLog(tag = "站内消息")
     public Object read_more(@Param("ids") String[] ids, HttpServletRequest req) {
         try {
+            if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.error("system.error.demo");
+            }
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
-            req.setAttribute("_slog_msg", String.format("标为已读IDS:%s", ids));
+            req.setAttribute("_slog_msg", String.format("标为已读IDS:%s", Arrays.toString(ids)));
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -341,7 +346,7 @@ public class SysMsgController {
      * @api {post} /api/1.0.0/platform/sys/msg/status/read_all 全部已读
      * @apiName read_all
      * @apiGroup SYS_MSG
-     * @apiPermission logon
+     * @apiPermission 登陆用户
      * @apiVersion 1.0.0
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
@@ -352,6 +357,9 @@ public class SysMsgController {
     @SLog(tag = "站内消息", msg = "全部已读")
     public Object readAll(HttpServletRequest req) {
         try {
+            if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.error("system.error.demo");
+            }
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
@@ -365,7 +373,7 @@ public class SysMsgController {
      * @api {post} /api/1.0.0/platform/sys/msg/get 获取消息
      * @apiName get
      * @apiGroup SYS_MSG
-     * @apiPermission logon
+     * @apiPermission 登陆用户
      * @apiVersion 1.0.0
      * @apiParam {String} ids    消息编号
      * @apiSuccess {Number} code  0
@@ -391,7 +399,7 @@ public class SysMsgController {
      * @api {post} /api/1.0.0/platform/sys/msg/status/read_one/:id 标记已读
      * @apiName read_one
      * @apiGroup SYS_MSG
-     * @apiPermission logon
+     * @apiPermission 登陆用户
      * @apiVersion 1.0.0
      * @apiParam {String} id    消息编号
      * @apiSuccess {Number} code  0
@@ -403,6 +411,9 @@ public class SysMsgController {
     @SLog(tag = "站内消息")
     public Object read_one(String id, HttpServletRequest req) {
         try {
+            if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
+                return Result.success("system.error.demo");
+            }
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());

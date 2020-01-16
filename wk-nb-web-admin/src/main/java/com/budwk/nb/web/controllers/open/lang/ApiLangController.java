@@ -33,8 +33,8 @@ public class ApiLangController {
 
     /**
      * @api {post} /api/1.0.0/open/language/get_data 获取多语言字符串
-     * @apiName get_data
-     * @apiGroup OPEN_LANG
+     * @apiName language/get_data
+     * @apiGroup OPEN
      * @apiVersion 1.0.0
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
@@ -53,8 +53,8 @@ public class ApiLangController {
 
     /**
      * @api {post} /api/1.0.0/open/language/get_lang 获取多语言列表
-     * @apiName get_lang
-     * @apiGroup OPEN_LANG
+     * @apiName language/get_lang
+     * @apiGroup OPEN
      * @apiVersion 1.0.0
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
@@ -73,8 +73,8 @@ public class ApiLangController {
 
     /**
      * @api {post} /api/1.0.0/open/language/set_lang 设置当前语言
-     * @apiName set_lang
-     * @apiGroup OPEN_LANG
+     * @apiName language/set_lang
+     * @apiGroup OPEN
      * @apiVersion 1.0.0
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
