@@ -9,9 +9,9 @@ public interface CmsArticleService extends BaseService<Cms_article> {
     /**
      * 获取文章列表
      *
-     * @param pageNumber
-     * @param pageSize
-     * @param cnd
+     * @param pageNumber 页码
+     * @param pageSize 页大小
+     * @param cnd 查询条件
      * @return
      */
     Pagination getListPage(int pageNumber, int pageSize, Condition cnd);

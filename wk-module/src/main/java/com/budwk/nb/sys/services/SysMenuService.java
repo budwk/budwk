@@ -31,14 +31,14 @@ public interface SysMenuService extends BaseService<Sys_menu> {
     /**
      * 级联删除菜单
      *
-     * @param menu
+     * @param menu 菜单对象
      */
     void deleteAndChild(Sys_menu menu);
 
     /**
      * 获取左侧菜单
      *
-     * @param href
+     * @param href 请求路径
      * @return
      */
     Sys_menu getLeftMenu(String href);
@@ -46,7 +46,7 @@ public interface SysMenuService extends BaseService<Sys_menu> {
     /**
      * 获取左侧菜单路径
      *
-     * @param list
+     * @param list 路径列表
      * @return
      */
     Sys_menu getLeftPathMenu(List<String> list);

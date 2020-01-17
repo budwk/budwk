@@ -11,7 +11,7 @@ public interface SysLogService extends BaseService<Sys_log> {
     /**
      * 快速插入日志
      *
-     * @param syslog
+     * @param syslog 日志对象
      */
     void fastInsertSysLog(Sys_log syslog);
 

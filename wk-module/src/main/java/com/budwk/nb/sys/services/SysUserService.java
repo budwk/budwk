@@ -14,14 +14,14 @@ public interface SysUserService extends BaseService<Sys_user> {
     /**
      * 查询用户的角色
      *
-     * @param user
+     * @param user 用户对象
      * @return
      */
     List<NutMap> getRoles(Sys_user user);
     /**
      * 查询用户的角色
      *
-     * @param user
+     * @param user 用户对象
      * @return
      */
     List<String> getRoleCodeList(Sys_user user);
@@ -29,7 +29,7 @@ public interface SysUserService extends BaseService<Sys_user> {
     /**
      * 通过用户ID获取菜单及权限
      *
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     List<Sys_menu> getMenusAndButtons(String userId);
@@ -37,8 +37,8 @@ public interface SysUserService extends BaseService<Sys_user> {
     /**
      * 通过用户ID和菜单父ID获取下级权限菜单
      *
-     * @param userId
-     * @param pid
+     * @param userId 用户ID
+     * @param pid 菜单父ID
      * @return
      */
     List<Sys_menu> getRoleMenus(String userId, String pid);
@@ -46,29 +46,29 @@ public interface SysUserService extends BaseService<Sys_user> {
     /**
      * 判断用户是否有下级数据权限
      *
-     * @param userId
-     * @param pid
+     * @param userId 用户ID
+     * @param pid 菜单父ID
      * @return
      */
     boolean hasChildren(String userId, String pid);
     /**
      * 通过用户ID删除用户
      *
-     * @param userId
+     * @param userId 用户ID
      */
     void deleteById(String userId);
 
     /**
      * 批量删除用户
      *
-     * @param userIds
+     * @param userIds 用户ID数组
      */
     void deleteByIds(String[] userIds);
 
     /**
      * 清除一个用户的缓存
      *
-     * @param userId
+     * @param userId 用户ID
      */
     void deleteCache(String userId);
 

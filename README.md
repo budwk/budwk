@@ -92,7 +92,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   MySql 创建名为 `nutzwk_nb` 的空数据库,在每个NB(nutzboot缩写)模块启动时会自动建表,同时初始化数据
 *   项目根目录执行 `mvn clean install -Dmaven.test.skip=true`
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
-*   在项目根目录执行 `mvn -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
+*   在项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
 *   启动顺序是 sys --> slog --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
 *   正常启动后访问 `http://127.0.0.1:9527` 用户名 superadmin 密码 1
 *   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [wizzer.cn 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)

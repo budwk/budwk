@@ -10,15 +10,15 @@ public interface SysUnitService extends BaseService<Sys_unit> {
     /**
      * 保存单位
      *
-     * @param unit
-     * @param pid
+     * @param unit 单位对象
+     * @param pid 父ID
      */
     void save(Sys_unit unit, String pid);
 
     /**
      * 级联删除单位及单位下用户
      *
-     * @param unit
+     * @param unit 单位对象
      */
     void deleteAndChild(Sys_unit unit);
 

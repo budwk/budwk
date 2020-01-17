@@ -10,7 +10,7 @@ public interface CmsSiteService extends BaseService<Cms_site> {
     /**
      * 通过编码获取站点信息
      *
-     * @param code
+     * @param code 站点标识
      * @return
      */
     Cms_site getSite(String code);

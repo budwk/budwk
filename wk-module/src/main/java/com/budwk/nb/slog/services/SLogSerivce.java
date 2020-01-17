@@ -10,7 +10,7 @@ public interface SLogSerivce {
     /**
      * 创建日志
      *
-     * @param syslog
+     * @param syslog 日志对象
      */
     void create(Sys_log syslog);
 

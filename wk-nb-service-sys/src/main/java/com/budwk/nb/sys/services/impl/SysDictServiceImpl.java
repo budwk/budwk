@@ -33,7 +33,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过code获取name
      *
-     * @param code
+     * @param code 字典标识
      * @return
      */
     @Override
@@ -46,7 +46,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过id获取name
      *
-     * @param id
+     * @param id ID
      * @return
      */
     @Override
@@ -59,7 +59,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过树path获取下级列表
      *
-     * @param path
+     * @param path 路径
      * @return
      */
     @Override
@@ -71,7 +71,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过父id获取下级列表
      *
-     * @param id
+     * @param id ID
      * @return
      */
     @Override
@@ -83,7 +83,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过code获取下级列表
      *
-     * @param code
+     * @param code 标识
      * @return
      */
     @Override
@@ -96,7 +96,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过path获取下级map
      *
-     * @param path
+     * @param path 路径
      * @return
      */
     @Override
@@ -108,7 +108,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过id获取下级map
      *
-     * @param id
+     * @param id ID
      * @return
      */
     @Override
@@ -120,7 +120,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 通过code获取下级map
      *
-     * @param code
+     * @param code 字典标识
      * @return
      */
     @Override
@@ -133,8 +133,8 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 新增字典
      *
-     * @param dict
-     * @param pid
+     * @param dict 字典对象
+     * @param pid 父ID
      */
     @Override
     @Aop(TransAop.READ_COMMITTED)
@@ -155,7 +155,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     /**
      * 级联删除单位
      *
-     * @param dict
+     * @param dict 字典对象
      */
     @Override
     @Aop(TransAop.READ_COMMITTED)

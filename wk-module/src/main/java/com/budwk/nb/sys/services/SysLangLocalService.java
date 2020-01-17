@@ -18,7 +18,7 @@ public interface SysLangLocalService extends BaseService<Sys_lang_local> {
 
     /**
      * 清空语言字符串
-     * @param locale
+     * @param locale 语言
      */
     void clearLocal(String locale);
     /**

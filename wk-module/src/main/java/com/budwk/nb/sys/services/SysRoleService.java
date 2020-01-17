@@ -37,7 +37,7 @@ public interface SysRoleService extends BaseService<Sys_role> {
     /**
      * 通过角色获取权限标识符
      *
-     * @param role
+     * @param role 角色对象
      * @return
      */
     List<String> getPermissionNameList(Sys_role role);
@@ -45,28 +45,28 @@ public interface SysRoleService extends BaseService<Sys_role> {
     /**
      * 删除角色
      *
-     * @param roleid
+     * @param roleid 角色ID
      */
     void del(String roleid);
 
     /**
      * 批量删除角色
      *
-     * @param roleids
+     * @param roleids 角色ID数组
      */
     void del(String[] roleids);
 
     /**
      * 保存菜单数据
-     * @param menuIds
-     * @param roleId
+     * @param menuIds 菜单数组
+     * @param roleId 角色ID
      */
     void saveMenu(String[] menuIds, String roleId);
     /**
      * 通过角色ID和菜单父ID获取下级权限菜单
      *
-     * @param roleId
-     * @param pid
+     * @param roleId 角色ID
+     * @param pid 菜单父ID
      * @return
      */
     List<Sys_menu> getRoleMenus(String roleId, String pid);
@@ -74,8 +74,8 @@ public interface SysRoleService extends BaseService<Sys_role> {
     /**
      * 判断角色是否有下级数据权限
      *
-     * @param roleId
-     * @param pid
+     * @param roleId 角色ID
+     * @param pid 菜单父ID
      * @return
      */
     boolean hasChildren(String roleId, String pid);
@@ -83,10 +83,10 @@ public interface SysRoleService extends BaseService<Sys_role> {
     /**
      * 查询用户
      *
-     * @param roleId
-     * @param keyword
-     * @param isAdmin
-     * @param sysUnit
+     * @param roleId 角色ID
+     * @param keyword 关键词
+     * @param isAdmin 是否管理员
+     * @param sysUnit 单位对象
      * @return
      */
     Pagination userSearch(String roleId, String keyword, boolean isAdmin, Sys_unit sysUnit);
