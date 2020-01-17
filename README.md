@@ -84,7 +84,7 @@ Maven | 项目构建管理  | [https://maven.apache.org](https://maven.apache.or
 ----|------|----
 Vue.js | MVVM框架 | [https://vuejs.org](https://vuejs.org)
 Nuxt.js | Vue通用应用框架 | [https://nuxtjs.org](https://nuxtjs.org)
-Elment | 基于Vue的UI框架 | [https://element.eleme.io](https://element.eleme.io)
+Element | 基于Vue的UI框架 | [https://element.eleme.io](https://element.eleme.io)
 Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
 
 ## 开发指南
@@ -94,8 +94,14 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
 *   在项目根目录执行 `mvn -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
 *   启动顺序是 sys --> slog --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
-*   正常启动后访问 `http://127.0.0.1:8080/sysadmin` 用户名 superadmin 密码 1
+*   正常启动后访问 `http://127.0.0.1:9527` 用户名 superadmin 密码 1
 *   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [wizzer.cn 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
+
+## 生成API文档
+*   安装nodejs,执行命令 `npm install apidoc -g` 
+*   生成接口文档 `apidoc -i ./ -o apidoc/` 其中 `-i ./` 指定要生成文档的目标文件,`-o apidoc/` 指定要生成文档的输出路径
+*   wk-nb-web-admin 目录下,执行 `apidoc -i ./ -o E:/dst/apidoc_admin/` 生成后台接口文档
+*   wk-nb-web-api-open 目录下,执行 `apidoc -i ./ -o E:/dst/apidoc_api/` 生成对外接口文档
 
 ## 项目部署
 
