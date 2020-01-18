@@ -7,6 +7,10 @@ NutzBoot 版本(下文简称NB)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![PowerByNutz](https://img.shields.io/badge/PowerBy-Nutz-green.svg)](https://github.com/nutzam/nutz)
 
+https://demo.budwk.com  V6演示地址
+
+https://nutzwk.wizzer.cn  V5演示地址
+
 https://wizzer.cn/donation  赞助者
 
 # 前言
