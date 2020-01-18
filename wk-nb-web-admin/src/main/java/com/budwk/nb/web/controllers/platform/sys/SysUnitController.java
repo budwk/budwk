@@ -1,13 +1,13 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.constants.PlatformConstant;
+import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.sys.models.Sys_unit;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysUnitService;
-import com.budwk.nb.commons.annotation.SLog;
-import com.budwk.nb.commons.utils.StringUtil;
-import com.budwk.nb.commons.base.Result;
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/11/21
+ * @author wizzer(wizzer @ qq.com) on 2019/11/21
  */
 @IocBean
 @At("/api/{version}/platform/sys/unit")
@@ -175,6 +175,9 @@ public class SysUnitController {
         try {
             if ("root".equals(parentId) || parentId == null) {
                 parentId = "";
+            }
+            if (!shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME) && Strings.isBlank(parentId)) {
+                return Result.error("system.error.invalid");
             }
             unit.setCreatedBy(StringUtil.getPlatformUid());
             unit.setUpdatedBy(StringUtil.getPlatformUid());
