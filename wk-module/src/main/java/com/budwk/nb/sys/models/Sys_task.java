@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/30.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_task")
 public class Sys_task extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -57,75 +61,4 @@ public class Sys_task extends BaseModel implements Serializable {
     @ColDefine(type = ColType.BOOLEAN)
     private boolean disabled;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getJobClass() {
-        return jobClass;
-    }
-
-    public void setJobClass(String jobClass) {
-        this.jobClass = jobClass;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getCron() {
-        return cron;
-    }
-
-    public void setCron(String cron) {
-        this.cron = cron;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public Long getExeAt() {
-        return exeAt;
-    }
-
-    public void setExeAt(Long exeAt) {
-        this.exeAt = exeAt;
-    }
-
-    public String getExeResult() {
-        return exeResult;
-    }
-
-    public void setExeResult(String exeResult) {
-        this.exeResult = exeResult;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
 }

@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * 应用管理--配置文件表
  * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_app_conf")
 public class Sys_app_conf extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,51 +48,4 @@ public class Sys_app_conf extends BaseModel implements Serializable {
     @One(field = "createdBy")
     private Sys_user user;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getConfName() {
-        return confName;
-    }
-
-    public void setConfName(String confName) {
-        this.confName = confName;
-    }
-
-    public String getConfVersion() {
-        return confVersion;
-    }
-
-    public void setConfVersion(String confVersion) {
-        this.confVersion = confVersion;
-    }
-
-    public String getConfData() {
-        return confData;
-    }
-
-    public void setConfData(String confData) {
-        this.confData = confData;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public Sys_user getUser() {
-        return user;
-    }
-
-    public void setUser(Sys_user user) {
-        this.user = user;
-    }
 }

@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_user")
 @TableIndexes({@Index(name = "INDEX_WX_USER_OPENID", fields = {"openid"}, unique = true)})
 public class Wx_user extends BaseModel implements Serializable {
@@ -81,115 +85,4 @@ public class Wx_user extends BaseModel implements Serializable {
     @One(field = "wxid")
     private Wx_config wxConfig;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getUnionid() {
-        return unionid;
-    }
-
-    public void setUnionid(String unionid) {
-        this.unionid = unionid;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public boolean isSubscribe() {
-        return subscribe;
-    }
-
-    public void setSubscribe(boolean subscribe) {
-        this.subscribe = subscribe;
-    }
-
-    public Long getSubscribeAt() {
-        return subscribeAt;
-    }
-
-    public void setSubscribeAt(Long subscribeAt) {
-        this.subscribeAt = subscribeAt;
-    }
-
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getHeadimgurl() {
-        return headimgurl;
-    }
-
-    public void setHeadimgurl(String headimgurl) {
-        this.headimgurl = headimgurl;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public Wx_config getWxConfig() {
-        return wxConfig;
-    }
-
-    public void setWxConfig(Wx_config wxConfig) {
-        this.wxConfig = wxConfig;
-    }
-
-    public String getSys_unit_id() {
-        return sys_unit_id;
-    }
-
-    public void setSys_unit_id(String sys_unit_id) {
-        this.sys_unit_id = sys_unit_id;
-    }
 }

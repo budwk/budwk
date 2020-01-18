@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2018/11/7.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_reply_img")
 public class Wx_reply_img extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -39,43 +43,4 @@ public class Wx_reply_img extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String mediaId;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSys_unit_id() {
-        return sys_unit_id;
-    }
-
-    public void setSys_unit_id(String sys_unit_id) {
-        this.sys_unit_id = sys_unit_id;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public String getPicurl() {
-        return picurl;
-    }
-
-    public void setPicurl(String picurl) {
-        this.picurl = picurl;
-    }
-
-    public String getMediaId() {
-        return mediaId;
-    }
-
-    public void setMediaId(String mediaId) {
-        this.mediaId = mediaId;
-    }
 }

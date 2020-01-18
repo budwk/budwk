@@ -1,6 +1,8 @@
 package com.budwk.nb.cms.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -10,6 +12,8 @@ import java.util.List;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("cms_link_class")
 @TableIndexes({@Index(name = "INDEX_CMS_LINK_CLASS", fields = {"code"}, unique = true)})
 public class Cms_link_class extends BaseModel implements Serializable {
@@ -34,27 +38,4 @@ public class Cms_link_class extends BaseModel implements Serializable {
     @ManyMany(from = "classId", relation = "cms_class_link", to = "linkId")
     private List<Cms_link> links;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 }

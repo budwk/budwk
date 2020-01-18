@@ -1,6 +1,8 @@
 package com.budwk.nb.cms.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("cms_link")
 public class Cms_link extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -51,67 +55,4 @@ public class Cms_link extends BaseModel implements Serializable {
     @One(field = "classId")
     private Cms_link_class linkClass;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getPicurl() {
-        return picurl;
-    }
-
-    public void setPicurl(String picurl) {
-        this.picurl = picurl;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public String getClassId() {
-        return classId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public Cms_link_class getLinkClass() {
-        return linkClass;
-    }
-
-    public void setLinkClass(Cms_link_class linkClass) {
-        this.linkClass = linkClass;
-    }
 }

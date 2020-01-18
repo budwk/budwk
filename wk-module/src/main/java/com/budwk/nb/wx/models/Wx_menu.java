@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_menu")
 public class Wx_menu extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -93,107 +97,4 @@ public class Wx_menu extends BaseModel implements Serializable {
     @One(field = "wxid")
     private Wx_config wxConfig;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public String getMenuType() {
-        return menuType;
-    }
-
-    public void setMenuType(String menuType) {
-        this.menuType = menuType;
-    }
-
-    public String getMenuKey() {
-        return menuKey;
-    }
-
-    public void setMenuKey(String menuKey) {
-        this.menuKey = menuKey;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Integer getLocation() {
-        return location;
-    }
-
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
-
-    public boolean isHasChildren() {
-        return hasChildren;
-    }
-
-    public void setHasChildren(boolean hasChildren) {
-        this.hasChildren = hasChildren;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public Wx_config getWxConfig() {
-        return wxConfig;
-    }
-
-    public void setWxConfig(Wx_config wxConfig) {
-        this.wxConfig = wxConfig;
-    }
-
-    public String getAppid() {
-        return appid;
-    }
-
-    public void setAppid(String appid) {
-        this.appid = appid;
-    }
-
-    public String getPagepath() {
-        return pagepath;
-    }
-
-    public void setPagepath(String pagepath) {
-        this.pagepath = pagepath;
-    }
 }

@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2018/6/29.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_msg_user")
 public class Sys_msg_user extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -47,51 +51,4 @@ public class Sys_msg_user extends BaseModel implements Serializable {
     @One(field = "msgId")
     private Sys_msg msg;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getMsgId() {
-        return msgId;
-    }
-
-    public void setMsgId(String msgId) {
-        this.msgId = msgId;
-    }
-
-    public String getLoginname() {
-        return loginname;
-    }
-
-    public void setLoginname(String loginname) {
-        this.loginname = loginname;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Long getReadAt() {
-        return readAt;
-    }
-
-    public void setReadAt(Long readAt) {
-        this.readAt = readAt;
-    }
-
-    public Sys_msg getMsg() {
-        return msg;
-    }
-
-    public void setMsg(Sys_msg msg) {
-        this.msg = msg;
-    }
 }

@@ -2,6 +2,8 @@ package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
 import com.budwk.nb.sys.enums.SysMsgTypeEnum;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -11,6 +13,8 @@ import java.util.List;
 /**
  * @author wizzer(wizzer@qq.com) on 2018/6/29.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_msg")
 public class Sys_msg extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -48,59 +52,4 @@ public class Sys_msg extends BaseModel implements Serializable {
     @Many(field = "msgId")
     private List<Sys_msg_user> userList;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public SysMsgTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(SysMsgTypeEnum type) {
-        this.type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Long getSendAt() {
-        return sendAt;
-    }
-
-    public void setSendAt(Long sendAt) {
-        this.sendAt = sendAt;
-    }
-
-    public List<Sys_msg_user> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<Sys_msg_user> userList) {
-        this.userList = userList;
-    }
 }

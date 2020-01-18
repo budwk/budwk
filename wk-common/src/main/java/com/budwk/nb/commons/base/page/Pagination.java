@@ -49,14 +49,14 @@ public class Pagination extends SimplePage implements java.io.Serializable {
     /**
      * 当前页的数据
      */
-    private List list;
+    public List list;
 
     /**
      * 获得分页内容
      *
      * @return
      */
-    public <T> List<T> getList() {
+    public <T> List getList() {
         return list;
     }
 
@@ -73,7 +73,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
     /**
      * 设置分页内容
      *
-     * @param list
+     * @param list 列表对象
      */
     public void setList(List list) {
         this.list = list;

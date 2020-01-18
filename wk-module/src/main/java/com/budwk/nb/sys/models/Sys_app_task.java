@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * 应用管理--推送任务表
  * @author wizzer(wizzer@qq.com) on 2019/2/27.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_app_task")
 public class Sys_app_task extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -82,99 +86,4 @@ public class Sys_app_task extends BaseModel implements Serializable {
     @One(field = "createdBy")
     private Sys_user user;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getAppVersion() {
-        return appVersion;
-    }
-
-    public void setAppVersion(String appVersion) {
-        this.appVersion = appVersion;
-    }
-
-    public String getConfVersion() {
-        return confVersion;
-    }
-
-    public void setConfVersion(String confVersion) {
-        this.confVersion = confVersion;
-    }
-
-    public String getProcessId() {
-        return processId;
-    }
-
-    public void setProcessId(String processId) {
-        this.processId = processId;
-    }
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
-
-    public String getHostAddress() {
-        return hostAddress;
-    }
-
-    public void setHostAddress(String hostAddress) {
-        this.hostAddress = hostAddress;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Long getPushAt() {
-        return pushAt;
-    }
-
-    public void setPushAt(Long pushAt) {
-        this.pushAt = pushAt;
-    }
-
-    public String getPushResult() {
-        return pushResult;
-    }
-
-    public void setPushResult(String pushResult) {
-        this.pushResult = pushResult;
-    }
-
-    public Sys_user getUser() {
-        return user;
-    }
-
-    public void setUser(Sys_user user) {
-        this.user = user;
-    }
 }

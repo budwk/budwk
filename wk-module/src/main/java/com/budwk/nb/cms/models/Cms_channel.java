@@ -1,6 +1,8 @@
 package com.budwk.nb.cms.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("cms_channel")
 @TableIndexes({@Index(name = "INDEX_CHANNEL", fields = {"code"}, unique = true)})
 public class Cms_channel extends BaseModel implements Serializable {
@@ -87,117 +91,5 @@ public class Cms_channel extends BaseModel implements Serializable {
     @Column
     @Comment("有子节点")
     private boolean hasChildren;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSiteid() {
-        return siteid;
-    }
-
-    public void setSiteid(String siteid) {
-        this.siteid = siteid;
-    }
-
-    public String getShopid() {
-        return shopid;
-    }
-
-    public void setShopid(String shopid) {
-        this.shopid = shopid;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public boolean isShowit() {
-        return showit;
-    }
-
-    public void setShowit(boolean showit) {
-        this.showit = showit;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public Integer getLocation() {
-        return location;
-    }
-
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
-
-    public boolean isHasChildren() {
-        return hasChildren;
-    }
-
-    public void setHasChildren(boolean hasChildren) {
-        this.hasChildren = hasChildren;
-    }
 
 }

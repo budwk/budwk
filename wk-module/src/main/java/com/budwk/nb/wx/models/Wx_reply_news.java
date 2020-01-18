@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_reply_news")
 public class Wx_reply_news extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -63,75 +67,4 @@ public class Wx_reply_news extends BaseModel implements Serializable {
     })
     private Integer location;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
-    }
-
-    public String getPicUrl2() {
-        return picUrl2;
-    }
-
-    public void setPicUrl2(String picUrl2) {
-        this.picUrl2 = picUrl2;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Integer getLocation() {
-        return location;
-    }
-
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
-
-    public String getSys_unit_id() {
-        return sys_unit_id;
-    }
-
-    public void setSys_unit_id(String sys_unit_id) {
-        this.sys_unit_id = sys_unit_id;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
 }

@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/1.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_mass")
 public class Wx_mass extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -76,99 +80,4 @@ public class Wx_mass extends BaseModel implements Serializable {
     @One(field = "id",key = "massId")
     private Wx_mass_send massSend;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getMedia_id() {
-        return media_id;
-    }
-
-    public void setMedia_id(String media_id) {
-        this.media_id = media_id;
-    }
-
-    public String getPicurl() {
-        return picurl;
-    }
-
-    public void setPicurl(String picurl) {
-        this.picurl = picurl;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public Wx_config getWxConfig() {
-        return wxConfig;
-    }
-
-    public String getSys_unit_id() {
-        return sys_unit_id;
-    }
-
-    public void setSys_unit_id(String sys_unit_id) {
-        this.sys_unit_id = sys_unit_id;
-    }
-
-    public void setWxConfig(Wx_config wxConfig) {
-        this.wxConfig = wxConfig;
-    }
-
-    public Wx_mass_send getMassSend() {
-        return massSend;
-    }
-
-    public void setMassSend(Wx_mass_send massSend) {
-        this.massSend = massSend;
-    }
 }

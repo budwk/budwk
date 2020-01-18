@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_mass_send")
 public class Wx_mass_send extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -70,75 +74,4 @@ public class Wx_mass_send extends BaseModel implements Serializable {
     @One(field = "wxid")
     private Wx_config wxConfig;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getMassId() {
-        return massId;
-    }
-
-    public void setMassId(String massId) {
-        this.massId = massId;
-    }
-
-    public String getReceivers() {
-        return receivers;
-    }
-
-    public void setReceivers(String receivers) {
-        this.receivers = receivers;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getMsgId() {
-        return msgId;
-    }
-
-    public void setMsgId(String msgId) {
-        this.msgId = msgId;
-    }
-
-    public String getErrCode() {
-        return errCode;
-    }
-
-    public void setErrCode(String errCode) {
-        this.errCode = errCode;
-    }
-
-    public String getErrMsg() {
-        return errMsg;
-    }
-
-    public void setErrMsg(String errMsg) {
-        this.errMsg = errMsg;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public Wx_config getWxConfig() {
-        return wxConfig;
-    }
-
-    public void setWxConfig(Wx_config wxConfig) {
-        this.wxConfig = wxConfig;
-    }
 }

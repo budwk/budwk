@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.io.Serializable;
  * API密钥管理
  * @author wizzer(wizzer@qq.com) on 2019/2/26.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_api")
 public class Sys_api extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -31,35 +35,4 @@ public class Sys_api extends BaseModel implements Serializable {
     @ColDefine(type = ColType.BOOLEAN)
     private boolean disabled;
 
-    public String getAppid() {
-        return appid;
-    }
-
-    public void setAppid(String appid) {
-        this.appid = appid;
-    }
-
-    public String getAppkey() {
-        return appkey;
-    }
-
-    public void setAppkey(String appkey) {
-        this.appkey = appkey;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
 }

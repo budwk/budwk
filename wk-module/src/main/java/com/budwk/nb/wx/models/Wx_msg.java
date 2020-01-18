@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_msg")
 public class Wx_msg extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -60,83 +64,4 @@ public class Wx_msg extends BaseModel implements Serializable {
     @One(field = "wxid")
     private Wx_config wxConfig;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getReplyId() {
-        return replyId;
-    }
-
-    public void setReplyId(String replyId) {
-        this.replyId = replyId;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public Wx_config getWxConfig() {
-        return wxConfig;
-    }
-
-    public void setWxConfig(Wx_config wxConfig) {
-        this.wxConfig = wxConfig;
-    }
-
-    public String getSys_unit_id() {
-        return sys_unit_id;
-    }
-
-    public void setSys_unit_id(String sys_unit_id) {
-        this.sys_unit_id = sys_unit_id;
-    }
-
-    public Wx_msg_reply getReply() {
-        return reply;
-    }
-
-    public void setReply(Wx_msg_reply reply) {
-        this.reply = reply;
-    }
 }

@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * 多语言区域
  * @author wizzer(wizzer@qq.com) on 2019/10/29
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_lang_local")
 public class Sys_lang_local extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -45,43 +49,4 @@ public class Sys_lang_local extends BaseModel implements Serializable {
     })
     private Integer location;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public Integer getLocation() {
-        return location;
-    }
-
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
 }

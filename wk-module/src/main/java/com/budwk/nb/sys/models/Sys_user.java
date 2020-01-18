@@ -1,6 +1,8 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 import org.nutz.integration.json4excel.annotation.J4EIgnore;
@@ -12,6 +14,8 @@ import java.util.List;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/6/21.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("sys_user")
 @J4EName("用户数据")
 @TableIndexes({@Index(name = "INDEX_SYS_USER_LOGINNAMAE", fields = {"loginname"}, unique = true)})
@@ -137,171 +141,4 @@ public class Sys_user extends BaseModel implements Serializable {
     @J4EIgnore
     protected List<Sys_unit> units;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getLoginname() {
-        return loginname;
-    }
-
-    public void setLoginname(String loginname) {
-        this.loginname = loginname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public boolean isUserOnline() {
-        return userOnline;
-    }
-
-    public void setUserOnline(boolean userOnline) {
-        this.userOnline = userOnline;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getLoginAt() {
-        return loginAt;
-    }
-
-    public void setLoginAt(Long loginAt) {
-        this.loginAt = loginAt;
-    }
-
-    public String getLoginIp() {
-        return loginIp;
-    }
-
-    public void setLoginIp(String loginIp) {
-        this.loginIp = loginIp;
-    }
-
-    public Integer getLoginCount() {
-        return loginCount;
-    }
-
-    public void setLoginCount(Integer loginCount) {
-        this.loginCount = loginCount;
-    }
-
-    public String getCustomMenu() {
-        return customMenu;
-    }
-
-    public void setCustomMenu(String customMenu) {
-        this.customMenu = customMenu;
-    }
-
-    public String getThemeConfig() {
-        return themeConfig;
-    }
-
-    public void setThemeConfig(String themeConfig) {
-        this.themeConfig = themeConfig;
-    }
-
-    public String getUnitid() {
-        return unitid;
-    }
-
-    public void setUnitid(String unitid) {
-        this.unitid = unitid;
-    }
-
-    public Sys_unit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(Sys_unit unit) {
-        this.unit = unit;
-    }
-
-    public List<Sys_role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Sys_role> roles) {
-        this.roles = roles;
-    }
-
-    public List<Sys_unit> getUnits() {
-        return units;
-    }
-
-    public void setUnits(List<Sys_unit> units) {
-        this.units = units;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Sys_user getCreatedByUser() {
-        return createdByUser;
-    }
-
-    public void setCreatedByUser(Sys_user createdByUser) {
-        this.createdByUser = createdByUser;
-    }
-
-    public Sys_user getUpdatedByUser() {
-        return updatedByUser;
-    }
-
-    public void setUpdatedByUser(Sys_user updatedByUser) {
-        this.updatedByUser = updatedByUser;
-    }
 }

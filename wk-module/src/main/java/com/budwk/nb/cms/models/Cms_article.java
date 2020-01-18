@@ -1,6 +1,8 @@
 package com.budwk.nb.cms.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/18.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("cms_article")
 public class Cms_article extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -104,139 +108,4 @@ public class Cms_article extends BaseModel implements Serializable {
     @One(field = "channelId")
     private Cms_channel channel;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSiteid() {
-        return siteid;
-    }
-
-    public void setSiteid(String siteid) {
-        this.siteid = siteid;
-    }
-
-    public String getShopid() {
-        return shopid;
-    }
-
-    public void setShopid(String shopid) {
-        this.shopid = shopid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getPicurl() {
-        return picurl;
-    }
-
-    public void setPicurl(String picurl) {
-        this.picurl = picurl;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public Long getPublishAt() {
-        return publishAt;
-    }
-
-    public void setPublishAt(Long publishAt) {
-        this.publishAt = publishAt;
-    }
-
-    public Long getEndAt() {
-        return endAt;
-    }
-
-    public void setEndAt(Long endAt) {
-        this.endAt = endAt;
-    }
-
-    public Integer getView_num() {
-        return view_num;
-    }
-
-    public void setView_num(Integer view_num) {
-        this.view_num = view_num;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Integer getLocation() {
-        return location;
-    }
-
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
-
-    public String getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
-    }
-
-    public Cms_channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Cms_channel channel) {
-        this.channel = channel;
-    }
 }

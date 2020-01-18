@@ -1,6 +1,8 @@
 package com.budwk.nb.wx.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 /**
  * @author wizzer(wizzer@qq.com) on 2016/7/2.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table("wx_mass_news")
 public class Wx_mass_news extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -100,123 +104,4 @@ public class Wx_mass_news extends BaseModel implements Serializable {
     @One(field = "wxid")
     private Wx_config wxConfig;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getThumb_media_id() {
-        return thumb_media_id;
-    }
-
-    public void setThumb_media_id(String thumb_media_id) {
-        this.thumb_media_id = thumb_media_id;
-    }
-
-    public String getPicurl() {
-        return picurl;
-    }
-
-    public void setPicurl(String picurl) {
-        this.picurl = picurl;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent_source_url() {
-        return content_source_url;
-    }
-
-    public void setContent_source_url(String content_source_url) {
-        this.content_source_url = content_source_url;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getDigest() {
-        return digest;
-    }
-
-    public void setDigest(String digest) {
-        this.digest = digest;
-    }
-
-    public Integer getShow_cover_pic() {
-        return show_cover_pic;
-    }
-
-    public void setShow_cover_pic(Integer show_cover_pic) {
-        this.show_cover_pic = show_cover_pic;
-    }
-
-    public Integer getLocation() {
-        return location;
-    }
-
-    public void setLocation(Integer location) {
-        this.location = location;
-    }
-
-    public String getWxid() {
-        return wxid;
-    }
-
-    public void setWxid(String wxid) {
-        this.wxid = wxid;
-    }
-
-    public Wx_config getWxConfig() {
-        return wxConfig;
-    }
-
-    public void setWxConfig(Wx_config wxConfig) {
-        this.wxConfig = wxConfig;
-    }
-
-    public String getSys_unit_id() {
-        return sys_unit_id;
-    }
-
-    public void setSys_unit_id(String sys_unit_id) {
-        this.sys_unit_id = sys_unit_id;
-    }
-
-    public Integer getNeed_open_comment() {
-        return need_open_comment;
-    }
-
-    public void setNeed_open_comment(Integer need_open_comment) {
-        this.need_open_comment = need_open_comment;
-    }
-
-    public Integer getOnly_fans_can_comment() {
-        return only_fans_can_comment;
-    }
-
-    public void setOnly_fans_can_comment(Integer only_fans_can_comment) {
-        this.only_fans_can_comment = only_fans_can_comment;
-    }
 }

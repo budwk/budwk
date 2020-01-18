@@ -25,6 +25,11 @@
             <version>${commons-lang3.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -37,6 +42,7 @@
                     <target>1.8</target>
                     <compilerArgs>
                         <arg>-parameters</arg>
+                        <compilerArgument>-Xlint:unchecked</compilerArgument>
                     </compilerArgs>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
                 </configuration>
