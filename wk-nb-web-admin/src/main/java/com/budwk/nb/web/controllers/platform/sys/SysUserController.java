@@ -491,9 +491,9 @@ public class SysUserController {
             }
             sysUserService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
             if (disabled) {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
-            } else {
                 req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
+            } else {
+                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
             }
             sysUserService.clearCache();
             return Result.success();

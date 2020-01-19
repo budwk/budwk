@@ -133,9 +133,9 @@ public class SysApiController {
         try {
             sysApiService.updateAppkey(appid, disabled, StringUtil.getPlatformUid());
             if (disabled) {
-                req.setAttribute("_slog_msg", "appid:" + appid + " " + Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
-            } else {
                 req.setAttribute("_slog_msg", "appid:" + appid + " " + Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
+            } else {
+                req.setAttribute("_slog_msg", "appid:" + appid + " " + Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
             }
             sysApiService.clearCache();
             return Result.success();

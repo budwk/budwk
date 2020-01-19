@@ -164,7 +164,7 @@ public class SysTaskController {
                     log.error(e.getMessage());
                     return Result.error().addMsg(e.getMessage());
                 }
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on") + " " + sysTask.getName());
+                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off") + " " + sysTask.getName());
             } else {
                 try {
                     if (!taskPlatformService.isExist(sysTask.getId(), sysTask.getId())) {
@@ -175,7 +175,7 @@ public class SysTaskController {
                     log.error(e.getMessage());
                     return Result.error().addMsg(e.getMessage());
                 }
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off") + " " + sysTask.getName());
+                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on") + " " + sysTask.getName());
             }
             sysTaskService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
             return Result.success();
