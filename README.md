@@ -93,7 +93,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 ## 开发指南
 *   确保 MySql、Redis、Zookeeper 默认端口配置并已启动好
-*   MySql 创建名为 `nutzwk_nb` 的空数据库,在每个NB(nutzboot缩写)模块启动时会自动建表,同时初始化数据
+*   MySql 创建名为 `budwk_v6` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
 *   项目根目录执行 `mvn clean install -Dmaven.test.skip=true`
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
 *   在项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
