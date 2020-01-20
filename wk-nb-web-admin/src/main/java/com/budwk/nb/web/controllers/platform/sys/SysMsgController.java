@@ -408,7 +408,6 @@ public class SysMsgController {
     @At("/status/read_one/?")
     @Ok("json")
     @RequiresAuthentication
-    @SLog(tag = "站内消息")
     public Object read_one(String id, HttpServletRequest req) {
         try {
             if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
@@ -417,7 +416,6 @@ public class SysMsgController {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
-            req.setAttribute("_slog_msg", String.format("标为已读ID:%s", id));
             return Result.success();
         } catch (Exception e) {
             return Result.error();
