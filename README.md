@@ -2,7 +2,6 @@
 
 NutzBoot 版本(下文简称NB)
 
-[![Build Status](https://travis-ci.org/budwk/budwk-nutzboot.png?branch=bootstrap)](https://travis-ci.org/Wizzercn/NutzWk)
 [![GitHub release](https://img.shields.io/github/release/budwk/budwk-nutzboot.svg)](https://github.com/Wizzercn/NutzWk/releases)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![PowerByNutz](https://img.shields.io/badge/PowerBy-Nutz-green.svg)](https://github.com/nutzam/nutz)

@@ -34,7 +34,7 @@ public class PubFileUploadController {
     private FtpService ftpService;
     @Inject
     private PropertiesProxy conf;
-    @Inject("java:$conf.get('system.upload.type')")
+    @Inject("java:$conf.get('budwk.upload.type')")
     private String UploadType;
     private final static String UPLOAD_TYPE_FTP = "ftp";
 
