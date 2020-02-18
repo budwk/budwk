@@ -5,9 +5,23 @@ import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_task;
+import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysTaskService;
 import com.budwk.nb.task.services.TaskPlatformService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -20,6 +34,7 @@ import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Path;
 
 /**
  * @author wizzer(wizzer@qq.com) on 2019/12/14
@@ -28,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 @At("/api/{version}/platform/sys/task")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_定时任务")}, servers = @Server(url = "/"))
 public class SysTaskController {
     private static final Log log = Logs.get();
     @Inject
@@ -37,24 +53,32 @@ public class SysTaskController {
     @Reference(check = false)
     private TaskPlatformService taskPlatformService;
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/task/list 分页查询
-     * @apiName list
-     * @apiGroup SYS_TASK
-     * @apiPermission sys.manage.task
-     * @apiVersion 1.0.0
-     * @apiParam {String} pageNo       页码
-     * @apiParam {String} pageSize     页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
+
     @At("/list")
     @POST
     @Ok("json:full")
     @RequiresPermissions("sys.manage.task")
+    @Operation(
+            tags = "系统_定时任务", summary = "分页查询定时任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.task")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -67,22 +91,27 @@ public class SysTaskController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/task/create 新增任务
-     * @apiName create
-     * @apiGroup SYS_TASK
-     * @apiPermission sys.manage.task.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} task   表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
+
     @At("/create")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.task.create")
     @SLog(tag = "新增任务", msg = "任务名称:${task.name}")
+    @Operation(
+            tags = "系统_定时任务", summary = "新增定时任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.task.create")
+            },
+            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_task.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object create(@Param("..") Sys_task task, HttpServletRequest req) {
         try {
             task.setCreatedBy(StringUtil.getPlatformUid());
@@ -101,21 +130,27 @@ public class SysTaskController {
         }
     }
 
-    /**
-     * @api {delete} /api/1.0.0/platform/sys/task/delete/:id 删除任务
-     * @apiName delete
-     * @apiGroup SYS_TASK
-     * @apiPermission sys.manage.task.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
-    @At("/delete/?")
+    @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.task.delete")
     @SLog(tag = "删除任务")
+    @Operation(
+            tags = "系统_定时任务", summary = "删除定时任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.task.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "定时任务ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object delete(String id, HttpServletRequest req) {
         try {
             Sys_task sysTask = sysTaskService.fetch(id);
@@ -135,24 +170,30 @@ public class SysTaskController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/task/disabled 启用禁用
-     * @apiName disabled
-     * @apiGroup SYS_TASK
-     * @apiPermission sys.manage.task.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiParam {String} disabled   true/false
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/disabled")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.task.update")
     @SLog(tag = "启用禁用任务")
-    public Object changeDisabled(@Param("id") String id, @Param("path") String path, @Param("disabled") boolean disabled, HttpServletRequest req) {
+    @Operation(
+            tags = "系统_定时任务", summary = "启用禁用定时任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.task.update")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "id",description = "主键",required = true),
+                    @ApiFormParam(name = "disabled",description = "启用禁用",required = true,example = "true",type = "boolean")
+            }
+    )
+    public Object changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             Sys_task sysTask = sysTaskService.fetch(id);
             if (disabled) {
@@ -187,20 +228,26 @@ public class SysTaskController {
 
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/task/get/:id 获取任务信息
-     * @apiName get
-     * @apiGroup SYS_TASK
-     * @apiPermission sys.manage.task
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
-    @At("/get/?")
+    @At("/get/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.task")
+    @Operation(
+            tags = "系统_用户管理", summary = "获取用户信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.task")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "定时任务ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getData(String id, HttpServletRequest req) {
         try {
             Sys_task task = sysTaskService.fetch(id);
@@ -214,21 +261,26 @@ public class SysTaskController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/task/update 修改任务信息
-     * @apiName update
-     * @apiGroup SYS_TASK
-     * @apiPermission sys.manage.task.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} task 表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.task.update")
     @SLog(tag = "修改任务", msg = "任务名称:${task.name}")
+    @Operation(
+            tags = "系统_定时任务", summary = "修改定时任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.task.update")
+            },
+            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_task.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object update(@Param("..") Sys_task task, HttpServletRequest req) {
         try {
             task.setUpdatedBy(StringUtil.getPlatformUid());

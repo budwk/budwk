@@ -99,7 +99,7 @@ public class SysApiController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/delete/?")
+    @At("/delete/{appid}")
     @Ok("json")
     @RequiresPermissions("sys.config.api.delete")
     @SLog(tag = "删除密钥", msg = "Appid:${appid}")

@@ -25,22 +25,27 @@ public class Sys_role extends BaseModel implements Serializable {
     private String id;
 
     @Column
+    @Comment("角色名称")
     @ColDefine(type = ColType.VARCHAR, width = 50)
     private String name;
 
     @Column
+    @Comment("角色代码")
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String code;
 
     @Column
+    @Comment("是否禁用")
     @ColDefine(type = ColType.BOOLEAN)
     private boolean disabled;
 
     @Column
+    @Comment("单位ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String unitid;
 
     @Column
+    @Comment("角色备注")
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String note;
 

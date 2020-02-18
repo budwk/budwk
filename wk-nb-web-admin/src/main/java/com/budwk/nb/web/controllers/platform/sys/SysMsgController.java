@@ -178,7 +178,7 @@ public class SysMsgController {
      * @apiSuccess {String} msg   操作成功
      * @apiSuccess {Object} data  多语言字符串
      */
-    @At("/delete/?")
+    @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.msg.delete")
@@ -379,7 +379,7 @@ public class SysMsgController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/get/?")
+    @At("/get/{id}")
     @Ok("json")
     @RequiresAuthentication
     public Object get(String id, HttpServletRequest req) {
@@ -405,7 +405,7 @@ public class SysMsgController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/status/read_one/?")
+    @At("/status/read_one/{id}")
     @Ok("json")
     @RequiresAuthentication
     public Object read_one(String id, HttpServletRequest req) {

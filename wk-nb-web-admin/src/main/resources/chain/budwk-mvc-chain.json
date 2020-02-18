@@ -11,6 +11,7 @@ var chain={
               "com.budwk.nb.web.commons.processor.XssSqlFilterProcessor",
 		      "org.nutz.mvc.impl.processor.ActionFiltersProcessor",
 		      "org.nutz.mvc.impl.processor.AdaptorProcessor",
+			  "org.nutz.plugins.validation.ValidationProcessor",
 		      "org.nutz.mvc.impl.processor.MethodInvokeProcessor",
 			  "org.nutz.mvc.impl.processor.ViewProcessor"
 		],

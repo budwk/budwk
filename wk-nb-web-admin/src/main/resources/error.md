@@ -15,4 +15,5 @@
 |500209|登陆会话失效,请您重新登陆|system.login.unauthorized|
 |500210|没有访问权限,请您重新登陆|system.login.accessdenied|
 |500211|获取不到用户角色和菜单权限|system.login.norole|
+|500212|操作失败|system.fail|
 

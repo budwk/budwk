@@ -8,6 +8,8 @@ import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.commons.constants.RedisConstant;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.models.Sys_unit;
 import com.budwk.nb.sys.models.Sys_user;
@@ -16,6 +18,17 @@ import com.budwk.nb.sys.services.SysUnitService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -39,6 +52,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
+import org.nutz.plugins.validation.Errors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,6 +69,7 @@ import java.util.Set;
 @At("/api/{version}/platform/sys/user")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_用户管理")}, servers = @Server(url = "/"))
 public class SysUserController {
     private static final Log log = Logs.get();
     @Inject
@@ -72,23 +87,149 @@ public class SysUserController {
     @Inject
     private RedisService redisService;
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/logon_user_info 获取当前用户菜单及角色
-     * @apiName logon_user_info
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据对象
-     * @apiSuccess {Object} data.user  用户数据
-     * @apiSuccess {Object} data.menus  用户菜单
-     * @apiSuccess {Object} data.roles  用户角色
-     */
     @At("/logon_user_info")
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "获取已登陆用户数据", description = "返回语言,系统参数,用户信息,角色,菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content =
+                            @Content(schema = @Schema(example = "{\n" +
+                                    "  \"code\": 0,\n" +
+                                    "  \"msg\": \"操作成功\",\n" +
+                                    "  \"data\": {\n" +
+                                    "    \"lang\": [\n" +
+                                    "      {\n" +
+                                    "        \"name\": \"中文\",\n" +
+                                    "        \"locale\": \"zh-CN\",\n" +
+                                    "        \"disabled\": false\n" +
+                                    "      },\n" +
+                                    "      {\n" +
+                                    "        \"name\": \"English\",\n" +
+                                    "        \"locale\": \"en-US\",\n" +
+                                    "        \"disabled\": false\n" +
+                                    "      }\n" +
+                                    "    ],\n" +
+                                    "    \"conf\": {\n" +
+                                    "      \"AppDemoEnv\": \"true\",\n" +
+                                    "      \"AppDomain\": \"http://127.0.0.1:3999\",\n" +
+                                    "      \"AppFileDomain\": \"http://127.0.0.1:9527\",\n" +
+                                    "      \"AppName\": \"BudWK-V6\",\n" +
+                                    "      \"AppShrotName\": \"BudWK\",\n" +
+                                    "      \"AppUploadBase\": \"/upload\",\n" +
+                                    "      \"AppWebBrowserNotice\": \"true\",\n" +
+                                    "      \"AppWebSocket\": \"true\",\n" +
+                                    "      \"AppWebUserOnlyOne\": \"true\"\n" +
+                                    "    },\n" +
+                                    "    \"user\": {\n" +
+                                    "      \"id\": \"5ff0e61b22254ce1ab11eff1f68b391b\",\n" +
+                                    "      \"loginname\": \"superadmin\",\n" +
+                                    "      \"username\": \"超级管理员\",\n" +
+                                    "      \"avatar\": \"/upload/image/20191219/0vonuing0agadq7bcnf7aqntgu.jpg\",\n" +
+                                    "      \"userOnline\": false,\n" +
+                                    "      \"disabled\": false,\n" +
+                                    "      \"email\": \"wizzer@qq.com\",\n" +
+                                    "      \"mobile\": \"\",\n" +
+                                    "      \"loginAt\": 1581753439688,\n" +
+                                    "      \"loginIp\": \"127.0.0.1\",\n" +
+                                    "      \"loginCount\": 189,\n" +
+                                    "      \"customMenu\": null,\n" +
+                                    "      \"themeConfig\": \"{\\\"theme\\\":\\\"theme1\\\",\\\"fixedHeader\\\":false,\\\"fixedAside\\\":false,\\\"verticalMenu\\\":true,\\\"contentWidth\\\":\\\"s\\\"}\",\n" +
+                                    "      \"unitid\": \"5fb661b395ab42bea45a56ba73245a64\",\n" +
+                                    "      \"unit\": {\n" +
+                                    "        \"id\": \"5fb661b395ab42bea45a56ba73245a64\",\n" +
+                                    "        \"parentId\": \"\",\n" +
+                                    "        \"path\": \"0001\",\n" +
+                                    "        \"name\": \"系统管理\",\n" +
+                                    "        \"aliasName\": \"System\",\n" +
+                                    "        \"unitcode\": null,\n" +
+                                    "        \"note\": null,\n" +
+                                    "        \"address\": \"银河-太阳系-地球\",\n" +
+                                    "        \"telephone\": \"\",\n" +
+                                    "        \"email\": \"wizzer@qq.com\",\n" +
+                                    "        \"website\": \"https://wizzer.cn\",\n" +
+                                    "        \"location\": 0,\n" +
+                                    "        \"hasChildren\": false,\n" +
+                                    "        \"logo\": null,\n" +
+                                    "        \"createdBy\": \"\",\n" +
+                                    "        \"createdAt\": 1573701338314,\n" +
+                                    "        \"updatedBy\": \"\",\n" +
+                                    "        \"updatedAt\": 1573701338314,\n" +
+                                    "        \"delFlag\": false\n" +
+                                    "      },\n" +
+                                    "      \"createdByUser\": null,\n" +
+                                    "      \"updatedByUser\": null,\n" +
+                                    "      \"roles\": [\n" +
+                                    "        {\n" +
+                                    "          \"id\": \"9b59a5ebd4d844c6a15482f342d87c27\",\n" +
+                                    "          \"name\": \"系统管理员\",\n" +
+                                    "          \"code\": \"sysadmin\",\n" +
+                                    "          \"disabled\": false,\n" +
+                                    "          \"unitid\": \"\",\n" +
+                                    "          \"note\": \"System Admin\",\n" +
+                                    "          \"unit\": null,\n" +
+                                    "          \"createdByUser\": null,\n" +
+                                    "          \"menus\": null,\n" +
+                                    "          \"users\": null,\n" +
+                                    "          \"createdBy\": \"\",\n" +
+                                    "          \"createdAt\": 1573701338840,\n" +
+                                    "          \"updatedBy\": \"\",\n" +
+                                    "          \"updatedAt\": 1573701338840,\n" +
+                                    "          \"delFlag\": false\n" +
+                                    "        }\n" +
+                                    "      ],\n" +
+                                    "      \"units\": [],\n" +
+                                    "      \"createdBy\": \"d399be64462c40d992cf308871ccd3bb\",\n" +
+                                    "      \"createdAt\": 1575969280648,\n" +
+                                    "      \"updatedBy\": \"d399be64462c40d992cf308871ccd3bb\",\n" +
+                                    "      \"updatedAt\": 1575969280648,\n" +
+                                    "      \"delFlag\": false\n" +
+                                    "    },\n" +
+                                    "    \"token\": \"d9fba300fc548794db116f17fa60046c\",\n" +
+                                    "    \"menus\": [\n" +
+                                    "      {\n" +
+                                    "        \"id\": \"7fbd82da6292478bb6da15e3c92ce52f\",\n" +
+                                    "        \"parentId\": \"\",\n" +
+                                    "        \"path\": \"0001\",\n" +
+                                    "        \"name\": \"系统\",\n" +
+                                    "        \"alias\": \"sys\",\n" +
+                                    "        \"type\": \"menu\",\n" +
+                                    "        \"href\": \"\",\n" +
+                                    "        \"target\": \"\",\n" +
+                                    "        \"icon\": \"fa fa-cogs\",\n" +
+                                    "        \"showit\": true,\n" +
+                                    "        \"disabled\": false,\n" +
+                                    "        \"permission\": \"sys\",\n" +
+                                    "        \"note\": \"系统\",\n" +
+                                    "        \"location\": 0,\n" +
+                                    "        \"hasChildren\": false,\n" +
+                                    "        \"buttons\": null,\n" +
+                                    "        \"createdBy\": \"\",\n" +
+                                    "        \"createdAt\": 1573701338343,\n" +
+                                    "        \"updatedBy\": \"a24156c5a59641bfb8f5113ec9118c54\",\n" +
+                                    "        \"updatedAt\": 1574745422508,\n" +
+                                    "        \"delFlag\": false\n" +
+                                    "      }\n" +
+                                    "    ],\n" +
+                                    "    \"roles\": [\n" +
+                                    "      {\n" +
+                                    "        \"code\": \"sysadmin\",\n" +
+                                    "        \"name\": \"系统管理员\"\n" +
+                                    "      }\n" +
+                                    "    ]\n" +
+                                    "  }\n" +
+                                    "}"), mediaType = "application/json"
+                            )
+                    )
+            }
+    )
     public Object getLogonUserInfo(HttpSession session) {
         try {
             Subject subject = SecurityUtils.getSubject();
@@ -112,19 +253,28 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/set_user_theme 设置用户布局及样式
-     * @apiName set_user_theme
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/set_user_theme")
     @Ok("json")
     @POST
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "设置用户主题",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "themeConfig", example = "{}", description = "主题JSON字符串", required = true)
+            }
+    )
     public Object setUserThemeConfig(@Param("themeConfig") String themeConfig) {
         try {
             if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
@@ -144,19 +294,27 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/set_user_avatar 设置用户头像
-     * @apiName set_user_avatar
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/set_user_avatar")
     @Ok("json")
     @POST
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "设置用户头像",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "avatar", example = "/upload/image/avatar.png", description = "图片路径", required = true)
+            }
+    )
     public Object setUserAvatar(@Param("avatar") String avatar) {
         try {
             if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
@@ -176,18 +334,27 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/change_user_info 修改当前用户信息
-     * @apiName change_user_info
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/change_user_info")
     @Ok("json")
-    @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "设置用户信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "username", description = "用户姓名或昵称", required = false, in = ParameterIn.QUERY),
+                    @Parameter(name = "email", description = "Email", required = false, in = ParameterIn.QUERY),
+                    @Parameter(name = "mobile", description = "手机号", required = false, in = ParameterIn.QUERY),
+                    @Parameter(name = "avatar", description = "用户头像(URL)", required = false, in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object doChangeInfo(@Param("username") String username, @Param("email") String email, @Param("mobile") String mobile, @Param("avatar") String avatar, HttpServletRequest req) {
         try {
             if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
@@ -224,18 +391,30 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/change_user_pwd 修改当前用户密码
-     * @apiName change_user_pwd
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/change_user_pwd")
     @Ok("json")
+    @POST
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "更改用户密码",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "oldPassword", example = "", description = "原密码", required = true, format = "password", type = "string"),
+                    @ApiFormParam(name = "newPassword", example = "", description = "新密码", required = true, format = "password", type = "string")
+            }
+    )
     public Object doChangePassword(@Param("oldPassword") String oldPassword, @Param("newPassword") String newPassword, HttpServletRequest req) {
         try {
             if ("superadmin".equals(StringUtil.getPlatformLoginname()) && Globals.MyConfig.getBoolean("AppDemoEnv")) {
@@ -265,21 +444,26 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/info_by_id/:userId 查询用户信息
-     * @apiName info_by_id
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} userId   用户ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  用户数据
-     */
-    @At("/info_by_id/?")
+
+    @At("/info_by_id/{id}")
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "通过用户ID获取用户信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "用户ID", required = true, in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getInfoByUserId(String userId) {
         try {
             Sys_user sysUser = sysUserService.fetch(userId);
@@ -293,21 +477,25 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/info_by_loginname/:loginname 查询用户信息
-     * @apiName info_by_loginname
-     * @apiGroup SYS_USER
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} loginname 登陆账号
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  用户数据
-     */
-    @At("/info_by_loginname/?")
+    @At("/info_by_loginname/{loginname}")
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_用户管理", summary = "通过用户名获取用户信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "loginname", description = "用户名", required = true, in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getInfoByLoginname(String loginname) {
         try {
             Sys_user sysUser = sysUserService.fetch(Cnd.where("loginname", "=", loginname));
@@ -321,30 +509,38 @@ public class SysUserController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/list 用户分页查询
-     * @apiName list
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user
-     * @apiVersion 1.0.0
-     * @apiParam {String} unitid   单位ID
-     * @apiParam {String} loginname  用户名
-     * @apiParam {String} username  姓名或昵称
-     * @apiParam {String} mobile   手机号
-     * @apiParam {String} email    Email
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
     @At
     @POST
-    @Ok("json:full")
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.manage.user")
-    public Object list(@Param("unitid") String unitid, @Param("loginname") String loginname, @Param("username") String username, @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    @Operation(
+            tags = "系统_用户管理", summary = "分页查询用户信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "unitid", example = "", description = "单位ID"),
+                    @ApiFormParam(name = "loginname", example = "", description = "用户名"),
+                    @ApiFormParam(name = "username", example = "", description = "姓名或昵称"),
+                    @ApiFormParam(name = "mobile", example = "", description = "手机号"),
+                    @ApiFormParam(name = "email", example = "", description = "Email"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
+    public Object list(@Param("unitid")String unitid,String loginname, @Param("username") String username, @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
             if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
@@ -402,19 +598,24 @@ public class SysUserController {
         return false;
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/get_unit_tree 获取单位树数据
-     * @apiName get_unit_tree
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/get_unit_tree")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.user")
+    @Operation(
+            tags = "系统_用户管理", summary = "获取单位树数据",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getUnitTree(HttpServletRequest req) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -462,23 +663,30 @@ public class SysUserController {
         return treeList;
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/disabled 用户启用禁用
-     * @apiName disabled
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiParam {String} disabled   true/false
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
+
     @At("/disabled")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.user.update")
     @SLog(tag = "启用禁用用户")
+    @Operation(
+            tags = "系统_用户管理", summary = "启用禁用用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.update")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "id",description = "主键",required = true),
+                    @ApiFormParam(name = "disabled",description = "启用禁用",required = true,example = "true",type = "boolean")
+            }
+    )
     public Object changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             int userCount = sysUserService.count(Cnd.where("delFlag", "=", false).and("disabled", "=", false));
@@ -489,37 +697,49 @@ public class SysUserController {
                     return Result.error("sys.manage.user.superadmin.disable");
                 }
             }
-            sysUserService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
-            if (disabled) {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
-            } else {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+            int res = sysUserService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
+            if (res > 0) {
+                if (disabled) {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
+                } else {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+                }
+
+                sysUserService.clearCache();
+                return Result.success();
             }
-            sysUserService.clearCache();
-            return Result.success();
+            return Result.error(500512, "system.fail");
         } catch (Exception e) {
             log.error(e);
             return Result.error();
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/user/create 新增用户
-     * @apiName create
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} user   用户表单
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
+
     @At
     @Ok("json")
     @RequiresPermissions("sys.manage.user.create")
     @SLog(tag = "新增用户")
-    public Object create(@Param("..") Sys_user user, HttpServletRequest req) {
+    @Operation(
+            tags = "系统_用户管理", summary = "新增用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.create")
+            },
+            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    public Object create(@Param("..") Sys_user user, Errors errors, HttpServletRequest req) {
         try {
+            if (errors.hasError()) {
+                return Result.error(errors.getErrorsList().toString());
+            }
             if (Strings.isNotBlank(user.getLoginname())) {
                 int num = sysUserService.count(Cnd.where("loginname", "=", Strings.trim(user.getLoginname())));
                 if (num > 0) {
@@ -554,21 +774,78 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/get_menu/:id 获取用户的权限
-     * @apiName get_menu
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiParam {String} pid 父节点ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
-    @At("/get_menu/?")
+
+    @At("/get_menu/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.user")
+    @Operation(
+            tags = "系统_用户管理", summary = "获取用户权限菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH),
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "  \"code\": 0,\n" +
+                                    "  \"msg\": \"操作成功\",\n" +
+                                    "  \"data\": [\n" +
+                                    "    {\n" +
+                                    "      \"id\": \"7fbd82da6292478bb6da15e3c92ce52f\",\n" +
+                                    "      \"parentId\": \"\",\n" +
+                                    "      \"path\": \"0001\",\n" +
+                                    "      \"name\": \"系统\",\n" +
+                                    "      \"alias\": \"sys\",\n" +
+                                    "      \"type\": \"menu\",\n" +
+                                    "      \"href\": \"\",\n" +
+                                    "      \"target\": \"\",\n" +
+                                    "      \"icon\": \"fa fa-cogs\",\n" +
+                                    "      \"showit\": true,\n" +
+                                    "      \"disabled\": false,\n" +
+                                    "      \"permission\": \"sys\",\n" +
+                                    "      \"note\": \"系统\",\n" +
+                                    "      \"location\": 0,\n" +
+                                    "      \"hasChildren\": true,\n" +
+                                    "      \"createdBy\": \"\",\n" +
+                                    "      \"createdAt\": 1573701338343,\n" +
+                                    "      \"updatedBy\": \"a24156c5a59641bfb8f5113ec9118c54\",\n" +
+                                    "      \"updatedAt\": 1574745422508,\n" +
+                                    "      \"delFlag\": false,\n" +
+                                    "      \"expanded\": false,\n" +
+                                    "      \"children\": []\n" +
+                                    "    },\n" +
+                                    "    {\n" +
+                                    "      \"id\": \"02e86a61e99746bea34236ea73dd52a5\",\n" +
+                                    "      \"parentId\": \"\",\n" +
+                                    "      \"path\": \"0003\",\n" +
+                                    "      \"name\": \"CMS\",\n" +
+                                    "      \"alias\": \"cms\",\n" +
+                                    "      \"type\": \"menu\",\n" +
+                                    "      \"href\": \"\",\n" +
+                                    "      \"target\": \"\",\n" +
+                                    "      \"icon\": \"fa fa-internet-explorer\",\n" +
+                                    "      \"showit\": true,\n" +
+                                    "      \"disabled\": false,\n" +
+                                    "      \"permission\": \"cms\",\n" +
+                                    "      \"location\": 9,\n" +
+                                    "      \"hasChildren\": true,\n" +
+                                    "      \"updatedBy\": \"5ff0e61b22254ce1ab11eff1f68b391b\",\n" +
+                                    "      \"updatedAt\": 1581299734759,\n" +
+                                    "      \"delFlag\": false,\n" +
+                                    "      \"expanded\": false,\n" +
+                                    "      \"children\": []\n" +
+                                    "    }\n" +
+                                    "  ]\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
     public Object getMenu(String id, @Param("pid") String pid) {
         try {
             List<Sys_menu> list = sysUserService.getRoleMenus(id, pid);
@@ -588,21 +865,27 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/reset_pwd/:id 重置用户密码
-     * @apiName reset_pwd
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
-    @At("/reset_pwd/?")
+    @At("/reset_pwd/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.user.update")
     @SLog(tag = "重置用户密码")
+    @Operation(
+            tags = "系统_用户管理", summary = "重置用户密码",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.update")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object resetPwd(String id, HttpServletRequest req) {
         try {
             Sys_user user = sysUserService.fetch(id);
@@ -621,20 +904,26 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/get/:id 获取用户信息
-     * @apiName get
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user
-     * @apiVersion 1.0.0
-     * @apiParam {String} id 用户ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
-    @At("/get/?")
+    @At("/get/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.user")
+    @Operation(
+            tags = "系统_用户管理", summary = "获取用户信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getData(String id, HttpServletRequest req) {
         try {
             Sys_user user = sysUserService.fetch(id);
@@ -648,21 +937,27 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/update 修改用户信息
-     * @apiName update
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} user 用户表单
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.user.update")
     @SLog(tag = "修改用户")
+    @Operation(
+            tags = "系统_用户管理", summary = "修改用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.update")
+            },
+            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object update(@Param("..") Sys_user user, HttpServletRequest req) {
         try {
             user.setUpdatedBy(StringUtil.getPlatformUid());
@@ -675,21 +970,28 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/delete/:id 删除用户
-     * @apiName delete
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id 用户ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
-    @At("/delete/?")
+
+    @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.user.delete")
     @SLog(tag = "删除用户")
+    @Operation(
+            tags = "系统_用户管理", summary = "删除用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object delete(String userId, HttpServletRequest req) {
         try {
             Sys_user user = sysUserService.fetch(userId);
@@ -709,21 +1011,31 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/delete_more 批量删除用户
-     * @apiName delete_more
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id 用户ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/delete_more")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.user.delete")
     @SLog(tag = "删除用户")
+    @Operation(
+            tags = "系统_用户管理", summary = "批量删除用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.delete")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "ids", example = "a,b", description = "用户ID数组", required = true),
+                    @ApiFormParam(name = "names", example = "a,b", description = "用户名数组", required = true)
+            }
+    )
     public Object deleteMore(@Param("ids") String[] ids, @Param("names") String names, HttpServletRequest req) {
         try {
             if (ids == null) {
@@ -750,27 +1062,37 @@ public class SysUserController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/user/export 导出用户数据
-     * @apiName export
-     * @apiGroup SYS_USER
-     * @apiPermission sys.manage.user
-     * @apiVersion 1.0.0
-     * @apiParam {String} unitid   单位ID
-     * @apiParam {String} loginname  用户名
-     * @apiParam {String} username  姓名或昵称
-     * @apiParam {String} mobile   手机号
-     * @apiParam {String} email    Email
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言字符串
-     */
+
     @At
     @Ok("void")
+    @GET
     @RequiresPermissions("sys.manage.user")
-    public void export(@Param("unitid") String unitid, @Param("loginname") String loginname, @Param("username") String username, @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy, HttpServletRequest req, HttpServletResponse response) {
+    @Operation(
+            tags = "系统_用户管理", summary = "导出用户资料xls文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user")
+            },
+            parameters = {
+                    @Parameter(name = "unitid", description = "单位ID", in = ParameterIn.QUERY),
+                    @Parameter(name = "loginname", description = "用户名", in = ParameterIn.QUERY),
+                    @Parameter(name = "username", description = "姓名昵称", in = ParameterIn.QUERY),
+                    @Parameter(name = "mobile", description = "手机号", in = ParameterIn.QUERY),
+                    @Parameter(name = "email", description = "Email", in = ParameterIn.QUERY),
+                    @Parameter(name = "pageNo", description = "页码", example = "1", in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+                    @Parameter(name = "pageSize", description = "页大小", example = "10", in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+                    @Parameter(name = "pageOrderName", description = "排序字段", example = "loginname", in = ParameterIn.QUERY),
+                    @Parameter(name = "pageOrderBy", description = "排序方式", example = "descending", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(format = "binary"), mediaType = "application/shlnd.ms-excel"))
+            }
+    )
+    public void export(@Param("unitid") String unitid, @Param("loginname") String loginname, @Param("username") String username,
+                       @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy, HttpServletRequest req, HttpServletResponse response) {
         try {
             J4EConf j4eConf = J4EConf.from(Sys_user.class);
             j4eConf.setUse2007(true);

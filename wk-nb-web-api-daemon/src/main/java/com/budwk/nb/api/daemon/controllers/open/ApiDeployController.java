@@ -102,6 +102,7 @@ public class ApiDeployController {
             redisService.setex("logback:deploy:" + hostname + ":" + timestamp, 10 * 60, Json.toJson(map, JsonFormat.compact()));
             return Result.success("获取成功").addData(list);
         } catch (Exception e) {
+            log.error(e);
             return Result.error("获取失败");
         }
     }

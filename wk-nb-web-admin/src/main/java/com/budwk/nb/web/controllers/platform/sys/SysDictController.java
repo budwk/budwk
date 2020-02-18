@@ -1,11 +1,11 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.sys.models.Sys_dict;
 import com.budwk.nb.sys.services.SysDictService;
-import com.budwk.nb.commons.annotation.SLog;
-import com.budwk.nb.commons.utils.StringUtil;
-import com.budwk.nb.commons.base.Result;
-import com.alibaba.dubbo.config.annotation.Reference;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/11/26
+ * @author wizzer(wizzer @ qq.com) on 2019/11/26
  */
 @IocBean
 @At("/api/{version}/platform/sys/dict")
@@ -167,7 +167,7 @@ public class SysDictController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/delete/?")
+    @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.config.dict.delete")
@@ -199,7 +199,7 @@ public class SysDictController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/get/?")
+    @At("/get/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.config.dict")
@@ -341,14 +341,17 @@ public class SysDictController {
     @SLog(tag = "启用禁用字典")
     public Object changeDisabled(@Param("id") String id, @Param("path") String path, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
-            sysDictService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
-            if (disabled) {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
-            } else {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+            int res = sysDictService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
+            if (res > 0) {
+                if (disabled) {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
+                } else {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+                }
+                sysDictService.clearCache();
+                return Result.success();
             }
-            sysDictService.clearCache();
-            return Result.success();
+            return Result.error(500512, "system.fail");
         } catch (Exception e) {
             log.error(e);
             return Result.error();

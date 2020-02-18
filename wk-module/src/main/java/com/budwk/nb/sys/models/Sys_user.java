@@ -7,6 +7,7 @@ import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 import org.nutz.integration.json4excel.annotation.J4EIgnore;
 import org.nutz.integration.json4excel.annotation.J4EName;
+import org.nutz.plugins.validation.annotation.Validations;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,6 +34,7 @@ public class Sys_user extends BaseModel implements Serializable {
     @Comment("用户名")
     @J4EName("用户名")
     @ColDefine(type = ColType.VARCHAR, width = 120)
+    @Validations(required=true,errorMsg = "sys.manage.user.form.loginname.required")
     private String loginname;
 
     /**

@@ -1,13 +1,13 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.services.SysMenuService;
 import com.budwk.nb.sys.services.SysRoleService;
 import com.budwk.nb.sys.services.SysUserService;
-import com.budwk.nb.commons.annotation.SLog;
-import com.budwk.nb.commons.utils.StringUtil;
-import com.budwk.nb.commons.base.Result;
-import com.alibaba.dubbo.config.annotation.Reference;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/11/22
+ * @author wizzer(wizzer @ qq.com) on 2019/11/22
  */
 @IocBean
 @At("/api/{version}/platform/sys/menu")
@@ -154,16 +154,19 @@ public class SysMenuController {
             if (Strings.sNull(path).startsWith("0001")) {
                 return Result.error("system.error.disabled.notAllow");
             }
-            sysMenuService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
-            if (disabled) {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
-            } else {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+            int res = sysMenuService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
+            if (res > 0) {
+                if (disabled) {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
+                } else {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+                }
+                sysMenuService.clearCache();
+                sysUserService.clearCache();
+                sysRoleService.clearCache();
+                return Result.success();
             }
-            sysMenuService.clearCache();
-            sysUserService.clearCache();
-            sysRoleService.clearCache();
-            return Result.success();
+            return Result.error(500512, "system.fail");
         } catch (Exception e) {
             log.error(e);
             return Result.error();
@@ -230,7 +233,7 @@ public class SysMenuController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/delete/?")
+    @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.menu.delete")
@@ -345,7 +348,7 @@ public class SysMenuController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/get_menu/?")
+    @At("/get_menu/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.menu.update")
@@ -430,7 +433,7 @@ public class SysMenuController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/get_data/?")
+    @At("/get_data/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.menu")

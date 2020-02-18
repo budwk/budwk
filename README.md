@@ -100,11 +100,19 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   正常启动后访问 `http://127.0.0.1:9527` 用户名 superadmin 密码 1
 *   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [wizzer.cn 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
 
-## 生成API文档
-*   安装nodejs,执行命令 `npm install apidoc -g` 
-*   生成接口文档 `apidoc -i ./ -o apidoc/` 其中 `-i ./` 指定要生成文档的目标文件,`-o apidoc/` 指定要生成文档的输出路径
-*   wk-nb-web-admin 目录下,执行 `apidoc -i ./ -o E:/dst/apidoc_admin/` 生成后台接口文档
-*   wk-nb-web-api-open 目录下,执行 `apidoc -i ./ -o E:/dst/apidoc_api/` 生成对外接口文档
+## API文档
+*   基于 Swagger 2.1.1 (OpenAPI v3)
+*   web-admin 项目启动时会自动生成API文档
+*   访问文档 http://127.0.0.1:9527/swagger 
+*   导出文档 http://127.0.0.1:9527/swagger/swagger.json 或 http://127.0.0.1:9527/swagger/swagger.yaml
+*   方法上必须加 `@GET @POST @PUT @DELETE` 注解和 `@Operation` 才会被扫描
+*   API定义时 `requestBody = @RequestBody(content = @Content())` 不可缺少,否则 swagger 输出的格式不正确,可能是其bug
+*   表单参数是个类对象时,使用 `@RequestBody` 来定义
+    `requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
+                                       mediaType = "application/x-www-form-urlencoded"
+     ))`
+*   表单参数不是类时,因 OpenAPI v3 中表单参数从 parameters 移到了 requestBody 里,但其缺少对应注解,所以扩展了 `@ApiFormParams` 注解来定义
+*   原路径参数中的 `?` 请使用 `{变量名}` 代替，如 原 `@At("/test/?")` 改为 `@At("/test/{id}")`
 
 ## 项目部署
 

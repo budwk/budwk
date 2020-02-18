@@ -23,6 +23,11 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
+            <artifactId>nutz-plugins-validation</artifactId>
+            <version>${nutz.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
             <artifactId>nutz-integration-json4excel</artifactId>
             <version>${nutz.version}</version>
             <exclusions><!-- 手动排除依赖,瘦身 -->

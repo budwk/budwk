@@ -227,7 +227,7 @@ public class SysAppController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/task/cannel/?")
+    @At("/task/cannel/{id}")
     @Ok("json")
     @RequiresPermissions("sys.server.app.instance")
     @SLog(tag = "取消任务", msg = "任务ID:${id}")
@@ -364,7 +364,7 @@ public class SysAppController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/jar/delete/?")
+    @At("/jar/delete/{id}")
     @Ok("json")
     @RequiresPermissions("sys.server.app.jar.delete")
     @SLog(tag = "删除Jar包")
@@ -401,13 +401,16 @@ public class SysAppController {
     @SLog(tag = "启用禁用Jar包")
     public Object changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
-            sysAppListService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
-            if (disabled) {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
-            } else {
-                req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+            int res = sysAppListService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
+            if (res > 0) {
+                if (disabled) {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.off"));
+                } else {
+                    req.setAttribute("_slog_msg", Mvcs.getMessage(req, "system.commons.txt.disabled.on"));
+                }
+                return Result.success();
             }
-            return Result.success();
+            return Result.error(500512, "system.fail");
         } catch (Exception e) {
             log.error(e);
             return Result.error();
@@ -504,7 +507,7 @@ public class SysAppController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/conf/delete/?")
+    @At("/conf/delete/{id}")
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf.delete")
     @SLog(tag = "删除配置文件")
@@ -531,7 +534,7 @@ public class SysAppController {
      * @apiParam {String} id   ID
      * @apiSuccess {Object} data  文件流
      */
-    @At("/conf/download/?")
+    @At("/conf/download/{id}")
     @Ok("void")
     @RequiresPermissions("sys.server.app.conf")
     public void confDownload(String id, HttpServletResponse response) {
@@ -558,7 +561,7 @@ public class SysAppController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/conf/get/?")
+    @At("/conf/get/{id}")
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf")
     public Object confGet(String id, HttpServletRequest req) {

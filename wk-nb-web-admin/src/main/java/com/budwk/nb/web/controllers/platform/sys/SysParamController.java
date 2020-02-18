@@ -106,7 +106,7 @@ public class SysParamController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/get/?")
+    @At("/get/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.param")
@@ -160,7 +160,7 @@ public class SysParamController {
      * @apiSuccess {Number} code  0
      * @apiSuccess {String} msg   操作成功
      */
-    @At("/delete/?")
+    @At("/delete/{configKey}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.param.delete")

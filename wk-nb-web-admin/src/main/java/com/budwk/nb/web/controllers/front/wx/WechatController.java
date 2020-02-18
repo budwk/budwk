@@ -45,7 +45,7 @@ public class WechatController {
     @Inject
     private WxService wxService;
 
-    @At("/?/oauth")
+    @At("/{wxid}/oauth")
     @Ok("re")
     @Filters
     public String oauth(String wxid, @Param(value = "goto_url", df = "/public/wx/cms/channel") String goto_url, HttpServletRequest req, HttpSession session) throws Exception {
@@ -64,7 +64,7 @@ public class WechatController {
         }
     }
 
-    @At("/?/back")
+    @At("/{wxid}/back")
     @Ok("re")
     @Filters
     public String back(String wxid, @Param("code") String code, HttpServletRequest req, HttpSession session) throws Exception {

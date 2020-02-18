@@ -30,7 +30,7 @@ public class WeixinController {
         Wxs.enableDevMode(); // 开启debug模式,这样就会把接收和发送的内容统统打印,方便查看
     }
 
-    @At({"/api", "/api/?"})
+    @At({"/api", "/api/{key}"})
     @Fail("http:200")
     public View msgIn(String key, HttpServletRequest req) throws IOException {
         return Wxs.handle(wxHandler, req, key);
