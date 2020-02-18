@@ -106,7 +106,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   访问文档 http://127.0.0.1:9527/swagger 
 *   导出文档 http://127.0.0.1:9527/swagger/swagger.json 或 http://127.0.0.1:9527/swagger/swagger.yaml
 *   方法上必须加 `@GET @POST @PUT @DELETE` 注解和 `@Operation` 才会被扫描
-*   API定义时 `requestBody = @RequestBody(content = @Content())` 不可缺少,否则 swagger 输出的格式不正确,可能是其bug
+*   路径参数/查询参数(非表单参数)定义时 `requestBody = @RequestBody(content = @Content())` 不可缺少,否则 swagger 输出的格式不正确,可能是其bug
 *   表单参数是个类对象时,使用 `@RequestBody` 来定义
     `requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
                                        mediaType = "application/x-www-form-urlencoded"
