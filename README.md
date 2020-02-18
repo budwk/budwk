@@ -107,11 +107,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   导出文档 http://127.0.0.1:9527/swagger/swagger.json 或 http://127.0.0.1:9527/swagger/swagger.yaml
 *   方法上必须加 `@GET @POST @PUT @DELETE` 注解和 `@Operation` 才会被扫描
 *   路径参数/查询参数(非表单参数)定义时 `requestBody = @RequestBody(content = @Content())` 不可缺少,否则 swagger 输出的格式不正确,可能是其bug
-*   表单参数是个类对象时,使用 `@RequestBody` 来定义
-    `requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
-                                       mediaType = "application/x-www-form-urlencoded"
-     ))`
-*   表单参数不是类时,因 OpenAPI v3 中表单参数从 parameters 移到了 requestBody 里,但其缺少对应注解,所以扩展了 `@ApiFormParams` 注解来定义
+*   POST表单参数,使用 `@ApiFormParams` 来定义,同时支持单个字段定义和类对象映射
 *   原路径参数中的 `?` 请使用 `{变量名}` 代替，如 原 `@At("/test/?")` 改为 `@At("/test/{id}")`
 
 ## 项目部署
