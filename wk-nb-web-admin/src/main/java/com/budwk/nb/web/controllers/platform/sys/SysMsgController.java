@@ -441,7 +441,7 @@ public class SysMsgController {
 
     @At("/get/{id}")
     @Ok("json")
-    @GET
+    @POST
     @RequiresAuthentication
     @Operation(
             tags = "系统_系统消息", summary = "获取一条消息内容",

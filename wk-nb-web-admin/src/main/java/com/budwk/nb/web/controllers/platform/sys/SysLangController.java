@@ -81,7 +81,7 @@ public class SysLangController {
     }
 
     @At("/get")
-    @GET
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.config.lang")
     @Operation(
@@ -90,14 +90,16 @@ public class SysLangController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang")
             },
-            parameters = {
-                    @Parameter(name = "lang_key", description = "语言标识", in = ParameterIn.QUERY)
-            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "lang_key",description = "多语言KEY")
             }
     )
     public Object getLang(@Param("lang_key") String lang_key) {
