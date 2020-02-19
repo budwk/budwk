@@ -343,7 +343,7 @@ public class NutzReader implements OpenApiReader {
             At methodPath = ReflectionUtils.getAnnotation(method, At.class);
             ApiVersion methodApiVersion = ReflectionUtils.getAnnotation(method, ApiVersion.class);
 
-            String operationPath = NutzReaderUtils.getPath(apiPath, apiVersion, methodPath, methodApiVersion, parentPath, isSubresource,method.getName());
+            String operationPath = NutzReaderUtils.getPath(apiPath, apiVersion, methodPath, methodApiVersion, parentPath, isSubresource, method.getName());
             // skip if path is the same as parent, e.g. for @ApplicationPath annotated application
             // extending resource config.
             if (ignoreOperationPath(operationPath, parentPath) && !isSubresource) {
@@ -531,12 +531,12 @@ public class NutzReader implements OpenApiReader {
                                 if (Strings.isNotBlank(example)) {
                                     if (formParam.type().equalsIgnoreCase("integer")) {
                                         property.setExample(Integer.valueOf(example));
-                                    }
-                                    if (formParam.type().equalsIgnoreCase("double") || formParam.type().equalsIgnoreCase("number")) {
+                                    } else if (formParam.type().equalsIgnoreCase("double") || formParam.type().equalsIgnoreCase("number")) {
                                         property.setExample(Double.valueOf(example));
-                                    }
-                                    if (formParam.type().equalsIgnoreCase("boolean")) {
+                                    } else if (formParam.type().equalsIgnoreCase("boolean")) {
                                         property.setExample(Boolean.valueOf(example));
+                                    } else {
+                                        property.setExample(example);
                                     }
                                 }
 
@@ -562,7 +562,7 @@ public class NutzReader implements OpenApiReader {
                             for (Field field : fields) {
                                 Comment comment = field.getAnnotation(Comment.class);
                                 Column column = field.getAnnotation(Column.class);
-                                if(column!=null) {
+                                if (column != null) {
                                     Schema property = new Schema();
                                     property.setName(field.getName());
                                     if (comment != null) {

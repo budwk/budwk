@@ -263,13 +263,13 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "themeConfig", example = "{}", description = "主题JSON字符串", required = true)
@@ -303,13 +303,13 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "avatar", example = "/upload/image/avatar.png", description = "图片路径", required = true)
@@ -408,7 +408,6 @@ public class SysUserController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "oldPassword", example = "", description = "原密码", required = true, format = "password", type = "string"),
@@ -526,7 +525,6 @@ public class SysUserController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "unitid", example = "", description = "单位ID"),
@@ -675,6 +673,7 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.update")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -726,14 +725,15 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.create")
             },
-            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
-                    mediaType = "application/x-www-form-urlencoded"
-            )),
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
+    )
+    @ApiFormParams(
+            implementation = Sys_user.class
     )
     public Object create(@Param("..") Sys_user user, Errors errors, HttpServletRequest req) {
         try {
@@ -949,14 +949,15 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.update")
             },
-            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_user.class),
-                    mediaType = "application/x-www-form-urlencoded"
-            )),
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
+    )
+    @ApiFormParams(
+            implementation = Sys_user.class
     )
     public Object update(@Param("..") Sys_user user, HttpServletRequest req) {
         try {
@@ -1029,7 +1030,6 @@ public class SysUserController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "ids", example = "a,b", description = "用户ID数组", required = true),

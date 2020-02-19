@@ -2,7 +2,18 @@ package com.budwk.nb.web.controllers.platform.pub;
 
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.DateUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.web.commons.base.Globals;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.boot.starter.ftp.FtpService;
 import org.nutz.ioc.impl.PropertiesProxy;
@@ -28,6 +39,7 @@ import java.util.Date;
 @At("/api/{version}/platform/pub/file/upload")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_公共_文件上传")}, servers = @Server(url = "/"))
 public class PubFileUploadController {
     private static final Log log = Logs.get();
     @Inject
@@ -38,16 +50,7 @@ public class PubFileUploadController {
     private String UploadType;
     private final static String UPLOAD_TYPE_FTP = "ftp";
 
-    /**
-     * @api {post} /api/1.0.0/platform/pub/file/upload/file 上传文件
-     * @apiName file
-     * @apiGroup PLATFORM_PUB
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} Filedata    文件参数名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
     @POST
     @At
@@ -56,6 +59,33 @@ public class PubFileUploadController {
     /**
      * AdaptorErrorContext必须是最后一个参数
      */
+    @Operation(
+            tags = "系统_公共_文件上传", summary = "上传文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "    \"code\":0,\n" +
+                                    "    \"msg\":\"上传成功\",\n" +
+                                    "    \"data\":{\n" +
+                                    "        \"file_type\":\".doc\",\n" +
+                                    "        \"file_name\":\"xxx\",\n" +
+                                    "        \"file_size\":1024,\n" +
+                                    "        \"file_url\":\"/upload/file/20200220/xxx.doc\"\n" +
+                                    "    }\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "Filedata",description = "文件对象名")
+            },
+            mediaType = "multipart/form-data"
+    )
     public Object file(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {
@@ -88,16 +118,6 @@ public class PubFileUploadController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/pub/file/upload/video 上传视频文件
-     * @apiName video
-     * @apiGroup PLATFORM_PUB
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} Filedata    文件参数名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:videoUpload"})
     @POST
     @At
@@ -106,6 +126,33 @@ public class PubFileUploadController {
     /**
      * AdaptorErrorContext必须是最后一个参数
      */
+    @Operation(
+            tags = "系统_公共_文件上传", summary = "上传视频",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "    \"code\":0,\n" +
+                                    "    \"msg\":\"上传成功\",\n" +
+                                    "    \"data\":{\n" +
+                                    "        \"file_type\":\".mp4\",\n" +
+                                    "        \"file_name\":\"xxx\",\n" +
+                                    "        \"file_size\":1024,\n" +
+                                    "        \"file_url\":\"/upload/video/20200220/xxx.mp4\"\n" +
+                                    "    }\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "Filedata",description = "文件对象名")
+            },
+            mediaType = "multipart/form-data"
+    )
     public Object video(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {
@@ -138,16 +185,7 @@ public class PubFileUploadController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/pub/file/upload/video 上传图片文件
-     * @apiName image
-     * @apiGroup PLATFORM_PUB
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} Filedata    文件参数名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:imageUpload"})
     @POST
     @At
@@ -156,6 +194,33 @@ public class PubFileUploadController {
     /**
      * AdaptorErrorContext必须是最后一个参数
      */
+    @Operation(
+            tags = "系统_公共_文件上传", summary = "上传图片",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "    \"code\":0,\n" +
+                                    "    \"msg\":\"上传成功\",\n" +
+                                    "    \"data\":{\n" +
+                                    "        \"file_type\":\".png\",\n" +
+                                    "        \"file_name\":\"xxx\",\n" +
+                                    "        \"file_size\":1024,\n" +
+                                    "        \"file_url\":\"/upload/image/20200220/xxx.png\"\n" +
+                                    "    }\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "Filedata",description = "文件对象名")
+            },
+            mediaType = "multipart/form-data"
+    )
     public Object image(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {

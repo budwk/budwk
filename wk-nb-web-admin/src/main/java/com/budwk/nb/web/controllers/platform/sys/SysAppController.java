@@ -5,12 +5,25 @@ import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_app_conf;
 import com.budwk.nb.sys.models.Sys_app_list;
 import com.budwk.nb.sys.models.Sys_app_task;
 import com.budwk.nb.sys.services.SysAppConfService;
 import com.budwk.nb.sys.services.SysAppListService;
 import com.budwk.nb.sys.services.SysAppTaskService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.boot.starter.logback.exts.loglevel.LoglevelCommand;
 import org.nutz.boot.starter.logback.exts.loglevel.LoglevelProperty;
@@ -44,6 +57,7 @@ import java.util.*;
 @At("/api/{version}/platform/sys/app")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_应用管理")}, servers = @Server(url = "/"))
 public class SysAppController {
     private static final Log log = Logs.get();
     @Inject
@@ -60,20 +74,28 @@ public class SysAppController {
     @Inject
     private RedisService redisService;
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/host_data 获取主机数据
-     * @apiName host_data
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} hostName   主机名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  主机数据
-     */
     @At("/host_data")
+    @POST
     @Ok("json:full")
     @RequiresPermissions("sys.server.app")
+    @Operation(
+            tags = "系统_应用管理", summary = "获取主机数据",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "hostName", description = "主机名")
+            }
+    )
     @SuppressWarnings("unchecked")
     public Object getHostData(@Param("hostName") String hostName) {
         try {
@@ -98,19 +120,29 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/os_data 获取资源占用数据
-     * @apiName os_data
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} hostName   主机名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/os_data")
+    @POST
     @Ok("json:full")
     @RequiresPermissions("sys.server.app")
+    @Operation(
+            tags = "系统_应用管理", summary = "获取主机统计数据",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "hostName", description = "主机名")
+            }
+    )
     @SuppressWarnings("unchecked")
     public Object getOsData(@Param("hostName") String hostName) {
         try {
@@ -127,19 +159,28 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/version 获取最新版本信息
-     * @apiName version
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} name   实例名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/version")
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.server.app")
+    @Operation(
+            tags = "系统_应用管理", summary = "获取应用和配置文件版本号",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "name", description = "应用实例名")
+            }
+    )
     public Object version(@Param("name") String name) {
         try {
             List<Sys_app_list> appVerList = sysAppListService.query(Cnd.where("disabled", "=", false).and("appName", "=", name).desc("createdAt"), new Pager().setPageNumber(1).setPageSize(10));
@@ -150,20 +191,28 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/version 创建执行任务
-     * @apiName version
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} appTask   任务表单
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/task/create")
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.server.app.instance")
-    @SLog(tag = "创建任务", msg = "应用名称:${appTask.getName()} 动作:${appTask.getAction()}")
+    @SLog(tag = "创建实例执行任务", msg = "应用名称:${appTask.getName()} 动作:${appTask.getAction()}")
+    @Operation(
+            tags = "系统_应用管理", summary = "创建实例执行任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_app_task.class
+    )
     public Object taskAddDo(@Param("..") Sys_app_task appTask, HttpServletRequest req) {
         try {
             Cnd cnd = Cnd.where("name", "=", appTask.getName()).and("action", "=", "stop")
@@ -189,22 +238,32 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/task/list 获取任务列表
-     * @apiName task/list
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/task/list")
+    @POST
     @Ok("json:{locked:'confData',ignoreNull:false}")
     @RequiresPermissions("sys.server.app")
+    @Operation(
+            tags = "系统_应用管理", summary = "分页查询实例任务列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object getTaskList(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -217,20 +276,27 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/task/cannel 取消任务执行
-     * @apiName task/cannel
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   任务ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/task/cannel/{id}")
+    @GET
     @Ok("json")
     @RequiresPermissions("sys.server.app.instance")
     @SLog(tag = "取消任务", msg = "任务ID:${id}")
+    @Operation(
+            tags = "系统_应用管理", summary = "取消实例执行任务",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.instance")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "任务ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object taskCannel(String id, HttpServletRequest req) {
         try {
             //加上status条件,防止执行前状态已变更
@@ -241,22 +307,32 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/log/level 更改任务等级
-     * @apiName log/level
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app
-     * @apiVersion 1.0.0
-     * @apiParam {String} name   实例名
-     * @apiParam {String} action   动作
-     * @apiParam {String} processId   进程ID
-     * @apiParam {String} loglevel   日志等级
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/log/level")
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.server.app.loglevel")
+    @Operation(
+            tags = "系统_应用管理", summary = "更改实例日志等级",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.loglevel")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "action", description = "执行方式", example = "processId", required = true),
+                    @ApiFormParam(name = "name", description = "实例名称", required = true),
+                    @ApiFormParam(name = "processId", description = "进程ID", required = true),
+                    @ApiFormParam(name = "loglevel", description = "日志等级", required = true)
+            }
+    )
     public Object changeLogLevel(@Param("action") String action, @Param("name") String name, @Param("processId") String processId, @Param("loglevel") String loglevel) {
         try {
             LoglevelCommand loglevelCommand = new LoglevelCommand();
@@ -273,23 +349,33 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/jar/list 获取Jar包列表
-     * @apiName jar/list
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.jar
-     * @apiVersion 1.0.0
-     * @apiParam {String} appName   实例名
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/jar/list")
+    @POST
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.server.app.jar")
+    @Operation(
+            tags = "系统_应用管理", summary = "分页查询JAR列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.jar")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "appName", example = "", description = "实例名称"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object jarData(@Param("appName") String appName, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -305,21 +391,27 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/jar/create 添加Jar包
-     * @apiName jar/create
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.jar.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} sysAppList   表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/jar/create")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.server.app.jar.create")
     @SLog(tag = "添加安装包", msg = "应用名称:${sysAppList.appName}")
+    @Operation(
+            tags = "系统_应用管理", summary = "添加JAR安装包",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.jar.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_app_list.class
+    )
     public Object jarCreate(@Param("..") Sys_app_list sysAppList, HttpServletRequest req) {
         try {
             int num = sysAppListService.count(Cnd.where("appName", "=", Strings.trim(sysAppList.getAppName())).and("appVersion", "=", Strings.trim(sysAppList.getAppVersion())));
@@ -337,37 +429,54 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/jar/search 查询Jar包
-     * @apiName jar/search
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.jar
-     * @apiVersion 1.0.0
-     * @apiParam {String} appName   实例名
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/jar/search")
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.server.app.jar")
+    @Operation(
+            tags = "系统_应用管理", summary = "搜索JAR包",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.jar")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "appName", description = "实例名称")
+            }
+    )
     public Object jarSearch(@Param("appName") String appName) {
         return Result.NEW().addData(sysAppListService.getAppNameList());
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/jar/delete/:id 删除Jar包
-     * @apiName jar/delete
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.jar.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/jar/delete/{id}")
     @Ok("json")
+    @DELETE
     @RequiresPermissions("sys.server.app.jar.delete")
     @SLog(tag = "删除Jar包")
+    @Operation(
+            tags = "系统_应用管理", summary = "删除Jar包",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.jar.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object jarDelete(String id, HttpServletRequest req) {
         try {
             Sys_app_list appList = sysAppListService.fetch(id);
@@ -382,23 +491,31 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/jar/disabled 启用禁用Jar包
-     * @apiName jar/disabled
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.jar.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiParam {String} disabled   true/false
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
+
     @At("/jar/disabled")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.server.app.jar.update")
     @SLog(tag = "启用禁用Jar包")
+    @Operation(
+            tags = "系统_应用管理", summary = "启用禁用Jar包",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.jar.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "id", description = "主键", required = true),
+                    @ApiFormParam(name = "disabled", description = "启用禁用", required = true, example = "true", type = "boolean")
+            }
+    )
     public Object changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             int res = sysAppListService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
@@ -417,23 +534,33 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/app/conf/list 获取配置列表
-     * @apiName conf/list
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf
-     * @apiVersion 1.0.0
-     * @apiParam {String} appName   实例名
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/conf/list")
+    @POST
     @Ok("json:{locked:'confData|password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.server.app.conf")
+    @Operation(
+            tags = "系统_应用管理", summary = "分页查询配置列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "confName", example = "", description = "实例名称"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object confData(@Param("confName") String confName, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -449,20 +576,26 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/create 添加Jar包
-     * @apiName conf/create
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} sysAppConf   表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/conf/create")
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf.create")
     @SLog(tag = "添加配置文件", msg = "应用名称:${sysAppConf.confName}")
+    @Operation(
+            tags = "系统_应用管理", summary = "添加配置文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_app_conf.class
+    )
     public Object confAddDo(@Param("..") Sys_app_conf sysAppConf, HttpServletRequest req) {
         try {
             int num = sysAppConfService.count(Cnd.where("confName", "=", Strings.trim(sysAppConf.getConfName())).and("confVersion", "=", Strings.trim(sysAppConf.getConfVersion())));
@@ -480,37 +613,53 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/search 查询配置
-     * @apiName conf/search
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf
-     * @apiVersion 1.0.0
-     * @apiParam {Object} sysAppConf   表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/conf/search")
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf")
+    @Operation(
+            tags = "系统_应用管理", summary = "搜索配置文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "confName", example = "", description = "实例名称")
+            }
+    )
     public Object confSearch(@Param("confName") String confName) {
         return Result.NEW().addData(sysAppConfService.getConfNameList());
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/delete/:id 删除配置
-     * @apiName conf/delete
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/conf/delete/{id}")
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf.delete")
     @SLog(tag = "删除配置文件")
+    @Operation(
+            tags = "系统_应用管理", summary = "删除配置文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object confDelete(String id, HttpServletRequest req) {
         try {
             Sys_app_conf appConf = sysAppConfService.fetch(id);
@@ -525,18 +674,27 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/download/:id 下载配置文件
-     * @apiName download/delete
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiSuccess {Object} data  文件流
-     */
+
     @At("/conf/download/{id}")
+    @GET
     @Ok("void")
     @RequiresPermissions("sys.server.app.conf")
+    @Operation(
+            tags = "系统_应用管理", summary = "下载配置文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "",name = "example"),mediaType = "text/properties"))
+            }
+    )
     public void confDownload(String id, HttpServletResponse response) {
         try {
             Sys_app_conf conf = sysAppConfService.fetch(id);
@@ -551,19 +709,26 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/get/:id 获取配置内容
-     * @apiName conf/get
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/conf/get/{id}")
+    @GET
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf")
+    @Operation(
+            tags = "系统_应用管理", summary = "获取配置文件内容",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object confGet(String id, HttpServletRequest req) {
         try {
             Sys_app_conf appConf = sysAppConfService.fetch(id);
@@ -576,20 +741,27 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/update 修改配置
-     * @apiName conf/update
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} sysAppConf   表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/conf/update")
+    @POST
     @Ok("json")
     @RequiresPermissions("sys.server.app.conf.update")
     @SLog(tag = "修改配置文件", msg = "应用名称:${sysAppConf.confName}")
+    @Operation(
+            tags = "系统_应用管理", summary = "修改配置文件内容",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_app_conf.class
+    )
     public Object confEditDo(@Param("..") Sys_app_conf sysAppConf, HttpServletRequest req) {
         try {
             sysAppConf.setUpdatedBy(StringUtil.getPlatformUid());
@@ -600,23 +772,30 @@ public class SysAppController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/app/conf/disabled 启用禁用Jar包
-     * @apiName conf/disabled
-     * @apiGroup SYS_APP
-     * @apiPermission sys.server.app.conf.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiParam {String} disabled   true/false
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/conf/disabled")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.server.app.conf.update")
-    @SLog(tag = "启用禁用Jar包")
+    @SLog(tag = "启用禁用配置文件")
+    @Operation(
+            tags = "系统_应用管理", summary = "启用禁用配置文件",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.server.app.conf.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "id", description = "主键", required = true),
+                    @ApiFormParam(name = "disabled", description = "启用禁用", required = true, example = "true", type = "boolean")
+            }
+    )
     public Object changeConfDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             sysAppConfService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));

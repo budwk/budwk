@@ -1,13 +1,26 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_lang;
 import com.budwk.nb.sys.models.Sys_lang_local;
 import com.budwk.nb.sys.services.SysLangLocalService;
 import com.budwk.nb.sys.services.SysLangService;
-import com.budwk.nb.commons.utils.PageUtil;
-import com.budwk.nb.commons.utils.StringUtil;
-import com.budwk.nb.commons.base.Result;
-import com.alibaba.dubbo.config.annotation.Reference;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -23,12 +36,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/11/15
+ * @author wizzer(wizzer @ qq.com) on 2019/11/15
  */
 @IocBean
 @At("/api/{version}/platform/sys/lang")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_多语言管理")}, servers = @Server(url = "/"))
 public class SysLangController {
     private static final Log log = Logs.get();
     @Inject
@@ -38,19 +52,23 @@ public class SysLangController {
     @Reference
     private SysLangLocalService sysLangLocalService;
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/lang/locale 查询多语言区域
-     * @apiName locale
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言数据
-     */
     @At("/locale")
     @Ok("json")
+    @GET
     @RequiresPermissions("sys.config.lang")
+    @Operation(
+            tags = "系统_多语言管理", summary = "查询语言",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object locale() {
         try {
             Cnd cnd = Cnd.NEW();
@@ -62,19 +80,26 @@ public class SysLangController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/lang/get 查询字符串
-     * @apiName get
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言数据
-     */
     @At("/get")
+    @GET
     @Ok("json")
     @RequiresPermissions("sys.config.lang")
+    @Operation(
+            tags = "系统_多语言管理", summary = "通过KEY查询多语言字符串",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang")
+            },
+            parameters = {
+                    @Parameter(name = "lang_key", description = "语言标识", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getLang(@Param("lang_key") String lang_key) {
         try {
             NutMap nutMap = NutMap.NEW();
@@ -92,22 +117,31 @@ public class SysLangController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/lang/create_or_update 新增或修改多语言字符串
-     * @apiName create_or_update
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang.create
-     * @apiVersion 1.0.0
-     * @apiParam {String} lang_key   多语言字符串标识
-     * @apiParam {String} lang_value[*]   多语言字符串值
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言数据
-     */
+
     @At("/create_or_update")
     @POST
     @Ok("json")
     @RequiresPermissions("sys.config.lang.create")
+    @Operation(
+            tags = "系统_多语言管理", summary = "创建或修改多语言字符串",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "lang_key", description = "多语言字符串KEY", example = "sys.test"),
+                    @ApiFormParam(name = "lang_value[zh-CN]", description = "多语言字符串", example = "中文"),
+                    @ApiFormParam(name = "lang_value[en-US]", description = "多语言字符串", example = "英文")
+            }
+    )
     public Object createOrUpdate(@Param("lang_key") String lang_key, HttpServletRequest req) {
         try {
             List<Sys_lang_local> list = sysLangLocalService.query();
@@ -134,25 +168,34 @@ public class SysLangController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/lang/list 查询多语言字符串
-     * @apiName list
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang
-     * @apiVersion 1.0.0
-     * @apiParam {String} locale   多语言区域
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言字符串
-     */
     @At
     @POST
     @Ok("json:full")
     @RequiresPermissions("sys.config.lang")
+    @Operation(
+            tags = "系统_多语言管理", summary = "分页查询多语言字符串",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "locale", example = "zh-CN", description = "语言标识"),
+                    @ApiFormParam(name = "lang_key", example = "", description = "字符串KEY"),
+                    @ApiFormParam(name = "lang_value", example = "", description = "字符串内容"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object list(@Param("locale") String locale, @Param("lang_key") String lang_key, @Param("lang_value") String lang_value, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -160,10 +203,10 @@ public class SysLangController {
                 cnd.and("locale", "=", locale);
             }
             if (Strings.isNotBlank(lang_key)) {
-                cnd.and(Cnd.likeEX("lang_key",lang_key));
+                cnd.and(Cnd.likeEX("lang_key", lang_key));
             }
             if (Strings.isNotBlank(lang_value)) {
-                cnd.and(Cnd.likeEX("lang_value",lang_value));
+                cnd.and(Cnd.likeEX("lang_value", lang_value));
             }
             cnd.and("delFlag", "=", false);
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
@@ -176,21 +219,29 @@ public class SysLangController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/lang/language_create 新增语言
-     * @apiName language_create
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang.create
-     * @apiVersion 1.0.0
-     * @apiParam {String} name   名称
-     * @apiParam {String} locale   语言标识符
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/language_create")
     @POST
     @Ok("json")
     @RequiresPermissions("sys.config.lang.create")
+    @Operation(
+            tags = "系统_多语言管理", summary = "添加语言",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "name", description = "语言名称"),
+                    @ApiFormParam(name = "locale", description = "语言标识")
+            }
+    )
     public Object languageCreate(@Param("name") String name, @Param("locale") String locale, HttpServletRequest req) {
         try {
             if (sysLangLocalService.count(Cnd.where("locale", "=", locale)) > 0) {
@@ -210,20 +261,29 @@ public class SysLangController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/lang/language_delete 删除语言
-     * @apiName language_delete
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} locale   语言标识符
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/language_delete")
     @POST
     @Ok("json")
     @RequiresPermissions("sys.config.lang.delete")
+    @Operation(
+            tags = "系统_多语言管理", summary = "删除语言",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang.delete")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "locale", description = "语言标识")
+            }
+    )
     public Object languageDelete(@Param("locale") String locale, HttpServletRequest req) {
         try {
             sysLangLocalService.clearLocal(locale);
@@ -236,20 +296,28 @@ public class SysLangController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/lang/delete 删除字符串
-     * @apiName delete
-     * @apiGroup SYS_LANG
-     * @apiPermission sys.config.lang.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} lang_key   字符串标识
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/delete")
     @POST
     @Ok("json")
     @RequiresPermissions("sys.config.lang.delete")
+    @Operation(
+            tags = "系统_多语言管理", summary = "删除多语言字符串",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.lang.delete")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "lang_key", description = "多语言字符串KEY")
+            }
+    )
     public Object deleteLang(@Param("lang_key") String lang_key, HttpServletRequest req) {
         try {
             sysLangService.clear(Cnd.where("lang_key", "=", lang_key));

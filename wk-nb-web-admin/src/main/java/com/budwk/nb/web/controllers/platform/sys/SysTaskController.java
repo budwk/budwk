@@ -64,13 +64,13 @@ public class SysTaskController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
@@ -103,14 +103,15 @@ public class SysTaskController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task.create")
             },
-            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_task.class),
-                    mediaType = "application/x-www-form-urlencoded"
-            )),
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
+    )
+    @ApiFormParams(
+            implementation = Sys_task.class
     )
     public Object create(@Param("..") Sys_task task, HttpServletRequest req) {
         try {
@@ -181,6 +182,7 @@ public class SysTaskController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task.update")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -272,14 +274,15 @@ public class SysTaskController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task.update")
             },
-            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = Sys_task.class),
-                    mediaType = "application/x-www-form-urlencoded"
-            )),
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
+    )
+    @ApiFormParams(
+            implementation = Sys_task.class
     )
     public Object update(@Param("..") Sys_task task, HttpServletRequest req) {
         try {

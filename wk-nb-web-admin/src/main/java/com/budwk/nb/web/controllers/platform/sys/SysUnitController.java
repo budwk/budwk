@@ -228,18 +228,18 @@ public class SysUnitController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.unit.create")
             },
-            requestBody = @RequestBody(
-                    content = {
-                            @Content(
-                                    schema = @Schema(implementation = Sys_unit.class),
-                                    mediaType = "application/x-www-form-urlencoded"
-                            )}
-            ),
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "parentId",description = "父级ID")
+            },
+            implementation = Sys_unit.class
     )
     public Object create(@Param("..") Sys_unit unit, @Param("parentId") String parentId, HttpServletRequest req) {
         try {
@@ -364,18 +364,15 @@ public class SysUnitController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.unit.update")
             },
-            requestBody = @RequestBody(
-                    content = {
-                            @Content(
-                                    schema = @Schema(implementation = Sys_unit.class),
-                                    mediaType = "application/x-www-form-urlencoded"
-                            )}
-            ),
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
+    )
+    @ApiFormParams(
+            implementation = Sys_unit.class
     )
     public Object update(@Param("..") Sys_unit unit, HttpServletRequest req) {
         try {

@@ -4,10 +4,23 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.services.SysMenuService;
 import com.budwk.nb.sys.services.SysRoleService;
 import com.budwk.nb.sys.services.SysUserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,6 +48,7 @@ import java.util.List;
 @At("/api/{version}/platform/sys/menu")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_菜单管理")}, servers = @Server(url = "/"))
 public class SysMenuController {
     private static final Log log = Logs.get();
     @Inject
@@ -47,21 +61,26 @@ public class SysMenuController {
     @Reference
     private SysRoleService sysRoleService;
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/menu/child 获取子级数据
-     * @apiName child
-     * @apiGroup SYS_MENU
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} pid   父级ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
+
     @At("/child")
     @Ok("json")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_菜单管理", summary = "获取子级菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getChild(@Param("pid") String pid, HttpServletRequest req) {
         List<Sys_menu> list = new ArrayList<>();
         List<NutMap> treeList = new ArrayList<>();
@@ -85,21 +104,26 @@ public class SysMenuController {
         return Result.success().addData(treeList);
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/menu/tree 获取树数据
-     * @apiName tree
-     * @apiGroup SYS_MENU
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} pid   父级ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
+
     @At("/tree")
     @Ok("json")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_菜单管理", summary = "获取子级菜单树",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getTree(@Param("pid") String pid, HttpServletRequest req) {
         try {
             List<NutMap> treeList = new ArrayList<>();
@@ -132,23 +156,31 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/menu/disabled 启用禁用菜单
-     * @apiName disabled
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiParam {String} disabled   true/false
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/disabled")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.menu.update")
-    @SLog(tag = "修改菜单")
+    @SLog(tag = "启用禁用菜单")
+    @Operation(
+            tags = "系统_菜单管理", summary = "启用禁用菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "id", description = "菜单ID", required = true),
+                    @ApiFormParam(name = "path", description = "菜单PATH", required = true),
+                    @ApiFormParam(name = "disabled", description = "启用禁用", required = true, example = "true", type = "boolean")
+            }
+    )
     public Object changeDisabled(@Param("id") String id, @Param("path") String path, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             if (Strings.sNull(path).startsWith("0001")) {
@@ -173,23 +205,30 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/menu/create 新增菜单
-     * @apiName create
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} menu   菜单
-     * @apiParam {Object} buttons  权限
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/create")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.menu.create")
     @SLog(tag = "新增菜单")
+    @Operation(
+            tags = "系统_菜单管理", summary = "新增菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "menu", description = "菜单对象", type = "object", required = true),
+                    @ApiFormParam(name = "buttons", description = "菜单权限数组", required = true)
+            }
+    )
     public Object create(@Param("..") NutMap nutMap, HttpServletRequest req) {
         try {
             Sys_menu sysMenu = nutMap.getAs("menu", Sys_menu.class);
@@ -223,21 +262,27 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {delete} /api/1.0.0/platform/sys/menu/delete/:id 删除菜单
-     * @apiName delete
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id 单位ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.menu.delete")
     @SLog(tag = "删除菜单")
+    @Operation(
+            tags = "系统_菜单管理", summary = "删除菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object delete(String id, HttpServletRequest req) {
         try {
             Sys_menu menu = sysMenuService.fetch(id);
@@ -257,19 +302,23 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/menu/get_sort_tree 获取树数据
-     * @apiName get_sort_tree
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/get_sort_tree")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.menu")
+    @Operation(
+            tags = "系统_菜单管理", summary = "获取待排序菜单树",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getSortTree(HttpServletRequest req) {
         try {
             List<Sys_menu> list = sysMenuService.query(Cnd.NEW().asc("location").asc("path"));
@@ -303,20 +352,28 @@ public class SysMenuController {
         return treeList;
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/menu/sort 执行排序
-     * @apiName sort
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.update
-     * @apiVersion 1.0.0
-     * @apiParam ids 节点ids
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/sort")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.menu.update")
+    @Operation(
+            tags = "系统_菜单管理", summary = "提交菜单排序",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "ids",description = "菜单ID数组")
+            }
+    )
     public Object sortDo(@Param("ids") String ids, HttpServletRequest req) {
         try {
             String[] unitIds = StringUtils.split(ids, ",");
@@ -338,20 +395,27 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/menu/get_menu/:id 获取菜单信息
-     * @apiName get_menu
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id 菜单ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/get_menu/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.menu.update")
+    @Operation(
+            tags = "系统_菜单管理", summary = "获取菜单树",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getMenu(String id, HttpServletRequest req) {
         try {
             Sys_menu menu = sysMenuService.fetch(id);
@@ -377,23 +441,30 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/menu/update_menu 修改菜单
-     * @apiName update_menu
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} menu   菜单
-     * @apiParam {Object} buttons  权限
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/update_menu")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.menu.update")
     @SLog(tag = "修改菜单")
+    @Operation(
+            tags = "系统_菜单管理", summary = "修改菜单",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "menu", description = "菜单对象", type = "object", required = true),
+                    @ApiFormParam(name = "buttons", description = "菜单权限数组", required = true)
+            }
+    )
     public Object updateMenu(@Param("..") NutMap nutMap, HttpServletRequest req) {
         try {
             Sys_menu sysMenu = nutMap.getAs("menu", Sys_menu.class);
@@ -423,20 +494,27 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/menu/get_data/:id 获取权限信息
-     * @apiName get_data
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu
-     * @apiVersion 1.0.0
-     * @apiParam {String} id 菜单权限ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/get_data/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.menu")
+    @Operation(
+            tags = "系统_菜单管理", summary = "获取菜单数据",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getData(String id, HttpServletRequest req) {
         try {
             return Result.success().addData(sysMenuService.fetch(id));
@@ -445,22 +523,27 @@ public class SysMenuController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/menu/update_data 修改菜单权限
-     * @apiName update_data
-     * @apiGroup SYS_MENU
-     * @apiPermission sys.manage.menu.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} menu   菜单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/update_data")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.menu.update")
     @SLog(tag = "修改菜单权限")
+    @Operation(
+            tags = "系统_菜单管理", summary = "修改菜单信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_menu.class
+    )
     public Object updateData(@Param("..") Sys_menu menu, HttpServletRequest req) {
         try {
             int num = sysMenuService.count(Cnd.where("permission", "=", menu.getPermission().trim()).and("id", "<>", menu.getId()));

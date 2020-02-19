@@ -84,13 +84,13 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "name", example = "", description = "角色名称"),
@@ -255,6 +255,7 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role.create")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -301,6 +302,7 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role.update")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -483,6 +485,7 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role.menu")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -522,6 +525,7 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -554,13 +558,13 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "roleId", example = "", description = "角色ID"),
@@ -601,13 +605,13 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role.user")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "users", example = "", description = "用户ID数组"),
@@ -646,13 +650,13 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role.user")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             apiFormParams = {
                     @ApiFormParam(name = "users", example = "", description = "用户ID数组"),
@@ -728,13 +732,13 @@ public class SysRoleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.role.update")
             },
+            requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    // 当表单参数不是类对象时,使用 @ApiFormParams 定义,不在 @RequestBody
     @ApiFormParams(
             implementation = Sys_role.class
     )

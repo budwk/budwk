@@ -66,9 +66,6 @@ public class SwaggerServletStarter extends OpenApiServlet implements WebServletF
     @PropDoc(value = "扫描包路径", type = "string")
     public static final String PROP_RESOURCE_PACKAGES = PRE + "scanner.package";
 
-    @PropDoc(value = "服务地址", type = "string")
-    public static final String PROP_SERVER_URL = PRE + "server.url";
-
     public Map<String, String> getInitParameters() {
         return new HashMap<>();
     }

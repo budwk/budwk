@@ -1,14 +1,27 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
-import com.budwk.nb.commons.constants.RedisConstant;
-import com.budwk.nb.sys.models.Sys_config;
-import com.budwk.nb.sys.services.SysConfigService;
-import com.budwk.nb.commons.utils.PageUtil;
-import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.base.page.Pagination;
-import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
+import com.budwk.nb.sys.models.Sys_config;
+import com.budwk.nb.sys.services.SysConfigService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.integration.jedis.pubsub.PubSubService;
@@ -22,12 +35,13 @@ import org.nutz.mvc.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/12/10
+ * @author wizzer(wizzer @ qq.com) on 2019/12/10
  */
 @IocBean
 @At("/api/{version}/platform/sys/param")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_系统参数")}, servers = @Server(url = "/"))
 public class SysParamController {
     private static final Log log = Logs.get();
     @Inject
@@ -36,24 +50,31 @@ public class SysParamController {
     @Inject
     private PubSubService pubSubService;
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/param/list 分页查询
-     * @apiName list
-     * @apiGroup SYS_PARAM
-     * @apiPermission sys.manage.param
-     * @apiVersion 1.0.0
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
     @At
     @POST
     @Ok("json:full")
     @RequiresPermissions("sys.manage.param")
+    @Operation(
+            tags = "系统_系统参数", summary = "分页查询系统参数",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.param")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -69,20 +90,27 @@ public class SysParamController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/param/create 新增
-     * @apiName create
-     * @apiGroup SYS_PARAM
-     * @apiPermission sys.manage.param.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} config  表单
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At
     @Ok("json")
+    @POST
     @RequiresPermissions("sys.manage.param.create")
     @SLog(tag = "新增参数")
+    @Operation(
+            tags = "系统_系统参数", summary = "新增参数",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.param.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_config.class
+    )
     public Object create(@Param("..") Sys_config config, HttpServletRequest req) {
         try {
             if (sysConfigService.insert(config) != null) {
@@ -96,20 +124,27 @@ public class SysParamController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/param/get/:id 获取参数信息
-     * @apiName get
-     * @apiGroup SYS_PARAM
-     * @apiPermission sys.manage.param
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/get/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.param")
+    @Operation(
+            tags = "系统_系统参数", summary = "获取参数信息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.param")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getData(String id) {
         try {
             Sys_config config = sysConfigService.fetch(id);
@@ -122,21 +157,27 @@ public class SysParamController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/param/update 修改参数信息
-     * @apiName update
-     * @apiGroup SYS_PARAM
-     * @apiPermission sys.manage.param.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} config  表单
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At
     @Ok("json")
     @POST
     @RequiresPermissions("sys.manage.param.update")
     @SLog(tag = "修改参数")
+    @Operation(
+            tags = "系统_系统参数", summary = "修改参数",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.param.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_config.class
+    )
     public Object update(@Param("..") Sys_config config, HttpServletRequest req) {
         try {
             config.setUpdatedBy(StringUtil.getPlatformUid());
@@ -150,21 +191,27 @@ public class SysParamController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/param/delete/:configKey 删除参数信息
-     * @apiName delete
-     * @apiGroup SYS_PARAM
-     * @apiPermission sys.manage.param.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} configKey 参数Key
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/delete/{configKey}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.param.delete")
     @SLog(tag = "删除参数")
+    @Operation(
+            tags = "系统_系统参数", summary = "删除参数",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.param.delete")
+            },
+            parameters = {
+                    @Parameter(name = "configKey", description = "configKey", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object delete(String configKey, HttpServletRequest req) {
         try {
             if (Strings.sBlank(configKey).startsWith("App")) {

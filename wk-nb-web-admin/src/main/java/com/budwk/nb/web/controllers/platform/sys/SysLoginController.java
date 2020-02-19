@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.constants.RedisConstant;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_log;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysUserService;
@@ -13,6 +15,15 @@ import com.budwk.nb.web.commons.shiro.exception.CaptchaEmptyException;
 import com.budwk.nb.web.commons.shiro.exception.CaptchaIncorrectException;
 import com.budwk.nb.web.commons.shiro.filter.PlatformAuthenticationFilter;
 import com.budwk.nb.web.commons.slog.SLogServer;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -45,12 +56,13 @@ import java.awt.image.BufferedImage;
 import java.util.Set;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/10/29
+ * @author wizzer(wizzer @ qq.com) on 2019/10/29
  */
 @IocBean
 @At("/api/{version}/platform/login")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_系统登陆")}, servers = @Server(url = "/"))
 public class SysLoginController {
     private static final Log log = Logs.get();
     @Inject
@@ -69,26 +81,29 @@ public class SysLoginController {
     @Inject("refer:shiroWebSessionManager")
     private DefaultWebSessionManager webSessionManager;
 
-    /**
-     * @api {post} /api/1.0.0/platform/login/login 用户登陆
-     * @apiName login
-     * @apiGroup LOGIN
-     * @apiVersion 1.0.0
-     * @apiParam {String} loginname 用户账号
-     * @apiParam {String} password  用户密码
-     * @apiParam {String} captcha   验证码
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   登陆成功
-     * @apiSuccess {Object} data  用户数据
-     * @apiSuccess {String} data.token  用户Token
-     * @apiSuccess {Object} data.user  用户数据
-     * @apiSuccess {Object} data.menus  用户菜单
-     * @apiSuccess {Object} data.roles  用户角色
-     */
+
     @At
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @POST
     @Filters(@By(type = PlatformAuthenticationFilter.class))
+    @Operation(
+            tags = "系统_系统登陆", summary = "登陆系统",
+            security = {
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "username", description = "用户名", required = true),
+                    @ApiFormParam(name = "password", description = "用户密码", required = true),
+                    @ApiFormParam(name = "captcha", description = "验证码", required = false)
+            }
+    )
     public Object login(@Attr("platformLoginToken") AuthenticationToken formLoginToken, HttpServletRequest req, HttpSession session) {
         int errCount = 0;
         try {
@@ -184,18 +199,21 @@ public class SysLoginController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/login/logout 退出登陆
-     * @apiName logout
-     * @apiGroup LOGIN
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  用户数据
-     */
     @At
     @Ok("json")
     @GET
+    @Operation(
+            tags = "系统_系统登陆", summary = "退出登陆",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object logout(HttpSession session, HttpServletRequest req) {
         try {
             Subject currentUser = SecurityUtils.getSubject();
@@ -228,15 +246,28 @@ public class SysLoginController {
         return Result.error();
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/login/captcha 获取验证码
-     * @apiName captcha
-     * @apiGroup LOGIN
-     * @apiVersion 1.0.0
-     * @apiSuccess {Object} data  图片字节流
-     */
+
     @At("/captcha")
     @Ok("raw:png")
+    @GET
+    @Operation(
+            tags = "系统_系统登陆", summary = "登陆系统",
+            security = {
+                    @SecurityRequirement(name = "获取验证码")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "", name = "example"), mediaType = "image/png"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "w", description = "宽度", example = "300", type = "integer"),
+                    @ApiFormParam(name = "h", description = "高度", example = "200", type = "integer")
+            }
+    )
     public BufferedImage captcha(HttpSession session, @Param("w") int w, @Param("h") int h) {
         if (w * h < 1) {
             w = 200;

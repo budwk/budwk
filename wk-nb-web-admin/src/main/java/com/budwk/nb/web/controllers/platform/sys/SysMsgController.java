@@ -7,6 +7,8 @@ import com.budwk.nb.commons.base.page.Pagination;
 import com.budwk.nb.commons.constants.PlatformConstant;
 import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.enums.SysMsgTypeEnum;
 import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.services.SysMsgService;
@@ -15,6 +17,17 @@ import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.web.commons.ext.websocket.WkNotifyService;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
@@ -44,6 +57,7 @@ import java.util.Map;
 @At("/api/{version}/platform/sys/msg")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_系统消息")}, servers = @Server(url = "/"))
 public class SysMsgController {
     private static final Log log = Logs.get();
     @Inject
@@ -60,20 +74,23 @@ public class SysMsgController {
     @Inject
     private ShiroUtil shiroUtil;
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/msg/get_type 获取消息类型
-     * @apiName get_type
-     * @apiGroup SYS_MSG
-     * @apiPermission sys.manage.msg
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言数据
-     */
     @At("/get_type")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.manage.msg")
+    @Operation(
+            tags = "系统_系统消息", summary = "获取消息类型",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.msg")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getType() {
         try {
             return Result.success().addData(SysMsgTypeEnum.values());
@@ -83,26 +100,33 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/list 查询消息列表
-     * @apiName list
-     * @apiGroup SYS_MSG
-     * @apiPermission sys.manage.msg
-     * @apiVersion 1.0.0
-     * @apiParam {String} type    消息类型
-     * @apiParam {String} title   消息标题
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
     @At
     @POST
     @Ok("json:full")
     @RequiresPermissions("sys.manage.msg")
+    @Operation(
+            tags = "系统_系统消息", summary = "分页查询系统消息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.msg")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "type", example = "", description = "消息类型"),
+                    @ApiFormParam(name = "title", example = "", description = "消息标题"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object list(@Param("type") String type, @Param("title") String title, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -131,26 +155,34 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/get_user_view_list 消息发送对象列表
-     * @apiName get_user_view_list
-     * @apiGroup SYS_MSG
-     * @apiPermission sys.manage.msg
-     * @apiVersion 1.0.0
-     * @apiParam {String} type    消息类型
-     * @apiParam {String} id      消息ID
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
+
     @At("/get_user_view_list")
     @POST
     @Ok("json:full")
     @RequiresPermissions("sys.manage.msg")
+    @Operation(
+            tags = "系统_系统消息", summary = "分页查询消息查看用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.msg")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "type", example = "", description = "消息类型"),
+                    @ApiFormParam(name = "id", example = "", description = "消息ID", required = true),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object getUserViewList(@Param("type") String type, @Param("id") String id, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             String sql = "SELECT a.loginname,a.username,a.mobile,a.email,a.disabled,a.unitid,b.name as unitname,c.status,c.readat FROM sys_user a,sys_unit b,sys_msg_user c WHERE a.unitid=b.id \n" +
@@ -167,22 +199,27 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/delete/:id 删除消息
-     * @apiName delete
-     * @apiGroup SYS_MSG
-     * @apiPermission sys.manage.msg
-     * @apiVersion 1.0.0
-     * @apiParam {String} id      消息ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  多语言字符串
-     */
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.manage.msg.delete")
     @SLog(tag = "站内消息")
+    @Operation(
+            tags = "系统_系统消息", summary = "删除系统消息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.msg.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键", in = ParameterIn.PATH, required = true)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object delete(String id, HttpServletRequest req) {
         try {
             Sys_msg msg = sysMsgService.fetch(id);
@@ -199,25 +236,32 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/select_user_list 查询用户列表
-     * @apiName select_user_list
-     * @apiGroup SYS_MSG
-     * @apiPermission sys.manage.msg
-     * @apiVersion 1.0.0
-     * @apiParam {String} searchName    查询字段
-     * @apiParam {String} searchKeyword  查询内容
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
     @At("/select_user_list")
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.manage.msg")
+    @Operation(
+            tags = "系统_系统消息", summary = "分页查询消息发送用户",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.msg")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "searchName", example = "", description = "查询字段"),
+                    @ApiFormParam(name = "searchKeyword", example = "", description = "查询关键词"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object selectUserList(@Param("searchName") String searchName, @Param("searchKeyword") String searchKeyword, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -236,21 +280,29 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/create 发送消息
-     * @apiName create
-     * @apiGroup SYS_MSG
-     * @apiPermission sys.manage.msg
-     * @apiVersion 1.0.0
-     * @apiParam {Object} nutMap 表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
     @At("/create")
     @Ok("json")
     @RequiresPermissions("sys.manage.msg.create")
     @SLog(tag = "发送消息", msg = "${msg.title}")
+    @Operation(
+            tags = "系统_系统消息", summary = "发送消息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.msg.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_msg.class,
+            apiFormParams = {
+                    @ApiFormParam(name = "users", description = "用户ID数组")
+            }
+    )
     public Object create(@Param("..") Sys_msg msg, @Param("users") String[] users, HttpServletRequest req) {
         try {
             msg.setSendAt(Times.now().getTime());
@@ -267,26 +319,32 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/my_msg_list 查询当前用户消息列表
-     * @apiName my_msg_list
-     * @apiGroup SYS_MSG
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} type    消息类型
-     * @apiParam {String} status  读取状态
-     * @apiParam {String} pageNo   页码
-     * @apiParam {String} pageSize   页大小
-     * @apiParam {String} pageOrderName   排序字段
-     * @apiParam {String} pageOrderBy   排序方式
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  分页数据
-     */
     @At
     @POST
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_系统消息", summary = "分页查询已读未读消息",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "status", example = "", description = "读取状态"),
+                    @ApiFormParam(name = "type", example = "", description = "消息类型"),
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
     public Object my_msg_list(@Param("status") String status, @Param("type") String type, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
@@ -312,28 +370,35 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/status/read_more 标记已读
-     * @apiName read
-     * @apiGroup SYS_MSG
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} ids    消息编号
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/status/read_more")
     @Ok("json")
     @POST
     @RequiresAuthentication
     @SLog(tag = "站内消息")
+    @Operation(
+            tags = "系统_系统消息", summary = "消息批量设置已读",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "ids", description = "ID数组")
+            }
+    )
     public Object read_more(@Param("ids") String[] ids, HttpServletRequest req) {
         try {
             if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
                 return Result.error("system.error.demo");
             }
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
-                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status", "=", 0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
             req.setAttribute("_slog_msg", String.format("标为已读IDS:%s", Arrays.toString(ids)));
             return Result.success("system.success");
@@ -342,26 +407,30 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/status/read_all 全部已读
-     * @apiName read_all
-     * @apiGroup SYS_MSG
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/status/read_all")
     @Ok("json")
+    @POST
     @RequiresAuthentication
     @SLog(tag = "站内消息", msg = "全部已读")
+    @Operation(
+            tags = "系统_系统消息", summary = "消息全部设置已读",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object readAll(HttpServletRequest req) {
         try {
             if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
                 return Result.error("system.error.demo");
             }
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
-                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()).and("status", "=", 0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
             return Result.success();
         } catch (Exception e) {
@@ -369,19 +438,26 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/get 获取消息
-     * @apiName get
-     * @apiGroup SYS_MSG
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} ids    消息编号
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/get/{id}")
     @Ok("json")
+    @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_系统消息", summary = "获取一条消息内容",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "消息ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object get(String id, HttpServletRequest req) {
         try {
             // 判断是否有权限查看
@@ -395,26 +471,33 @@ public class SysMsgController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/msg/status/read_one/:id 标记已读
-     * @apiName read_one
-     * @apiGroup SYS_MSG
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} id    消息编号
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
+
     @At("/status/read_one/{id}")
     @Ok("json")
+    @POST
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_系统消息", summary = "设置一条消息已读",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "消息ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object read_one(String id, HttpServletRequest req) {
         try {
             if (Globals.MyConfig.getBoolean("AppDemoEnv")) {
                 return Result.success("system.error.demo");
             }
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
-                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status","=",0));
+                    .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status", "=", 0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
             return Result.success();
         } catch (Exception e) {

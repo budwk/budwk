@@ -1,27 +1,38 @@
 package com.budwk.nb.web.controllers.open.lang;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.services.SysLangLocalService;
 import com.budwk.nb.sys.services.SysLangService;
-import com.budwk.nb.commons.base.Result;
-import com.alibaba.dubbo.config.annotation.Reference;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
-import org.nutz.mvc.annotation.ApiVersion;
-import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Ok;
-import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.annotation.*;
 
 /**
  * 获取多语言标识符
- * @author wizzer(wizzer@qq.com) on 2019/11/13
+ *
+ * @author wizzer(wizzer @ qq.com) on 2019/11/13
  */
 @IocBean
 @At("/api/{version}/open/language")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "公共_多语言")}, servers = @Server(url = "/"))
 public class ApiLangController {
     private static final Log log = Logs.get();
     @Inject
@@ -31,17 +42,23 @@ public class ApiLangController {
     @Reference
     private SysLangLocalService sysLangLocalService;
 
-    /**
-     * @api {post} /api/1.0.0/open/language/get_data 获取多语言字符串
-     * @apiName language/get_data
-     * @apiGroup OPEN
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data   map对象
-     */
     @At("/get_data")
+    @GET
     @Ok("json")
+    @Operation(
+            tags = "公共_多语言", summary = "通过语言标识获取字符串",
+            security = {
+            },
+            parameters = {
+                    @Parameter(name = "language", example = "zh-CN", description = "语言标识", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getData(@Param("language") String language) {
         try {
             return Result.success().addData(sysLangService.getLang(language));
@@ -51,17 +68,20 @@ public class ApiLangController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/open/language/get_lang 获取多语言列表
-     * @apiName language/get_lang
-     * @apiGroup OPEN
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data   list对象
-     */
     @At("/get_lang")
+    @GET
     @Ok("json")
+    @Operation(
+            tags = "公共_多语言", summary = "获取语言列表",
+            security = {
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getLang() {
         try {
             return Result.success().addData(sysLangLocalService.getLocal());
@@ -71,17 +91,26 @@ public class ApiLangController {
         return Result.error();
     }
 
-    /**
-     * @api {post} /api/1.0.0/open/language/set_lang 设置当前语言
-     * @apiName language/set_lang
-     * @apiGroup OPEN
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data   list对象
-     */
+
     @At("/set_lang")
+    @POST
     @Ok("json")
+    @Operation(
+            tags = "公共_多语言", summary = "设置当前语言",
+            security = {
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "lang", example = "zh-CN", description = "语言标识")
+            }
+    )
     public Object setLang(@Param("lang") String lang) {
         try {
             if (Strings.isNotBlank(lang)) {

@@ -4,8 +4,21 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_dict;
 import com.budwk.nb.sys.services.SysDictService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -32,27 +45,32 @@ import java.util.List;
 @At("/api/{version}/platform/sys/dict")
 @Ok("json")
 @ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "系统_字典管理")}, servers = @Server(url = "/"))
 public class SysDictController {
     private static final Log log = Logs.get();
     @Inject
     @Reference
     private SysDictService sysDictService;
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/dict/child 获取子级数据
-     * @apiName child
-     * @apiGroup SYS_DICT
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} pid   父级ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/child")
     @Ok("json")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_字典管理", summary = "获取字典子级",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getChild(@Param("pid") String pid, HttpServletRequest req) {
         List<Sys_dict> list = new ArrayList<>();
         List<NutMap> treeList = new ArrayList<>();
@@ -76,21 +94,25 @@ public class SysDictController {
         return Result.success().addData(treeList);
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/dict/tree 获取单位树数据
-     * @apiName tree
-     * @apiGroup SYS_DICT
-     * @apiPermission 登陆用户
-     * @apiVersion 1.0.0
-     * @apiParam {String} pid   父级ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/tree")
     @Ok("json")
     @GET
     @RequiresAuthentication
+    @Operation(
+            tags = "系统_字典管理", summary = "获取字典子级树",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getTree(@Param("pid") String pid, HttpServletRequest req) {
         try {
             List<Sys_dict> list = new ArrayList<>();
@@ -124,23 +146,30 @@ public class SysDictController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/dict/create 新增字典
-     * @apiName create
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict.create
-     * @apiVersion 1.0.0
-     * @apiParam {Object} dict   字典
-     * @apiParam {String} parentId 父ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/create")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.config.dict.create")
     @SLog(tag = "新增字典", msg = "字典名称:${unit.name}")
+    @Operation(
+            tags = "系统_字典管理", summary = "新增字典",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "parentId", description = "父级ID")
+            },
+            implementation = Sys_dict.class
+    )
     public Object create(@Param("..") Sys_dict dict, @Param("parentId") String parentId, HttpServletRequest req) {
         try {
             if ("root".equals(parentId) || parentId == null) {
@@ -157,21 +186,27 @@ public class SysDictController {
         }
     }
 
-    /**
-     * @api {delete} /api/1.0.0/platform/sys/dict/delete/:id 删除字典
-     * @apiName delete
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict.delete
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
     @RequiresPermissions("sys.config.dict.delete")
     @SLog(tag = "删除字典")
+    @Operation(
+            tags = "系统_字典管理", summary = "删除字典",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object delete(String id, HttpServletRequest req) {
         try {
             Sys_dict dict = sysDictService.fetch(id);
@@ -189,20 +224,26 @@ public class SysDictController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/dict/get/:id 获取信息
-     * @apiName get
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict
-     * @apiVersion 1.0.0
-     * @apiParam {String} id ID
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/get/{id}")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.config.dict")
+    @Operation(
+            tags = "系统_字典管理", summary = "获取字典内容",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getData(String id, HttpServletRequest req) {
         try {
             Sys_dict dict = sysDictService.fetch(id);
@@ -216,21 +257,27 @@ public class SysDictController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/dict/update 修改信息
-     * @apiName update
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict.update
-     * @apiVersion 1.0.0
-     * @apiParam {Object} dict 表单对象
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At
     @Ok("json")
     @POST
     @RequiresPermissions("sys.config.dict.update")
     @SLog(tag = "修改字典", msg = "单位名称:${dict.name}")
+    @Operation(
+            tags = "系统_字典管理", summary = "修改字典内容",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = Sys_dict.class
+    )
     public Object update(@Param("..") Sys_dict dict, HttpServletRequest req) {
         try {
             dict.setUpdatedBy(StringUtil.getPlatformUid());
@@ -243,19 +290,23 @@ public class SysDictController {
         }
     }
 
-    /**
-     * @api {get} /api/1.0.0/platform/sys/dict/get_sort_tree 获取树数据
-     * @apiName get_sort_tree
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict
-     * @apiVersion 1.0.0
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/get_sort_tree")
     @Ok("json")
     @GET
     @RequiresPermissions("sys.config.dict")
+    @Operation(
+            tags = "系统_字典管理", summary = "获取待排序字典树",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
     public Object getSortTree(HttpServletRequest req) {
         try {
             List<Sys_dict> list = sysDictService.query(Cnd.NEW().asc("location").asc("path"));
@@ -289,20 +340,28 @@ public class SysDictController {
         return treeList;
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/dict/sort 执行排序
-     * @apiName sort
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict.update
-     * @apiVersion 1.0.0
-     * @apiParam ids 节点ids
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     */
     @At("/sort")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.config.dict.update")
+    @Operation(
+            tags = "系统_字典管理", summary = "提交字典排序数据",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "ids", description = "字典ID数组")
+            }
+    )
     public Object sortDo(@Param("ids") String ids, HttpServletRequest req) {
         try {
             String[] unitIds = StringUtils.split(ids, ",");
@@ -322,23 +381,31 @@ public class SysDictController {
         }
     }
 
-    /**
-     * @api {post} /api/1.0.0/platform/sys/dict/disabled 启用禁用
-     * @apiName disabled
-     * @apiGroup SYS_DICT
-     * @apiPermission sys.config.dict.update
-     * @apiVersion 1.0.0
-     * @apiParam {String} id   ID
-     * @apiParam {String} disabled   true/false
-     * @apiSuccess {Number} code  0
-     * @apiSuccess {String} msg   操作成功
-     * @apiSuccess {Object} data  数据
-     */
     @At("/disabled")
     @Ok("json")
     @POST
     @RequiresPermissions("sys.config.dict.update")
     @SLog(tag = "启用禁用字典")
+    @Operation(
+            tags = "系统_字典管理", summary = "启用禁用字典",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.config.dict.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "id", description = "字典主键", required = true),
+                    @ApiFormParam(name = "code", description = "字典PATH", required = true),
+                    @ApiFormParam(name = "disabled", description = "启用禁用", required = true, example = "true", type = "boolean")
+            }
+    )
     public Object changeDisabled(@Param("id") String id, @Param("path") String path, @Param("disabled") boolean disabled, HttpServletRequest req) {
         try {
             int res = sysDictService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
