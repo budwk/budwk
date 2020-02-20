@@ -241,7 +241,7 @@ public class SysAppController {
 
     @At("/task/list")
     @POST
-    @Ok("json:{locked:'confData',ignoreNull:false}")
+    @Ok("json:{locked:'confData|password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.server.app")
     @Operation(
             tags = "系统_应用管理", summary = "分页查询实例任务列表",

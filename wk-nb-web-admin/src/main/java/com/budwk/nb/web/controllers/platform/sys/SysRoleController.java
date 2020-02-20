@@ -76,7 +76,7 @@ public class SysRoleController {
 
     @At
     @POST
-    @Ok("json:full")
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.manage.role")
     @Operation(
             tags = "系统_角色管理", summary = "分页查询角色",

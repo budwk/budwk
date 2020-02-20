@@ -52,7 +52,7 @@ public class SysParamController {
 
     @At
     @POST
-    @Ok("json:full")
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresPermissions("sys.manage.param")
     @Operation(
             tags = "系统_系统参数", summary = "分页查询系统参数",
