@@ -1,6 +1,7 @@
 package com.budwk.nb.cms.commons.core;
 
 import com.budwk.nb.cms.commons.ig.RedisIdGenerator;
+import com.budwk.nb.cms.models.Cms_site;
 import org.nutz.boot.NbApp;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -63,6 +64,13 @@ public class CmsMainLauncher {
             Daos.createTablesInPackage(dao, "com.budwk.nb.cms", false);
             //通过POJO类修改表结构
             //Daos.migration(dao, "com.budwk.nb.app.cms", true, false);
+            if (dao.count(Cms_site.class,Cnd.NEW())==0) {
+                Cms_site site = new Cms_site();
+                site.setId("site");
+                site.setSite_name("演示站点");
+                site.setSite_domain("https://budwk.com");
+                dao.insert(site);
+            }
         } catch (Exception e) {
         }
         //初始化主键值到redis
