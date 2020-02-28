@@ -3,7 +3,7 @@ package com.budwk.nb.sys.services.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.nb.commons.base.page.Pagination;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
-import com.budwk.nb.sys.enums.SysMsgTypeEnum;
+import com.budwk.nb.sys.enums.SysMsgType;
 import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.models.Sys_msg_user;
 import com.budwk.nb.sys.models.Sys_user;
@@ -41,7 +41,7 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
     public Sys_msg saveMsg(Sys_msg sysMsg, String[] users) {
         Sys_msg dbMsg = this.insert(sysMsg);
         if (dbMsg != null) {
-            if (SysMsgTypeEnum.USER.equals(dbMsg.getType()) && users != null) {
+            if (SysMsgType.USER.equals(dbMsg.getType()) && users != null) {
                 for (String loginname : users) {
                     Sys_msg_user sys_msg_user = new Sys_msg_user();
                     sys_msg_user.setMsgId(dbMsg.getId());
@@ -52,7 +52,7 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
                     sysMsgUserService.insert(sys_msg_user);
                 }
             }
-            if (SysMsgTypeEnum.SYSTEM.equals(dbMsg.getType())) {
+            if (SysMsgType.SYSTEM.equals(dbMsg.getType())) {
                 Cnd cnd = Cnd.where("disabled", "=", false).and("delFlag", "=", false);
                 int total = sysUserService.count(cnd);
                 int size = 1000;

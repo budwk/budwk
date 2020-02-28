@@ -1,7 +1,7 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.sys.enums.SysMsgTypeEnum;
+import com.budwk.nb.sys.enums.SysMsgType;
 import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.models.Sys_msg_user;
 import com.budwk.nb.sys.services.SysMsgService;
@@ -49,12 +49,12 @@ public class WkNotifyService {
         map.put("type", innerMsg.getType().getValue());
         String msg = Json.toJson(map, JsonFormat.compact());
         // 系统消息发送给所有在线用户
-        if (SysMsgTypeEnum.SYSTEM.equals(innerMsg.getType())) {
+        if (SysMsgType.SYSTEM.equals(innerMsg.getType())) {
             Set<String> keys = redisService.keys("wsroom:*");
             for (String room : keys) {
                 pubSubService.fire(room, msg);
             }
-        } else if (SysMsgTypeEnum.USER.equals(innerMsg.getType())) {
+        } else if (SysMsgType.USER.equals(innerMsg.getType())) {
             for (String room : rooms) {
                 Set<String> keys = redisService.keys("wsroom:" + room + ":*");
                 for (String key : keys) {

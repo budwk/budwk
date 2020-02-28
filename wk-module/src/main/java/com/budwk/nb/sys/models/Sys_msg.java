@@ -1,7 +1,7 @@
 package com.budwk.nb.sys.models;
 
 import com.budwk.nb.commons.base.model.BaseModel;
-import com.budwk.nb.sys.enums.SysMsgTypeEnum;
+import com.budwk.nb.sys.enums.SysMsgType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
@@ -28,7 +28,7 @@ public class Sys_msg extends BaseModel implements Serializable {
     @Column
     @Comment("消息类型")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    private SysMsgTypeEnum type;
+    private SysMsgType type;
 
     @Column
     @Comment("消息标题")

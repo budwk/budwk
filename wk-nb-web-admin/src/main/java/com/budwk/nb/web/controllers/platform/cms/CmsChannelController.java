@@ -1,6 +1,7 @@
 package com.budwk.nb.web.controllers.platform.cms;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.cms.enums.CmsChannelType;
 import com.budwk.nb.cms.models.Cms_channel;
 import com.budwk.nb.cms.services.CmsChannelService;
 import com.budwk.nb.cms.services.CmsSiteService;
@@ -58,8 +59,66 @@ public class CmsChannelController {
     @Reference(check = false)
     private CmsSiteService cmsSiteService;
 
+    @At("/list_site")
+    @GET
+    @Ok("json:{actived:'code|msg|data|id|site_name',ignoreNull:true}")
+    @RequiresAuthentication
+    @Operation(
+            tags = "CMS_栏目管理", summary = "获取站点列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "  \"code\": 0,\n" +
+                                    "  \"msg\": \"操作成功\",\n" +
+                                    "  \"data\": [\n" +
+                                    "    {\n" +
+                                    "      \"id\": \"site\",\n" +
+                                    "      \"site_name\": \"演示站点\"\n" +
+                                    "    }\n" +
+                                    "  ]\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
+    public Object listSite(HttpServletRequest req) {
+        try {
+            return Result.success().addData(cmsSiteService.query());
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/get_type")
+    @Ok("json")
+    @GET
+    @RequiresAuthentication
+    @Operation(
+            tags = "CMS_栏目管理", summary = "获取栏目类型",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    public Object getType() {
+        try {
+            return Result.success().addData(CmsChannelType.values());
+        } catch (Exception e) {
+            log.error(e);
+            return Result.error();
+        }
+    }
+
     @At("/child/{siteId}")
-    @POST
+    @GET
     @Ok("json")
     @RequiresAuthentication
     @Operation(
@@ -111,7 +170,7 @@ public class CmsChannelController {
     }
 
     @At("/tree/{siteId}")
-    @POST
+    @GET
     @Ok("json")
     @RequiresAuthentication
     @Operation(

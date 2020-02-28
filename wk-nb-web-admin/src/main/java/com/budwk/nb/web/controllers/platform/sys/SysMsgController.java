@@ -9,7 +9,7 @@ import com.budwk.nb.commons.utils.PageUtil;
 import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
-import com.budwk.nb.sys.enums.SysMsgTypeEnum;
+import com.budwk.nb.sys.enums.SysMsgType;
 import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysMsgUserService;
@@ -93,7 +93,7 @@ public class SysMsgController {
     )
     public Object getType() {
         try {
-            return Result.success().addData(SysMsgTypeEnum.values());
+            return Result.success().addData(SysMsgType.values());
         } catch (Exception e) {
             log.error(e);
             return Result.error();

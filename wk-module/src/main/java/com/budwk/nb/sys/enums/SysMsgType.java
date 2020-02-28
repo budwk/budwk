@@ -8,7 +8,7 @@ import org.nutz.json.JsonShape;
  * JsonShape注解用于Json和实体类的相互转换,必须加
  */
 @JsonShape(JsonShape.Type.OBJECT)
-public enum SysMsgTypeEnum {
+public enum SysMsgType {
     /**
      * system
      */
@@ -21,7 +21,7 @@ public enum SysMsgTypeEnum {
     private String value;
     private String text;
 
-    SysMsgTypeEnum(String value, String text) {
+    SysMsgType(String value, String text) {
         this.value = value;
         this.text = text;
     }
@@ -42,13 +42,13 @@ public enum SysMsgTypeEnum {
         return text;
     }
 
-    public static SysMsgTypeEnum from(String value) {
-        for (SysMsgTypeEnum t : values()) {
+    public static SysMsgType from(String value) {
+        for (SysMsgType t : values()) {
             if (t.value.equals(value)) {
                 return t;
             }
         }
-        throw new IllegalArgumentException("unknown SysMsgTypeEnum: " + value);
+        throw new IllegalArgumentException("unknown SysMsgType: " + value);
     }
 
 
