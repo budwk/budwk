@@ -61,7 +61,7 @@ public class CmsArticleController {
     @Reference(check = false)
     private CmsArticleService cmsArticleService;
 
-    @At("/get_channel_tree")
+    @At("/get_channel_tree/{siteid}")
     @Ok("json")
     @GET
     @RequiresAuthentication
@@ -70,6 +70,9 @@ public class CmsArticleController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -77,9 +80,9 @@ public class CmsArticleController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    public Object getChannelTree(HttpServletRequest req) {
+    public Object getChannelTree(String siteid,HttpServletRequest req) {
         try {
-            List<Cms_channel> list = cmsChannelService.query(Cnd.NEW().asc("location").asc("path"));
+            List<Cms_channel> list = cmsChannelService.query(Cnd.where("siteid","=",siteid).asc("location").asc("path"));
             NutMap nutMap = NutMap.NEW();
             for (Cms_channel channel : list) {
                 List<Cms_channel> list1 = nutMap.getList(channel.getParentId(), Cms_channel.class);
