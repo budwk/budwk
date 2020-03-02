@@ -254,6 +254,10 @@ public class CmsChannelController {
             if ("root".equals(parentId)) {
                 parentId = "";
             }
+            int codeCount = cmsChannelService.count(Cnd.where("code", "=", Strings.sNull(channel.getCode())));
+            if (codeCount > 0) {
+                return Result.error("cms.content.channel.form.code.exist");
+            }
             channel.setCreatedBy(StringUtil.getPlatformUid());
             channel.setUpdatedBy(StringUtil.getPlatformUid());
             cmsChannelService.save(channel, parentId);
@@ -325,6 +329,13 @@ public class CmsChannelController {
     )
     public Object update(@Param("..") Cms_channel channel, HttpServletRequest req) {
         try {
+            Cms_channel dbChannel = cmsChannelService.fetch(channel.getId());
+            if(!Strings.sNull(channel.getCode()).equals(dbChannel.getCode())) {
+                int codeCount = cmsChannelService.count(Cnd.where("code", "=", Strings.sNull(dbChannel.getCode())));
+                if (codeCount > 0) {
+                    return Result.error("cms.content.channel.form.code.exist");
+                }
+            }
             channel.setUpdatedBy(StringUtil.getPlatformUid());
             cmsChannelService.updateIgnoreNull(channel);
             cmsChannelService.clearCache();
