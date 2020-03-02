@@ -410,7 +410,7 @@ public class CmsChannelController {
         }
     }
 
-    @At("/get_sort_tree")
+    @At("/get_sort_tree/{siteid}")
     @Ok("json")
     @GET
     @RequiresPermissions("cms.content.channel")
@@ -420,6 +420,9 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.channel")
             },
+            parameters = {
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -427,9 +430,9 @@ public class CmsChannelController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    public Object getSortTree(HttpServletRequest req) {
+    public Object getSortTree(String siteid, HttpServletRequest req) {
         try {
-            List<Cms_channel> list = cmsChannelService.query(Cnd.NEW().asc("location").asc("path"));
+            List<Cms_channel> list = cmsChannelService.query(Cnd.where("siteid", "=", siteid).asc("location").asc("path"));
             NutMap nutMap = NutMap.NEW();
             for (Cms_channel channel : list) {
                 List<Cms_channel> list1 = nutMap.getList(channel.getParentId(), Cms_channel.class);
@@ -460,7 +463,7 @@ public class CmsChannelController {
         return treeList;
     }
 
-    @At("/sort")
+    @At("/sort/{siteid}")
     @Ok("json")
     @POST
     @RequiresPermissions("cms.content.channel")
@@ -471,6 +474,9 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "cms.content.channel")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -482,14 +488,14 @@ public class CmsChannelController {
                     @ApiFormParam(name = "ids", description = "ID数组")
             }
     )
-    public Object sortDo(@Param("ids") String ids, HttpServletRequest req) {
+    public Object sortDo(String siteid, @Param("ids") String ids, HttpServletRequest req) {
         try {
             String[] unitIds = StringUtils.split(ids, ",");
             int i = 0;
             cmsChannelService.update(Chain.make("location", 0), Cnd.NEW());
             for (String id : unitIds) {
                 if (!Strings.isBlank(id)) {
-                    cmsChannelService.update(Chain.make("location", i), Cnd.where("id", "=", id));
+                    cmsChannelService.update(Chain.make("location", i), Cnd.where("id", "=", id).and("siteid", "=", siteid));
                     i++;
                 }
             }
