@@ -99,6 +99,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
                 Sys_menu d = this.fetch(id);
                 if (d != null) {
                     d.setPermission(map.getString("permission", ""));
+                    d.setAlias(d.getPermission());
                     d.setName(map.getString("name", ""));
                     this.updateIgnoreNull(d);
                     notInIds.add(d.getId());
@@ -110,6 +111,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
                     m.setLocation(0);
                     m.setType("data");
                     m.setPermission(map.getString("permission", ""));
+                    m.setAlias(m.getPermission());
                     m.setName(map.getString("name", ""));
                     m.setPath(getSubPath("sys_menu", "path", menu.getPath()));
                     m.setCreatedBy(menu.getCreatedBy());

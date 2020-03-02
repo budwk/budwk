@@ -197,7 +197,7 @@ public class CmsChannelController {
         try {
             List<NutMap> treeList = new ArrayList<>();
             if (Strings.isBlank(pid)) {
-                NutMap root = NutMap.NEW().addv("value", "root").addv("label", Mvcs.getMessage(req, "sys.manage.menu.form.noselect")).addv("leaf", true);
+                NutMap root = NutMap.NEW().addv("value", "root").addv("label", Mvcs.getMessage(req, "system.commons.txt.parentRoot")).addv("leaf", true);
                 treeList.add(root);
             }
             Cnd cnd = Cnd.NEW();
