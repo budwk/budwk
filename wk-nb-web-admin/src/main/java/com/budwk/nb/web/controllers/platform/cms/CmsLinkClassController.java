@@ -7,6 +7,7 @@ import com.budwk.nb.cms.services.CmsLinkService;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -113,7 +114,13 @@ public class CmsLinkClassController {
     )
     public Object create(@Param("..") Cms_link_class linkClass, HttpServletRequest req) {
         try {
-            cmsLinkClassService.updateIgnoreNull(linkClass);
+            int codeCount = cmsLinkClassService.count(Cnd.where("code", "=", Strings.sNull(linkClass.getCode())));
+            if (codeCount > 0) {
+                return Result.error("cms.links.class.form.code.exist");
+            }
+            linkClass.setCreatedBy(StringUtil.getPlatformUid());
+            linkClass.setUpdatedBy(StringUtil.getPlatformUid());
+            cmsLinkClassService.insert(linkClass);
             return Result.success();
         } catch (Exception e) {
             return Result.error();
@@ -143,6 +150,14 @@ public class CmsLinkClassController {
     )
     public Object update(@Param("..") Cms_link_class linkClass, HttpServletRequest req) {
         try {
+            Cms_link_class dbClass = cmsLinkClassService.fetch(linkClass.getId());
+            if (!Strings.sNull(linkClass.getCode()).equals(dbClass.getCode())) {
+                int codeCount = cmsLinkClassService.count(Cnd.where("code", "=", Strings.sNull(dbClass.getCode())));
+                if (codeCount > 0) {
+                    return Result.error("cms.links.class.form.code.exist");
+                }
+            }
+            linkClass.setUpdatedBy(StringUtil.getPlatformUid());
             cmsLinkClassService.updateIgnoreNull(linkClass);
             return Result.success();
         } catch (Exception e) {
