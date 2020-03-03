@@ -117,7 +117,7 @@ public class CmsArticleController {
         return treeList;
     }
 
-    @At
+    @At("/list")
     @POST
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresAuthentication
@@ -164,7 +164,8 @@ public class CmsArticleController {
         }
     }
 
-    @At("/create/?")
+    @At("/create")
+    @POST
     @Ok("json")
     @RequiresPermissions("cms.content.article.create")
     @SLog(tag = "添加文章", msg = "文章标题:${article.title}")
@@ -174,9 +175,6 @@ public class CmsArticleController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.article.create")
-            },
-            parameters = {
-                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -191,11 +189,10 @@ public class CmsArticleController {
             },
             implementation = Cms_article.class
     )
-    public Object create(String siteid, @Param("..") Cms_article article, @Param("time_param") long[] time, HttpServletRequest req) {
+    public Object create(@Param("..") Cms_article article, @Param("time_param") long[] time, HttpServletRequest req) {
         try {
-            article.setPublishAt(time[0] / 1000);
-            article.setEndAt(time[1] / 1000);
-            article.setSiteid(siteid);
+            article.setPublishAt(time[0]);
+            article.setEndAt(time[1]);
             article.setStatus(0);
             article.setCreatedBy(StringUtil.getPlatformUid());
             article.setUpdatedBy(StringUtil.getPlatformUid());
@@ -387,8 +384,8 @@ public class CmsArticleController {
     )
     public Object update(@Param("..") Cms_article article, @Param("time_param") long[] time, HttpServletRequest req) {
         try {
-            article.setPublishAt(time[0] / 1000);
-            article.setEndAt(time[1] / 1000);
+            article.setPublishAt(time[0]);
+            article.setEndAt(time[1]);
             article.setStatus(0);
             article.setUpdatedBy(StringUtil.getPlatformUid());
             cmsArticleService.updateIgnoreNull(article);
