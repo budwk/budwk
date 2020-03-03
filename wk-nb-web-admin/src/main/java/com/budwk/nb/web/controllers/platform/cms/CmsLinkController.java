@@ -219,6 +219,43 @@ public class CmsLinkController {
         }
     }
 
+    @At("/delete_more")
+    @Ok("json")
+    @POST
+    @RequiresPermissions("cms.links.link.delete")
+    @SLog(tag = "批量删除链接")
+    @Operation(
+            tags = "CMS_链接管理", summary = "批量删除链接",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "cms.links.link.delete")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "ids", example = "a,b", description = "链接ID数组", required = true),
+                    @ApiFormParam(name = "names", example = "a,b", description = "链接名称数组", required = true)
+            }
+    )
+    public Object deleteMore(@Param("ids") String[] ids, @Param("names") String names, HttpServletRequest req) {
+        try {
+            if (ids == null) {
+                return Result.error("system.error.invalid");
+            }
+            cmsLinkService.delete(ids);
+            req.setAttribute("_slog_msg", names);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
