@@ -1,7 +1,7 @@
 package com.budwk.nb.web.controllers.platform.cms;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.cms.models.Cms_link_class;
+import com.budwk.nb.cms.models.Cms_link;
 import com.budwk.nb.cms.services.CmsLinkClassService;
 import com.budwk.nb.cms.services.CmsLinkService;
 import com.budwk.nb.commons.annotation.SLog;
@@ -38,11 +38,11 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020/3/3
  */
 @IocBean
-@At("/api/{version}/platform/cms/links/class")
+@At("/api/{version}/platform/cms/links/link")
 @Ok("json")
 @ApiVersion("1.0.0")
-@OpenAPIDefinition(tags = {@Tag(name = "CMS_链接分类")}, servers = {@Server(url = "/")})
-public class CmsLinkClassController {
+@OpenAPIDefinition(tags = {@Tag(name = "CMS_链接管理")}, servers = {@Server(url = "/")})
+public class CmsLinkController {
     private static final Log log = Logs.get();
 
     @Inject
@@ -53,15 +53,49 @@ public class CmsLinkClassController {
     @Reference(check = false)
     private CmsLinkService cmsLinkService;
 
+    @At("/list_class")
+    @GET
+    @Ok("json:{actived:'code|msg|data|id|name',ignoreNull:true}")
+    @RequiresAuthentication
+    @Operation(
+            tags = "CMS_链接管理", summary = "获取分类列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "  \"code\": 0,\n" +
+                                    "  \"msg\": \"操作成功\",\n" +
+                                    "  \"data\": [\n" +
+                                    "    {\n" +
+                                    "      \"id\": \"xxxx\",\n" +
+                                    "      \"name\": \"友情链接\",\n" +
+                                    "      \"code\": \"links\"\n" +
+                                    "    }\n" +
+                                    "  ]\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
+    public Object listClass(HttpServletRequest req) {
+        try {
+            return Result.success().addData(cmsLinkClassService.query());
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
     @At("/list")
     @POST
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
-    @RequiresPermissions("cms.links.class")
+    @RequiresPermissions("cms.links.link")
     @Operation(
-            tags = "CMS_链接分类", summary = "分页查询链接分类",
+            tags = "CMS_链接管理", summary = "分页查询链接",
             security = {
                     @SecurityRequirement(name = "登陆认证"),
-                    @SecurityRequirement(name = "cms.links.class")
+                    @SecurityRequirement(name = "cms.links.link")
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -72,19 +106,23 @@ public class CmsLinkClassController {
     )
     @ApiFormParams(
             apiFormParams = {
+                    @ApiFormParam(name = "classId", example = "", description = "分类ID"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
                     @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
             }
     )
-    public Object list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Object list(@Param("classId") String classId, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
+            if (Strings.isNotBlank(classId)) {
+                cnd.and("classId", "=", classId);
+            }
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
                 cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
             }
-            return Result.success().addData(cmsLinkClassService.listPage(pageNo, pageSize, cnd));
+            return Result.success().addData(cmsLinkService.listPage(pageNo, pageSize, cnd));
         } catch (Exception e) {
             log.error(e);
             return Result.error();
@@ -94,13 +132,13 @@ public class CmsLinkClassController {
     @At("/create")
     @POST
     @Ok("json")
-    @RequiresPermissions("cms.links.class.create")
-    @SLog(tag = "新增链接分类", msg = "分类名称:${linkClass.name}")
+    @RequiresPermissions("cms.links.link.create")
+    @SLog(tag = "新增链接", msg = "链接名称:${link.name}")
     @Operation(
-            tags = "CMS_链接分类", summary = "新增链接分类",
+            tags = "CMS_链接管理", summary = "新增链接",
             security = {
                     @SecurityRequirement(name = "登陆认证"),
-                    @SecurityRequirement(name = "cms.links.class.create")
+                    @SecurityRequirement(name = "cms.links.link.create")
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -110,17 +148,13 @@ public class CmsLinkClassController {
             }
     )
     @ApiFormParams(
-            implementation = Cms_link_class.class
+            implementation = Cms_link.class
     )
-    public Object create(@Param("..") Cms_link_class linkClass, HttpServletRequest req) {
+    public Object create(@Param("..") Cms_link link, HttpServletRequest req) {
         try {
-            int codeCount = cmsLinkClassService.count(Cnd.where("code", "=", Strings.sNull(linkClass.getCode())));
-            if (codeCount > 0) {
-                return Result.error("cms.links.class.form.code.exist");
-            }
-            linkClass.setCreatedBy(StringUtil.getPlatformUid());
-            linkClass.setUpdatedBy(StringUtil.getPlatformUid());
-            cmsLinkClassService.insert(linkClass);
+            link.setCreatedBy(StringUtil.getPlatformUid());
+            link.setUpdatedBy(StringUtil.getPlatformUid());
+            cmsLinkService.insert(link);
             return Result.success();
         } catch (Exception e) {
             return Result.error();
@@ -130,13 +164,13 @@ public class CmsLinkClassController {
     @At("/update")
     @POST
     @Ok("json")
-    @RequiresPermissions("cms.links.class.update")
-    @SLog(tag = "修改链接分类", msg = "分类名称:${linkClass.name}")
+    @RequiresPermissions("cms.links.link.update")
+    @SLog(tag = "修改链接", msg = "链接名称:${link.name}")
     @Operation(
-            tags = "CMS_链接分类", summary = "修改链接分类",
+            tags = "CMS_链接管理", summary = "修改链接",
             security = {
                     @SecurityRequirement(name = "登陆认证"),
-                    @SecurityRequirement(name = "cms.links.class.update")
+                    @SecurityRequirement(name = "cms.links.link.update")
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -146,19 +180,12 @@ public class CmsLinkClassController {
             }
     )
     @ApiFormParams(
-            implementation = Cms_link_class.class
+            implementation = Cms_link.class
     )
-    public Object update(@Param("..") Cms_link_class linkClass, HttpServletRequest req) {
+    public Object update(@Param("..") Cms_link link, HttpServletRequest req) {
         try {
-            Cms_link_class dbClass = cmsLinkClassService.fetch(linkClass.getId());
-            if (!Strings.sNull(linkClass.getCode()).equals(dbClass.getCode())) {
-                int codeCount = cmsLinkClassService.count(Cnd.where("code", "=", Strings.sNull(dbClass.getCode())));
-                if (codeCount > 0) {
-                    return Result.error("cms.links.class.form.code.exist");
-                }
-            }
-            linkClass.setUpdatedBy(StringUtil.getPlatformUid());
-            cmsLinkClassService.updateIgnoreNull(linkClass);
+            link.setUpdatedBy(StringUtil.getPlatformUid());
+            cmsLinkService.updateIgnoreNull(link);
             return Result.success();
         } catch (Exception e) {
             return Result.error();
@@ -170,7 +197,7 @@ public class CmsLinkClassController {
     @Ok("json")
     @RequiresAuthentication
     @Operation(
-            tags = "CMS_链接分类", summary = "获取链接分类信息",
+            tags = "CMS_链接管理", summary = "获取链接信息",
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
@@ -186,7 +213,7 @@ public class CmsLinkClassController {
     )
     public Object get(String id, HttpServletRequest req) {
         try {
-            return Result.success().addData(cmsLinkClassService.fetch(id));
+            return Result.success().addData(cmsLinkService.fetch(id));
         } catch (Exception e) {
             return Result.error();
         }
@@ -195,13 +222,13 @@ public class CmsLinkClassController {
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
-    @RequiresPermissions("cms.links.class.delete")
-    @SLog(tag = "删除链接分类")
+    @RequiresPermissions("cms.links.link.delete")
+    @SLog(tag = "删除链接")
     @Operation(
-            tags = "CMS_链接分类", summary = "删除链接分类",
+            tags = "CMS_链接管理", summary = "删除链接",
             security = {
                     @SecurityRequirement(name = "登陆认证"),
-                    @SecurityRequirement(name = "cms.links.class.delete")
+                    @SecurityRequirement(name = "cms.links.link.delete")
             },
             parameters = {
                     @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
@@ -215,13 +242,12 @@ public class CmsLinkClassController {
     )
     public Object delete(String id, HttpServletRequest req) {
         try {
-            Cms_link_class linkClass = cmsLinkClassService.fetch(id);
-            if (linkClass == null) {
+            Cms_link link = cmsLinkService.fetch(id);
+            if (link == null) {
                 return Result.error("system.error.noData");
             }
-            cmsLinkClassService.delete(id);
-            cmsLinkService.clear(Cnd.where("classId", "=", id));
-            req.setAttribute("_slog_msg", String.format("%s", linkClass.getName()));
+            cmsLinkService.delete(id);
+            req.setAttribute("_slog_msg", String.format("%s", link.getName()));
             return Result.success();
         } catch (Exception e) {
             return Result.error();
