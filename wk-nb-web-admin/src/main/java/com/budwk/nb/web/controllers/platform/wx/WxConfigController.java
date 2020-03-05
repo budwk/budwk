@@ -195,7 +195,7 @@ public class WxConfigController {
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @RequiresPermissions("wx.conf.account")
     @Operation(
-            tags = "微信_账号配置", summary = "分页查询账号信息",
+            tags = "微信_账号配置", summary = "分页查询微信公众号",
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.account")
