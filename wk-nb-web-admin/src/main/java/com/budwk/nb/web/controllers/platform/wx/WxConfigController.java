@@ -53,6 +53,39 @@ public class WxConfigController {
     @Inject
     private PubSubService pubSubService;
 
+    @At("/list_account")
+    @GET
+    @Ok("json:{actived:'code|msg|data|id|appname|appid',ignoreNull:true}")
+    @RequiresAuthentication
+    @Operation(
+            tags = "微信_账号配置", summary = "获取微信账号列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(example = "{\n" +
+                                    "  \"code\": 0,\n" +
+                                    "  \"msg\": \"操作成功\",\n" +
+                                    "  \"data\": [\n" +
+                                    "    {\n" +
+                                    "      \"id\": \"main\",\n" +
+                                    "      \"appname\": \"测试公众号\"\n" +
+                                    "    }\n" +
+                                    "  ]\n" +
+                                    "}"), mediaType = "application/json"))
+            }
+    )
+    public Object listAccount(HttpServletRequest req) {
+        try {
+            return Result.success().addData(wxConfigService.query());
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
     @At("/create")
     @POST
     @Ok("json")

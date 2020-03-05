@@ -4,14 +4,14 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.PageUtil;
-import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.web.commons.ext.wx.WxService;
-import com.budwk.nb.wx.models.Wx_user;
+import com.budwk.nb.wx.models.Wx_config;
+import com.budwk.nb.wx.models.Wx_msg_reply;
 import com.budwk.nb.wx.services.WxConfigService;
-import com.budwk.nb.wx.services.WxUserService;
-import com.vdurmont.emoji.EmojiParser;
+import com.budwk.nb.wx.services.WxMsgReplyService;
+import com.budwk.nb.wx.services.WxMsgService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,11 +28,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.json.Json;
-import org.nutz.lang.*;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
+import org.nutz.weixin.bean.WxOutMsg;
 import org.nutz.weixin.spi.WxApi2;
 import org.nutz.weixin.spi.WxResp;
 
@@ -43,22 +43,24 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020/3/5
  */
 @IocBean
-@At("/api/{version}/platform/wx/user")
+@At("/api/{version}/platform/wx/msg/user")
 @Ok("json")
 @ApiVersion("1.0.0")
-@OpenAPIDefinition(tags = {@Tag(name = "微信_用户管理")}, servers = {@Server(url = "/")})
-public class WxUserController {
+@OpenAPIDefinition(tags = {@Tag(name = "微信_会员消息")}, servers = {@Server(url = "/")})
+public class WxMsgUserController {
     private static final Log log = Logs.get();
 
     @Inject
     @Reference(check = false)
     private WxConfigService wxConfigService;
-
     @Inject
     @Reference(check = false)
-    private WxUserService wxUserService;
-
+    private WxMsgService wxMsgService;
     @Inject
+    @Reference(check = false)
+    private WxMsgReplyService wxMsgReplyService;
+    @Inject
+    @Reference(check = false)
     private WxService wxService;
 
     @At("/list")
@@ -66,7 +68,7 @@ public class WxUserController {
     @Ok("json:full")
     @RequiresAuthentication
     @Operation(
-            tags = "微信_用户管理", summary = "分页查询微信用户信息",
+            tags = "微信_会员消息", summary = "分页查询微信会员信息",
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
@@ -82,13 +84,14 @@ public class WxUserController {
                     @ApiFormParam(name = "wxid", example = "", description = "微信ID"),
                     @ApiFormParam(name = "openid", example = "", description = "微信openid"),
                     @ApiFormParam(name = "nickname", example = "", description = "微信昵称"),
+                    @ApiFormParam(name = "content", example = "", description = "消息内容"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
                     @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
             }
     )
-    public Object list(@Param("wxid") String wxid, @Param("openid") String openid, @Param("nickname") String nickname, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Object list(@Param("wxid") String wxid, @Param("openid") String openid, @Param("nickname") String nickname, @Param("content") String content, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
             if (!Strings.isBlank(wxid)) {
@@ -100,25 +103,27 @@ public class WxUserController {
             if (Strings.isNotBlank(nickname)) {
                 cnd.and("nickname", "like", "%" + Strings.trim(nickname) + "%");
             }
+            if (Strings.isNotBlank(content)) {
+                cnd.and("content", "like", "%" + Strings.trim(content) + "%");
+            }
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
                 cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
             }
-            return Result.success().addData(wxUserService.listPage(pageNo, pageSize, cnd));
+            return Result.success().addData(wxMsgService.listPage(pageNo, pageSize, cnd));
         } catch (Exception e) {
             return Result.error();
         }
     }
 
-    @At("/down/{wxid}")
-    @GET
+    @At({"/reply/{wxid}"})
     @Ok("json")
-    @RequiresPermissions("wx.user.list.sync")
-    @SLog(tag = "同步微信会员", msg = "微信ID:${wxid}")
+    @RequiresPermissions("wx.msg.user.reply")
+    @SLog(tag = "回复微信消息", msg = "微信昵称:${nickname}")
     @Operation(
-            tags = "微信_用户管理", summary = "同步微信会员",
+            tags = "微信_会员消息", summary = "回复微信消息",
             security = {
                     @SecurityRequirement(name = "登陆认证"),
-                    @SecurityRequirement(name = "wx.user.list.sync")
+                    @SecurityRequirement(name = "wx.msg.user.reply")
             },
             parameters = {
                     @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
@@ -130,32 +135,41 @@ public class WxUserController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    public Object down(String wxid, HttpServletRequest req) {
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "msgid", example = "", description = "消息ID"),
+                    @ApiFormParam(name = "openid", example = "", description = "微信openid"),
+                    @ApiFormParam(name = "replyContent", example = "", description = "回复内容")
+            }
+    )
+    public Object reply(String wxid, @Param("msgid") String msgid, @Param("nickname") String nickname, @Param("openid") String openid, @Param("replyContent") String content, HttpServletRequest req) {
         try {
+            Wx_config config = wxConfigService.fetch(wxid);
             WxApi2 wxApi2 = wxService.getWxApi2(wxid);
-            wxApi2.user_get(new Each<String>() {
-                public void invoke(int index, String _ele, int length)
-                        throws ExitLoop, ContinueLoop, LoopException {
-                    WxResp resp = wxApi2.user_info(_ele, "zh_CN");
-                    Wx_user usr = Json.fromJson(Wx_user.class, Json.toJson(resp.user()));
-                    usr.setCreatedAt(System.currentTimeMillis());
-                    usr.setCreatedBy(StringUtil.getPlatformUid());
-                    usr.setNickname(EmojiParser.parseToAliases(usr.getNickname(), EmojiParser.FitzpatrickAction.REMOVE));
-                    usr.setSubscribeAt(resp.user().getSubscribe_time());
-                    usr.setWxid(wxid);
-                    Wx_user dbUser = wxUserService.fetch(Cnd.where("wxid", "=", wxid).and("openid", "=", usr.getOpenid()));
-                    if (dbUser == null) {
-                        wxUserService.insert(usr);
-                    } else {
-                        usr.setId(dbUser.getId());
-                        wxUserService.updateIgnoreNull(usr);
-                    }
-                }
-            });
+            long now = System.currentTimeMillis() / 1000;
+            WxOutMsg msg = new WxOutMsg();
+            msg.setCreateTime(now);
+            msg.setFromUserName(config.getAppid());
+            msg.setMsgType("text");
+            msg.setToUserName(openid);
+            msg.setContent(content);
+            WxResp wxResp = wxApi2.send(msg);
+            if (wxResp.errcode() != 0) {
+                return Result.error(wxResp.errmsg());
+            }
+            Wx_msg_reply reply = new Wx_msg_reply();
+            reply.setContent(content);
+            reply.setType("text");
+            reply.setMsgid(msgid);
+            reply.setOpenid(openid);
+            reply.setWxid(wxid);
+            Wx_msg_reply reply1 = wxMsgReplyService.insert(reply);
+            if (reply1 != null) {
+                wxMsgService.update(org.nutz.dao.Chain.make("replyId", reply1.getId()), Cnd.where("id", "=", msgid));
+            }
             return Result.success();
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Result.error(e.getMessage());
+            return Result.error();
         }
     }
 }
