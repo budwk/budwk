@@ -1,5 +1,6 @@
 package com.budwk.nb.web.controllers.open.pay;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.nb.wx.services.WxConfigService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class WxPayBackController {
     private static final Log log = Logs.get();
     @Inject
+    @Reference(check = false)
     private WxConfigService wxConfigService;
 
     @At

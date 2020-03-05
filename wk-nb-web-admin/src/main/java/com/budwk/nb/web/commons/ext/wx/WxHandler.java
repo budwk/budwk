@@ -1,19 +1,27 @@
 package com.budwk.nb.web.commons.ext.wx;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.utils.DateUtil;
+import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.wx.models.*;
 import com.budwk.nb.wx.services.*;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
+import org.nutz.aop.interceptor.async.Async;
+import org.nutz.boot.starter.ftp.FtpService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
+import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.Files;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
+import org.nutz.lang.random.R;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.resource.NutResource;
 import org.nutz.weixin.bean.WxArticle;
 import org.nutz.weixin.bean.WxInMsg;
 import org.nutz.weixin.bean.WxOutMsg;
@@ -25,10 +33,11 @@ import org.nutz.weixin.spi.WxResp;
 import org.nutz.weixin.util.Wxs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2016/7/3.
+ * @author wizzer(wizzer @ qq.com) on 2016/7/3.
  */
 @IocBean(name = "wxHandler")
 public class WxHandler extends AbstractWxHandler {
@@ -61,6 +70,13 @@ public class WxHandler extends AbstractWxHandler {
     private WxMsgService wxMsgService;
     @Inject
     private WxService wxService;
+    @Inject
+    private FtpService ftpService;
+    @Inject
+    private PropertiesProxy conf;
+    @Inject("java:$conf.get('budwk.upload.type')")
+    private String UploadType;
+    private final static String UPLOAD_TYPE_FTP = "ftp";
 
     @Override
     public boolean check(String signature, String timestamp, String nonce, String key) {
@@ -90,6 +106,7 @@ public class WxHandler extends AbstractWxHandler {
 
     /**
      * 用户发送的是文本的时候调用这个方法
+     *
      * @param msg
      * @return
      */
@@ -131,6 +148,64 @@ public class WxHandler extends AbstractWxHandler {
         wxMsgService.insert(wxMsg);
         return Wxs.respText(null, "您的留言已收到！");
     }
+
+    /**
+     * 用户发送的是图片的时候调用这个方法
+     *
+     * @param msg
+     * @return
+     */
+    @Override
+    public WxOutMsg image(WxInMsg msg) {
+        saveMsg(msg, "image");
+        return Wxs.respText(null, "您的留言已收到！");
+    }
+
+    /**
+     * 用户发送的是视频的时候调用这个方法
+     *
+     * @param msg
+     * @return
+     */
+    @Override
+    public WxOutMsg video(WxInMsg msg) {
+        saveMsg(msg, "video");
+        return Wxs.respText(null, "您的留言已收到！");
+    }
+
+
+    @Async
+    public void saveMsg(WxInMsg msg, String type) {
+        Wx_user usr = wxUserService.fetch(Cnd.where("openid", "=", msg.getFromUserName()));
+        Wx_msg wxMsg = new Wx_msg();
+        try {
+            if ("video".equals(type) || "image".equals(type)) {
+                NutResource nutResource = wxService.getWxApi2(msg.getExtkey()).media_get(msg.getMediaId());
+                String suffixName = nutResource.getName().substring(nutResource.getName().lastIndexOf("."));
+                String filePath = Globals.AppUploadBase + "/wechat/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
+                String fileName = R.UU32() + suffixName;
+                String url = filePath + fileName;
+                if (UPLOAD_TYPE_FTP.equals(UploadType)) {
+                    ftpService.upload(filePath, fileName, nutResource.getInputStream());
+                } else {
+                    String staticPath = conf.get("jetty.staticPath", "/files");
+                    Files.write(staticPath + url, nutResource.getInputStream());
+                }
+                wxMsg.setContent(url);
+            } else {
+                wxMsg.setContent(msg.getContent());
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
+        wxMsg.setOpenid(msg.getFromUserName());
+        wxMsg.setWxid(msg.getExtkey());
+        wxMsg.setType(type);
+        wxMsg.setNickname(usr == null ? "匿名" : usr.getNickname());
+        wxMsg.setDelFlag(false);
+        wxMsgService.insert(wxMsg);
+    }
+
 
     @Override
     public WxOutMsg eventClick(WxInMsg msg) {

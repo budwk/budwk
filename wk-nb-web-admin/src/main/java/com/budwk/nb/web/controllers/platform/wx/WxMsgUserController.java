@@ -109,7 +109,7 @@ public class WxMsgUserController {
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
                 cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
             }
-            return Result.success().addData(wxMsgService.listPage(pageNo, pageSize, cnd));
+            return Result.success().addData(wxMsgService.listPageLinks(pageNo, pageSize, cnd,"reply"));
         } catch (Exception e) {
             return Result.error();
         }

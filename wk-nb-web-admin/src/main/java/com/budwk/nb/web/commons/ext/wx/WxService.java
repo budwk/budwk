@@ -12,10 +12,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.weixin.at.impl.JedisAgenAccessTokenStore;
-import org.nutz.weixin.at.impl.RedisAccessTokenStore;
 import org.nutz.weixin.impl.WxApi2Impl;
 import org.nutz.weixin.spi.WxApi2;
-import redis.clients.jedis.JedisPool;
 
 /**
  * @author wizzer(wizzer @ qq.com) on 2018/3/17.
@@ -43,6 +41,5 @@ public class WxService {
             Globals.WxMap.put(wxid, wxApi2);
         }
         return wxApi2;
-
     }
 }
