@@ -30,11 +30,12 @@ import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 
 /**
+ * 微信授权跳转处理
  * @author wizzer(wizzer@qq.com) on 2016/8/6.
  */
 @IocBean
 @At("/public/wx/wechat")
-public class WechatController {
+public class WechatOauthController {
     private static final Log log = Logs.get();
     @Inject
     @Reference

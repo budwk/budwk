@@ -1,8 +1,6 @@
 package com.budwk.nb.web.controllers.platform.wx;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.nb.cms.services.CmsArticleService;
-import com.budwk.nb.cms.services.CmsChannelService;
 import com.budwk.nb.commons.annotation.SLog;
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.utils.StringUtil;
@@ -75,19 +73,11 @@ public class WxMenuController {
 
     @Inject
     @Reference(check = false)
-    private CmsChannelService cmsChannelService;
-
-    @Inject
-    @Reference(check = false)
-    private CmsArticleService cmsArticleService;
-
-    @Inject
-    @Reference(check = false)
     private WxService wxService;
 
     @At("/list_account")
     @GET
-    @Ok("json:{actived:'code|msg|data|id|appname',ignoreNull:true}")
+    @Ok("json:{actived:'code|msg|data|id|appname|appid',ignoreNull:true}")
     @RequiresAuthentication
     @Operation(
             tags = "微信_菜单配置", summary = "获取微信账号列表",
@@ -118,14 +108,17 @@ public class WxMenuController {
         }
     }
 
-    @At("/child")
-    @POST
+    @At("/child/{wxid}")
+    @GET
     @Ok("json")
     @RequiresAuthentication
     @Operation(
             tags = "微信_菜单配置", summary = "表格展开下级菜单",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -136,11 +129,10 @@ public class WxMenuController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "wxid", description = "微信ID"),
                     @ApiFormParam(name = "pid", description = "父级ID")
             }
     )
-    public Object child(@Param("pid") String pid, @Param("wxid") String wxid, HttpServletRequest req) {
+    public Object child(String wxid, @Param("pid") String pid, HttpServletRequest req) {
         List<Wx_menu> list = new ArrayList<>();
         List<NutMap> treeList = new ArrayList<>();
         Cnd cnd = Cnd.NEW();
@@ -164,14 +156,17 @@ public class WxMenuController {
         return Result.success().addData(treeList);
     }
 
-    @At("/tree")
-    @POST
+    @At("/tree/{wxid}")
+    @GET
     @Ok("json")
     @RequiresAuthentication
     @Operation(
             tags = "微信_菜单配置", summary = "获取菜单树结构",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -182,11 +177,10 @@ public class WxMenuController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "wxid", description = "微信ID"),
                     @ApiFormParam(name = "pid", description = "父级ID")
             }
     )
-    public Object tree(@Param("pid") String pid, @Param("wxid") String wxid, HttpServletRequest req) {
+    public Object tree(String wxid, @Param("pid") String pid, HttpServletRequest req) {
         try {
             List<NutMap> treeList = new ArrayList<>();
             if (Strings.isBlank(pid)) {
@@ -359,7 +353,7 @@ public class WxMenuController {
         }
     }
 
-    @At("/push_menu")
+    @At("/push/{wxid}")
     @POST
     @Ok("json")
     @RequiresPermissions("wx.conf.menu.push")
@@ -370,6 +364,9 @@ public class WxMenuController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.menu.push")
             },
+            parameters = {
+                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -377,12 +374,7 @@ public class WxMenuController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    @ApiFormParams(
-            apiFormParams = {
-                    @ApiFormParam(name = "wxid", description = "微信ID")
-            }
-    )
-    public Object pushMenu(@Param("wxid") String wxid, HttpServletRequest req) {
+    public Object pushMenu(String wxid, HttpServletRequest req) {
         try {
             Wx_config config = wxConfigService.fetch(wxid);
             WxApi2 wxApi2 = wxService.getWxApi2(wxid);
@@ -467,7 +459,7 @@ public class WxMenuController {
         }
     }
 
-    @At("/get_keyword")
+    @At("/list_keyword")
     @POST
     @Ok("json:full")
     @RequiresPermissions("wx.conf.menu")
@@ -554,7 +546,7 @@ public class WxMenuController {
         return treeList;
     }
 
-    @At("/sort")
+    @At("/sort/{wxid}")
     @POST
     @Ok("json")
     @RequiresPermissions("wx.conf.menu")
@@ -563,6 +555,9 @@ public class WxMenuController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.menu.sort")
+            },
+            parameters = {
+                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -573,11 +568,10 @@ public class WxMenuController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "wxid", description = "微信ID"),
                     @ApiFormParam(name = "ids", description = "菜单ID数组")
             }
     )
-    public Object sort(@Param("wxid") String wxid, @Param("ids") String ids, HttpServletRequest req) {
+    public Object sort(String wxid, @Param("ids") String ids, HttpServletRequest req) {
         try {
             String[] menuIds = StringUtils.split(ids, ",");
             int i = 0;
@@ -593,4 +587,6 @@ public class WxMenuController {
             return Result.error();
         }
     }
+
+
 }
