@@ -60,7 +60,6 @@ public class WxMsgUserController {
     @Reference(check = false)
     private WxMsgReplyService wxMsgReplyService;
     @Inject
-    @Reference(check = false)
     private WxService wxService;
 
     @At("/list")
@@ -109,7 +108,7 @@ public class WxMsgUserController {
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
                 cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
             }
-            return Result.success().addData(wxMsgService.listPageLinks(pageNo, pageSize, cnd,"reply"));
+            return Result.success().addData(wxMsgService.listPageLinks(pageNo, pageSize, cnd, "reply"));
         } catch (Exception e) {
             return Result.error();
         }
