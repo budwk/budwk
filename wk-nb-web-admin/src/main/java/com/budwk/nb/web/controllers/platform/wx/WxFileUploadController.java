@@ -179,7 +179,8 @@ public class WxFileUploadController {
                     String staticPath = conf.get("jetty.staticPath", "/files");
                     Files.write(staticPath + url, tf.getInputStream());
                     return Result.success("system.error.upload.success", NutMap.NEW().addv("id", resp.get("thumb_media_id"))
-                            .addv("picurl", url));
+                            .addv("picurl", url)
+                            .addv("wx_picurl", Strings.sNull(resp.get("url")).replace("http://", "https://")));
                 }
             }
         } catch (Exception e) {
@@ -244,7 +245,8 @@ public class WxFileUploadController {
                     Files.write(staticPath + url, tf.getInputStream());
                 }
                 return Result.success("system.error.upload.success", NutMap.NEW().addv("id", resp.get("media_id"))
-                        .addv("picurl", url));
+                        .addv("picurl", url)
+                        .addv("wx_picurl", Strings.sNull(resp.get("url")).replace("http://", "https://")));
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
