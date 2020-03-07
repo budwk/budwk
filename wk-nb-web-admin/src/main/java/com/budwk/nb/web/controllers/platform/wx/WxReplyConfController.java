@@ -295,4 +295,42 @@ public class WxReplyConfController {
             return Result.error();
         }
     }
+
+    @At("/list_content")
+    @POST
+    @Ok("json:full")
+    @RequiresPermissions("wx.reply.conf")
+    @Operation(
+            tags = "微信_自动回复_获取待选择内容", summary = "获取待选择内容",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "wx.reply.conf")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "wxid", description = "微信ID"),
+                    @ApiFormParam(name = "msgType", description = "消息类型")
+            }
+    )
+    public Object listContent(@Param("wxid") String wxid, @Param("msgType") String msgType) {
+        try {
+            if ("txt".equals(msgType)) {
+                return Result.success().addData(wxReplyTxtService.query(Cnd.orderBy().desc("createdAt")));
+            } else if ("image".equals(msgType)) {
+                return Result.success().addData(wxReplyImgService.query(Cnd.orderBy().desc("createdAt")));
+            } else if ("news".equals(msgType)) {
+                return Result.success().addData(wxReplyNewsService.query(Cnd.orderBy().desc("createdAt")));
+            }
+            return Result.error();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
 }
