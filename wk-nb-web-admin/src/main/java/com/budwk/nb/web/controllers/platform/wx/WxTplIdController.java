@@ -13,8 +13,6 @@ import com.budwk.nb.wx.services.WxConfigService;
 import com.budwk.nb.wx.services.WxTplIdService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -130,7 +128,7 @@ public class WxTplIdController {
                 wxTplIdService.insert(wxTplId);
                 return Result.success();
             }
-            return Result.error(wxResp.errcode() + ":::" + wxResp.errmsg());
+            return Result.error(wxResp.errmsg());
         } catch (Exception e) {
             return Result.error();
         }
@@ -173,7 +171,7 @@ public class WxTplIdController {
                 if (wxResp.errcode() == 0) {
                     wxTplIdService.clear(Cnd.where("id", "=", id).and("wxid", "=", wxid));
                 } else {
-                    return Result.error(wxResp.errcode() + ":::" + wxResp.errmsg());
+                    return Result.error(wxResp.errmsg());
                 }
             }
             wxTplIdService.delete(ids);
@@ -184,9 +182,9 @@ public class WxTplIdController {
         }
     }
 
-    @At("/delete/{id}")
+    @At("/delete")
     @Ok("json")
-    @DELETE
+    @POST
     @RequiresPermissions("wx.tpl.id.delete")
     @SLog(tag = "删除模板编号")
     @Operation(
@@ -195,9 +193,6 @@ public class WxTplIdController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.tpl.id.delete")
             },
-            parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
-            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -205,20 +200,26 @@ public class WxTplIdController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    public Object delete(String id, HttpServletRequest req) {
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "wxid", example = "", description = "微信ID", required = true),
+                    @ApiFormParam(name = "id", example = "", description = "模板库ID", required = true)
+            }
+    )
+    public Object delete(@Param("wxid") String wxid, @Param("id") String id, HttpServletRequest req) {
         try {
-            Wx_tpl_id wxTplId = wxTplIdService.fetch(id);
+            Wx_tpl_id wxTplId = wxTplIdService.fetch(Cnd.where("id", "=", id).and("wxid", "=", wxid));
             if (wxTplId == null) {
                 return Result.error("system.error.noData");
             }
-            WxApi2 wxApi2 = wxService.getWxApi2(wxTplId.getWxid());
+            WxApi2 wxApi2 = wxService.getWxApi2(wxid);
             WxResp wxResp = wxApi2.template_api_del_template(wxTplId.getTemplate_id());
             if (wxResp.errcode() == 0) {
                 wxTplIdService.clear(Cnd.where("id", "=", id).and("wxid", "=", wxTplId.getWxid()));
                 req.setAttribute("_slog_msg", String.format("模板编号:%s", wxTplId.getTemplate_id()));
                 return Result.success();
             } else {
-                return Result.error(wxResp.errcode() + ":::" + wxResp.errmsg());
+                return Result.error(wxResp.errmsg());
             }
         } catch (Exception e) {
             return Result.error();

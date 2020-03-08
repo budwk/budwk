@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Wx_tpl_id extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column
-    @Comment("模板编号")
+    @Comment("模板库ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String id;
 
