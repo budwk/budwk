@@ -1,0 +1,96 @@
+package com.budwk.nb.web.commons.base;
+
+import com.budwk.nb.sys.models.Sys_config;
+import com.budwk.nb.sys.models.Sys_task;
+import com.budwk.nb.sys.services.SysConfigService;
+import com.budwk.nb.sys.services.SysTaskService;
+import com.budwk.nb.task.services.TaskPlatformService;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
+import org.nutz.lang.util.NutMap;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+
+import java.util.List;
+
+/**
+ * @author wizzer(wizzer.cn) on 2016/12/19.
+ */
+@IocBean(create = "init")
+public class Globals {
+    private static final Log log = Logs.get();
+    // 项目路径
+    public static String AppRoot = "";
+    // 项目目录
+    public static String AppBase = "";
+    // 项目名称
+    public static String AppName = "BudWk v6";
+    // 项目短名称
+    public static String AppShrotName = "v6";
+    // 项目域名
+    public static String AppDomain = "http://127.0.0.1";
+    // 文件访问域名
+    public static String AppFileDomain = "";
+    // 文件上传路径
+    public static String AppUploadBase = "/upload";
+    // 系统自定义参数
+    public static NutMap MyConfig = NutMap.NEW();
+    // 微信map
+    public static NutMap WxMap = NutMap.NEW();
+    @Inject
+    private SysConfigService sysConfigService;
+
+    @Inject
+    private TaskPlatformService taskPlatformService;
+
+    public void init(SysTaskService sysTaskService) {
+        taskPlatformService.clear();
+        List<Sys_task> taskList = sysTaskService.query();
+        for (Sys_task sysTask : taskList) {
+            try {
+                if (!sysTask.isDisabled()) {
+                    taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron()
+                            , sysTask.getNote(), sysTask.getData());
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    public void init() {
+        initSysParam(sysConfigService);
+    }
+
+    public static void initSysParam(SysConfigService sysConfigService) {
+        Globals.MyConfig.clear();
+        List<Sys_config> configList = sysConfigService.query();
+        for (Sys_config sysConfig : configList) {
+            switch (Strings.sNull(sysConfig.getConfigKey())) {
+                case "AppName":
+                    Globals.AppName = sysConfig.getConfigValue();
+                    break;
+                case "AppShrotName":
+                    Globals.AppShrotName = sysConfig.getConfigValue();
+                    break;
+                case "AppDomain":
+                    Globals.AppDomain = sysConfig.getConfigValue();
+                    break;
+                case "AppFileDomain":
+                    Globals.AppFileDomain = sysConfig.getConfigValue();
+                    break;
+                case "AppUploadBase":
+                    Globals.AppUploadBase = sysConfig.getConfigValue();
+                    break;
+                default:
+                    break;
+            }
+            Globals.MyConfig.put(sysConfig.getConfigKey(), sysConfig.getConfigValue());
+        }
+    }
+
+    public static void initWx() {
+        Globals.WxMap.clear();
+    }
+}

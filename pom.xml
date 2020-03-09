@@ -5,17 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <name>budwk-nutzboot</name>
     <modules>
-        <module>wk-code-generator</module>
-        <module>wk-common</module>
-        <module>wk-module</module>
-        <module>wk-nb-service-sys</module>
-        <module>wk-nb-service-cms</module>
-        <module>wk-nb-service-wx</module>
-        <module>wk-nb-service-slog</module>
-        <module>wk-nb-task</module>
-        <module>wk-nb-web-api-open</module>
-        <module>wk-nb-web-api-daemon</module>
-        <module>wk-nb-web-admin</module>
+        <module>wk-nb-web</module>
         <module>wk-starter</module>
     </modules>
     <groupId>com.budwk.nb</groupId>
@@ -26,17 +16,12 @@
     <properties>
         <nutzboot.version>2.3.8-SNAPSHOT</nutzboot.version>
         <nutz.version>1.r.68-SNAPSHOT</nutz.version>
-        <zkclient.version>0.11</zkclient.version>
         <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <slf4j.version>1.7.26</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <swagger.version>2.1.1</swagger.version>
-        <!-- dubbo 及 sentinel 中netty版本保持一致 -->
-        <netty.version>4.1.34.Final</netty.version>
-        <jjwt.version>0.10.7</jjwt.version>
-        <lombok.version>1.18.10</lombok.version>
         <docker.image.prefix>budwk</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
