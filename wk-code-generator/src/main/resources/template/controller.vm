@@ -1,0 +1,245 @@
+package ${packageName}.web.controllers.platform.${table.ModelName};
+
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.commons.utils.PageUtil;
+import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
+import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
+import ${table.EntityFullClassName};
+import ${table.ServiceFullClassName};
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Cnd;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+import org.nutz.mvc.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+@IocBean
+@At("/api/{version}/platform/${table.ModelName}${table.UriPrefix}")
+@Ok("json")
+@ApiVersion("1.0.0")
+@OpenAPIDefinition(tags = {@Tag(name = "${table.ModelName}_${table.ModelSubName}")}, servers = {@Server(url = "/")})
+public class ${table.ControllerClassName} {
+    private static final Log log = Logs.get();
+
+    @Inject
+    @Reference(check = false)
+    private ${table.ServiceClassName} ${table.ServiceInstanceName};
+
+    @At("/list")
+    @POST
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
+    @RequiresAuthentication
+    @Operation(
+            tags = "${table.ModelName}_${table.ModelSubName}", summary = "分页查询",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer", format = "int32"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
+    public Object list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+        try {
+            Cnd cnd = Cnd.NEW();
+            if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
+                cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
+            }
+            return Result.success().addData(${table.ServiceInstanceName}.listPage(pageNo, pageSize, cnd));
+        } catch (Exception e) {
+            log.error(e);
+            return Result.error();
+        }
+    }
+
+    @At("/create")
+    @POST
+    @Ok("json")
+    @RequiresPermissions("${table.ModelName}.${table.Permissions}.create")
+    @SLog(tag = "新增", msg = "文本标题:${${table.EntityInstanceName}.id}")
+    @Operation(
+            tags = "${table.ModelName}_${table.ModelSubName}", summary = "新增",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "${table.ModelName}.${table.Permissions}.create")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = ${table.EntityClassName}.class
+    )
+    public Object create(@Param("..") ${table.EntityClassName} ${table.EntityInstanceName}, HttpServletRequest req) {
+        try {
+            ${table.EntityInstanceName}.setCreatedBy(StringUtil.getPlatformUid());
+            ${table.EntityInstanceName}.setUpdatedBy(StringUtil.getPlatformUid());
+            ${table.ServiceInstanceName}.insert(${table.EntityInstanceName});
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/update")
+    @POST
+    @Ok("json")
+    @RequiresPermissions("${table.ModelName}.${table.Permissions}.update")
+    @SLog(tag = "修改", msg = "ID:${${table.EntityInstanceName}.id}")
+    @Operation(
+            tags = "${table.ModelName}_${table.ModelSubName}", summary = "修改",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "${table.ModelName}.${table.Permissions}.update")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            implementation = ${table.EntityClassName}.class
+    )
+    public Object update(@Param("..") ${table.EntityClassName} ${table.EntityInstanceName}, HttpServletRequest req) {
+        try {
+            ${table.EntityInstanceName}.setUpdatedBy(StringUtil.getPlatformUid());
+            ${table.ServiceInstanceName}.updateIgnoreNull(${table.EntityInstanceName});
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/get/{id}")
+    @GET
+    @Ok("json")
+    @RequiresAuthentication
+    @Operation(
+            tags = "${table.ModelName}_${table.ModelSubName}", summary = "获取",
+            security = {
+                    @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    public Object get(String id, HttpServletRequest req) {
+        try {
+            return Result.success().addData(${table.ServiceInstanceName}.fetch(id));
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/delete_more")
+    @Ok("json")
+    @POST
+    @RequiresPermissions("${table.ModelName}.${table.Permissions}.delete")
+    @SLog(tag = "批量删除")
+    @Operation(
+            tags = "${table.ModelName}_${table.ModelSubName}", summary = "批量删除",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "${table.ModelName}.${table.Permissions}.delete")
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "ids", example = "a,b", description = "ID数组", required = true),
+                    @ApiFormParam(name = "titles", example = "a,b", description = "删除内容数组", required = true)
+            }
+    )
+    public Object deleteMore(@Param("ids") String[] ids, @Param("titles") String titles, HttpServletRequest req) {
+        try {
+            if (ids == null) {
+                return Result.error("system.error.invalid");
+            }
+            ${table.ServiceInstanceName}.delete(ids);
+            req.setAttribute("_slog_msg", String.format("删除内容:%s", titles));
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+
+    @At("/delete/{id}")
+    @Ok("json")
+    @DELETE
+    @RequiresPermissions("${table.ModelName}.${table.Permissions}.delete")
+    @SLog(tag = "删除")
+    @Operation(
+            tags = "${table.ModelName}_${table.ModelSubName}", summary = "删除",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "${table.ModelName}.${table.Permissions}.delete")
+            },
+            parameters = {
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    public Object delete(String id, HttpServletRequest req) {
+        try {
+            ${table.EntityClassName} ${table.EntityInstanceName} = ${table.ServiceInstanceName}.fetch(id);
+            if (${table.EntityInstanceName} == null) {
+                return Result.error("system.error.noData");
+            }
+            ${table.ServiceInstanceName}.delete(id);
+            req.setAttribute("_slog_msg", String.format("删除内容:%s", ${table.EntityInstanceName}.getId()));
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
+}
