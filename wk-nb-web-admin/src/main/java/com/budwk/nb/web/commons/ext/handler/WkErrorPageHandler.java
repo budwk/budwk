@@ -39,7 +39,7 @@ public class WkErrorPageHandler extends ErrorPageErrorHandler {
                 log.error(e);
             }
         }
-        super.handle(target, baseRequest, request, response);
+        super.doError(target, baseRequest, request, response);
     }
 
     private boolean isAjax(ServletRequest req) {
