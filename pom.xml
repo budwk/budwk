@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <name>budwk-nutzboot</name>
     <modules>
+        <module>wk-code-generator</module>
         <module>wk-nb-web</module>
         <module>wk-starter</module>
     </modules>
@@ -14,8 +15,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <nutzboot.version>2.3.8-SNAPSHOT</nutzboot.version>
-        <nutz.version>1.r.68-SNAPSHOT</nutz.version>
+        <nutzboot.version>2.3.9.v20200309</nutzboot.version>
+        <nutz.version>1.r.68.v20200309</nutz.version>
         <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>

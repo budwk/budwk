@@ -1,0 +1,8 @@
+package ${table.SerPackageName};
+
+import ${table.EntityFullClassName};
+import com.budwk.nb.commons.base.service.BaseService;
+
+public interface ${table.ServiceClassName} extends BaseService<${table.EntityClassName}>{
+
+}
