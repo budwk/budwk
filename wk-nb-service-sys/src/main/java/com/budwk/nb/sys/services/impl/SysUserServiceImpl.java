@@ -26,12 +26,14 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysUserService.class)
-@CacheDefaults(cacheName = "sys_user")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_user")
 public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements SysUserService {
     public SysUserServiceImpl(Dao dao) {
         super(dao);

@@ -18,9 +18,11 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = CmsLinkService.class)
-@CacheDefaults(cacheName = "cms_link")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "cms_link")
 public class CmsLinkServiceImpl extends BaseServiceImpl<Cms_link> implements CmsLinkService {
     public CmsLinkServiceImpl(Dao dao) {
         super(dao);

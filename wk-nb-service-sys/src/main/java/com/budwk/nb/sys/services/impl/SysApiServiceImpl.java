@@ -15,13 +15,15 @@ import org.nutz.plugins.wkcache.annotation.CacheRemove;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 
 /**
  * @author wizzer(wizzer @ qq.com) on 2018/3/16.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysApiService.class)
-@CacheDefaults(cacheName = "sys_api")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_api")
 public class SysApiServiceImpl extends BaseServiceImpl<Sys_api> implements SysApiService {
     public SysApiServiceImpl(Dao dao) {
         super(dao);

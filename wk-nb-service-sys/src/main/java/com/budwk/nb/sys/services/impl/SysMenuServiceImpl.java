@@ -22,12 +22,14 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer@qq.com) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMenuService.class)
-@CacheDefaults(cacheName = "sys_menu")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_menu")
 public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements SysMenuService {
     public SysMenuServiceImpl(Dao dao) {
         super(dao);

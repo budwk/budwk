@@ -193,6 +193,7 @@ public class NutzReader implements OpenApiReader {
     }
 
 
+    @SuppressWarnings(value={"unchecked", "deprecation"})
     public OpenAPI read(Class<?> cls,
                         String parentPath,
                         String parentMethod,

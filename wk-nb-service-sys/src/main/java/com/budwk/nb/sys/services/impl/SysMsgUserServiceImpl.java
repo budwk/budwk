@@ -15,12 +15,14 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer@qq.com) on 2019/12/12.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMsgUserService.class)
-@CacheDefaults(cacheName = "sys_msg_user", cacheLiveTime = 300)
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_msg_user", cacheLiveTime = 300)
 public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> implements SysMsgUserService {
     public SysMsgUserServiceImpl(Dao dao) {
         super(dao);
