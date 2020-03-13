@@ -149,7 +149,7 @@ public class CmsLinkClassController {
         try {
             Cms_link_class dbClass = cmsLinkClassService.fetch(linkClass.getId());
             if (!Strings.sNull(linkClass.getCode()).equals(dbClass.getCode())) {
-                int codeCount = cmsLinkClassService.count(Cnd.where("code", "=", Strings.sNull(dbClass.getCode())));
+                int codeCount = cmsLinkClassService.count(Cnd.where("code", "=", Strings.sNull(linkClass.getCode())));
                 if (codeCount > 0) {
                     return Result.error("cms.links.class.form.code.exist");
                 }

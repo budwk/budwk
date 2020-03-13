@@ -328,7 +328,7 @@ public class CmsChannelController {
         try {
             Cms_channel dbChannel = cmsChannelService.fetch(channel.getId());
             if (!Strings.sNull(channel.getCode()).equals(dbChannel.getCode())) {
-                int codeCount = cmsChannelService.count(Cnd.where("code", "=", Strings.sNull(dbChannel.getCode())));
+                int codeCount = cmsChannelService.count(Cnd.where("code", "=", Strings.sNull(channel.getCode())));
                 if (codeCount > 0) {
                     return Result.error("cms.content.channel.form.code.exist");
                 }
