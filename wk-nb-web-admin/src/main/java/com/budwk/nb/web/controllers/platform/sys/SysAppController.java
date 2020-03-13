@@ -49,6 +49,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.*;
 
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_APP_DEPLOY;
+
 /**
  * @author wizzer(wizzer.cn)
  * @date 2020/1/10
@@ -146,7 +148,7 @@ public class SysAppController {
     @SuppressWarnings("unchecked")
     public Object getOsData(@Param("hostName") String hostName) {
         try {
-            Set<String> set = redisService.keys("logback:deploy:" + hostName + ":*");
+            Set<String> set = redisService.keys(REDIS_KEY_APP_DEPLOY + hostName + ":*");
             List<String> list = new ArrayList<>(set);
             Collections.sort(list);
             List<NutMap> dataList = new ArrayList<>();

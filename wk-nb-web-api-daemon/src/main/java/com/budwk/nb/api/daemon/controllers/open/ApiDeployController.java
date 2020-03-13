@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_APP_DEPLOY;
+
 /**
  * 应用管理服务端接口
  *
@@ -99,7 +101,7 @@ public class ApiDeployController {
                     .addv("hdd_free", hddFree)
                     .addv("hdd_percent", hddPercent)
                     .addv("timestamp", timestamp);
-            redisService.setex("logback:deploy:" + hostname + ":" + timestamp, 10 * 60, Json.toJson(map, JsonFormat.compact()));
+            redisService.setex(REDIS_KEY_APP_DEPLOY + hostname + ":" + timestamp, 10 * 60, Json.toJson(map, JsonFormat.compact()));
             return Result.success("获取成功").addData(list);
         } catch (Exception e) {
             log.error(e);
