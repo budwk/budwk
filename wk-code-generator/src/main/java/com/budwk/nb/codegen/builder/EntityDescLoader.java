@@ -23,7 +23,7 @@ public class EntityDescLoader extends Loader {
     private static final Log log = Logs.get();
 
     @Override
-    public Map<String, TableDescriptor> loadTables(Ioc ioc, String basePackageName, String basePath, String baseUri, String servPackageName, String modPackageName,List<String> needTables) throws Exception {
+    public Map<String, TableDescriptor> loadTables(Ioc ioc, String basePackageName, String basePath, String baseUri, String servPackageName, String modPackageName, List<String> needTables, String tableNamePrefix) throws Exception {
         Map<String, TableDescriptor> tables = new HashMap<String, TableDescriptor>();
         List<Class<?>> ks = Scans.me().scanPackage(modPackageName);
         for (Class thatClass : ks) {
@@ -33,7 +33,11 @@ public class EntityDescLoader extends Loader {
                 continue;
             }
             String tableName = tableAnno.value();
-            if(!needTables.contains(tableName.toLowerCase())){
+            if (tableNamePrefix.endsWith("*")) {
+                if (!tableName.toLowerCase().startsWith(tableNamePrefix.substring(0, tableNamePrefix.length() - 1))) {
+                    continue;
+                }
+            } else if (!needTables.contains(tableName.toLowerCase())) {
                 continue;
             }
             String entityName = thatClass.getSimpleName();

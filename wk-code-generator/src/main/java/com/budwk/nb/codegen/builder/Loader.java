@@ -12,6 +12,6 @@ import java.util.Map;
 public abstract class Loader {
 
     public abstract Map<String, TableDescriptor> loadTables(Ioc ioc,
-                                                            String basePackageName, String basePath, String baseUri, String servPackageName, String modPackageName, List<String> tables) throws Exception;
+                                                            String basePackageName, String basePath, String baseUri, String servPackageName, String modPackageName, List<String> tables, String tableNamePrefix) throws Exception;
 
 }
