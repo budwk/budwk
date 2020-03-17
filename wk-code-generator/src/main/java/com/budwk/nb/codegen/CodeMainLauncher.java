@@ -44,6 +44,7 @@ public class CodeMainLauncher {
 
 
     public void init() throws Exception {
+        String tableNamePrefix = conf.get("codegen.tables.prefix", "");
         List<String> confTables = conf.getList("codegen.tables", ",");
         if (confTables.size() == 0) {
             log.error("未设置表名...");
@@ -67,7 +68,7 @@ public class CodeMainLauncher {
                 basePath,
                 baseUri,
                 servicePackageName,
-                modelPackageName, needTables);
+                modelPackageName, needTables, tableNamePrefix);
         for (Map.Entry<String, TableDescriptor> entry : tables.entrySet()) {
             String tableName = entry.getKey();
             if (includePattern != null) {
