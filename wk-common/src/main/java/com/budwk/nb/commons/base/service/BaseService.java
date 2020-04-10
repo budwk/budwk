@@ -654,6 +654,25 @@ public interface BaseService<T> {
     List<T> listEntity(Sql sql);
 
     /**
+     * 自定义sql分页查询并返回单表对象
+     *
+     * @param pageNumber
+     * @param sql
+     * @return
+     */
+    Pagination listPageEntity(Integer pageNumber, Sql sql);
+
+    /**
+     * 自定义sql分页查询并返回单表对象
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sql
+     * @return
+     */
+    Pagination listPageEntity(Integer pageNumber, int pageSize, Sql sql);
+
+    /**
      * 自定义sql获取map key-value
      *
      * @param sql

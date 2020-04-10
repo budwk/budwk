@@ -942,6 +942,38 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
     }
 
     /**
+     * 自定义sql分页查询并返回单表对象
+     *
+     * @param pageNumber
+     * @param sql
+     * @return
+     */
+    @Override
+    public Pagination listPageEntity(Integer pageNumber, Sql sql) {
+        return listPageEntity(pageNumber, DEFAULT_PAGE_NUMBER, sql);
+    }
+
+    /**
+     * 自定义sql分页查询并返回单表对象
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sql
+     * @return
+     */
+    @Override
+    public Pagination listPageEntity(Integer pageNumber, int pageSize, Sql sql) {
+        pageNumber = getPageNumber(pageNumber);
+        pageSize = getPageSize(pageSize);
+        Pager pager = this.dao().createPager(pageNumber, pageSize);
+        pager.setRecordCount((int) Daos.queryCount(this.dao(), sql));// 记录数需手动设置
+        sql.setPager(pager);
+        sql.setCallback(Sqls.callback.entities());
+        this.dao().execute(sql);
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), sql.getList(getEntityClass()));
+    }
+    
+    /**
      * 自定义sql获取map key-value
      *
      * @param sql
