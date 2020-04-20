@@ -968,11 +968,12 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
         Pager pager = this.dao().createPager(pageNumber, pageSize);
         pager.setRecordCount((int) Daos.queryCount(this.dao(), sql));// 记录数需手动设置
         sql.setPager(pager);
+        sql.setEntity(getEntity());
         sql.setCallback(Sqls.callback.entities());
         this.dao().execute(sql);
         return new Pagination(pageNumber, pageSize, pager.getRecordCount(), sql.getList(getEntityClass()));
     }
-    
+
     /**
      * 自定义sql获取map key-value
      *
