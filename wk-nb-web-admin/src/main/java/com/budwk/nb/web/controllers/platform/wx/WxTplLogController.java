@@ -8,6 +8,8 @@ import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.wx.services.WxTplLogService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -48,6 +50,9 @@ public class WxTplLogController {
             tags = "微信_模板消息_发送日志", summary = "分页查询模板日志",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

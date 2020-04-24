@@ -58,6 +58,9 @@ public class SysApiController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.api")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -99,6 +102,9 @@ public class SysApiController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.api.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -133,7 +139,8 @@ public class SysApiController {
                     @SecurityRequirement(name = "sys.config.api.delete")
             },
             parameters = {
-                    @Parameter(name = "appid", description = "appid", in = ParameterIn.PATH)
+                    @Parameter(name = "appid", description = "appid", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -161,7 +168,9 @@ public class SysApiController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.api.update")
-            },
+            }, parameters = {
+            @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+    },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(

@@ -71,7 +71,8 @@ public class CmsArticleController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -80,9 +81,9 @@ public class CmsArticleController {
                             content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
             }
     )
-    public Object getChannelTree(String siteid,HttpServletRequest req) {
+    public Object getChannelTree(String siteid, HttpServletRequest req) {
         try {
-            List<Cms_channel> list = cmsChannelService.query(Cnd.where("siteid","=",siteid).asc("location").asc("path"));
+            List<Cms_channel> list = cmsChannelService.query(Cnd.where("siteid", "=", siteid).asc("location").asc("path"));
             NutMap nutMap = NutMap.NEW();
             for (Cms_channel channel : list) {
                 List<Cms_channel> list1 = nutMap.getList(channel.getParentId(), Cms_channel.class);
@@ -125,6 +126,9 @@ public class CmsArticleController {
             tags = "CMS_文章管理", summary = "分页查询文章",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -176,6 +180,9 @@ public class CmsArticleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.article.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -214,6 +221,9 @@ public class CmsArticleController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.article.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -258,6 +268,9 @@ public class CmsArticleController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.article.delete")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -297,7 +310,8 @@ public class CmsArticleController {
                     @SecurityRequirement(name = "cms.content.article.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "文章ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "文章ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -331,7 +345,8 @@ public class CmsArticleController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -367,7 +382,8 @@ public class CmsArticleController {
                     @SecurityRequirement(name = "cms.content.article.update")
             },
             parameters = {
-                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

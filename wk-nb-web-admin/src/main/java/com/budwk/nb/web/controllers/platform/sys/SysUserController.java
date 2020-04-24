@@ -96,6 +96,9 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -263,6 +266,9 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -302,6 +308,9 @@ public class SysUserController {
             tags = "系统_用户管理", summary = "设置用户头像",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -346,7 +355,8 @@ public class SysUserController {
                     @Parameter(name = "username", description = "用户姓名或昵称", required = false, in = ParameterIn.QUERY),
                     @Parameter(name = "email", description = "Email", required = false, in = ParameterIn.QUERY),
                     @Parameter(name = "mobile", description = "手机号", required = false, in = ParameterIn.QUERY),
-                    @Parameter(name = "avatar", description = "用户头像(URL)", required = false, in = ParameterIn.QUERY)
+                    @Parameter(name = "avatar", description = "用户头像(URL)", required = false, in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -401,6 +411,9 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -454,7 +467,8 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "用户ID", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "用户ID", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -486,7 +500,8 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "loginname", description = "用户名", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "loginname", description = "用户名", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -518,6 +533,9 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -538,7 +556,7 @@ public class SysUserController {
                     @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
             }
     )
-    public Object list(@Param("unitid")String unitid,String loginname, @Param("username") String username, @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Object list(@Param("unitid") String unitid, String loginname, @Param("username") String username, @Param("mobile") String mobile, @Param("email") String email, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         try {
             Cnd cnd = Cnd.NEW();
             if (shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
@@ -607,6 +625,9 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -673,6 +694,9 @@ public class SysUserController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -682,8 +706,8 @@ public class SysUserController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "id",description = "主键",required = true),
-                    @ApiFormParam(name = "disabled",description = "启用禁用",required = true,example = "true",type = "boolean")
+                    @ApiFormParam(name = "id", description = "主键", required = true),
+                    @ApiFormParam(name = "disabled", description = "启用禁用", required = true, example = "true", type = "boolean")
             }
     )
     public Object changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
@@ -724,6 +748,9 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.create")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -787,7 +814,8 @@ public class SysUserController {
             },
             parameters = {
                     @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH),
-                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -877,7 +905,8 @@ public class SysUserController {
                     @SecurityRequirement(name = "sys.manage.user.update")
             },
             parameters = {
-                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -915,7 +944,8 @@ public class SysUserController {
                     @SecurityRequirement(name = "sys.manage.user")
             },
             parameters = {
-                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -948,6 +978,9 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -984,7 +1017,8 @@ public class SysUserController {
                     @SecurityRequirement(name = "sys.manage.user.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "用户ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -1022,6 +1056,9 @@ public class SysUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.user.delete")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -1082,7 +1119,8 @@ public class SysUserController {
                     @Parameter(name = "pageNo", description = "页码", example = "1", in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
                     @Parameter(name = "pageSize", description = "页大小", example = "10", in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
                     @Parameter(name = "pageOrderName", description = "排序字段", example = "loginname", in = ParameterIn.QUERY),
-                    @Parameter(name = "pageOrderBy", description = "排序方式", example = "descending", in = ParameterIn.QUERY)
+                    @Parameter(name = "pageOrderBy", description = "排序方式", example = "descending", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

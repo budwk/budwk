@@ -8,7 +8,6 @@ import com.budwk.nb.commons.utils.StringUtil;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_task;
-import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysTaskService;
 import com.budwk.nb.task.services.TaskPlatformService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -34,10 +33,9 @@ import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Path;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/12/14
+ * @author wizzer(wizzer @ qq.com) on 2019/12/14
  */
 @IocBean
 @At("/api/{version}/platform/sys/task")
@@ -63,6 +61,9 @@ public class SysTaskController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -102,6 +103,9 @@ public class SysTaskController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task.create")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -143,7 +147,8 @@ public class SysTaskController {
                     @SecurityRequirement(name = "sys.manage.task.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "定时任务ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "定时任务ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -182,6 +187,9 @@ public class SysTaskController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -191,8 +199,8 @@ public class SysTaskController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "id",description = "主键",required = true),
-                    @ApiFormParam(name = "disabled",description = "启用禁用",required = true,example = "true",type = "boolean")
+                    @ApiFormParam(name = "id", description = "主键", required = true),
+                    @ApiFormParam(name = "disabled", description = "启用禁用", required = true, example = "true", type = "boolean")
             }
     )
     public Object changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
@@ -241,7 +249,8 @@ public class SysTaskController {
                     @SecurityRequirement(name = "sys.manage.task")
             },
             parameters = {
-                    @Parameter(name = "id", description = "定时任务ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "定时任务ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -273,6 +282,9 @@ public class SysTaskController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.task.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

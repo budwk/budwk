@@ -68,6 +68,9 @@ public class CmsChannelController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -101,6 +104,9 @@ public class CmsChannelController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -127,7 +133,8 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "siteId", description = "站点ID", in = ParameterIn.PATH)
+                    @Parameter(name = "siteId", description = "站点ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -179,7 +186,8 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "siteId", description = "站点ID", in = ParameterIn.PATH)
+                    @Parameter(name = "siteId", description = "站点ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -236,6 +244,9 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.channel.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -279,7 +290,8 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "cms.content.channel")
             },
             parameters = {
-                    @Parameter(name = "id", description = "栏目ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "栏目ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -317,6 +329,9 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.channel.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -330,7 +345,7 @@ public class CmsChannelController {
     public Object update(@Param("..") Cms_channel channel, HttpServletRequest req) {
         try {
             Cms_channel dbChannel = cmsChannelService.fetch(channel.getId());
-            if(!Strings.sNull(channel.getCode()).equals(dbChannel.getCode())) {
+            if (!Strings.sNull(channel.getCode()).equals(dbChannel.getCode())) {
                 int codeCount = cmsChannelService.count(Cnd.where("code", "=", Strings.sNull(channel.getCode())));
                 if (codeCount > 0) {
                     return Result.error("cms.content.channel.form.code.exist");
@@ -357,7 +372,8 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "cms.content.channel.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "栏目ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "栏目ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -388,6 +404,9 @@ public class CmsChannelController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.content.channel.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -432,7 +451,8 @@ public class CmsChannelController {
                     @SecurityRequirement(name = "cms.content.channel")
             },
             parameters = {
-                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -486,7 +506,8 @@ public class CmsChannelController {
             },
             requestBody = @RequestBody(content = @Content()),
             parameters = {
-                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH)
+                    @Parameter(name = "siteid", description = "站点ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             responses = {
                     @ApiResponse(

@@ -6,7 +6,6 @@ var chain={
 			  "org.nutz.mvc.impl.processor.UpdateRequestAttributesProcessor",
 		      "org.nutz.mvc.impl.processor.EncodingProcessor",
 		      "org.nutz.mvc.impl.processor.ModuleProcessor",
-			  "com.budwk.nb.web.commons.processor.WkUserTokenProcessor",
 			  "com.budwk.nb.web.commons.processor.WkShiroProcessor",
               "com.budwk.nb.web.commons.processor.XssSqlFilterProcessor",
 		      "org.nutz.mvc.impl.processor.ActionFiltersProcessor",

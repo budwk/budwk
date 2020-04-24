@@ -62,6 +62,9 @@ public class SysLangController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -90,6 +93,9 @@ public class SysLangController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -99,7 +105,7 @@ public class SysLangController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "lang_key",description = "多语言KEY")
+                    @ApiFormParam(name = "lang_key", description = "多语言KEY")
             }
     )
     public Object getLang(@Param("lang_key") String lang_key) {
@@ -129,6 +135,9 @@ public class SysLangController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang.create")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -179,6 +188,9 @@ public class SysLangController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -231,6 +243,9 @@ public class SysLangController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -274,6 +289,9 @@ public class SysLangController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang.delete")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -307,6 +325,9 @@ public class SysLangController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.config.lang.delete")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

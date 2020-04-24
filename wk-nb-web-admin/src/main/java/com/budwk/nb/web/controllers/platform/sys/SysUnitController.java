@@ -67,7 +67,8 @@ public class SysUnitController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "pid", description = "父级ID", required = false, in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", required = false, in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -146,7 +147,8 @@ public class SysUnitController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "pid", description = "父级ID", required = false, in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", required = false, in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -228,6 +230,9 @@ public class SysUnitController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.unit.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -237,7 +242,7 @@ public class SysUnitController {
     )
     @ApiFormParams(
             apiFormParams = {
-                    @ApiFormParam(name = "parentId",description = "父级ID")
+                    @ApiFormParam(name = "parentId", description = "父级ID")
             },
             implementation = Sys_unit.class
     )
@@ -271,7 +276,8 @@ public class SysUnitController {
                     @SecurityRequirement(name = "sys.manage.unit.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "单位ID", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "单位ID", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -310,7 +316,8 @@ public class SysUnitController {
                     @SecurityRequirement(name = "sys.manage.unit")
             },
             parameters = {
-                    @Parameter(name = "id", description = "单位ID", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "单位ID", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -364,6 +371,9 @@ public class SysUnitController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.unit.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -395,6 +405,9 @@ public class SysUnitController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.unit")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -511,6 +524,9 @@ public class SysUnitController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.unit.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

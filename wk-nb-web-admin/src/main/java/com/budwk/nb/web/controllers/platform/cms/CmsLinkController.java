@@ -62,6 +62,9 @@ public class CmsLinkController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -96,6 +99,9 @@ public class CmsLinkController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.links.link")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -140,6 +146,9 @@ public class CmsLinkController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.links.link.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -172,6 +181,9 @@ public class CmsLinkController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.links.link.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -202,7 +214,8 @@ public class CmsLinkController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -229,7 +242,9 @@ public class CmsLinkController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "cms.links.link.delete")
-            },
+            }, parameters = {
+            @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+    },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -268,7 +283,8 @@ public class CmsLinkController {
                     @SecurityRequirement(name = "cms.links.link.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

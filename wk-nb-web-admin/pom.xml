@@ -190,6 +190,11 @@
             <artifactId>nutzboot-starter-ftp</artifactId>
             <version>${nutzboot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

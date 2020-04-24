@@ -15,8 +15,11 @@ import com.budwk.nb.web.commons.shiro.exception.CaptchaEmptyException;
 import com.budwk.nb.web.commons.shiro.exception.CaptchaIncorrectException;
 import com.budwk.nb.web.commons.shiro.filter.PlatformAuthenticationFilter;
 import com.budwk.nb.web.commons.slog.SLogServer;
+import com.budwk.nb.web.commons.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -162,8 +165,7 @@ public class SysLoginController {
             sysLog.setUsername(user.getUsername());
             sysLog.setLoginname(user.getLoginname());
             sLogServer.async(sysLog);
-            long now = Times.getTS();
-            String userToken = StringUtil.generateUserToken(user.getId(), now, "budwk.com");
+            String userToken = JwtUtil.sign(user, RedisKeySessionTTL * 1000);
             session.setAttribute("userToken", userToken);
             session.setAttribute("userId", user.getId());
             redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":" + userToken, RedisKeySessionTTL, session.getId());
@@ -206,6 +208,9 @@ public class SysLoginController {
             tags = "系统_系统登陆", summary = "退出登陆",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

@@ -86,6 +86,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -133,6 +136,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -171,6 +177,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -204,6 +213,9 @@ public class SysAppController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -251,6 +263,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -290,7 +305,8 @@ public class SysAppController {
                     @SecurityRequirement(name = "sys.server.app.instance")
             },
             parameters = {
-                    @Parameter(name = "id", description = "任务ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "任务ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -319,6 +335,9 @@ public class SysAppController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.loglevel")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -362,6 +381,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.jar")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -404,6 +426,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.jar.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -442,6 +467,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.jar")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -470,7 +498,8 @@ public class SysAppController {
                     @SecurityRequirement(name = "sys.server.app.jar.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -504,6 +533,9 @@ public class SysAppController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.jar.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -547,6 +579,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.conf")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -588,6 +623,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.conf.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -625,6 +663,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.conf")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -653,7 +694,8 @@ public class SysAppController {
                     @SecurityRequirement(name = "sys.server.app.conf.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -688,13 +730,14 @@ public class SysAppController {
                     @SecurityRequirement(name = "sys.server.app.conf")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
-                            content = @Content(schema = @Schema(example = "",name = "example"),mediaType = "text/properties"))
+                            content = @Content(schema = @Schema(example = "", name = "example"), mediaType = "text/properties"))
             }
     )
     public void confDownload(String id, HttpServletResponse response) {
@@ -722,7 +765,8 @@ public class SysAppController {
                     @SecurityRequirement(name = "sys.server.app.conf")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -754,6 +798,9 @@ public class SysAppController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.conf.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -784,6 +831,9 @@ public class SysAppController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.server.app.conf.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

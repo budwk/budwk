@@ -71,6 +71,9 @@ public class WxMsgUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -125,7 +128,8 @@ public class WxMsgUserController {
                     @SecurityRequirement(name = "wx.msg.user.reply")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
