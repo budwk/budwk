@@ -646,6 +646,14 @@ public interface BaseService<T> {
     List<Record> list(Sql sql);
 
     /**
+     * 自定义SQL返回NutMap记录集，区分大小写
+     *
+     * @param sql
+     * @return
+     */
+    List<NutMap> listMap(Sql sql);
+
+    /**
      * 自定义查询,并返回当前实体类对象
      *
      * @param sql

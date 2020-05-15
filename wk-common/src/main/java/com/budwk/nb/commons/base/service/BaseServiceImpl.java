@@ -928,6 +928,19 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
     }
 
     /**
+     * 自定义SQL返回NutMap记录集，区分大小写
+     *
+     * @param sql
+     * @return
+     */
+    @Override
+    public List<NutMap> listMap(Sql sql) {
+        sql.setCallback(Sqls.callback.maps());
+        this.dao().execute(sql);
+        return sql.getList(NutMap.class);
+    }
+
+    /**
      * 自定义查询,并返回当前实体类对象
      *
      * @param sql
