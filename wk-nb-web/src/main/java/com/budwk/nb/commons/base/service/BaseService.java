@@ -1,10 +1,7 @@
 package com.budwk.nb.commons.base.service;
 
 import com.budwk.nb.commons.base.page.Pagination;
-import org.nutz.dao.Chain;
-import org.nutz.dao.Condition;
-import org.nutz.dao.Dao;
-import org.nutz.dao.FieldFilter;
+import org.nutz.dao.*;
 import org.nutz.dao.entity.Entity;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
@@ -21,6 +18,7 @@ public interface BaseService<T> {
 
     /**
      * 获取dao对象
+     *
      * @return
      */
     Dao dao();
@@ -411,6 +409,7 @@ public interface BaseService<T> {
 
     /**
      * 清空表
+     *
      * @param tableName 表名
      * @return
      */
@@ -418,6 +417,7 @@ public interface BaseService<T> {
 
     /**
      * 按条件清除一组数据
+     *
      * @param cnd 查询条件
      * @return
      */
@@ -425,8 +425,9 @@ public interface BaseService<T> {
 
     /**
      * 按条件清除一组数据
+     *
      * @param tableName 表名
-     * @param cnd 查询条件
+     * @param cnd       查询条件
      * @return
      */
     int clear(String tableName, Condition cnd);
@@ -465,8 +466,9 @@ public interface BaseService<T> {
 
     /**
      * 根据条件进行伪删除
+     *
      * @param tableName 表名
-     * @param cnd 查询条件
+     * @param cnd       查询条件
      * @return
      */
     int vDelete(String tableName, Condition cnd);
@@ -534,6 +536,7 @@ public interface BaseService<T> {
 
     /**
      * 关联查询全部数据
+     *
      * @param cnd      查询条件
      * @param linkName 关联字段，支持正则 ^(a|b)$
      * @return
@@ -652,6 +655,14 @@ public interface BaseService<T> {
      * @return
      */
     List<T> listEntity(Sql sql);
+
+    /**
+     * 自定义SQL返回NutMap记录集，区分大小写
+     *
+     * @param sql
+     * @return
+     */
+    List<NutMap> listMap(Sql sql);
 
     /**
      * 自定义sql获取map key-value
@@ -825,4 +836,22 @@ public interface BaseService<T> {
      */
     Pagination listPage(Integer pageNumber, int pageSize, String tableName, Condition cnd);
 
+    /**
+     * 分页查询并返回包含实体类内容的NutMap对象
+     *
+     * @param pageNumber
+     * @param cnd
+     * @return
+     */
+    Pagination listPageMap(Integer pageNumber, Cnd cnd);
+
+    /**
+     * 分页查询并返回包含实体类内容的NutMap对象
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param cnd
+     * @return
+     */
+    Pagination listPageMap(Integer pageNumber, int pageSize, Cnd cnd);
 }
