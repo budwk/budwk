@@ -85,7 +85,7 @@ public class SLogServiceImpl implements SLogSerivce {
             cur.skip((pageNumber - 1) * pageSize);
             cur.limit(pageSize);
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
-                ZMoDoc sortDoc = ZMoDoc.NEW("createAt", "asc".equals(pageOrderBy) ? 1 : -1);
+                ZMoDoc sortDoc = ZMoDoc.NEW("createdAt", "asc".equals(pageOrderBy) ? 1 : -1);
                 cur.sort(sortDoc);
             }
             List<DBObject> objects = new ArrayList<>();
