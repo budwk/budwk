@@ -90,6 +90,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
     @Override
     @Aop(TransAop.READ_COMMITTED)
     public void edit(Sys_menu menu, String pid, List<NutMap> datas) {
+        if (this.count(Cnd.where("parentId", "=", menu.getId()).and("type","=","menu")) > 0) {
+            menu.setHasChildren(true);
+        }
         this.updateIgnoreNull(menu);
         if (datas == null || datas.size() == 0) {
             //如果子权限是空,那就清空咯
