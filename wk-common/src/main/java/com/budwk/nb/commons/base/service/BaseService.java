@@ -1,7 +1,10 @@
 package com.budwk.nb.commons.base.service;
 
 import com.budwk.nb.commons.base.page.Pagination;
-import org.nutz.dao.*;
+import org.nutz.dao.Chain;
+import org.nutz.dao.Condition;
+import org.nutz.dao.Dao;
+import org.nutz.dao.FieldFilter;
 import org.nutz.dao.entity.Entity;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
@@ -862,7 +865,7 @@ public interface BaseService<T> {
      * @param cnd
      * @return
      */
-    Pagination listPageMap(Integer pageNumber, Cnd cnd);
+    Pagination listPageMap(Integer pageNumber, Condition cnd);
 
     /**
      * 分页查询并返回包含实体类内容的NutMap对象
@@ -872,5 +875,5 @@ public interface BaseService<T> {
      * @param cnd
      * @return
      */
-    Pagination listPageMap(Integer pageNumber, int pageSize, Cnd cnd);
+    Pagination listPageMap(Integer pageNumber, int pageSize, Condition cnd);
 }

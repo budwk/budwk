@@ -1299,7 +1299,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @return
      */
     @Override
-    public Pagination listPageMap(Integer pageNumber, Cnd cnd) {
+    public Pagination listPageMap(Integer pageNumber, Condition cnd) {
         return listPageMap(pageNumber, DEFAULT_PAGE_NUMBER, cnd);
     }
 
@@ -1312,7 +1312,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @return
      */
     @Override
-    public Pagination listPageMap(Integer pageNumber, int pageSize, Cnd cnd) {
+    public Pagination listPageMap(Integer pageNumber, int pageSize, Condition cnd) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
         Pager pager = this.dao().createPager(pageNumber, pageSize);
