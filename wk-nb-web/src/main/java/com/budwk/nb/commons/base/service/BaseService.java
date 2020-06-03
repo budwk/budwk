@@ -843,7 +843,7 @@ public interface BaseService<T> {
      * @param cnd
      * @return
      */
-    Pagination listPageMap(Integer pageNumber, Cnd cnd);
+    Pagination listPageMap(Integer pageNumber, Condition cnd);
 
     /**
      * 分页查询并返回包含实体类内容的NutMap对象
@@ -853,5 +853,5 @@ public interface BaseService<T> {
      * @param cnd
      * @return
      */
-    Pagination listPageMap(Integer pageNumber, int pageSize, Cnd cnd);
+    Pagination listPageMap(Integer pageNumber, int pageSize, Condition cnd);
 }
