@@ -36,7 +36,7 @@ public class SLogServiceImpl implements SLogSerivce {
 
     public void init() {
         if ("mongo".equals(dbType)) {
-            this.zMoDB = ioc.get(ZMoDB.class);
+            this.zMoDB = ioc.get(ZMoDB.class, "zmodb");
             this.zMoCo = zMoDB.cc(Sys_log.class.getSimpleName(), false);
         }
     }
