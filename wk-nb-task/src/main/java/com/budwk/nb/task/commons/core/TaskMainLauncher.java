@@ -50,7 +50,7 @@ public class TaskMainLauncher {
     }
 
     public void init() {
-        if (!dao.exists("sys_qrtz_triggers")) {
+        if (!dao.exists("sys_qrtz_triggers") && !dao.exists("SYS_QRTZ_TRIGGERS")) {
             //执行Quartz SQL脚本
             String dbType = dao.getJdbcExpert().getDatabaseType();
             log.debug("dbType:::" + dbType);
