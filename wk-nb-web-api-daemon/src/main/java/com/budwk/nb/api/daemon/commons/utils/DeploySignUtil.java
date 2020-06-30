@@ -42,7 +42,7 @@ public class DeploySignUtil {
                 return Result.error(1, "appid不正确");
             }
             // 时间戳相差大于1分钟则为无效的
-            if (Times.getTS() - Long.valueOf(timestamp) > TIMEOUT_ONE_MINIUTE) {
+            if (Times.getTS() - Long.parseLong(timestamp) > TIMEOUT_ONE_MINIUTE) {
                 return Result.error(2, "timestamp不正确");
             }
             String nonceCache = redisService.get(RedisConstant.REDIS_KEY_API_SIGN_DEPLOY_NONCE + appid + "_" + nonce);
