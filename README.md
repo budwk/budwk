@@ -54,16 +54,7 @@ https://budwk.com/donation  赞助者
 | 模块名称                                     | 介绍                                     |
 | ---------------------------------------- | ---------------------------------------- |
 |[wk-code-generator](wk-code-generator) |代码生成器|
-|[wk-common](wk-common) |框架公共模块,工具类,枚举类,常量类等|
-|[wk-module](wk-module) |POJO类,接口类|
-|[wk-nb-service-sys](wk-nb-service-sys) |系统管理模块,dubbo服务端,组织架构/权限管理等|
-|[wk-nb-service-cms](wk-nb-service-cms) |CMS管理模块,dubbo服务端,ig主键生成器及wkcache方法缓存演示|
-|[wk-nb-service-wx](wk-nb-service-wx) |微信管理模块,dubbo服务端,微信及微信支付功能演示|
-|[wk-nb-service-slog](wk-nb-service-slog) |SLog日志服务,dubbo服务端|
-|[wk-nb-task](wk-nb-task) |定时任务模块,dubbo服务端,支持基于数据库的集群|
-|[wk-nb-web-admin](wk-nb-web-admin) |WEB管理后台API服务,dubbo消费端,Mvc Http API|
-|[wk-nb-web-api-daemon](wk-nb-api-daemon) |应用管理服务守护API,dubbo消费端,Mvc Http API|
-|[wk-nb-web-api-open](wk-nb-api-open) |API Sign/JWT Token示例,dubbo消费端,Mvc Http API|
+|[wk-nb-web](wk-nb-web) |含系统/CMS/微信/SLog日志/定时任务等模块,以及Web API|
 
 ## 技术选型
 ### 后端技术
@@ -71,10 +62,8 @@ https://budwk.com/donation  赞助者
 ----|------|----
 Nutz | JavaEE应用程序框架  | [https://nutzam.com](https://nutzam.com)
 NutzBoot | 微服务开发框架  | [https://github.com/nutzam/nutzboot](https://github.com/nutzam/nutzboot)
-Apache Shiro | 安全框架  | [https://shiro.apache.org](https://shiro.apache.org)
+Shiro | 安全框架  | [https://shiro.apache.org](https://shiro.apache.org)
 Druid | 数据库连接池  | [https://github.com/alibaba/druid](https://github.com/alibaba/druid)
-ZooKeeper | 分布式协调服务  | [https://zookeeper.apache.org](https://zookeeper.apache.org)
-Dubbo | 分布式服务框架  | [https://dubbo.apache.org](https://dubbo.apache.org)
 Redis | 分布式缓存数据库  | [https://redis.io](https://redis.io)
 Quartz | 作业调度框架  | [https://www.quartz-scheduler.org](https://www.quartz-scheduler.org)
 Ehcache | 进程内缓存框架  | [https://www.ehcache.org](https://www.ehcache.org)
@@ -93,7 +82,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   MySql 创建名为 `budwk_v6_mini` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
 *   项目根目录执行 `mvn clean install -Dmaven.test.skip=true`
 *   在`wk-nb-web`模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
-*   启动顺序是 sys --> slog --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
+*   启动顺序是 wk-nb-web[后端] --> wk-vue-admin[前端]
 *   正常启动后访问 `http://127.0.0.1:9527` 用户名 superadmin 密码 1
 *   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [wizzer.cn 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
 
@@ -102,7 +91,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 ## API文档
 *   基于 Swagger 2.1.1 (OpenAPI v3)
-*   web-admin 项目启动时会自动生成API文档
+*   wk-nb-web 项目启动时会自动生成API文档
 *   访问文档 http://127.0.0.1:9527/swagger 
 *   导出文档 http://127.0.0.1:9527/swagger/swagger.json 或 http://127.0.0.1:9527/swagger/swagger.yaml
 *   方法上必须加 `@GET @POST @PUT @DELETE` 注解和 `@Operation` 才会被扫描
