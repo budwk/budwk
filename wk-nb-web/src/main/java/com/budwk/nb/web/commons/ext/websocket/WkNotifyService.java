@@ -12,6 +12,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
@@ -86,11 +87,13 @@ public class WkNotifyService {
             List<Sys_msg_user> list = sysMsgUserService.getUnreadList(loginname, 1, 5);
             List<NutMap> mapList = new ArrayList<>();
             for (Sys_msg_user msgUser : list) {
-                mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType().getValue())
-                        .addv("typeText", msgUser.getMsg().getType().getText())
-                        .addv("title", msgUser.getMsg().getTitle())
-                        .addv("url", msgUser.getMsg().getUrl())
-                        .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(msgUser.getMsg().getSendAt()))));
+                if(Lang.isNotEmpty(msgUser.getMsg())) {
+                    mapList.add(NutMap.NEW().addv("msgId", msgUser.getMsgId()).addv("type", msgUser.getMsg().getType().getValue())
+                            .addv("typeText", msgUser.getMsg().getType().getText())
+                            .addv("title", msgUser.getMsg().getTitle())
+                            .addv("url", msgUser.getMsg().getUrl())
+                            .addv("time", Times.format("yyyy-MM-dd HH:mm", Times.D(msgUser.getMsg().getSendAt()))));
+                }
             }
             innerMsg(loginname, size, mapList);
         } catch (Exception e) {
