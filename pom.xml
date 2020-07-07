@@ -33,6 +33,7 @@
         <slf4j.version>1.7.26</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <swagger.version>2.1.1</swagger.version>
+        <dubbo.version>2.6.7</dubbo.version>
         <!-- dubbo 及 sentinel 中netty版本保持一致 -->
         <netty.version>4.1.34.Final</netty.version>
         <jjwt.version>0.10.7</jjwt.version>

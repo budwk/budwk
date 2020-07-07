@@ -28,7 +28,8 @@ https://budwk.com/donation  赞助者
 
 | 版本名称 | 版本特点 | 版本地址 | 运行方式 | 后端主要技术| 前端主要技术 | 浏览器兼容性 |
 | ---------|---------| ----------| ----------| ----------|----------|----------|
-| BudWk v6.x | 微服务分布式 + 前后端分离 |[v6.x](https://github.com/budwk/budwk-nutzboot/tree/v6.x)| jar,war | nutzboot + dubbo + shiro | nuxt + vue + elementUI | Chrome,IE10+ |
+| BudWk v6.x | 微服务分布式 + 前后端分离 |[v6.x](https://github.com/budwk/budwk-nutzboot/tree/v6.x)| jar,war | nutzboot + dubbo + zookeeper + shiro | nuxt + vue + elementUI | Chrome,IE10+ |
+| BudWk v6.x-nacos | 微服务分布式 + 前后端分离 |[v6.x-nacos](https://github.com/budwk/budwk-nutzboot/tree/v6.x-nacos)| jar,war | nutzboot + dubbo + nacos + shiro | nuxt + vue + elementUI | Chrome,IE10+ |
 | BudWk v6.x-mini | 微服务单应用 + 前后端分离 |[v6.x-mini](https://github.com/budwk/budwk-nutzboot/tree/v6.x-mini)| jar,war | nutzboot + shiro | nuxt + vue + elementUI | Chrome,IE10+ |
 | NutzWk v5.x| 微服务分布式 + 前端混合模式 |[v5.x](https://github.com/Wizzercn/NutzWk/tree/v5.x)| jar,war | nutzboot + dubbo + shiro + beetl | vue + elementUI + jquery 或 jquery + bootstrap 两个版本 | Chrome,IE9+ |
 | NutzWk v5.x-mini| 微服务单应用 + 前端混合模式 |[v5.x-mini](https://github.com/Wizzercn/NutzWk/tree/v5.x-mini)| jar,war | nutzboot + shiro + beetl | vue + elementUI + jquery | Chrome,IE9+ |
@@ -43,7 +44,7 @@ https://budwk.com/donation  赞助者
 *   JDK 8 181 + 或 OpenJDK 11 +
 *   Redis 4.0.8 +
 *   MySql 5.7 + 或 MariaDB、Oracle、SqlServer、达梦等
-*   Zookeeper 3.4.13 +
+*   Nacos 1.3.0 +
 
 ## 开发工具
 *   IntelliJ IDEA
@@ -75,7 +76,7 @@ Nutz | JavaEE应用程序框架  | [https://nutzam.com](https://nutzam.com)
 NutzBoot | 微服务开发框架  | [https://github.com/nutzam/nutzboot](https://github.com/nutzam/nutzboot)
 Apache Shiro | 安全框架  | [https://shiro.apache.org](https://shiro.apache.org)
 Druid | 数据库连接池  | [https://github.com/alibaba/druid](https://github.com/alibaba/druid)
-ZooKeeper | 分布式协调服务  | [https://zookeeper.apache.org](https://zookeeper.apache.org)
+Nacos | 注册中心和配置中心  | [https://nacos.io/](https://nacos.io/)
 Dubbo | 分布式服务框架  | [https://dubbo.apache.org](https://dubbo.apache.org)
 Redis | 分布式缓存数据库  | [https://redis.io](https://redis.io)
 Quartz | 作业调度框架  | [https://www.quartz-scheduler.org](https://www.quartz-scheduler.org)
