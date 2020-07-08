@@ -49,6 +49,9 @@ public class ApiSignServer {
             if (Times.getTS() - Long.parseLong(timestamp) > TIMEOUT_ONE_MINIUTE) {
                 return Result.error(500302, "system.api.error.timestamp");
             }
+            if (Strings.isBlank(nonce)) {
+                return Result.error(500303, "system.api.error.nonce");
+            }
             String nonceCache = redisService.get(RedisConstant.REDIS_KEY_API_SIGN_OPEN_NONCE + appid + "_" + nonce);
             // 如果一分钟内nonce是重复的则为无效,让nonce只能使用一次
             if (Strings.isNotBlank(nonceCache)) {

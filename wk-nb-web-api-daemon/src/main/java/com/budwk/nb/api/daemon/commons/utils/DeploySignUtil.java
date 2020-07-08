@@ -45,6 +45,9 @@ public class DeploySignUtil {
             if (Times.getTS() - Long.parseLong(timestamp) > TIMEOUT_ONE_MINIUTE) {
                 return Result.error(2, "timestamp不正确");
             }
+            if (Strings.isBlank(nonce)) {
+                return Result.error(3, "nonce不正确");
+            }
             String nonceCache = redisService.get(RedisConstant.REDIS_KEY_API_SIGN_DEPLOY_NONCE + appid + "_" + nonce);
             // 如果一分钟内nonce是重复的则为无效,让nonce只能使用一次
             if (Strings.isNotBlank(nonceCache)) {
