@@ -60,7 +60,8 @@ public class SysDictController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -102,7 +103,8 @@ public class SysDictController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -156,6 +158,9 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict.create")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -196,7 +201,8 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -233,7 +239,8 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -267,6 +274,9 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict.update")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -299,6 +309,9 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -349,6 +362,9 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict.update")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -391,6 +407,9 @@ public class SysDictController {
                     @SecurityRequirement(name = "sys.config.dict.update")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",

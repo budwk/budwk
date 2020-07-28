@@ -60,6 +60,9 @@ public class WxConfigController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -94,6 +97,9 @@ public class WxConfigController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.account.create")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -132,6 +138,9 @@ public class WxConfigController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.account.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -165,7 +174,8 @@ public class WxConfigController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -195,7 +205,8 @@ public class WxConfigController {
                     @SecurityRequirement(name = "wx.conf.account.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -230,6 +241,9 @@ public class WxConfigController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.account")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

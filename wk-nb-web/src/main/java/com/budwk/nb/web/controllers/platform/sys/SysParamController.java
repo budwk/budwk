@@ -58,6 +58,9 @@ public class SysParamController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.param")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -99,6 +102,9 @@ public class SysParamController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.param.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -134,7 +140,8 @@ public class SysParamController {
                     @SecurityRequirement(name = "sys.manage.param")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -165,6 +172,9 @@ public class SysParamController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.param.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -201,7 +211,8 @@ public class SysParamController {
                     @SecurityRequirement(name = "sys.manage.param.delete")
             },
             parameters = {
-                    @Parameter(name = "configKey", description = "configKey", in = ParameterIn.PATH)
+                    @Parameter(name = "configKey", description = "configKey", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

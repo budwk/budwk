@@ -78,6 +78,9 @@ public class WxMsgMassController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -117,6 +120,9 @@ public class WxMsgMassController {
             tags = "微信_群发消息", summary = "分页查询图文素材",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -159,7 +165,8 @@ public class WxMsgMassController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "图文ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "图文ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -186,6 +193,9 @@ public class WxMsgMassController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.msg.mass.news.create")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -219,7 +229,8 @@ public class WxMsgMassController {
                     @SecurityRequirement(name = "wx.msg.mass.news.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "图文ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "图文ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -251,6 +262,9 @@ public class WxMsgMassController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.msg.mass.push")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

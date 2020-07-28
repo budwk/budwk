@@ -12,6 +12,8 @@ import com.budwk.nb.wx.services.WxConfigService;
 import com.budwk.nb.wx.services.WxTplIdService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -61,6 +63,9 @@ public class WxTplIdController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -104,6 +109,9 @@ public class WxTplIdController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.tpl.id.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -141,6 +149,9 @@ public class WxTplIdController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.tpl.id.delete")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -189,6 +200,9 @@ public class WxTplIdController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.tpl.id.delete")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

@@ -68,7 +68,8 @@ public class SysMenuController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -111,7 +112,8 @@ public class SysMenuController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY)
+                    @Parameter(name = "pid", description = "父级ID", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -163,6 +165,9 @@ public class SysMenuController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.menu.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -211,6 +216,9 @@ public class SysMenuController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.menu.create")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -270,7 +278,8 @@ public class SysMenuController {
                     @SecurityRequirement(name = "sys.manage.menu.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -307,6 +316,9 @@ public class SysMenuController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.menu")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -358,6 +370,9 @@ public class SysMenuController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.menu.update")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -403,7 +418,8 @@ public class SysMenuController {
                     @SecurityRequirement(name = "sys.manage.menu.update")
             },
             parameters = {
-                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -447,6 +463,9 @@ public class SysMenuController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -502,7 +521,8 @@ public class SysMenuController {
                     @SecurityRequirement(name = "sys.manage.menu")
             },
             parameters = {
-                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "菜单ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -529,6 +549,9 @@ public class SysMenuController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "sys.manage.menu.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

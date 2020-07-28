@@ -7,6 +7,8 @@ import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.web.commons.base.Globals;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -65,6 +67,9 @@ public class PubFileUploadController {
                     @SecurityRequirement(name = "登陆认证")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -132,6 +137,9 @@ public class PubFileUploadController {
                     @SecurityRequirement(name = "登陆认证")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -200,6 +208,9 @@ public class PubFileUploadController {
                     @SecurityRequirement(name = "登陆认证")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",

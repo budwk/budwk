@@ -57,6 +57,9 @@ public class SysApiController {
                     @SecurityRequirement(name = "sys.config.api")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -98,6 +101,9 @@ public class SysApiController {
                     @SecurityRequirement(name = "sys.config.api.create")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -131,7 +137,8 @@ public class SysApiController {
                     @SecurityRequirement(name = "sys.config.api.delete")
             },
             parameters = {
-                    @Parameter(name = "appid", description = "appid", in = ParameterIn.PATH)
+                    @Parameter(name = "appid", description = "appid", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -161,6 +168,9 @@ public class SysApiController {
                     @SecurityRequirement(name = "sys.config.api.update")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",

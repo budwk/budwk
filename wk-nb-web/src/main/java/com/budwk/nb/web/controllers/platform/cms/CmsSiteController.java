@@ -58,6 +58,9 @@ public class CmsSiteController {
                     @SecurityRequirement(name = "cms.sites.site")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -99,6 +102,9 @@ public class CmsSiteController {
                     @SecurityRequirement(name = "cms.sites.site.create")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -132,6 +138,9 @@ public class CmsSiteController {
                     @SecurityRequirement(name = "cms.sites.site.update")
             },
             requestBody = @RequestBody(content = @Content()),
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200", description = "执行成功",
@@ -165,7 +174,8 @@ public class CmsSiteController {
                     @SecurityRequirement(name = "cms.sites.site.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -194,7 +204,8 @@ public class CmsSiteController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

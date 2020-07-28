@@ -16,6 +16,8 @@ import com.budwk.nb.web.commons.shiro.filter.PlatformAuthenticationFilter;
 import com.budwk.nb.web.commons.slog.SLogServer;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -204,6 +206,9 @@ public class SysLoginController {
             tags = "系统_系统登陆", summary = "退出登陆",
             security = {
                     @SecurityRequirement(name = "登陆认证")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

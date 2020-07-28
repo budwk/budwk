@@ -80,7 +80,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -128,7 +129,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -185,6 +187,9 @@ public class WxMenuController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.menu.create")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -232,7 +237,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "登陆认证")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -259,6 +265,9 @@ public class WxMenuController {
             security = {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.menu.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -292,7 +301,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "wx.conf.menu.delete")
             },
             parameters = {
-                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH)
+                    @Parameter(name = "id", description = "主键ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -327,7 +337,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "wx.conf.menu.push")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -431,6 +442,9 @@ public class WxMenuController {
                     @SecurityRequirement(name = "登陆认证"),
                     @SecurityRequirement(name = "wx.conf.menu")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -467,7 +481,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "wx.conf.menu")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
@@ -519,7 +534,8 @@ public class WxMenuController {
                     @SecurityRequirement(name = "wx.conf.menu.sort")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", required = true, in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {

@@ -67,6 +67,9 @@ public class WxUserController {
             security = {
                     @SecurityRequirement(name = "登陆认证")
             },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
             requestBody = @RequestBody(content = @Content()),
             responses = {
                     @ApiResponse(
@@ -118,7 +121,8 @@ public class WxUserController {
                     @SecurityRequirement(name = "wx.user.list.sync")
             },
             parameters = {
-                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH)
+                    @Parameter(name = "wxid", description = "微信ID", in = ParameterIn.PATH),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
             },
             requestBody = @RequestBody(content = @Content()),
             responses = {
