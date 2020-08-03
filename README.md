@@ -15,7 +15,7 @@ https://budwk.com/donation  赞助者
 
 # 前言
 
-本项目自2012年开始用于商业项目，至今已服务于全国各地公司大大小小数千个项目，行业涉及政务、电商、物联网等，随着个人经验积累及从事行业的不同分别发布了1.0至5.0多个版本，每个版本都是完整运行且完全开源免费的，您可以根据项目规模选择不同版本。本项目案例众多，省厅级项目、市级平台、大数据项目、电商平台、物联网平台等等。
+本框架自2012年开始用于商业项目，至今已服务于全国各地公司大大小小数千个项目，行业涉及政务、电商、物联网等，随着个人经验积累及从事行业的不同分别发布了1.x至6.x多个版本，您可以根据项目规模选择不同版本。本项目案例众多，省厅级项目、市级平台、大数据项目、电商平台、物联网平台等等。
 
 我们有强大的后援 —— Nutz 社区支持  https://nutz.cn  及 Nutz 使用手册 https://nutzam.com/core/nutz_preface.html
 
@@ -25,6 +25,16 @@ https://budwk.com/donation  赞助者
 *  2群: 24457628
 
 # 版本说明
+
+*   v6.x - nacos 微服务分布式版本 ```前后端分离,前端 nuxt + vue + elementUI```
+*   v6.x - zookeeper 微服务分布式版本 ```前后端分离,前端 nuxt + vue + elementUI```
+*   v6.x - mini 微服务单应用版本（一个 jar 或 war 包） ```前后端分离,前端 nuxt + vue + elementUI```
+*   v5.x - zookeeper 微服务分布式版本 ```前端 jQuery + bootsrtap 或 jQuery + vue.js + elementUI```
+*   v5.x - mini 微服务单应用版本（一个 jar 或 war 包） ```前端 jQuery + bootsrtap 或 jQuery + vue.js + elementUI```
+*   v4.x - 单应用版本（war 包） ```前端 jQuery + bootsrtap```
+*   v3.x - 单应用版本（war 包） ```前端 jQuery + bootsrtap```
+*   v1.x - 单应用版本（war 包）  ```前端 jQuery + easyUI```
+
 
 | 版本名称 | 版本特点 | 版本地址 | 运行方式 | 后端主要技术| 前端主要技术 | 浏览器兼容性 |
 | ---------|---------| ----------| ----------| ----------|----------|----------|
