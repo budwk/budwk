@@ -1,8 +1,8 @@
-package com.budwk.nb.api.open.controllers.open;
+package com.budwk.nb.web.controllers.open.test;
 
-import com.budwk.nb.api.open.commons.filters.ApiSignFilter;
-import com.budwk.nb.api.open.commons.token.ApiTokenServer;
 import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.web.commons.ext.api.filters.ApiSignFilter;
+import com.budwk.nb.web.commons.ext.api.token.ApiTokenServer;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;

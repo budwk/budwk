@@ -14,11 +14,13 @@ import org.nutz.lang.Strings;
 import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer.cn) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "sys_unit")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_unit")
 public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements SysUnitService {
     public SysUnitServiceImpl(Dao dao) {
         super(dao);

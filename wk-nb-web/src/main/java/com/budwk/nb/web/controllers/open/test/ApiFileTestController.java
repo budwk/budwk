@@ -1,8 +1,8 @@
-package com.budwk.nb.api.open.controllers.open;
+package com.budwk.nb.web.controllers.open.test;
 
-import com.budwk.nb.api.open.commons.filters.ApiHeaderSignFilter;
-import com.budwk.nb.api.open.commons.sign.ApiSignServer;
 import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.web.commons.ext.api.filters.ApiHeaderSignFilter;
+import com.budwk.nb.web.commons.ext.api.sign.ApiSignServer;
 import org.nutz.filepool.NutFilePool;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

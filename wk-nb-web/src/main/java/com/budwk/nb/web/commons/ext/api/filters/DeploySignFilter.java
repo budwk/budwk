@@ -1,7 +1,7 @@
-package com.budwk.nb.api.open.commons.filters;
+package com.budwk.nb.web.commons.ext.api.filters;
 
-import com.budwk.nb.api.open.commons.sign.ApiSignServer;
 import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.web.commons.ext.api.utils.DeploySignUtil;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.log.Log;
@@ -16,21 +16,20 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * Sign签名验证拦截器,如果不使用JWT可以直接用这个拦截器
- * @author wizzer(wizzer.cn) on 2016/8/11.
+ * 应用管理服务端接口签名
+ * @author wizzer(wizzer.cn) on 2019/3/8.
  */
-public class ApiSignFilter implements ActionFilter {
+public class DeploySignFilter implements ActionFilter {
     private static final Log log = Logs.get();
 
     @Override
     public View match(ActionContext context) {
         try {
-            ApiSignServer apiSignServer = context.getIoc().get(ApiSignServer.class);
+            DeploySignUtil deploySignUtil = context.getIoc().get(DeploySignUtil.class);
             Map<String, Object> paramMap = getParameterMap(context.getRequest());
             log.debug("paramMap:::\r\n" + Json.toJson(paramMap));
-            Result result = apiSignServer.checkSign(paramMap);
+            Result result = deploySignUtil.checkSign(paramMap);
             if (result == null) {
                 return new UTF8JsonView(JsonFormat.compact()).setData(Result.error("签名出错"));
             }

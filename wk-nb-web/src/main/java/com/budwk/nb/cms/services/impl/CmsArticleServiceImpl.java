@@ -11,11 +11,13 @@ import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer.cn) on 2018/3/16.
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "cms_article")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "cms_article")
 public class CmsArticleServiceImpl extends BaseServiceImpl<Cms_article> implements CmsArticleService {
     public CmsArticleServiceImpl(Dao dao) {
         super(dao);

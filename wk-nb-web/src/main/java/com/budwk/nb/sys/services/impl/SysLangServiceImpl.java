@@ -18,11 +18,13 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer.cn) on 2019/12/12.
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "sys_lang")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_lang")
 public class SysLangServiceImpl extends BaseServiceImpl<Sys_lang> implements SysLangService {
     public SysLangServiceImpl(Dao dao) {
         super(dao);

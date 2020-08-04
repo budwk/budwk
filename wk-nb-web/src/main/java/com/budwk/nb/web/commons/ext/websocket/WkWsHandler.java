@@ -11,6 +11,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.plugins.mvc.websocket.handler.SimpleWsHandler;
 
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
+
 @IocBean
 public class WkWsHandler extends SimpleWsHandler {
     private static final Log log = Logs.get();
@@ -56,7 +58,7 @@ public class WkWsHandler extends SimpleWsHandler {
     public void join(String room) {
         if (!Strings.isBlank(room)) {
             String[] tmp = StringUtils.split(room, ",");
-            room = "wsroom:" + tmp[0] + ":" + tmp[1];
+            room = REDIS_KEY_WSROOM + tmp[0] + ":" + tmp[1];
             log.debugf("session(id=%s) join room(name=%s)", session.getId(), room);
             roomProvider.join(room, session.getId());
         }
@@ -66,7 +68,7 @@ public class WkWsHandler extends SimpleWsHandler {
     public void left(String room) {
         if (!Strings.isBlank(room)) {
             String[] tmp = StringUtils.split(room, ",");
-            room = "wsroom:" + tmp[0] + ":" + tmp[1];
+            room = REDIS_KEY_WSROOM + tmp[0] + ":" + tmp[1];
             log.debugf("session(id=%s) left room(name=%s)", session.getId(), room);
             roomProvider.left(room, session.getId());
             redisService.del(room);

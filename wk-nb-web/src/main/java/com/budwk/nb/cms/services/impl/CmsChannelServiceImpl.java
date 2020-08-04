@@ -17,11 +17,13 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer.cn) on 2019/12/12.
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "cms_channel")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "cms_channel")
 public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implements CmsChannelService {
     public CmsChannelServiceImpl(Dao dao) {
         super(dao);

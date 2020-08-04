@@ -22,11 +22,13 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 /**
  * @author wizzer(wizzer.cn) on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "sys_role")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_role")
 public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements SysRoleService {
     public SysRoleServiceImpl(Dao dao) {
         super(dao);

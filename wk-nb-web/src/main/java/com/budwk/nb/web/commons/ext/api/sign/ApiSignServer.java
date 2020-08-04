@@ -1,4 +1,4 @@
-package com.budwk.nb.api.open.commons.sign;
+package com.budwk.nb.web.commons.ext.api.sign;
 
 import com.budwk.nb.commons.base.Result;
 import com.budwk.nb.commons.constants.RedisConstant;
@@ -45,7 +45,7 @@ public class ApiSignServer {
                 return Result.error(500301, "system.api.error.appid");
             }
             // 时间戳相差大于1分钟则为无效的
-            if (Times.getTS() - Long.valueOf(timestamp) > TIMEOUT_ONE_MINIUTE) {
+            if (Times.getTS() - Long.parseLong(timestamp) > TIMEOUT_ONE_MINIUTE) {
                 return Result.error(500302, "system.api.error.timestamp");
             }
             String nonceCache = redisService.get(RedisConstant.REDIS_KEY_API_SIGN_OPEN_NONCE + appid + "_" + nonce);

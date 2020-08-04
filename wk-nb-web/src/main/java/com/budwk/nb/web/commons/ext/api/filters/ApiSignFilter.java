@@ -1,7 +1,7 @@
-package com.budwk.nb.api.open.commons.filters;
+package com.budwk.nb.web.commons.ext.api.filters;
 
-import com.budwk.nb.api.open.commons.sign.ApiSignServer;
 import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.web.commons.ext.api.sign.ApiSignServer;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.log.Log;
@@ -18,21 +18,21 @@ import java.util.Map;
 
 
 /**
- * 通过 Header 参数实现的Sign签名验证拦截器
- * @author wizzer(wizzer.cn) on 2018/6/28.
+ * Sign签名验证拦截器,如果不使用JWT可以直接用这个拦截器
+ * @author wizzer(wizzer.cn) on 2016/8/11.
  */
-public class ApiHeaderSignFilter implements ActionFilter {
+public class ApiSignFilter implements ActionFilter {
     private static final Log log = Logs.get();
 
     @Override
     public View match(ActionContext context) {
         try {
             ApiSignServer apiSignServer = context.getIoc().get(ApiSignServer.class);
-            Map<String, Object> paramMap = getHeaderParameterMap(context.getRequest());
+            Map<String, Object> paramMap = getParameterMap(context.getRequest());
             log.debug("paramMap:::\r\n" + Json.toJson(paramMap));
             Result result = apiSignServer.checkSign(paramMap);
             if (result == null) {
-                return new UTF8JsonView(JsonFormat.compact()).setData(Result.error(500305, "system.api.error.unkown"));
+                return new UTF8JsonView(JsonFormat.compact()).setData(Result.error("签名出错"));
             }
             if (result.getCode() == 0) {
                 return null;
@@ -40,19 +40,16 @@ public class ApiHeaderSignFilter implements ActionFilter {
             return new UTF8JsonView(JsonFormat.compact()).setData(result);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return new UTF8JsonView(JsonFormat.compact()).setData(Result.error(500300, "system.api.error"));
+            return new UTF8JsonView(JsonFormat.compact()).setData(Result.error(-1, "系统异常"));
         }
     }
 
-    private Map<String, Object> getHeaderParameterMap(HttpServletRequest request) {
+    private Map<String, Object> getParameterMap(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
-        Enumeration<String> names = request.getHeaderNames();
+        Enumeration<String> names = request.getParameterNames();
         while (names.hasMoreElements()) {
             String paramName = names.nextElement();
-            //过滤掉非签名参数
-            if ("appid".equals(paramName) || "sign".equals(paramName) || "nonce".equals(paramName) || "timestamp".equals(paramName)) {
-                map.put(paramName, request.getHeader(paramName));
-            }
+            map.put(paramName, request.getParameter(paramName));
         }
         return map;
     }

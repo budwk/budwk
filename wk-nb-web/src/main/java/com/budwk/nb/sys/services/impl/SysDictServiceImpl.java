@@ -20,9 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "sys_dict")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_dict")
 public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements SysDictService {
     public SysDictServiceImpl(Dao dao) {
         super(dao);

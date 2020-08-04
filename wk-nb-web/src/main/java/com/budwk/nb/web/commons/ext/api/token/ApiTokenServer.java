@@ -1,4 +1,4 @@
-package com.budwk.nb.api.open.commons.token;
+package com.budwk.nb.web.commons.ext.api.token;
 
 import com.budwk.nb.commons.constants.RedisConstant;
 import io.jsonwebtoken.Jwts;

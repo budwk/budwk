@@ -10,8 +10,10 @@ import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
+import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = "cms_site")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "cms_site")
 public class CmsSiteServiceImpl extends BaseServiceImpl<Cms_site> implements CmsSiteService {
     public CmsSiteServiceImpl(Dao dao) {
         super(dao);

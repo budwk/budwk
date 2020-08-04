@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
+
 /**
  * @author wizzer(wizzer.cn) on 2018/6/28.
  */
@@ -48,13 +50,13 @@ public class WkNotifyService {
         String msg = Json.toJson(map, JsonFormat.compact());
         // 系统消息发送给所有在线用户
         if (SysMsgType.SYSTEM.equals(innerMsg.getType())) {
-            Set<String> keys = redisService.keys("wsroom:*");
+            Set<String> keys = redisService.keys(REDIS_KEY_WSROOM + "*");
             for (String room : keys) {
                 pubSubService.fire(room, msg);
             }
         } else if (SysMsgType.USER.equals(innerMsg.getType())) {
             for (String room : rooms) {
-                Set<String> keys = redisService.keys("wsroom:" + room + ":*");
+                Set<String> keys = redisService.keys(REDIS_KEY_WSROOM + room + ":*");
                 for (String key : keys) {
                     pubSubService.fire(key, msg);
                 }
@@ -72,7 +74,7 @@ public class WkNotifyService {
         map.put("list", list);
         String msg = Json.toJson(map, JsonFormat.compact());
         log.debugf("room=%s,msg=%s", room, msg);
-        Set<String> keys = redisService.keys("wsroom:" + room + ":*");
+        Set<String> keys = redisService.keys(REDIS_KEY_WSROOM + room + ":*");
         for (String key : keys) {
             pubSubService.fire(key, msg);
         }
@@ -107,7 +109,7 @@ public class WkNotifyService {
         map.put("action", "offline");
         String msg = Json.toJson(map, JsonFormat.compact());
         try {
-            room = "wsroom:" + room + ":" + userToken;
+            room = REDIS_KEY_WSROOM + room + ":" + userToken;
             log.debugf("offline room(name=%s)", room);
             pubSubService.fire(room, msg);
             redisService.expire(room, 60 * 3);

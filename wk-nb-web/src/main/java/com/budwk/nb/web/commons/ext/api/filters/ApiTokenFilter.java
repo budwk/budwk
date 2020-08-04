@@ -1,7 +1,7 @@
-package com.budwk.nb.api.open.commons.filters;
+package com.budwk.nb.web.commons.ext.api.filters;
 
-import com.budwk.nb.api.open.commons.token.ApiTokenServer;
 import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.web.commons.ext.api.token.ApiTokenServer;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;

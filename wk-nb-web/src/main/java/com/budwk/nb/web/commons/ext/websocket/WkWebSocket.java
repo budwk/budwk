@@ -17,6 +17,8 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
+
 /**
  * @author wizzer(wizzer.cn) on 2019/12/12.
  */
@@ -41,7 +43,7 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     public void init() {
         roomProvider = new WkJedisRoomProvider(jedisAgent, REDIS_KEY_SESSION_TTL);
         try (Jedis jedis = jedisAgent.getResource()) {
-            for (String key : jedis.keys("wsroom:*")) {
+            for (String key : jedis.keys(REDIS_KEY_WSROOM + "*")) {
                 switch (jedis.type(key)) {
                     case "none":
                         break;
@@ -52,7 +54,7 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
                 }
             }
         }
-        pubSubService.reg("wsroom:*", this);
+        pubSubService.reg(REDIS_KEY_WSROOM + "*", this);
     }
 
 
