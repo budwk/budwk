@@ -52,8 +52,6 @@ public class WkLocalizationManager implements LocalizationManager {
 
     @Override
     public String getMessage(String local, String key) {
-        System.out.println("local:::" + local);
-        System.out.println("key:::" + key);
         NutMessageMap map = getMessageMap(local);
         if (defaultLocal != null && map == null) {
             map = getMessageMap(defaultLocal);
