@@ -14,6 +14,7 @@ import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.models.Sys_unit;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysLangLocalService;
+import com.budwk.nb.sys.services.SysRoleService;
 import com.budwk.nb.sys.services.SysUnitService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.web.commons.base.Globals;
@@ -29,6 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -75,6 +77,9 @@ public class SysUserController {
     @Inject
     @Reference
     private SysUserService sysUserService;
+    @Inject
+    @Reference
+    private SysRoleService sysRoleService;
     @Inject
     @Reference
     private SysUnitService sysUnitService;
@@ -659,7 +664,7 @@ public class SysUserController {
                 list1.add(unit);
                 nutMap.put(Strings.sNull(unit.getParentId()), list1);
             }
-            if(isUser) {
+            if (isUser) {
                 return Result.success().addData(getTree(nutMap, user.getUnit().getParentId(), req));
             }
             return Result.success().addData(getTree(nutMap, "", req));
@@ -767,7 +772,7 @@ public class SysUserController {
     @ApiFormParams(
             implementation = Sys_user.class
     )
-    public Object create(@Param("..") Sys_user user, Errors errors, HttpServletRequest req) {
+    public Object create(@Param("..") Sys_user user, @Param("roleIds") String roleIds, Errors errors, HttpServletRequest req) {
         try {
             if (errors.hasError()) {
                 return Result.error(errors.getErrorsList().toString());
@@ -796,7 +801,10 @@ public class SysUserController {
             user.setLoginCount(0);
             user.setCreatedBy(StringUtil.getPlatformUid());
             user.setUpdatedBy(StringUtil.getPlatformUid());
-            sysUserService.insert(user);
+            user = sysUserService.insert(user);
+            String[] ids = StringUtils.split(roleIds, ",");
+            sysUserService.insertUserRole(ids, user.getId());
+            sysRoleService.clearCache();
             sysUserService.clearCache();
             req.setAttribute("_slog_msg", String.format("%s(%s)", user.getLoginname(), user.getUsername()));
             return Result.success();
@@ -965,13 +973,86 @@ public class SysUserController {
             if (user == null) {
                 return Result.error("system.error.noData");
             }
-            return Result.success().addData(user);
+            return Result.success().addData(NutMap.NEW().addv("user", user).addv("roleIds", sysUserService.getUserRoles(user.getId())));
         } catch (Exception e) {
             log.error(e);
             return Result.error();
         }
     }
 
+    @At("/list_canrole")
+    @Ok("json")
+    @GET
+    @RequiresPermissions("sys.manage.user")
+    @Operation(
+            tags = "系统_用户管理", summary = "获取用户可分配角色列表",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user")
+            },
+            parameters = {
+                    @Parameter(name = "keyword", description = "关键词", in = ParameterIn.QUERY),
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    public Object getUserCanRoleList(@Param("keyword") String keyword, HttpServletRequest req) {
+        try {
+            return Result.success().addData(sysUserService.getUserCanRoleList(keyword, shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME), StringUtil.getPlatformUid()));
+        } catch (Exception e) {
+            log.error(e);
+            return Result.error();
+        }
+    }
+
+    @At("/set_roles")
+    @Ok("json")
+    @POST
+    @RequiresPermissions("sys.manage.user.update")
+    @SLog(tag = "为用户分配角色")
+    @Operation(
+            tags = "系统_用户管理", summary = "为用户分配角色",
+            security = {
+                    @SecurityRequirement(name = "登陆认证"),
+                    @SecurityRequirement(name = "sys.manage.user.update")
+            },
+            parameters = {
+                    @Parameter(name = "X-Token", description = "X-Token", in = ParameterIn.HEADER, required = true)
+            },
+            requestBody = @RequestBody(content = @Content()),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "执行成功",
+                            content = @Content(schema = @Schema(implementation = Result.class), mediaType = "application/json"))
+            }
+    )
+    @ApiFormParams(
+            apiFormParams = {
+                    @ApiFormParam(name = "userId", description = "用户ID"),
+                    @ApiFormParam(name = "roleIds", description = "角色ID数组"),
+            }
+    )
+    public Object setRoles(@Param("userId") String userId, @Param("roleIds") String roleIds, HttpServletRequest req) {
+        try {
+            Sys_user user = sysUserService.fetch(userId);
+            if (user == null) {
+                return Result.error("system.error.noData");
+            }
+            String[] ids = StringUtils.split(roleIds, ",");
+            sysUserService.insertUserRole(ids, userId);
+            sysRoleService.clearCache();
+            sysUserService.deleteCache(userId);
+            req.setAttribute("_slog_msg", String.format("%s(%s)", user.getLoginname(), user.getUsername()));
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error();
+        }
+    }
 
     @At
     @Ok("json")
@@ -997,10 +1078,13 @@ public class SysUserController {
     @ApiFormParams(
             implementation = Sys_user.class
     )
-    public Object update(@Param("..") Sys_user user, HttpServletRequest req) {
+    public Object update(@Param("..") Sys_user user, @Param("roleIds") String roleIds, HttpServletRequest req) {
         try {
             user.setUpdatedBy(StringUtil.getPlatformUid());
             sysUserService.updateIgnoreNull(user);
+            String[] ids = StringUtils.split(roleIds, ",");
+            sysUserService.insertUserRole(ids, user.getId());
+            sysRoleService.clearCache();
             sysUserService.deleteCache(user.getId());
             req.setAttribute("_slog_msg", String.format("%s(%s)", user.getLoginname(), user.getUsername()));
             return Result.success();
