@@ -638,10 +638,12 @@ public class SysUserController {
     public Object getUnitTree(HttpServletRequest req) {
         try {
             Cnd cnd = Cnd.NEW();
+            boolean isUser = false;
+            Sys_user user = (Sys_user) shiroUtil.getPrincipal();
             if (!shiroUtil.hasRole(PlatformConstant.PLATFORM_ROLE_SYSADMIN_NAME)) {
-                Sys_user user = (Sys_user) shiroUtil.getPrincipal();
                 if (user != null) {
                     cnd.and("path", "like", user.getUnit().getPath() + "%");
+                    isUser = true;
                 } else {
                     cnd.and("1", "<>", 1);
                 }
@@ -656,6 +658,9 @@ public class SysUserController {
                 }
                 list1.add(unit);
                 nutMap.put(Strings.sNull(unit.getParentId()), list1);
+            }
+            if(isUser) {
+                return Result.success().addData(getTree(nutMap, user.getUnit().getParentId(), req));
             }
             return Result.success().addData(getTree(nutMap, "", req));
         } catch (Exception e) {
