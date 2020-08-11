@@ -9,6 +9,7 @@ import com.budwk.nb.sys.services.SysRoleService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import org.nutz.aop.interceptor.ioc.TransAop;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
@@ -154,6 +155,56 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         dao().clear("sys_user_unit", Cnd.where("userId", "in", userIds));
         dao().clear("sys_user_role", Cnd.where("userId", "in", userIds));
         dao().clear("sys_user", Cnd.where("id", "in", userIds));
+    }
+
+    /**
+     * 获取用户可分配角色列表
+     *
+     * @param kw
+     * @param sysadmin
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Sys_role> getUserCanRoleList(String kw, boolean sysadmin, String userId) {
+        if (sysadmin) {
+            Cnd cnd = Cnd.NEW();
+            if (Strings.isNotBlank(kw)) {
+                cnd.and("name", "like", "%" + kw + "%");
+            }
+            return sysRoleService.query(cnd);
+        } else {
+            Sql sql = Sqls.create("SELECT a.* FROM sys_role a,sys_user_role b WHERE a.id=b.roleId AND b.userId=@userId $s");
+            sql.setParam("userId", userId);
+            if (Strings.isNotBlank(kw)) {
+                sql.vars().set("s", " AND a.name like '%" + kw + "%'");
+            }
+            return sysRoleService.listEntity(sql);
+        }
+    }
+
+    /**
+     * 创建用户及角色关系
+     *
+     * @param roleIds
+     * @param userId
+     */
+    @Override
+    public void insertUserRole(String[] roleIds, String userId) {
+        dao().clear("sys_user_role", Cnd.where("userId", "=", userId));
+        for (String roleId : roleIds) {
+            dao().insert("sys_user_role", Chain.from(NutMap.NEW().addv("roleId", roleId).addv("userId", userId)));
+        }
+    }
+
+    /**
+     * 查询用户分配的角色
+     *
+     * @param userId
+     * @return
+     */
+    public List<NutMap> getUserRoles(String userId) {
+        return this.listMap(Sqls.create("select roleId from sys_user_role where userId=@userId").setParam("userId", userId));
     }
 
     @Override

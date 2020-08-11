@@ -1,6 +1,7 @@
 package com.budwk.nb.sys.services;
 
 import com.budwk.nb.sys.models.Sys_menu;
+import com.budwk.nb.sys.models.Sys_role;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.commons.base.service.BaseService;
 import org.nutz.lang.util.NutMap;
@@ -65,6 +66,32 @@ public interface SysUserService extends BaseService<Sys_user> {
      */
     void deleteByIds(String[] userIds);
 
+    /**
+     * 获取用户可分配角色列表
+     *
+     * @param kw
+     * @param sysadmin
+     * @param userId
+     * @return
+     */
+
+    List<Sys_role> getUserCanRoleList(String kw, boolean sysadmin, String userId);
+
+    /**
+     * 创建用户及角色关系
+     *
+     * @param roleIds
+     * @param userId
+     */
+    void insertUserRole(String[] roleIds, String userId);
+
+    /**
+     * 查询用户分配的角色
+     *
+     * @param userId
+     * @return
+     */
+    List<NutMap> getUserRoles(String userId);
     /**
      * 清除一个用户的缓存
      *
