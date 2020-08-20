@@ -5,7 +5,7 @@
     <parent>
         <artifactId>budwk-nutzboot</artifactId>
         <groupId>com.budwk.nb</groupId>
-        <version>6.0.3-SNAPSHOT</version>
+        <version>6.1.0-zookeeper</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
@@ -32,8 +32,8 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.nb</groupId>
-            <artifactId>wk-starter-swagger</artifactId>
-            <version>${project.version}</version>
+            <artifactId>budwk-nutzboot-starter-swagger</artifactId>
+            <version>${budwk-nutzboot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>budwk-nutzboot</artifactId>
         <groupId>com.budwk.nb</groupId>
-        <version>6.0.3-SNAPSHOT</version>
+        <version>6.1.0-zookeeper</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
