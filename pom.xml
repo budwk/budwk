@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <name>budwk-nutzboot</name>
+    <name>budwk-nutzboot-nacos</name>
     <modules>
         <module>wk-code-generator</module>
         <module>wk-common</module>
@@ -16,16 +16,16 @@
         <module>wk-nb-web-api-open</module>
         <module>wk-nb-web-api-daemon</module>
         <module>wk-nb-web-admin</module>
-        <module>wk-starter</module>
     </modules>
     <groupId>com.budwk.nb</groupId>
     <artifactId>budwk-nutzboot</artifactId>
-    <version>6.0.3-SNAPSHOT</version>
+    <version>6.1.0-nacos</version>
     <packaging>pom</packaging>
 
     <properties>
         <nutzboot.version>2.4.0.v20200427</nutzboot.version>
         <nutz.version>1.r.68.v20200309</nutz.version>
+        <budwk-nutzboot-starter.version>6.1.0</budwk-nutzboot-starter.version>
         <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
@@ -141,7 +141,20 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.nutz.boot</groupId>
                 <artifactId>nutzboot-maven-plugin</artifactId>
@@ -185,7 +198,7 @@
             <url>https://jfrog.nutz.cn/artifactory/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>sonatype-release-staging</id>
+            <id>budwk-release</id>
             <name>Sonatype Nexus release repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
