@@ -24,11 +24,6 @@
     <dependencies>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-quartz</artifactId>
-            <version>${nutzboot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-nutz-dao</artifactId>
             <version>${nutzboot.version}</version>
         </dependency>
@@ -218,6 +213,11 @@
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-ftp</artifactId>
+            <version>${nutzboot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-quartz</artifactId>
             <version>${nutzboot.version}</version>
         </dependency>
     </dependencies>
