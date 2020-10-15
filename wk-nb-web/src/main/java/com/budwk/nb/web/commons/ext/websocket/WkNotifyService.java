@@ -17,6 +17,8 @@ import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,16 +52,24 @@ public class WkNotifyService {
         String msg = Json.toJson(map, JsonFormat.compact());
         // 系统消息发送给所有在线用户
         if (SysMsgType.SYSTEM.equals(innerMsg.getType())) {
-            Set<String> keys = redisService.keys(REDIS_KEY_WSROOM + "*");
-            for (String room : keys) {
-                pubSubService.fire(room, msg);
-            }
+            ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + "*");
+            ScanResult<String> scan = null;
+            do {
+                scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                for (String room : scan.getResult()) {
+                    pubSubService.fire(room, msg);
+                }
+            } while (!scan.isCompleteIteration());
         } else if (SysMsgType.USER.equals(innerMsg.getType())) {
             for (String room : rooms) {
-                Set<String> keys = redisService.keys(REDIS_KEY_WSROOM + room + ":*");
-                for (String key : keys) {
-                    pubSubService.fire(key, msg);
-                }
+                ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
+                ScanResult<String> scan = null;
+                do {
+                    scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                    for (String key : scan.getResult()) {
+                        pubSubService.fire(key, msg);
+                    }
+                } while (!scan.isCompleteIteration());
             }
         }
     }
@@ -74,10 +84,14 @@ public class WkNotifyService {
         map.put("list", list);
         String msg = Json.toJson(map, JsonFormat.compact());
         log.debugf("room=%s,msg=%s", room, msg);
-        Set<String> keys = redisService.keys(REDIS_KEY_WSROOM + room + ":*");
-        for (String key : keys) {
-            pubSubService.fire(key, msg);
-        }
+        ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
+        ScanResult<String> scan = null;
+        do {
+            scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+            for (String key : scan.getResult()) {
+                pubSubService.fire(key, msg);
+            }
+        } while (!scan.isCompleteIteration());
     }
 
 

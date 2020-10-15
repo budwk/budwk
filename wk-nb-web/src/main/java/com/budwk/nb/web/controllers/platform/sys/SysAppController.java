@@ -42,6 +42,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -150,8 +152,13 @@ public class SysAppController {
     @SuppressWarnings("unchecked")
     public Object getOsData(@Param("hostName") String hostName) {
         try {
-            Set<String> set = redisService.keys(REDIS_KEY_APP_DEPLOY + hostName + ":*");
-            List<String> list = new ArrayList<>(set);
+            List<String> list;
+            ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
+            ScanResult<String> scan = null;
+            do {
+                scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                list = scan.getResult();
+            } while (!scan.isCompleteIteration());
             Collections.sort(list);
             List<NutMap> dataList = new ArrayList<>();
             for (String key : list) {

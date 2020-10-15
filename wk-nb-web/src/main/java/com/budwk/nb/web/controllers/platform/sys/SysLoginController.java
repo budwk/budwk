@@ -50,6 +50,8 @@ import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -122,23 +124,27 @@ public class SysLoginController {
             if ("true".equals(Globals.MyConfig.getOrDefault("AppWebUserOnlyOne", "false"))) {
                 try {
                     //把其他在线用户踢下线
-                    Set<String> set = redisService.keys(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
-                    for (String key : set) {
-                        String userToken = key.substring(key.lastIndexOf(":") + 1);
-                        String sessionId = Strings.sNull(redisService.get(key));
-                        if (!sessionId.equals(session.getId())) {
-                            try {
-                                Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
-                                if (oldSession != null) {
-                                    //通知其他用户被踢下线
-                                    wkNotifyService.offline(user.getLoginname(), userToken);
-                                    oldSession.stop();
-                                    webSessionManager.getSessionDAO().delete(oldSession);
+                    ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
+                    ScanResult<String> scan = null;
+                    do {
+                        scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                        for (String key : scan.getResult()) {
+                            String userToken = key.substring(key.lastIndexOf(":") + 1);
+                            String sessionId = Strings.sNull(redisService.get(key));
+                            if (!sessionId.equals(session.getId())) {
+                                try {
+                                    Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
+                                    if (oldSession != null) {
+                                        //通知其他用户被踢下线
+                                        wkNotifyService.offline(user.getLoginname(), userToken);
+                                        oldSession.stop();
+                                        webSessionManager.getSessionDAO().delete(oldSession);
+                                    }
+                                } catch (Exception e) {
                                 }
-                            } catch (Exception e) {
                             }
                         }
-                    }
+                    } while (!scan.isCompleteIteration());
                 } catch (Exception e) {
                     log.error(e);
                 }

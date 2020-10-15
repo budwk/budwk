@@ -12,6 +12,8 @@ import org.nutz.plugins.mvc.websocket.AbstractWsEndpoint;
 import org.nutz.plugins.mvc.websocket.NutWsConfigurator;
 import org.nutz.plugins.mvc.websocket.WsHandler;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import javax.websocket.EndpointConfig;
 import javax.websocket.Session;
@@ -43,16 +45,21 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
     public void init() {
         roomProvider = new WkJedisRoomProvider(jedisAgent, REDIS_KEY_SESSION_TTL);
         try (Jedis jedis = jedisAgent.getResource()) {
-            for (String key : jedis.keys(REDIS_KEY_WSROOM + "*")) {
-                switch (jedis.type(key)) {
-                    case "none":
-                        break;
-                    case "set":
-                        break;
-                    default:
-                        break;
+            ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + "*");
+            ScanResult<String> scan = null;
+            do {
+                scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                for (String key : scan.getResult()) {
+                    switch (jedis.type(key)) {
+                        case "none":
+                            break;
+                        case "set":
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
+            } while (!scan.isCompleteIteration());
         }
         pubSubService.reg(REDIS_KEY_WSROOM + "*", this);
     }
