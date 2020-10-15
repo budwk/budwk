@@ -55,6 +55,8 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 import org.nutz.plugins.validation.Errors;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +65,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
 
 /**
  * @author wizzer(wizzer @ qq.com) on 2019/11/21
@@ -611,8 +615,12 @@ public class SysUserController {
 
     private boolean getUserOnlineStatus(String userId) {
         try {
-            Set<String> set = redisService.keys(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + userId + ":*");
-            return set.size() > 0;
+            ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + userId + ":*");
+            ScanResult<String> scan = null;
+            do {
+                scan = redisService.scan(ScanParams.SCAN_POINTER_START, match);
+                return scan.getResult().size() >0;
+            } while (!scan.isCompleteIteration());
         } catch (Exception e) {
             log.error(e);
         }
