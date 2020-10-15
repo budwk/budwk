@@ -56,7 +56,7 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
                         case "set":
                             break;
                         default:
-                            break;
+                            jedis.del(key);
                     }
                 }
             } while (!scan.isCompleteIteration());
