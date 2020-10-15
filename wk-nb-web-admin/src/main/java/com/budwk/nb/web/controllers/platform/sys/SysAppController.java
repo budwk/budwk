@@ -157,12 +157,12 @@ public class SysAppController {
     @SuppressWarnings("unchecked")
     public Object getOsData(@Param("hostName") String hostName) {
         try {
-            List<String> list;
+            List<String> list = new ArrayList<>();
             ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
             ScanResult<String> scan = null;
             do {
                 scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                list = scan.getResult();
+                list.addAll(scan.getResult());//增量式迭代查询,可能还有下个循环,应该是追加
             } while (!scan.isCompleteIteration());
             Collections.sort(list);
             List<NutMap> dataList = new ArrayList<>();

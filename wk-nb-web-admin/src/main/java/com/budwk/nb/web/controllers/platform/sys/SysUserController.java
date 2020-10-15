@@ -619,7 +619,7 @@ public class SysUserController {
             ScanResult<String> scan = null;
             do {
                 scan = redisService.scan(ScanParams.SCAN_POINTER_START, match);
-                return scan.getResult().size() >0;
+                return scan.getResult().size() >0;//增量式迭代查询,可能还有下个循环
             } while (!scan.isCompleteIteration());
         } catch (Exception e) {
             log.error(e);
