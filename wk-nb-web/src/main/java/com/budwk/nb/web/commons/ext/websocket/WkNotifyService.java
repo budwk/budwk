@@ -58,6 +58,7 @@ public class WkNotifyService {
                 scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
                 for (String room : scan.getResult()) {
                     pubSubService.fire(room, msg);
+                    getMsg(room.split(":")[2]);
                 }
             } while (!scan.isCompleteIteration());
         } else if (SysMsgType.USER.equals(innerMsg.getType())) {
@@ -68,6 +69,7 @@ public class WkNotifyService {
                     scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
                     for (String key : scan.getResult()) {
                         pubSubService.fire(key, msg);
+                        getMsg(room);
                     }
                 } while (!scan.isCompleteIteration());
             }
