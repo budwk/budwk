@@ -65,13 +65,13 @@ public class WkNotifyService {
             } while (!scan.isCompleteIteration());
         } else if (SysMsgType.USER.equals(innerMsg.getType())) {
             for (String room : rooms) {
+                getMsg(room);
                 ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
                 ScanResult<String> scan = null;
                 do {
                     scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
                     for (String key : scan.getResult()) {
                         pubSubService.fire(key, msg);
-                        getMsg(room);
                     }
                 } while (!scan.isCompleteIteration());
             }
