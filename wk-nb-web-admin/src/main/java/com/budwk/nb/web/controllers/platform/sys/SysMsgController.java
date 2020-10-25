@@ -15,7 +15,6 @@ import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysMsgUserService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.web.commons.base.Globals;
-import com.budwk.nb.web.commons.ext.websocket.WkNotifyService;
 import com.budwk.nb.web.commons.utils.ShiroUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,8 +68,6 @@ public class SysMsgController {
     @Inject
     @Reference
     private SysUserService sysUserService;
-    @Inject
-    private WkNotifyService wkNotifyService;
     @Inject
     private ShiroUtil shiroUtil;
 
@@ -324,11 +321,7 @@ public class SysMsgController {
             msg.setSendAt(Times.now().getTime());
             msg.setCreatedBy(StringUtil.getPlatformUid());
             msg.setUpdatedBy(StringUtil.getPlatformUid());
-            Sys_msg sys_msg = sysMsgService.saveMsg(msg, users);
-            if (sys_msg != null) {
-                wkNotifyService.notify(sys_msg, users);
-            }
-            sysMsgUserService.clearCache();
+            sysMsgService.saveMsg(msg, users);
             return Result.success();
         } catch (Exception e) {
             return Result.error();
@@ -422,7 +415,7 @@ public class SysMsgController {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("id", "in", ids).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status", "=", 0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
-            wkNotifyService.getMsg(StringUtil.getPlatformLoginname());
+            sysMsgService.getMsg(StringUtil.getPlatformLoginname());
             req.setAttribute("_slog_msg", String.format("标为已读IDS:%s", Arrays.toString(ids)));
             return Result.success("system.success");
         } catch (Exception e) {
@@ -458,7 +451,7 @@ public class SysMsgController {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("loginname", "=", StringUtil.getPlatformLoginname()).and("status", "=", 0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
-            wkNotifyService.getMsg(StringUtil.getPlatformLoginname());
+            sysMsgService.getMsg(StringUtil.getPlatformLoginname());
             return Result.success();
         } catch (Exception e) {
             return Result.error();
@@ -528,7 +521,7 @@ public class SysMsgController {
             sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                     .add("updatedAt", Times.now().getTime()).add("updatedBy", StringUtil.getPlatformUid()), Cnd.where("msgid", "=", id).and("loginname", "=", StringUtil.getPlatformLoginname()).and("status", "=", 0));
             sysMsgUserService.deleteCache(StringUtil.getPlatformLoginname());
-            wkNotifyService.getMsg(StringUtil.getPlatformLoginname());
+            sysMsgService.getMsg(StringUtil.getPlatformLoginname());
             return Result.success();
         } catch (Exception e) {
             return Result.error();
