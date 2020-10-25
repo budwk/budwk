@@ -7,9 +7,9 @@ import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_log;
 import com.budwk.nb.sys.models.Sys_user;
+import com.budwk.nb.sys.services.SysMsgService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.web.commons.base.Globals;
-import com.budwk.nb.web.commons.ext.websocket.WkNotifyService;
 import com.budwk.nb.web.commons.shiro.exception.CaptchaEmptyException;
 import com.budwk.nb.web.commons.shiro.exception.CaptchaIncorrectException;
 import com.budwk.nb.web.commons.shiro.filter.PlatformAuthenticationFilter;
@@ -56,7 +56,6 @@ import redis.clients.jedis.ScanResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
-import java.util.Set;
 
 /**
  * @author wizzer(wizzer.cn) on 2019/10/29
@@ -79,7 +78,7 @@ public class SysLoginController {
     private int RedisKeySessionTTL;
 
     @Inject
-    private WkNotifyService wkNotifyService;
+    private SysMsgService sysMsgService;
     @Inject("refer:shiroWebSessionManager")
     private DefaultWebSessionManager webSessionManager;
 
@@ -136,7 +135,7 @@ public class SysLoginController {
                                     Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
                                     if (oldSession != null) {
                                         //通知其他用户被踢下线
-                                        wkNotifyService.offline(user.getLoginname(), userToken);
+                                        sysMsgService.offline(user.getLoginname(), userToken);
                                         oldSession.stop();
                                         webSessionManager.getSessionDAO().delete(oldSession);
                                     }

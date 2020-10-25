@@ -1,6 +1,7 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
 import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.sys.services.SysMsgService;
 import org.apache.commons.lang3.StringUtils;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -17,7 +18,7 @@ import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
 public class WkWsHandler extends SimpleWsHandler {
     private static final Log log = Logs.get();
     @Inject
-    private WkNotifyService wkNotifyService;
+    private SysMsgService sysMsgService;
     @Inject
     private RedisService redisService;
 
@@ -48,7 +49,7 @@ public class WkWsHandler extends SimpleWsHandler {
             room = REDIS_KEY_WSROOM + tmp[0] + ":" + tmp[1];
             log.debugf("session(id=%s) join room(name=%s)", session.getId(), room);
             roomProvider.join(room, session.getId());
-            wkNotifyService.getMsg(tmp[0]);
+            sysMsgService.getMsg(tmp[0]);
         }
     }
 
