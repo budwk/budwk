@@ -38,6 +38,8 @@ public class Globals {
     public static NutMap MyConfig = NutMap.NEW();
     // 微信map
     public static NutMap WxMap = NutMap.NEW();
+    // 微信支付map
+    public static NutMap WxPay3Map = NutMap.NEW();
     @Inject
     private SysConfigService sysConfigService;
 
