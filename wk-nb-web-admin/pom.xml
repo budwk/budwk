@@ -98,8 +98,8 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-weixin</artifactId>
-            <version>${nutzboot.version}</version>
+            <artifactId>nutzwx</artifactId>
+            <version>${nutzwx.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vdurmont</groupId>

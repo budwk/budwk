@@ -25,6 +25,7 @@
     <properties>
         <nutzboot.version>2.4.1.v20201014</nutzboot.version>
         <nutz.version>1.r.68.v20201011</nutz.version>
+        <nutzwx.version>1.r.68-SNAPSHOT</nutzwx.version>
         <budwk-nutzboot-starter.version>6.1.2</budwk-nutzboot-starter.version>
         <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
