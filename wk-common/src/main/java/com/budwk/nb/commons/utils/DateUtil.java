@@ -14,6 +14,7 @@ import java.util.Locale;
 public class DateUtil {
     private static final Locale DEFAULT_LOCALE = Locale.CHINA;
     private static final SimpleDateFormat YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat DATE_TIME_ZONE = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     /**
      * 获取当前时间(HH:mm:ss)
@@ -116,5 +117,17 @@ public class DateUtil {
         } catch (ParseException e) {
             return 0;
         }
+    }
+
+    /**
+     * 获取间隔N分钟之后的时间
+     *
+     * @param date
+     * @param minute
+     * @return
+     */
+    public static String getDateAfterMinute(Date date, int minute) {
+        long newTime = date.getTime() + minute * 60 * 1000;
+        return Times.format(DATE_TIME_ZONE, new Date(newTime));
     }
 }

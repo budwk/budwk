@@ -8,7 +8,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2016/7/1.
+ * @author wizzer(wizzer.cn) on 2016/7/1.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -72,13 +72,8 @@ public class Wx_config extends BaseModel implements Serializable {
     private String access_token_lastat;
 
     @Column
-    @Comment("禁用支付")
-    @ColDefine(type = ColType.BOOLEAN)
-    private boolean payEnabled;
-
-    @Column
-    @Comment("支付信息")
-    @ColDefine(type = ColType.TEXT)
-    private String payInfo;
+    @Comment("微信支付商户号")
+    @ColDefine(type = ColType.VARCHAR, width = 32)
+    private String mchid;
 
 }
