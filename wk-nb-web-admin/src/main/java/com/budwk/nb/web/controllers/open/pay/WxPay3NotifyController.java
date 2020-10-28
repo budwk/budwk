@@ -55,7 +55,8 @@ public class WxPay3NotifyController {
             String trade_state = res.getString("trade_state");
             String out_trade_no = res.getString("out_trade_no");
             String openid = payer.getString("openid");
-            if ("SUCCESS".equals(trade_state)) {
+            boolean ok = true;//业务代码入库
+            if ("SUCCESS".equals(trade_state) && ok) {
                 resp.setStatus(200);
                 map.put("code", "SUCCESS");
                 map.put("message", "SUCCESS");
