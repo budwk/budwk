@@ -48,13 +48,6 @@ public class Wx_pay extends BaseModel implements Serializable {
     private String v3certP12Path;
 
     /**
-     * 平台证书publicKey
-     */
-    @Column
-    @ColDefine(type = ColType.TEXT)
-    private String platformCertificate;
-
-    /**
      * 平台证书失效时间
      */
     @Column

@@ -36,6 +36,8 @@ public class WxPay3Service {
     @Inject
     private WxPayService wxPayService;
 
+
+    // 通过商户号获取 wx_pay 对象
     public synchronized Wx_pay getWxPay(String mchid) {
         Wx_pay wxPay = Globals.WxPay3Map.getAs(mchid, Wx_pay.class);
         if (wxPay == null) {
@@ -46,34 +48,40 @@ public class WxPay3Service {
         return wxPay;
     }
 
+    // 检查及更新平台证书机制
     public void checkPlatfromCerts(Wx_pay wxPay) {
         if (wxPay == null)
             throw new IllegalStateException("Wx_pay is null");
-        if (Strings.isBlank(wxPay.getPlatformCertificate()) || wxPay.getExpire_at() < 8 * 3600 * 1000 + System.currentTimeMillis()) {
+        if (wxPay.getExpire_at() == null || wxPay.getExpire_at() == 0 || wxPay.getExpire_at() < 8 * 3600 * 1000 + System.currentTimeMillis()) {
             getPlatfromCerts(wxPay.getMchid(), wxPay.getV3key(), wxPay.getV3keyPath(), wxPay.getV3certPath());
             wxPay = wxPayService.fetch(Cnd.where("mchid", "=", wxPay.getMchid()));
             Globals.WxPay3Map.put(wxPay.getMchid(), wxPay);
         }
     }
 
+    // jsapi 订单下单
     public WxPay3Response v3_order_jsapi(String mchid, String body) throws Exception {
         log.debug("v3_order_jsapi body::" + body);
         String serialNo = WxPay3Util.getCertSerialNo(getWxPay(mchid).getV3certPath());
         return WxPay3Api.v3_order_jsapi(mchid, serialNo, getWxPay(mchid).getV3keyPath(), body);
     }
 
-    public boolean verifySignature(WxPay3Response wxPay3Response, String mchid) throws Exception {
-        return WxPay3Util.verifySignature(wxPay3Response, getWxPay(mchid).getPlatformCertificate());
-    }
-
+    // 通过jsapi 订单号生成js参数
     public NutMap v3_call_jsapi(String mchid, String appid, String prepay_id) throws Exception {
         return WxPay3Util.getJsapiSignMessage(appid, prepay_id, getWxPay(mchid).getV3keyPath());
     }
 
+    // 验证http响应签名结果
+    public boolean verifySignature(WxPay3Response wxPay3Response, String mchid) throws Exception {
+        Wx_pay_cert wxPayCert = wxPayCertService.fetch(Cnd.where("mchid", "=", mchid).and("serial_no", "=", wxPay3Response.getHeader().get("Wechatpay-Serial")));
+        return WxPay3Util.verifySignature(wxPay3Response, wxPayCert.getCertificate());
+    }
 
+    // 验证回调通知签名及内容
     public String verifyNotify(String mchid, String serialNo, String body, String signature, String nonce, String timestamp) throws Exception {
+        Wx_pay_cert wxPayCert = wxPayCertService.fetch(Cnd.where("mchid", "=", mchid).and("serial_no", "=", serialNo));
         return WxPay3Util.verifyNotify(serialNo, body, signature, nonce, timestamp,
-                getWxPay(mchid).getV3key(), getWxPay(mchid).getPlatformCertificate());
+                getWxPay(mchid).getV3key(), wxPayCert.getCertificate());
     }
 
     /**
@@ -123,8 +131,7 @@ public class WxPay3Service {
                 }
                 Wx_pay_cert wxPayCert = wxPayCertService.fetch(Cnd.where("mchid", "=", mchid).orderBy("effective_at", "desc"));
                 if (wxPayCert != null) {
-                    wxPayService.update(Chain.make("platformCertificate", wxPayCert.getCertificate())
-                            .add("expire_at", wxPayCert.getExpire_at()), Cnd.where("mchid", "=", mchid));
+                    wxPayService.update(Chain.make("expire_at", wxPayCert.getExpire_at()), Cnd.where("mchid", "=", mchid));
                 }
             }
         } catch (Exception e) {
