@@ -16,6 +16,7 @@
         <module>wk-nb-web-api-open</module>
         <module>wk-nb-web-api-daemon</module>
         <module>wk-nb-web-admin</module>
+        <module>wk-nb-web-app-demo</module>
     </modules>
     <groupId>com.budwk.nb</groupId>
     <artifactId>budwk-nutzboot</artifactId>

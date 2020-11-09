@@ -76,7 +76,8 @@ https://budwk.com/donation  赞助者
 |[wk-nb-task](wk-nb-task) |定时任务模块,dubbo服务端,支持基于数据库的集群|
 |[wk-nb-web-admin](wk-nb-web-admin) |WEB管理后台API服务,dubbo消费端,Mvc Http API|
 |[wk-nb-web-api-daemon](wk-nb-api-daemon) |应用管理服务守护API,dubbo消费端,Mvc Http API|
-|[wk-nb-web-api-open](wk-nb-api-open) |API Sign/JWT Token示例,dubbo消费端,Mvc Http API|
+|[wk-nb-web-api-open](wk-nb-api-open) |API服务 Sign/JWT Token示例,dubbo消费端,Mvc Http API|
+|[wk-nb-web-app-demo](wk-nb-web-app-demo) |APP/小程序服务端示例,dubbo消费端,Mvc Http API|
 
 ## 技术选型
 ### 后端技术

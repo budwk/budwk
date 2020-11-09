@@ -16,4 +16,6 @@ public class RedisConstant {
     public final static String REDIS_KEY_LOGIN_ADMIN_SESSION = PLATFORM_REDIS_PREFIX + "admin:login:session:";
     public final static String REDIS_KEY_ADMIN_PUBSUB = PLATFORM_REDIS_PREFIX + "admin:pubsub:";
     public final static String REDIS_KEY_WX_TOKEN = PLATFORM_REDIS_PREFIX + "wx:token:";
+
+    public final static String REDIS_KEY_LOGIN_MEMBER_TOKEN_DATA = PLATFORM_REDIS_PREFIX + "app:token:data:";
 }
