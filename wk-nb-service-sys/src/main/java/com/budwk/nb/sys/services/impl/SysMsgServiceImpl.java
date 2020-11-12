@@ -13,6 +13,7 @@ import com.budwk.nb.sys.services.SysUserService;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -20,21 +21,20 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Lang;
-import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_APP_DEPLOY;
 import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
 
 /**
- * @author wizzer(wizzer@qq.com) on 2019/12/12.
+ * @author wizzer(wizzer @ qq.com) on 2019/12/12.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysMsgService.class)
@@ -42,13 +42,14 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
     public SysMsgServiceImpl(Dao dao) {
         super(dao);
     }
+
     private static final Log log = Logs.get();
     @Inject
     private SysMsgUserService sysMsgUserService;
     @Inject
     private SysUserService sysUserService;
     @Inject
-    private RedisService redisService;
+    private JedisAgent jedisAgent;
     @Inject
     private PubSubService pubSubService;
 
@@ -123,7 +124,7 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
             ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + "*");
             ScanResult<String> scan = null;
             do {
-                scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
                 for (String room : scan.getResult()) {
                     pubSubService.fire(room, msg);
                     getMsg(room.split(":")[2]);
@@ -132,14 +133,30 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
         } else if (SysMsgType.USER.equals(innerMsg.getType())) {
             for (String room : rooms) {
                 getMsg(room);
-                ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
-                ScanResult<String> scan = null;
-                do {
-                    scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                    for (String key : scan.getResult()) {
-                        pubSubService.fire(key, msg);
+                if (jedisAgent.isClusterMode()) {
+                    JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+                    for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
+                        try (Jedis jedis = pool.getResource()) {
+                            ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
+                            ScanResult<String> scan = null;
+                            do {
+                                scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                                for (String key : scan.getResult()) {
+                                    pubSubService.fire(key, msg);
+                                }
+                            } while (!scan.isCompleteIteration());
+                        }
                     }
-                } while (!scan.isCompleteIteration());
+                } else {
+                    ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
+                    ScanResult<String> scan = null;
+                    do {
+                        scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                        for (String key : scan.getResult()) {
+                            pubSubService.fire(key, msg);
+                        }
+                    } while (!scan.isCompleteIteration());
+                }
             }
         }
     }
@@ -155,19 +172,35 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
         map.put("list", list);
         String msg = Json.toJson(map, JsonFormat.compact());
         log.debugf("room=%s,msg=%s", room, msg);
-        ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
-        ScanResult<String> scan = null;
-        do {
-            scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-            for (String key : scan.getResult()) {
-                pubSubService.fire(key, msg);
+        if (jedisAgent.isClusterMode()) {
+            JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+            for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
+                try (Jedis jedis = pool.getResource()) {
+                    ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
+                    ScanResult<String> scan = null;
+                    do {
+                        scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                        for (String key : scan.getResult()) {
+                            pubSubService.fire(key, msg);
+                        }
+                    } while (!scan.isCompleteIteration());
+                }
             }
-        } while (!scan.isCompleteIteration());
+        } else {
+            ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + room + ":*");
+            ScanResult<String> scan = null;
+            do {
+                scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                for (String key : scan.getResult()) {
+                    pubSubService.fire(key, msg);
+                }
+            } while (!scan.isCompleteIteration());
+        }
     }
 
     @Override
     @Async
-    public void  getMsg(String loginname) {
+    public void getMsg(String loginname) {
         try {
             //通过用户名查询未读消息
             int size = sysMsgUserService.getUnreadNum(loginname);
@@ -198,7 +231,7 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
             room = REDIS_KEY_WSROOM + room + ":" + userToken;
             log.debugf("offline room(name=%s)", room);
             pubSubService.fire(room, msg);
-            redisService.expire(room, 60 * 3);
+            jedisAgent.jedis().expire(room, 60 * 3);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

@@ -11,9 +11,7 @@ import org.nutz.log.Logs;
 import org.nutz.plugins.mvc.websocket.AbstractWsEndpoint;
 import org.nutz.plugins.mvc.websocket.NutWsConfigurator;
 import org.nutz.plugins.mvc.websocket.WsHandler;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.*;
 
 import javax.websocket.EndpointConfig;
 import javax.websocket.Session;
@@ -44,22 +42,45 @@ public class WkWebSocket extends AbstractWsEndpoint implements PubSub {
 
     public void init() {
         roomProvider = new WkJedisRoomProvider(jedisAgent, REDIS_KEY_SESSION_TTL);
-        try (Jedis jedis = jedisAgent.getResource()) {
-            ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + "*");
-            ScanResult<String> scan = null;
-            do {
-                scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                for (String key : scan.getResult()) {
-                    switch (jedis.type(key)) {
-                        case "none":
-                            break;
-                        case "set":
-                            break;
-                        default:
-                            jedis.del(key);
-                    }
+        if (jedisAgent.isClusterMode()) {
+            JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+            for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
+                try (Jedis jedis = pool.getResource()) {
+                    ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + "*");
+                    ScanResult<String> scan = null;
+                    do {
+                        scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                        for (String key : scan.getResult()) {
+                            switch (jedis.type(key)) {
+                                case "none":
+                                    break;
+                                case "set":
+                                    break;
+                                default:
+                                    jedis.del(key);
+                            }
+                        }
+                    } while (!scan.isCompleteIteration());
                 }
-            } while (!scan.isCompleteIteration());
+            }
+        } else {
+            try (Jedis jedis = jedisAgent.getResource()) {
+                ScanParams match = new ScanParams().match(REDIS_KEY_WSROOM + "*");
+                ScanResult<String> scan = null;
+                do {
+                    scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                    for (String key : scan.getResult()) {
+                        switch (jedis.type(key)) {
+                            case "none":
+                                break;
+                            case "set":
+                                break;
+                            default:
+                                jedis.del(key);
+                        }
+                    }
+                } while (!scan.isCompleteIteration());
+            }
         }
         pubSubService.reg(REDIS_KEY_WSROOM + "*", this);
     }

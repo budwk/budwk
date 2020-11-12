@@ -39,7 +39,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
-import org.nutz.integration.jedis.RedisService;
+import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.integration.json4excel.J4E;
 import org.nutz.integration.json4excel.J4EColumn;
 import org.nutz.integration.json4excel.J4EConf;
@@ -55,8 +55,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 import org.nutz.plugins.validation.Errors;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,9 +63,6 @@ import javax.servlet.http.HttpSession;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
 
 /**
  * @author wizzer(wizzer @ qq.com) on 2019/11/21
@@ -94,7 +90,7 @@ public class SysUserController {
     @Reference
     private ShiroUtil shiroUtil;
     @Inject
-    private RedisService redisService;
+    private JedisAgent jedisAgent;
 
     @At("/logon_user_info")
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
@@ -615,12 +611,26 @@ public class SysUserController {
 
     private boolean getUserOnlineStatus(String userId) {
         try {
-            ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + userId + ":*");
-            ScanResult<String> scan = null;
-            do {
-                scan = redisService.scan(ScanParams.SCAN_POINTER_START, match);
-                return scan.getResult().size() >0;//增量式迭代查询,可能还有下个循环
-            } while (!scan.isCompleteIteration());
+            if (jedisAgent.isClusterMode()) {
+                JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+                for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
+                    try (Jedis jedis = pool.getResource()) {
+                        ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + userId + ":*");
+                        ScanResult<String> scan = null;
+                        do {
+                            scan = jedis.scan(ScanParams.SCAN_POINTER_START, match);
+                            return scan.getResult().size() > 0;//增量式迭代查询,可能还有下个循环
+                        } while (!scan.isCompleteIteration());
+                    }
+                }
+            } else {
+                ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + userId + ":*");
+                ScanResult<String> scan = null;
+                do {
+                    scan = jedisAgent.jedis().scan(ScanParams.SCAN_POINTER_START, match);
+                    return scan.getResult().size() > 0;//增量式迭代查询,可能还有下个循环
+                } while (!scan.isCompleteIteration());
+            }
         } catch (Exception e) {
             log.error(e);
         }
