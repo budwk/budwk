@@ -40,6 +40,7 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.img.Images;
+import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -51,12 +52,13 @@ import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
+
+import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_APP_DEPLOY;
 
 /**
  * @author wizzer(wizzer @ qq.com) on 2019/10/29
@@ -74,7 +76,7 @@ public class SysLoginController {
     @Inject
     private SLogServer sLogServer;
     @Inject
-    private RedisService redisService;
+    private JedisAgent jedisAgent;
 
     @Inject("java:$conf.getInt('shiro.session.cache.redis.ttl')")
     private int RedisKeySessionTTL;
@@ -125,28 +127,58 @@ public class SysLoginController {
             //如果启用了用户单一登录
             if ("true".equals(Globals.MyConfig.getOrDefault("AppWebUserOnlyOne", "false"))) {
                 try {
-                    //把其他在线用户踢下线
-                    ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
-                    ScanResult<String> scan = null;
-                    do {
-                        scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                        for (String key : scan.getResult()) {
-                            String userToken = key.substring(key.lastIndexOf(":") + 1);
-                            String sessionId = Strings.sNull(redisService.get(key));
-                            if (!sessionId.equals(session.getId())) {
-                                try {
-                                    Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
-                                    if (oldSession != null) {
-                                        //通知其他用户被踢下线
-                                        sysMsgService.offline(user.getLoginname(), userToken);
-                                        oldSession.stop();
-                                        webSessionManager.getSessionDAO().delete(oldSession);
+                    if (jedisAgent.isClusterMode()) {
+                        JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+                        for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
+                            try (Jedis jedis = pool.getResource()) {
+                                //把其他在线用户踢下线
+                                ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
+                                ScanResult<String> scan = null;
+                                do {
+                                    scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                                    for (String key : scan.getResult()) {
+                                        String userToken = key.substring(key.lastIndexOf(":") + 1);
+                                        String sessionId = Strings.sNull(jedis.get(key));
+                                        if (!sessionId.equals(session.getId())) {
+                                            try {
+                                                Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
+                                                if (oldSession != null) {
+                                                    //通知其他用户被踢下线
+                                                    sysMsgService.offline(user.getLoginname(), userToken);
+                                                    oldSession.stop();
+                                                    webSessionManager.getSessionDAO().delete(oldSession);
+                                                }
+                                            } catch (Exception e) {
+                                            }
+                                        }
                                     }
-                                } catch (Exception e) {
-                                }
+                                } while (!scan.isCompleteIteration());
                             }
                         }
-                    } while (!scan.isCompleteIteration());
+                    } else {
+                        //把其他在线用户踢下线
+                        ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
+                        ScanResult<String> scan = null;
+                        do {
+                            scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                            for (String key : scan.getResult()) {
+                                String userToken = key.substring(key.lastIndexOf(":") + 1);
+                                String sessionId = Strings.sNull(jedisAgent.jedis().get(key));
+                                if (!sessionId.equals(session.getId())) {
+                                    try {
+                                        Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
+                                        if (oldSession != null) {
+                                            //通知其他用户被踢下线
+                                            sysMsgService.offline(user.getLoginname(), userToken);
+                                            oldSession.stop();
+                                            webSessionManager.getSessionDAO().delete(oldSession);
+                                        }
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }
+                        } while (!scan.isCompleteIteration());
+                    }
                 } catch (Exception e) {
                     log.error(e);
                 }
@@ -173,7 +205,7 @@ public class SysLoginController {
             String userToken = JwtUtil.sign(user, RedisKeySessionTTL * 1000);
             session.setAttribute("userToken", userToken);
             session.setAttribute("userId", user.getId());
-            redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":" + userToken, RedisKeySessionTTL, session.getId());
+            jedisAgent.jedis().setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":" + userToken, RedisKeySessionTTL, session.getId());
             return Result.success("system.login.success").addData(
                     NutMap.NEW().addv("token", userToken)
                             .addv("user", user)
@@ -284,7 +316,7 @@ public class SysLoginController {
             h = 60;
         }
         String text = R.captchaNumber(4);
-        redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_CAPTCHA + session.getId(), 300, text);
+        jedisAgent.jedis().setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_CAPTCHA + session.getId(), 300, text);
         return Images.createCaptcha(text, w, h, null, null, null);
     }
 }
