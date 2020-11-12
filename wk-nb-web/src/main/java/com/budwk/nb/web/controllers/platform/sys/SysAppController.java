@@ -30,7 +30,7 @@ import org.nutz.boot.starter.logback.exts.loglevel.LoglevelService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.pager.Pager;
-import org.nutz.integration.jedis.RedisService;
+import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -42,8 +42,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,7 +71,7 @@ public class SysAppController {
     @Inject
     private SysAppTaskService sysAppTaskService;
     @Inject
-    private RedisService redisService;
+    private JedisAgent jedisAgent;
 
     @At("/host_data")
     @POST
@@ -153,16 +152,30 @@ public class SysAppController {
     public Object getOsData(@Param("hostName") String hostName) {
         try {
             List<String> list = new ArrayList<>();
-            ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
-            ScanResult<String> scan = null;
-            do {
-                scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                list.addAll(scan.getResult());//增量式迭代查询,可能还有下个循环,应该是追加
-            } while (!scan.isCompleteIteration());
+            if (jedisAgent.isClusterMode()) {
+                JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+                for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
+                    try (Jedis jedis = pool.getResource()) {
+                        ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
+                        ScanResult<String> scan = null;
+                        do {
+                            scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                            list.addAll(scan.getResult());//增量式迭代查询,可能还有下个循环,应该是追加
+                        } while (!scan.isCompleteIteration());
+                    }
+                }
+            } else {
+                ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
+                ScanResult<String> scan = null;
+                do {
+                    scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                    list.addAll(scan.getResult());//增量式迭代查询,可能还有下个循环,应该是追加
+                } while (!scan.isCompleteIteration());
+            }
             Collections.sort(list);
             List<NutMap> dataList = new ArrayList<>();
             for (String key : list) {
-                dataList.add(Json.fromJson(NutMap.class, redisService.get(key)));
+                dataList.add(Json.fromJson(NutMap.class, jedisAgent.jedis().get(key)));
             }
             return Result.success().addData(dataList);
         } catch (Exception e) {
