@@ -40,6 +40,7 @@ import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.img.Images;
 import org.nutz.integration.jedis.JedisAgent;
+import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -72,6 +73,8 @@ public class SysLoginController {
     private SLogServer sLogServer;
     @Inject
     private JedisAgent jedisAgent;
+    @Inject
+    private RedisService redisService;
 
     @Inject("java:$conf.getInt('shiro.session.cache.redis.ttl')")
     private int RedisKeySessionTTL;
@@ -150,14 +153,15 @@ public class SysLoginController {
                             }
                         }
                     } else {
+
                         //把其他在线用户踢下线
                         ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":*");
                         ScanResult<String> scan = null;
                         do {
-                            scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                            scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
                             for (String key : scan.getResult()) {
                                 String userToken = key.substring(key.lastIndexOf(":") + 1);
-                                String sessionId = Strings.sNull(jedisAgent.jedis().get(key));
+                                String sessionId = Strings.sNull(redisService.get(key));
                                 if (!sessionId.equals(session.getId())) {
                                     try {
                                         Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
@@ -200,7 +204,7 @@ public class SysLoginController {
             String userToken = StringUtil.generateUserToken(user.getId(), now, "budwk.com");
             session.setAttribute("userToken", userToken);
             session.setAttribute("userId", user.getId());
-            jedisAgent.jedis().setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":" + userToken, RedisKeySessionTTL, session.getId());
+            redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + user.getId() + ":" + userToken, RedisKeySessionTTL, session.getId());
             return Result.success("system.login.success").addData(
                     NutMap.NEW().addv("token", userToken)
                             .addv("user", user)
@@ -311,7 +315,7 @@ public class SysLoginController {
             h = 60;
         }
         String text = R.captchaNumber(4);
-        jedisAgent.jedis().setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_CAPTCHA + session.getId(), 300, text);
+        redisService.setex(RedisConstant.REDIS_KEY_LOGIN_ADMIN_CAPTCHA + session.getId(), 300, text);
         return Images.createCaptcha(text, w, h, null, null, null);
     }
 }

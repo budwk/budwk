@@ -39,6 +39,7 @@ import org.apache.shiro.util.ByteSource;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.integration.jedis.JedisAgent;
+import org.nutz.integration.jedis.RedisService;
 import org.nutz.integration.json4excel.J4E;
 import org.nutz.integration.json4excel.J4EColumn;
 import org.nutz.integration.json4excel.J4EConf;
@@ -86,6 +87,8 @@ public class SysUserController {
     private ShiroUtil shiroUtil;
     @Inject
     private JedisAgent jedisAgent;
+    @Inject
+    private RedisService redisService;
 
     @At("/logon_user_info")
     @Ok("json:{locked:'password|salt',ignoreNull:false}")
@@ -622,7 +625,7 @@ public class SysUserController {
                 ScanParams match = new ScanParams().match(RedisConstant.REDIS_KEY_LOGIN_ADMIN_SESSION + userId + ":*");
                 ScanResult<String> scan = null;
                 do {
-                    scan = jedisAgent.jedis().scan(ScanParams.SCAN_POINTER_START, match);
+                    scan = redisService.scan(ScanParams.SCAN_POINTER_START, match);
                     return scan.getResult().size() > 0;//增量式迭代查询,可能还有下个循环
                 } while (!scan.isCompleteIteration());
             }
