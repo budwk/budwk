@@ -78,6 +78,8 @@ public class SysAppController {
     private SysAppTaskService sysAppTaskService;
     @Inject
     private JedisAgent jedisAgent;
+    @Inject
+    private RedisService redisService;
 
     @At("/host_data")
     @POST
@@ -174,14 +176,14 @@ public class SysAppController {
                 ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
                 ScanResult<String> scan = null;
                 do {
-                    scan = jedisAgent.jedis().scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
+                    scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
                     list.addAll(scan.getResult());//增量式迭代查询,可能还有下个循环,应该是追加
                 } while (!scan.isCompleteIteration());
             }
             Collections.sort(list);
             List<NutMap> dataList = new ArrayList<>();
             for (String key : list) {
-                dataList.add(Json.fromJson(NutMap.class, jedisAgent.jedis().get(key)));
+                dataList.add(Json.fromJson(NutMap.class, redisService.get(key)));
             }
             return Result.success().addData(dataList);
         } catch (Exception e) {
