@@ -171,8 +171,6 @@ public class SysAppController {
                     }
                 }
             } else {
-                Jedis jedis = null;
-
                 ScanParams match = new ScanParams().match(REDIS_KEY_APP_DEPLOY + hostName + ":*");
                 ScanResult<String> scan = null;
                 do {

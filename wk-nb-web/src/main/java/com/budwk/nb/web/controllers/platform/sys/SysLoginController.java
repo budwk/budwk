@@ -56,6 +56,8 @@ import redis.clients.jedis.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author wizzer(wizzer.cn) on 2019/10/29
@@ -126,6 +128,7 @@ public class SysLoginController {
                 try {
                     if (jedisAgent.isClusterMode()) {
                         JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
+                        List<String> keys = new ArrayList<>();
                         for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
                             try (Jedis jedis = pool.getResource()) {
                                 //把其他在线用户踢下线
@@ -133,23 +136,24 @@ public class SysLoginController {
                                 ScanResult<String> scan = null;
                                 do {
                                     scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                                    for (String key : scan.getResult()) {
-                                        String userToken = key.substring(key.lastIndexOf(":") + 1);
-                                        String sessionId = Strings.sNull(jedis.get(key));
-                                        if (!sessionId.equals(session.getId())) {
-                                            try {
-                                                Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
-                                                if (oldSession != null) {
-                                                    //通知其他用户被踢下线
-                                                    sysMsgService.offline(user.getLoginname(), userToken);
-                                                    oldSession.stop();
-                                                    webSessionManager.getSessionDAO().delete(oldSession);
-                                                }
-                                            } catch (Exception e) {
-                                            }
-                                        }
-                                    }
+                                    keys.addAll(scan.getResult());
                                 } while (!scan.isCompleteIteration());
+                            }
+                        }
+                        for (String key : keys) {
+                            String userToken = key.substring(key.lastIndexOf(":") + 1);
+                            String sessionId = Strings.sNull(redisService.get(key));
+                            if (!sessionId.equals(session.getId())) {
+                                try {
+                                    Session oldSession = webSessionManager.getSessionDAO().readSession(sessionId);
+                                    if (oldSession != null) {
+                                        //通知其他用户被踢下线
+                                        sysMsgService.offline(user.getLoginname(), userToken);
+                                        oldSession.stop();
+                                        webSessionManager.getSessionDAO().delete(oldSession);
+                                    }
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     } else {
