@@ -1,7 +1,7 @@
 package com.budwk.nb.app.commons.shiro.service;
 
+import com.budwk.nb.app.commons.utils.JwtUtil;
 import com.budwk.nb.commons.constants.RedisConstant;
-import com.budwk.nb.shop.commons.utils.JwtUtil;
 import com.budwk.nb.sys.models.Sys_user;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;

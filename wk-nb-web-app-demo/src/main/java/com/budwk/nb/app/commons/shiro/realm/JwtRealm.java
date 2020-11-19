@@ -2,7 +2,7 @@ package com.budwk.nb.app.commons.shiro.realm;
 
 import com.budwk.nb.app.commons.shiro.service.JwtService;
 import com.budwk.nb.app.commons.shiro.token.JwtToken;
-import com.budwk.nb.shop.commons.utils.JwtUtil;
+import com.budwk.nb.app.commons.utils.JwtUtil;
 import com.budwk.nb.sys.models.Sys_user;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
