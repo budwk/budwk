@@ -38,9 +38,9 @@ https://budwk.com/donation  赞助者
 
 | 版本名称 | 版本特点 | 版本地址 | 运行方式 | 后端主要技术| 前端主要技术 | 浏览器兼容性 |
 | ---------|---------| ----------| ----------| ----------|----------|----------|
-| BudWk v6.x-nacos | 微服务分布式 + 前后端分离 |[v6.x-nacos](https://github.com/budwk/budwk-nutzboot/tree/v6.x-nacos)| jar,war | nutzboot + dubbo + nacos + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
-| BudWk v6.x-zookeeper | 微服务分布式 + 前后端分离 |[v6.x-zookeeper](https://github.com/budwk/budwk-nutzboot/tree/v6.x-zookeeper)| jar,war | nutzboot + dubbo + zookeeper + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
-| BudWk v6.x-mini | 微服务单应用 + 前后端分离 |[v6.x-mini](https://github.com/budwk/budwk-nutzboot/tree/v6.x-mini)| jar,war | nutzboot + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
+| BudWk v6.x-nacos | 微服务分布式 + 前后端分离 |[v6.x-nacos](https://github.com/budwk/budwk/tree/v6.x-nacos)| jar,war | nutzboot + dubbo + nacos + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
+| BudWk v6.x-zookeeper | 微服务分布式 + 前后端分离 |[v6.x-zookeeper](https://github.com/budwk/budwk/tree/v6.x-zookeeper)| jar,war | nutzboot + dubbo + zookeeper + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
+| BudWk v6.x-mini | 微服务单应用 + 前后端分离 |[v6.x-mini](https://github.com/budwk/budwk/tree/v6.x-mini)| jar,war | nutzboot + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
 | NutzWk v5.x| 微服务分布式 + 前端混合模式 |[v5.x](https://github.com/Wizzercn/NutzWk/tree/v5.x)| jar,war | nutzboot + dubbo + shiro + beetl | vue + elementUI + jquery 或 jquery + bootstrap 两个版本 | Chrome,IE9+ |
 | NutzWk v5.x-mini| 微服务单应用 + 前端混合模式 |[v5.x-mini](https://github.com/Wizzercn/NutzWk/tree/v5.x-mini)| jar,war | nutzboot + shiro + beetl | vue + elementUI + jquery | Chrome,IE9+ |
 | NutzWk v4.x| 模块化单应用 |[v4.x](https://github.com/Wizzercn/NutzWk/tree/v4.x)| war | nutz + shiro + beetl | jquery + bootstrap | Chrome,IE7 + |
@@ -109,7 +109,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   在项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
 *   启动顺序是 sys --> slog --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
 *   正常启动后访问 `http://127.0.0.1:9527` 用户名 superadmin 密码 1
-*   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [wizzer.cn 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
+*   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [budwk.com 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
 
 ## 前端开发指南
 *  `nuxt + vue + elementUI` 源码暂未发布
