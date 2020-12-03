@@ -3,6 +3,7 @@ package com.budwk.nb.sys.services.impl;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_api;
 import com.budwk.nb.sys.services.SysApiService;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -82,6 +83,7 @@ public class SysApiServiceImpl extends BaseServiceImpl<Sys_api> implements SysAp
 
     @Override
     @CacheRemove(cacheKey = "${appid}_*")
+    @Async
     //可以通过el表达式加 * 通配符来批量删除一批缓存
     public void deleteCache(String appid) {
 
@@ -89,6 +91,7 @@ public class SysApiServiceImpl extends BaseServiceImpl<Sys_api> implements SysAp
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }

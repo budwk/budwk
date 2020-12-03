@@ -5,6 +5,7 @@ import com.budwk.nb.cms.models.Cms_link_class;
 import com.budwk.nb.cms.services.CmsLinkClassService;
 import com.budwk.nb.cms.services.CmsLinkService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
@@ -45,6 +46,7 @@ public class CmsLinkServiceImpl extends BaseServiceImpl<Cms_link> implements Cms
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }
