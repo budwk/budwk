@@ -5,6 +5,7 @@ import com.budwk.nb.cms.models.Cms_article;
 import com.budwk.nb.cms.services.CmsArticleService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.commons.base.page.Pagination;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -39,6 +40,7 @@ public class CmsArticleServiceImpl extends BaseServiceImpl<Cms_article> implemen
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }

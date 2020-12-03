@@ -8,6 +8,7 @@ import com.budwk.nb.sys.services.SysMenuService;
 import com.budwk.nb.sys.services.SysRoleService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -34,7 +35,7 @@ import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACH
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = SysUserService.class)
-@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_user")
+@CacheDefaults(cacheName = PLATFORM_REDIS_WKCACHE_PREFIX + "sys_user",isHash = true)
 public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements SysUserService {
     public SysUserServiceImpl(Dao dao) {
         super(dao);
@@ -208,6 +209,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     }
 
     @Override
+    @Async
     @CacheRemove(cacheKey = "${userId}_*")
     public void deleteCache(String userId) {
 
@@ -215,6 +217,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }

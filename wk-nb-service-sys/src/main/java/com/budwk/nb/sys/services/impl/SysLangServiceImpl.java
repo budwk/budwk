@@ -5,6 +5,7 @@ import com.budwk.nb.sys.models.Sys_lang;
 import com.budwk.nb.sys.services.SysLangLocalService;
 import com.budwk.nb.sys.services.SysLangService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
@@ -43,6 +44,7 @@ public class SysLangServiceImpl extends BaseServiceImpl<Sys_lang> implements Sys
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }

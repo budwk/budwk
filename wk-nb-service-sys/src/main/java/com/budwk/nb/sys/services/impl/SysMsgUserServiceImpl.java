@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_msg_user;
 import com.budwk.nb.sys.services.SysMsgUserService;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
@@ -64,12 +65,14 @@ public class SysMsgUserServiceImpl extends BaseServiceImpl<Sys_msg_user> impleme
      */
     @Override
     @CacheRemove(cacheKey = "${loginname}_*")
+    @Async
     public void deleteCache(String loginname) {
 
     }
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }
