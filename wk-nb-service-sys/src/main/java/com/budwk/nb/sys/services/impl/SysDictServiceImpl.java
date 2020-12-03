@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.nb.sys.models.Sys_dict;
 import com.budwk.nb.sys.services.SysDictService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -173,6 +174,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }

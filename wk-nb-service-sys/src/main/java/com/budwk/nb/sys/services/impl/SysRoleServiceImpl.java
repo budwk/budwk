@@ -9,6 +9,7 @@ import com.budwk.nb.sys.services.SysRoleService;
 import com.budwk.nb.sys.services.SysUserService;
 import com.budwk.nb.commons.base.service.BaseServiceImpl;
 import com.budwk.nb.commons.base.page.Pagination;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.*;
 import org.nutz.dao.sql.Sql;
@@ -202,6 +203,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
 
     @Override
     @CacheRemoveAll
+    @Async
     public void clearCache() {
 
     }
