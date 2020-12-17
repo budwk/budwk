@@ -115,9 +115,9 @@ public class SLogServer {
         }
         if (result && re != null) {
             try {
-                dbParam = Json.toJson(re);
+                dbResult = Json.toJson(re);
             } catch (Exception e1) {
-                dbParam = "Json Serialization error";
+                dbResult = "Json Serialization error";
             }
         }
         log(type, tag, source, slogMsg, async, dbParam, dbResult);
