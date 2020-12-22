@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.base.page;
+package com.budwk.nb.base.page;
 
 /**
  * @author wizzer(wizzer.cn) on 2016/6/21.

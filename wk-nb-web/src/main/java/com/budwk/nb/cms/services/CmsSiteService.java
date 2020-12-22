@@ -1,7 +1,7 @@
 package com.budwk.nb.cms.services;
 
 import com.budwk.nb.cms.models.Cms_site;
-import com.budwk.nb.commons.base.service.BaseService;
+import com.budwk.nb.base.service.BaseService;
 
 /**
  * @author wizzer(wizzer.cn) on 2018/3/16.

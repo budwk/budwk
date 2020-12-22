@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.base;
+package com.budwk.nb.base.result;
 
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;

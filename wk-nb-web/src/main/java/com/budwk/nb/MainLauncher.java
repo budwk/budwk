@@ -1,7 +1,7 @@
-package com.budwk.nb.web.commons.core;
+package com.budwk.nb;
 
 import com.budwk.nb.cms.models.Cms_site;
-import com.budwk.nb.commons.constants.PlatformConstant;
+import com.budwk.nb.base.constant.PlatformConstant;
 import com.budwk.nb.sys.models.*;
 import com.budwk.nb.sys.services.SysTaskService;
 import com.budwk.nb.task.services.TaskPlatformService;
@@ -46,7 +46,7 @@ import java.util.List;
 @Encoding(input = "UTF-8", output = "UTF-8")
 @ChainBy(args = "chain/budwk-mvc-chain.json")
 @SessionBy(ShiroSessionProvider.class)
-public class WebMainLauncher {
+public class MainLauncher {
     private static final Log log = Logs.get();
     @Inject("refer:$ioc")
     private Ioc ioc;

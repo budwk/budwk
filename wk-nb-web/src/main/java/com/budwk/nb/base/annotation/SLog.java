@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.annotation;
+package com.budwk.nb.base.annotation;
 
 import java.lang.annotation.*;
 

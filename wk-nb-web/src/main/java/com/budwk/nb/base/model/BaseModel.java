@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.base.model;
+package com.budwk.nb.base.model;
 
 import lombok.Data;
 import org.nutz.dao.entity.annotation.*;

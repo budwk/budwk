@@ -1,8 +1,8 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
-import com.budwk.nb.commons.annotation.SLog;
-import com.budwk.nb.commons.base.Result;
-import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.base.annotation.SLog;
+import com.budwk.nb.base.result.Result;
+import com.budwk.nb.base.utils.StringUtil;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.models.Sys_menu;

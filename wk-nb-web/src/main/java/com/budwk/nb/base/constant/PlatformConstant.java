@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.constants;
+package com.budwk.nb.base.constant;
 
 /**
  * @author wizzer(wizzer.cn) on 2019/12/23

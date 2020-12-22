@@ -2,8 +2,8 @@ package com.budwk.nb.cms.services.impl;
 
 import com.budwk.nb.cms.models.Cms_article;
 import com.budwk.nb.cms.services.CmsArticleService;
-import com.budwk.nb.commons.base.page.Pagination;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.page.Pagination;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
@@ -12,7 +12,7 @@ import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
-import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+import static com.budwk.nb.base.constant.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
 
 /**
  * @author wizzer(wizzer.cn) on 2018/3/16.

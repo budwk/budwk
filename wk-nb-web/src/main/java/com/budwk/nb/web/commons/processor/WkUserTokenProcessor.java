@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.processor;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;

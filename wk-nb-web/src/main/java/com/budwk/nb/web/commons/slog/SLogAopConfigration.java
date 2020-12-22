@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.slog;
 
-import com.budwk.nb.commons.annotation.SLog;
+import com.budwk.nb.base.annotation.SLog;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.aop.SimpleAopMaker;

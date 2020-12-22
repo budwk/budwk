@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.base.page;
+package com.budwk.nb.base.page;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.budwk.nb.slog.services;
+package com.budwk.nb.sys.services;
 
-import com.budwk.nb.commons.base.page.Pagination;
+import com.budwk.nb.base.page.Pagination;
 import com.budwk.nb.sys.models.Sys_log;
 
 /**

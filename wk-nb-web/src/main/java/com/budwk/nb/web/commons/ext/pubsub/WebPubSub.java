@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.ext.pubsub;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import com.budwk.nb.sys.services.SysConfigService;
 import com.budwk.nb.web.commons.base.Globals;
 import org.nutz.integration.jedis.pubsub.PubSub;

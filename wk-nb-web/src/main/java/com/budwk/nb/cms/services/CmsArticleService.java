@@ -1,8 +1,8 @@
 package com.budwk.nb.cms.services;
 
 import com.budwk.nb.cms.models.Cms_article;
-import com.budwk.nb.commons.base.service.BaseService;
-import com.budwk.nb.commons.base.page.Pagination;
+import com.budwk.nb.base.service.BaseService;
+import com.budwk.nb.base.page.Pagination;
 import org.nutz.dao.Condition;
 
 public interface CmsArticleService extends BaseService<Cms_article> {

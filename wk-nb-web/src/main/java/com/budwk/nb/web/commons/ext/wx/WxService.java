@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.ext.wx;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.wx.models.Wx_config;
 import com.budwk.nb.wx.services.WxConfigService;

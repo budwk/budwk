@@ -1,8 +1,8 @@
 package com.budwk.nb.web.controllers.platform.sys;
 
-import com.budwk.nb.commons.base.Result;
-import com.budwk.nb.commons.utils.PageUtil;
-import com.budwk.nb.slog.services.SLogSerivce;
+import com.budwk.nb.base.result.Result;
+import com.budwk.nb.base.utils.PageUtil;
+import com.budwk.nb.sys.services.SLogSerivce;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;

@@ -1,8 +1,8 @@
 package com.budwk.nb.wx;
 
-import com.budwk.nb.commons.utils.DateUtil;
+import com.budwk.nb.base.utils.DateUtil;
 import com.budwk.nb.web.commons.base.Globals;
-import com.budwk.nb.web.commons.core.WebMainLauncher;
+import com.budwk.nb.MainLauncher;
 import com.budwk.nb.web.commons.ext.wx.WxPay3Service;
 import com.budwk.nb.wx.models.Wx_pay;
 import com.budwk.nb.wx.services.WxMinaService;
@@ -111,7 +111,7 @@ public class WxPay3Test extends Assert {
     // 若不提供,默认使用当前测试类作为MainLauncher.
     // 也可以自定义NbJUnit4Runner, 继承NbJUnit4Runner并覆盖其createNbApp方法
     public static NbApp createNbApp() {
-        NbApp nb = new NbApp().setMainClass(WebMainLauncher.class).setPrintProcDoc(false);
+        NbApp nb = new NbApp().setMainClass(MainLauncher.class).setPrintProcDoc(false);
         nb.getAppContext().setMainPackage("com.budwk");
         return nb;
     }

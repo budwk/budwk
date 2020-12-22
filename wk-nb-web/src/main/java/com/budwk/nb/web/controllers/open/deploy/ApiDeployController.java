@@ -1,6 +1,6 @@
 package com.budwk.nb.web.controllers.open.deploy;
 
-import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.base.result.Result;
 import com.budwk.nb.sys.models.Sys_app_conf;
 import com.budwk.nb.sys.models.Sys_app_list;
 import com.budwk.nb.sys.models.Sys_app_task;
@@ -32,7 +32,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_APP_DEPLOY;
+import static com.budwk.nb.base.constant.RedisConstant.REDIS_KEY_APP_DEPLOY;
 
 /**
  * 应用管理服务端接口

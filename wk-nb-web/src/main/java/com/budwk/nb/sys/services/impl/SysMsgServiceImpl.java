@@ -1,7 +1,7 @@
 package com.budwk.nb.sys.services.impl;
 
-import com.budwk.nb.commons.base.page.Pagination;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.page.Pagination;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.enums.SysMsgType;
 import com.budwk.nb.sys.models.Sys_msg;
 import com.budwk.nb.sys.models.Sys_msg_user;
@@ -29,7 +29,7 @@ import redis.clients.jedis.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
+import static com.budwk.nb.base.constant.RedisConstant.REDIS_KEY_WSROOM;
 
 /**
  * @author wizzer(wizzer.cn) on 2019/12/12.

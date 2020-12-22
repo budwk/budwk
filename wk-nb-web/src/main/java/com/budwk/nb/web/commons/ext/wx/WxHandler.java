@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.ext.wx;
 
-import com.budwk.nb.commons.utils.DateUtil;
+import com.budwk.nb.base.utils.DateUtil;
 import com.budwk.nb.web.commons.base.Globals;
 import com.budwk.nb.wx.models.*;
 import com.budwk.nb.wx.services.*;

@@ -1,6 +1,6 @@
 package com.budwk.nb.wx.models;
 
-import com.budwk.nb.commons.base.model.BaseModel;
+import com.budwk.nb.base.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;

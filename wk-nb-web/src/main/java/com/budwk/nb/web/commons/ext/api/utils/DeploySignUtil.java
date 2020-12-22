@@ -1,8 +1,8 @@
 package com.budwk.nb.web.commons.ext.api.utils;
 
-import com.budwk.nb.commons.base.Result;
-import com.budwk.nb.commons.constants.RedisConstant;
-import com.budwk.nb.commons.utils.SignUtil;
+import com.budwk.nb.base.result.Result;
+import com.budwk.nb.base.constant.RedisConstant;
+import com.budwk.nb.base.utils.SignUtil;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;

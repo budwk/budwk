@@ -1,6 +1,6 @@
 package com.budwk.nb.web.controllers.open.lang;
 
-import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.base.result.Result;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.sys.services.SysLangLocalService;

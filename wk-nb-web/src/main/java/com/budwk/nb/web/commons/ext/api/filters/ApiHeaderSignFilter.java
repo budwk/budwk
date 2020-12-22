@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.ext.api.filters;
 
-import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.base.result.Result;
 import com.budwk.nb.web.commons.ext.api.sign.ApiSignServer;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;

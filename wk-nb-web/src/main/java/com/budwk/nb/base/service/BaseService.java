@@ -1,6 +1,6 @@
-package com.budwk.nb.commons.base.service;
+package com.budwk.nb.base.service;
 
-import com.budwk.nb.commons.base.page.Pagination;
+import com.budwk.nb.base.page.Pagination;
 import org.nutz.dao.*;
 import org.nutz.dao.entity.Entity;
 import org.nutz.dao.entity.Record;

@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.ext.api.token;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.nutz.integration.jedis.RedisService;

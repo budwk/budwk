@@ -2,7 +2,7 @@ package com.budwk.nb.cms.services.impl;
 
 import com.budwk.nb.cms.models.Cms_link_class;
 import com.budwk.nb.cms.services.CmsLinkClassService;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 

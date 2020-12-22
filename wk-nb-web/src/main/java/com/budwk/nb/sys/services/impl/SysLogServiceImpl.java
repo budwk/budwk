@@ -1,7 +1,7 @@
 package com.budwk.nb.sys.services.impl;
 
-import com.budwk.nb.commons.base.page.Pagination;
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.page.Pagination;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_log;
 import com.budwk.nb.sys.services.SysLogService;
 import org.apache.commons.lang3.math.NumberUtils;

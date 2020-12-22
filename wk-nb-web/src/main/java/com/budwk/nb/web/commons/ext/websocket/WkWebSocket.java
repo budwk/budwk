@@ -20,7 +20,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
+import static com.budwk.nb.base.constant.RedisConstant.REDIS_KEY_WSROOM;
 
 /**
  * @author wizzer(wizzer.cn) on 2019/12/12.

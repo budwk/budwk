@@ -1,6 +1,6 @@
 package com.budwk.nb.web.controllers.open.test;
 
-import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.base.result.Result;
 import com.budwk.nb.web.commons.ext.api.filters.ApiSignFilter;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;

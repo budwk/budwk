@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.processor;
 
-import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.base.result.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.nutz.integration.shiro.NutShiro;
 import org.nutz.ioc.impl.PropertiesProxy;

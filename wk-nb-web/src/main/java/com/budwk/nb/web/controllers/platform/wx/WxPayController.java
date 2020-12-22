@@ -1,10 +1,10 @@
 package com.budwk.nb.web.controllers.platform.wx;
 
-import com.budwk.nb.commons.annotation.SLog;
-import com.budwk.nb.commons.base.Result;
-import com.budwk.nb.commons.base.page.Pagination;
-import com.budwk.nb.commons.utils.PageUtil;
-import com.budwk.nb.commons.utils.StringUtil;
+import com.budwk.nb.base.annotation.SLog;
+import com.budwk.nb.base.result.Result;
+import com.budwk.nb.base.page.Pagination;
+import com.budwk.nb.base.utils.PageUtil;
+import com.budwk.nb.base.utils.StringUtil;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParam;
 import com.budwk.nb.starter.swagger.annotation.ApiFormParams;
 import com.budwk.nb.wx.models.Wx_pay;

@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.processor;
 
-import com.budwk.nb.commons.base.Result;
+import com.budwk.nb.base.result.Result;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.nutz.integration.shiro.NutShiro;

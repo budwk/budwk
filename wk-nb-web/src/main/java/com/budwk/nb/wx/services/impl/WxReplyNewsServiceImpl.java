@@ -1,6 +1,6 @@
 package com.budwk.nb.wx.services.impl;
 
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import com.budwk.nb.wx.models.Wx_reply_news;
 import com.budwk.nb.wx.services.WxReplyNewsService;
 import org.nutz.dao.Dao;

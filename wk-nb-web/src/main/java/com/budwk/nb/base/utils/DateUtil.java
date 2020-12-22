@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.utils;
+package com.budwk.nb.base.utils;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.nutz.lang.Times;

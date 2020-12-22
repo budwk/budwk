@@ -1,6 +1,6 @@
 package com.budwk.nb.sys.services.impl;
 
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_app_list;
 import com.budwk.nb.sys.services.SysAppListService;
 import org.nutz.dao.Dao;

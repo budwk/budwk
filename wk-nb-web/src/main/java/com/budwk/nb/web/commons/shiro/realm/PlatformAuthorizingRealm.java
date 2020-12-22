@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.shiro.realm;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import com.budwk.nb.sys.models.Sys_role;
 import com.budwk.nb.sys.models.Sys_user;
 import com.budwk.nb.sys.services.SysRoleService;

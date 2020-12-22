@@ -1,4 +1,4 @@
-package com.budwk.nb.commons.utils;
+package com.budwk.nb.base.utils;
 
 import org.nutz.lang.Lang;
 

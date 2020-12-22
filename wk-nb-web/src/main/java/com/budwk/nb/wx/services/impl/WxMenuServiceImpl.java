@@ -1,6 +1,6 @@
 package com.budwk.nb.wx.services.impl;
 
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import com.budwk.nb.wx.models.Wx_menu;
 import com.budwk.nb.wx.services.WxMenuService;
 import org.nutz.aop.interceptor.ioc.TransAop;

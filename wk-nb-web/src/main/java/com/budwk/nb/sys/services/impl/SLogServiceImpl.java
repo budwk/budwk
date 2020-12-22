@@ -1,7 +1,7 @@
-package com.budwk.nb.slog.services.impl;
+package com.budwk.nb.sys.services.impl;
 
-import com.budwk.nb.commons.base.page.Pagination;
-import com.budwk.nb.slog.services.SLogSerivce;
+import com.budwk.nb.base.page.Pagination;
+import com.budwk.nb.sys.services.SLogSerivce;
 import com.budwk.nb.sys.models.Sys_log;
 import com.budwk.nb.sys.services.SysLogService;
 import com.mongodb.DBCursor;

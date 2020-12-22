@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.ext.websocket;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import com.budwk.nb.sys.services.SysMsgService;
 import org.apache.commons.lang3.StringUtils;
 import org.nutz.integration.jedis.RedisService;
@@ -12,7 +12,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.plugins.mvc.websocket.handler.SimpleWsHandler;
 
-import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
+import static com.budwk.nb.base.constant.RedisConstant.REDIS_KEY_WSROOM;
 
 @IocBean
 public class WkWsHandler extends SimpleWsHandler {

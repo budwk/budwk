@@ -1,6 +1,6 @@
 package com.budwk.nb.sys.services.impl;
 
-import com.budwk.nb.commons.base.service.BaseServiceImpl;
+import com.budwk.nb.base.service.BaseServiceImpl;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.models.Sys_role;
 import com.budwk.nb.sys.models.Sys_user;
@@ -27,7 +27,7 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.budwk.nb.commons.constants.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
+import static com.budwk.nb.base.constant.RedisConstant.PLATFORM_REDIS_WKCACHE_PREFIX;
 
 /**
  * @author wizzer(wizzer.cn) on 2016/12/22.

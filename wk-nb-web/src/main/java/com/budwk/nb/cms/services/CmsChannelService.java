@@ -1,7 +1,7 @@
 package com.budwk.nb.cms.services;
 
 import com.budwk.nb.cms.models.Cms_channel;
-import com.budwk.nb.commons.base.service.BaseService;
+import com.budwk.nb.base.service.BaseService;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.budwk.nb.web.commons.shiro.listener;
 
-import com.budwk.nb.commons.constants.RedisConstant;
+import com.budwk.nb.base.constant.RedisConstant;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
 import org.nutz.integration.jedis.RedisService;

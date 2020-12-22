@@ -1,6 +1,6 @@
 package com.budwk.nb.sys.services;
 
-import com.budwk.nb.commons.base.service.BaseService;
+import com.budwk.nb.base.service.BaseService;
 import com.budwk.nb.sys.models.Sys_menu;
 import com.budwk.nb.sys.models.Sys_role;
 import com.budwk.nb.sys.models.Sys_user;

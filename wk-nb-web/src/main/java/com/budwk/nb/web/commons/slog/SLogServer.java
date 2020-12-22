@@ -1,7 +1,7 @@
 package com.budwk.nb.web.commons.slog;
 
-import com.budwk.nb.commons.utils.StringUtil;
-import com.budwk.nb.slog.services.SLogSerivce;
+import com.budwk.nb.base.utils.StringUtil;
+import com.budwk.nb.sys.services.SLogSerivce;
 import com.budwk.nb.sys.models.Sys_log;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.el.El;
