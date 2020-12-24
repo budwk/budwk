@@ -4,6 +4,7 @@ import com.budwk.nb.base.result.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.nutz.integration.shiro.NutShiro;
 import org.nutz.ioc.impl.PropertiesProxy;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.ActionContext;
@@ -14,6 +15,7 @@ import org.nutz.mvc.impl.processor.AbstractProcessor;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class XssSqlFilterProcessor extends AbstractProcessor {
     public void init(NutConfig config, ActionInfo ai) throws Throwable {
         try {
             conf = config.getIoc().get(PropertiesProxy.class, "conf");
-            ignoreList = conf.getList("budwk.xsssql.ignore.urls", ",") == null ? new ArrayList<>() : conf.getList("budwk.xsssql.ignore.urls", ",");
+            ignoreList = Arrays.asList(Strings.splitIgnoreBlank(conf.get("budwk.xsssql.ignore.urls", "")));
         } catch (Exception e) {
         }
     }
