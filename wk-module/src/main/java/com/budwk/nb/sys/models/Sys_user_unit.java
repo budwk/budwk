@@ -22,7 +22,7 @@ public class Sys_user_unit extends BaseModel implements Serializable {
 
     @Column
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    private String roleId;
+    private String userId;
 
     @Column
     @ColDefine(type = ColType.VARCHAR, width = 32)
