@@ -44,7 +44,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/wx/tpl/list")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_模板消息_模板列表")}, servers = {@Server(url = "/")})
 public class WxTplListController {
     private static final Log log = Logs.get();

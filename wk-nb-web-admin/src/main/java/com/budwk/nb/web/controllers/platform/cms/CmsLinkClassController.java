@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 @IocBean
 @At("/api/{version}/platform/cms/links/class")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "CMS_链接分类")}, servers = {@Server(url = "/")})
 public class CmsLinkClassController {
     private static final Log log = Logs.get();

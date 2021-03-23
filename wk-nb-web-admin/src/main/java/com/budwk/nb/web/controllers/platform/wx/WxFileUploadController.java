@@ -47,7 +47,7 @@ import java.util.Date;
 @IocBean
 @At("/api/{version}/platform/wx/file/upload")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_文件上传")}, servers = @Server(url = "/"))
 public class WxFileUploadController {
     private static final Log log = Logs.get();

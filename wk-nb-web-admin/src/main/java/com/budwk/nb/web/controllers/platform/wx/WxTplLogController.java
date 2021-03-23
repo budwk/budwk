@@ -33,7 +33,7 @@ import org.nutz.mvc.annotation.*;
 @IocBean
 @At("/api/{version}/platform/wx/tpl/log")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_模板消息_发送日志")}, servers = {@Server(url = "/")})
 public class WxTplLogController {
     private static final Log log = Logs.get();

@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 @IocBean
 @At("/api/{version}/platform/wx/reply/conf")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_自动回复_事件配置")}, servers = {@Server(url = "/")})
 public class WxReplyConfController {
     private static final Log log = Logs.get();

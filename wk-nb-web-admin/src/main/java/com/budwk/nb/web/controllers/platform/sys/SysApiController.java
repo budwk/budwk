@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 @IocBean
 @At("/api/{version}/platform/sys/api")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_接口管理")}, servers = @Server(url = "/"))
 public class SysApiController {
     private static final Log log = Logs.get();

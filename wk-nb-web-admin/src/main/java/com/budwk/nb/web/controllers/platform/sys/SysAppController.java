@@ -61,7 +61,7 @@ import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_WSROOM;
 @IocBean
 @At("/api/{version}/platform/sys/app")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_应用管理")}, servers = @Server(url = "/"))
 public class SysAppController {
     private static final Log log = Logs.get();

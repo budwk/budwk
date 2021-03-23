@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 @IocBean
 @At("/api/{version}/platform/sys/param")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_系统参数")}, servers = @Server(url = "/"))
 public class SysParamController {
     private static final Log log = Logs.get();

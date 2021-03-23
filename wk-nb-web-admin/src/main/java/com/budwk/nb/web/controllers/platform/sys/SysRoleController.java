@@ -55,7 +55,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/sys/role")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_角色管理")}, servers = @Server(url = "/"))
 public class SysRoleController {
     private static final Log log = Logs.get();

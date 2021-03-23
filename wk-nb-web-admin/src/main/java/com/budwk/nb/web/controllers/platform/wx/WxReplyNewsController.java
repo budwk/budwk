@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 @IocBean
 @At("/api/{version}/platform/wx/reply/news")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_自动回复_图文管理")}, servers = {@Server(url = "/")})
 public class WxReplyNewsController {
     private static final Log log = Logs.get();

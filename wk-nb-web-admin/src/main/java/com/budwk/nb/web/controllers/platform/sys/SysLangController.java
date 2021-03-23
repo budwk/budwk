@@ -41,7 +41,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/sys/lang")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_多语言管理")}, servers = @Server(url = "/"))
 public class SysLangController {
     private static final Log log = Logs.get();

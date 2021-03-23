@@ -53,7 +53,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/wx/msg/mass")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_群发消息")}, servers = {@Server(url = "/")})
 public class WxMsgMassController {
 

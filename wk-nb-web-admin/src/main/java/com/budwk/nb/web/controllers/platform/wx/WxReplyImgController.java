@@ -53,7 +53,7 @@ import java.util.Date;
 @IocBean
 @At("/api/{version}/platform/wx/reply/img")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_自动回复_图片管理")}, servers = {@Server(url = "/")})
 public class WxReplyImgController {
     private static final Log log = Logs.get();

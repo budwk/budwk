@@ -31,7 +31,7 @@ import org.nutz.mvc.annotation.*;
  */
 @IocBean
 @At("/api/{version}/open/language")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "公共_多语言")}, servers = @Server(url = "/"))
 public class ApiLangController {
     private static final Log log = Logs.get();

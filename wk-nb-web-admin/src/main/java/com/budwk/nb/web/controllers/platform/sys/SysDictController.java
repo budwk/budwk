@@ -44,7 +44,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/sys/dict")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_字典管理")}, servers = @Server(url = "/"))
 public class SysDictController {
     private static final Log log = Logs.get();

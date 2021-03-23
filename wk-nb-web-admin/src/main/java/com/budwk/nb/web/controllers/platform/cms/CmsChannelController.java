@@ -48,7 +48,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/cms/channel")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "CMS_栏目管理")}, servers = {@Server(url = "/")})
 public class CmsChannelController {
     private static final Log log = Logs.get();

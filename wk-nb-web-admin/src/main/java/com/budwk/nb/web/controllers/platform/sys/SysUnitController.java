@@ -47,7 +47,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/sys/unit")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_单位管理")}, servers = {@Server(url = "/")})
 public class SysUnitController {
     private static final Log log = Logs.get();

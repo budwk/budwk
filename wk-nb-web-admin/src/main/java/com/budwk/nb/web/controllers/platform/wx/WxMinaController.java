@@ -37,7 +37,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/wx/conf/mina")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_小程序配置")}, servers = {@Server(url = "/")})
 public class WxMinaController {
     private static final Log log = Logs.get();

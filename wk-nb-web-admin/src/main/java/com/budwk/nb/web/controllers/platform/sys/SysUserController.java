@@ -71,7 +71,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/sys/user")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_用户管理")}, servers = @Server(url = "/"))
 public class SysUserController {
     private static final Log log = Logs.get();

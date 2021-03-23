@@ -55,7 +55,7 @@ import java.util.Map;
 @IocBean
 @At("/api/{version}/platform/sys/msg")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_系统消息")}, servers = @Server(url = "/"))
 public class SysMsgController {
     private static final Log log = Logs.get();

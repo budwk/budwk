@@ -68,7 +68,7 @@ import static com.budwk.nb.commons.constants.RedisConstant.REDIS_KEY_APP_DEPLOY;
 @IocBean
 @At("/api/{version}/platform/login")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_系统登陆")}, servers = @Server(url = "/"))
 public class SysLoginController {
     private static final Log log = Logs.get();

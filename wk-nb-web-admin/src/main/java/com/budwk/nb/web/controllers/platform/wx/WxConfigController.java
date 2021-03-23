@@ -43,7 +43,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/wx/conf/account")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_账号配置")}, servers = {@Server(url = "/")})
 public class WxConfigController {
     private static final Log log = Logs.get();

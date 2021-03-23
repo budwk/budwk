@@ -32,7 +32,7 @@ import org.nutz.mvc.annotation.*;
 @IocBean
 @At("/api/{version}/platform/sys/log")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_日志管理")}, servers = @Server(url = "/"))
 public class SysLogController {
     private static final Log log = Logs.get();

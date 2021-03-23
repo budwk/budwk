@@ -40,7 +40,7 @@ import java.util.Date;
 @IocBean
 @At("/api/{version}/platform/pub/file/upload")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "系统_公共_文件上传")}, servers = @Server(url = "/"))
 public class PubFileUploadController {
     private static final Log log = Logs.get();

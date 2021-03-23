@@ -54,7 +54,7 @@ import java.util.Map;
 @IocBean
 @At("/api/{version}/platform/wx/conf/menu")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_菜单配置")}, servers = {@Server(url = "/")})
 public class WxMenuController {
     private static final Log log = Logs.get();

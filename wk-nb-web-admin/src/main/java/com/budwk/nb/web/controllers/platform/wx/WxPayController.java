@@ -41,7 +41,7 @@ import java.util.List;
 @IocBean
 @At("/api/{version}/platform/wx/conf/pay")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "微信_微信支付配置")}, servers = {@Server(url = "/")})
 public class WxPayController {
     private static final Log log = Logs.get();

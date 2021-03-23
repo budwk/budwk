@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 @IocBean
 @At("/api/{version}/platform/cms/site")
 @Ok("json")
-@ApiVersion("1.0.0")
+@ApiVersion
 @OpenAPIDefinition(tags = {@Tag(name = "CMS_站点管理")}, servers = {@Server(url = "/")})
 public class CmsSiteController {
     private static final Log log = Logs.get();
