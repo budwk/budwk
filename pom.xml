@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <name>budwk-nutzboot-zookeeper</name>
     <modules>
-        <module>wk-code-generator</module>
         <module>wk-common</module>
         <module>wk-module</module>
         <module>wk-nb-service-sys</module>
