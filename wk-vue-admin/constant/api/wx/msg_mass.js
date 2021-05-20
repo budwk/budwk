@@ -1,6 +1,0 @@
-export const API_WX_MSG_MASS_LIST = '/platform/wx/msg/mass/list'
-export const API_WX_MSG_MASS_NEWS_LIST = '/platform/wx/msg/mass/news_list'
-export const API_WX_MSG_MASS_NEWS_CREATE = '/platform/wx/msg/mass/news_create'
-export const API_WX_MSG_MASS_NEWS_DETAIL = '/platform/wx/msg/mass/news_detail/'
-export const API_WX_MSG_MASS_NEWS_DELETE = '/platform/wx/msg/mass/news_delete/'
-export const API_WX_MSG_MASS_PUSH = '/platform/wx/msg/mass/push'
