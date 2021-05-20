@@ -568,7 +568,7 @@ export default {
         this.$alert('首次登录，请修改密码！', '操作提示', {
           confirmButtonText: '确定',
           callback: action => {
-            this.$router.push('/platform/home/user?tab=pwd')
+            this.$router.push('/home/user?tab=pwd')
           }
         })
       }

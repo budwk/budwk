@@ -173,6 +173,14 @@ public class WkPlatformLauncher {
                 sysApp.setId(GlobalConstant.DEFAULT_PLATFORM_APPID);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(2);
+                sysApp.setPath("/platform");
+                dao.insert(sysApp);
+                sysApp = new Sys_app();
+                sysApp.setName("内容管理");
+                sysApp.setId("CMS");
+                sysApp.setDisabled(false);
+                sysApp.setLocation(3);
+                sysApp.setPath("/cms");
                 dao.insert(sysApp);
 
                 //初始化单位
@@ -198,7 +206,7 @@ public class WkPlatformLauncher {
                 unit.setEmail("wizzer@qq.com");
                 unit.setTelephone("");
                 unit.setHasChildren(false);
-                unit.setParentId("0001");
+                unit.setParentId(headUnit.getId());
                 unit.setWebsite("https://budwk.com");
                 unit.setType(SysUnitType.UNIT);
                 dao.insert(unit);
