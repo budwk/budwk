@@ -1,0 +1,6 @@
+export const API_WX_CONFIG_PAY_GET = '/platform/wx/conf/pay/get/'
+export const API_WX_CONFIG_PAY_DELETE = '/platform/wx/conf/pay/delete/'
+export const API_WX_CONFIG_PAY_CREATE = '/platform/wx/conf/pay/create'
+export const API_WX_CONFIG_PAY_UPDATE = '/platform/wx/conf/pay/update'
+export const API_WX_CONFIG_PAY_LIST = '/platform/wx/conf/pay/list'
+export const API_WX_CONFIG_PAYCERT_LIST = '/platform/wx/conf/pay/cert/list'

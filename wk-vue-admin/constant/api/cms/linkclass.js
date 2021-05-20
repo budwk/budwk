@@ -1,0 +1,5 @@
+export const API_CMS_LINKCLASS_GET = '/cms/links/class/get/'
+export const API_CMS_LINKCLASS_DELETE = '/cms/links/class/delete/'
+export const API_CMS_LINKCLASS_CREATE = '/cms/links/class/create'
+export const API_CMS_LINKCLASS_UPDATE = '/cms/links/class/update'
+export const API_CMS_LINKCLASS_LIST = '/cms/links/class/list'

@@ -1,0 +1,7 @@
+export const API_CMS_LINK_GET = '/cms/links/link/get/'
+export const API_CMS_LINK_DELETE = '/cms/links/link/delete/'
+export const API_CMS_LINK_DELETE_MORE = '/cms/links/link/delete_more'
+export const API_CMS_LINK_CREATE = '/cms/links/link/create'
+export const API_CMS_LINK_UPDATE = '/cms/links/link/update'
+export const API_CMS_LINK_LIST = '/cms/links/link/list'
+export const API_CMS_LINK_LIST_CLASS = '/cms/links/link/list_class'

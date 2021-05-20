@@ -1,0 +1,7 @@
+export const API_SYS_APP_LIST = '/platform/sys/app/list'
+export const API_SYS_APP_GET = '/platform/sys/app/get/'
+export const API_SYS_APP_CREATE = '/platform/sys/app/create'
+export const API_SYS_APP_DELETE = '/platform/sys/app/delete/'
+export const API_SYS_APP_UPDATE = '/platform/sys/app/update'
+export const API_SYS_APP_DISABLED = '/platform/sys/app/disabled'
+export const API_SYS_APP_LOCATION = '/platform/sys/app/location'

@@ -1,0 +1,7 @@
+export const API_WX_REPLY_CONF_GET = '/platform/wx/reply/conf/get/'
+export const API_WX_REPLY_CONF_DELETE = '/platform/wx/reply/conf/delete/'
+export const API_WX_REPLY_CONF_DELETE_MORE = '/platform/wx/reply/conf/delete_more'
+export const API_WX_REPLY_CONF_CREATE = '/platform/wx/reply/conf/create'
+export const API_WX_REPLY_CONF_UPDATE = '/platform/wx/reply/conf/update'
+export const API_WX_REPLY_CONF_LIST = '/platform/wx/reply/conf/list'
+export const API_WX_REPLY_CONF_LIST_CONTENT = '/platform/wx/reply/conf/list_content'

@@ -1,0 +1,116 @@
+nutz:
+  application:
+    name: wk-ucenter
+server:
+  port: 0
+  host: 0.0.0.0
+jetty:
+  contextPath: /ucenter
+  threadpool:
+    idleTimeout: 60000
+    minThreads: 10
+    maxThreads: 200
+  #结合ftp使用,或用nginx代理ftp路径
+  staticPath: /data/files
+openapi:
+  enable: true
+  scanner:
+    package: com.budwk.app
+  info:
+    title: 认证中心
+    version: 7.0.0
+    contact:
+      name: 大鲨鱼
+      email: wizzer@qq.com
+  servers:
+    - url: ".."
+      description: 本机环境
+  headers:
+    - value: X-Token
+      name: 用户Token
+      in: header
+      required: true
+web:
+  sql:
+    ignore:
+  cors:
+    # 正式环境请改成部署的域名或网址,增加安全性
+    origin: "*"
+  validation:
+    enable: true
+security:
+  st:
+    # token参数名称,默认 X-Token
+    tokenName: X-Token
+    # 超时时间(单位s,默认1天)
+    timeout: 86400
+    # 是否允许同一账号并发登录(为false时新登录挤掉旧登录)
+    allowConcurrentLogin: true
+    # 在多人登录同一账号时,是否共用一个token(为false时每次登录新建一个token)
+    isShare: true
+    # Token 风格(默认可取值：uuid,simple-uuid,random-32,random-64,random-128,tik
+    tokenStyle: uuid
+redis:
+  host: 127.0.0.1
+  port: 6379
+  timeout: 2000
+  max_redir: 10
+  database: 0
+  maxTotal: 100
+  #password: 123
+  pool:
+    maxTotal: 100
+    maxIdle: 50
+    minIdle: 10
+  # cluster 集群模式
+  mode: normal
+  # cluster 集群模式
+  #nodes:
+nacos:
+  discovery:
+    server-addr: 192.168.5.211:8848
+    namespace: dev
+    naming:
+      service-name: budwk.ucenter
+      meta-data: "{'version':'budwk.ucenter.7.0.0'}"
+dubbo:
+  registry:
+    address: nacos://192.168.5.211:8848?namespace=dev
+  protocol:
+    name: dubbo
+    threads: 200
+    #随机端口
+    port: 0
+    #默认关闭QOS服务
+  application:
+    qos:
+      enable: false
+sms:
+  enable: false
+  #服务提供商
+  provider: tencent
+  tencent:
+    secret-id: xxx
+    secret-key: xxx
+    appid: 1400463107
+    sign: 萌发开源
+  template:
+    register: 813970  #注册短信验证码模版编号
+    login: 813970     #登录短信验证码模版编号
+    password: 813970  #找回密码短信验证码模版编号
+    message:          #短信通知模版编号
+email:
+  enable: false                  #是否启用
+  HostName: smtp.qq.com  #服务器域名或IP
+  SmtpPort: 465                 #服务器端口
+  UserName: xxx@qq.com   #账号
+  Password: xxx    #密码
+  SSLOnConnect: true            #开启SSL连接
+  From: xxx@qq.com       #发件人
+  charset: UTF-8                #字符集, 默认UTF-8
+  template:
+    domain: https://budwk.com    #邮件内容中留下的域名
+    author: 萌发开源  #邮件内容中留下的落款
+log:
+  color: true
+  level: debug

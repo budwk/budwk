@@ -1,0 +1,6 @@
+export const API_WX_REPLY_TXT_GET = '/platform/wx/reply/txt/get/'
+export const API_WX_REPLY_TXT_DELETE = '/platform/wx/reply/txt/delete/'
+export const API_WX_REPLY_TXT_DELETE_MORE = '/platform/wx/reply/txt/delete_more'
+export const API_WX_REPLY_TXT_CREATE = '/platform/wx/reply/txt/create'
+export const API_WX_REPLY_TXT_UPDATE = '/platform/wx/reply/txt/update'
+export const API_WX_REPLY_TXT_LIST = '/platform/wx/reply/txt/list'

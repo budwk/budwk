@@ -1,0 +1,25 @@
+@import "variables/variables";
+@import "utils/mixin";
+@import "base/reset";
+@import "base/config";
+
+// 上头部，下侧栏 主体，三级菜单
+@import "layout/default/variables";
+@import "layout/default/index";
+
+@import "core/content";
+
+// 上头部，下侧栏 主体，二级菜单
+//@import "layout/th_second_menu/variables";
+//@import "layout/th_second_menu/index";
+
+@import "modules/public";
+@import "modules/login";
+
+@import "../../components/Drawer/index";
+
+@each $name, $value in $themes-colors {
+  .platform-#{$name} {
+    background-color: $value;
+  }
+}

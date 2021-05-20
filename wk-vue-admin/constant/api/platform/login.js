@@ -1,0 +1,5 @@
+export const API_AUTH_LOGIN = '/platform/login/login'
+export const API_AUTH_CAPTCHA = '/platform/login/captcha'
+export const API_AUTH_INFO = '/platform/sys/user/logon_user_info'
+export const API_AUTH_SET_THEME = '/platform/sys/user/set_user_theme'
+export const API_AUTH_LOGOUT = '/platform/login/logout'

@@ -1,0 +1,6 @@
+export const API_WX_REPLY_IMG_GET = '/platform/wx/reply/img/get/'
+export const API_WX_REPLY_IMG_DELETE = '/platform/wx/reply/img/delete/'
+export const API_WX_REPLY_IMG_DELETE_MORE = '/platform/wx/reply/img/delete_more'
+export const API_WX_REPLY_IMG_CREATE = '/platform/wx/reply/img/create'
+export const API_WX_REPLY_IMG_UPDATE = '/platform/wx/reply/img/update'
+export const API_WX_REPLY_IMG_LIST = '/platform/wx/reply/img/list'

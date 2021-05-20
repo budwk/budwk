@@ -1,0 +1,45 @@
+.platform-login {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("/assets/images/login_bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &-form {
+    width: 300px;
+    font-size: 12px;
+
+    .el-card__header {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .el-button {
+      width: 100%;
+    }
+
+    .ft {
+      margin-top: 16px;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+    }
+  }
+  &-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  &-logo-pic {
+    width: 160px;
+    margin-right: 16px;
+  }
+  &-logo-txt {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+}

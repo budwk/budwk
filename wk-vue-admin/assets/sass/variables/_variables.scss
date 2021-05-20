@@ -1,0 +1,108 @@
+// themes
+$themes-count: 8;
+
+$themes-colors: (
+  default: #198bca,
+  theme1: #095bcc,
+  theme2: #6b42c7,
+  theme3: #25a054,
+  theme4: #ed6529
+);
+
+$themes-config: (
+  default: (
+    header-bgColor: #2d303b,
+    header-logo-item-color: #fff,
+    header-nav-item-color: #d1d1d1,
+    aside-color: #e1e1e1,
+    aside-bgColor: #31354b,
+    aside-item-active-color: #fff,
+    aside-item-active-bgColor: map_get($themes-colors, "default"),
+    aside-item-hover-color: lighten(#fff, 15%),
+    aside-item-hover-bgColor: lighten(map_get($themes-colors, "default"), 15%),
+    aside-second-color: #f5f5f5,
+    aside-second-bgColor: #2d303a,
+    aside-second-item-active-color: map_get($themes-colors, "default"),
+    aside-second-item-active-bgColor: #262932,
+    aside-second-item-hover-color:
+      lighten(map_get($themes-colors, "default"), 15%),
+    aside-second-item-hover-bgColor: lighten(#262932, 15%),
+    drawer-bgColor: map_get($themes-colors, "default")
+  ),
+  theme1: (
+    header-bgColor: #2d303b,
+    header-logo-item-color: #fff,
+    header-nav-item-color: #d1d1d1,
+    aside-color: #e1e1e1,
+    aside-bgColor: #31354b,
+    aside-item-active-color: #fff,
+    aside-item-active-bgColor: map_get($themes-colors, "theme1"),
+    aside-item-hover-color: lighten(#fff, 15%),
+    aside-item-hover-bgColor: lighten(map_get($themes-colors, "theme1"), 15%),
+    aside-second-color: #f5f5f5,
+    aside-second-bgColor: #2d303a,
+    aside-second-item-active-color: map_get($themes-colors, "theme1"),
+    aside-second-item-active-bgColor: #262932,
+    aside-second-item-hover-color:
+      lighten(map_get($themes-colors, "theme1"), 15%),
+    aside-second-item-hover-bgColor: lighten(#262932, 15%),
+    drawer-bgColor: map_get($themes-colors, "theme1")
+  ),
+  theme2: (
+    header-bgColor: #2d303b,
+    header-logo-item-color: #fff,
+    header-nav-item-color: #d1d1d1,
+    aside-color: #e1e1e1,
+    aside-bgColor: #31354b,
+    aside-item-active-color: #fff,
+    aside-item-active-bgColor: map_get($themes-colors, "theme2"),
+    aside-item-hover-color: lighten(#fff, 15%),
+    aside-item-hover-bgColor: lighten(map_get($themes-colors, "theme2"), 15%),
+    aside-second-color: #f5f5f5,
+    aside-second-bgColor: #2d303a,
+    aside-second-item-active-color: map_get($themes-colors, "theme2"),
+    aside-second-item-active-bgColor: #262932,
+    aside-second-item-hover-color:
+      lighten(map_get($themes-colors, "theme2"), 15%),
+    aside-second-item-hover-bgColor: lighten(#262932, 15%),
+    drawer-bgColor: map_get($themes-colors, "theme2")
+  ),
+  theme3: (
+    header-bgColor: #2d303b,
+    header-logo-item-color: #fff,
+    header-nav-item-color: #d1d1d1,
+    aside-color: #e1e1e1,
+    aside-bgColor: #31354b,
+    aside-item-active-color: #fff,
+    aside-item-active-bgColor: map_get($themes-colors, "theme3"),
+    aside-item-hover-color: lighten(#fff, 15%),
+    aside-item-hover-bgColor: lighten(map_get($themes-colors, "theme3"), 15%),
+    aside-second-color: #f5f5f5,
+    aside-second-bgColor: #2d303a,
+    aside-second-item-active-color: map_get($themes-colors, "theme3"),
+    aside-second-item-active-bgColor: #262932,
+    aside-second-item-hover-color:
+      lighten(map_get($themes-colors, "theme3"), 15%),
+    aside-second-item-hover-bgColor: lighten(#262932, 15%),
+    drawer-bgColor: map_get($themes-colors, "theme3")
+  ),
+  theme4: (
+    header-bgColor: #2d303b,
+    header-logo-item-color: #fff,
+    header-nav-item-color: #d1d1d1,
+    aside-color: #e1e1e1,
+    aside-bgColor: #31354b,
+    aside-item-active-color: #fff,
+    aside-item-active-bgColor: map_get($themes-colors, "theme4"),
+    aside-item-hover-color: lighten(#fff, 15%),
+    aside-item-hover-bgColor: lighten(map_get($themes-colors, "theme4"), 15%),
+    aside-second-color: #f5f5f5,
+    aside-second-bgColor: #2d303a,
+    aside-second-item-active-color: map_get($themes-colors, "theme4"),
+    aside-second-item-active-bgColor: #262932,
+    aside-second-item-hover-color:
+      lighten(map_get($themes-colors, "theme4"), 15%),
+    aside-second-item-hover-bgColor: lighten(#262932, 15%),
+    drawer-bgColor: map_get($themes-colors, "theme4")
+  )
+);

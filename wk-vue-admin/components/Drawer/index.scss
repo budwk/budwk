@@ -1,0 +1,102 @@
+$name: ".c-drawer";
+.c-drawer {
+  > * {
+    transition: transform 0.3s cubic-bezier(0.9, 0, 0.3, 0.7),
+      box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+  }
+  &-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 1011;
+    transition: opacity 0.3s linear, height 0s ease 0.3s;
+  }
+  &-open {
+    #{$name}-mask {
+      opacity: 0.3;
+      transition: opacity 0.3s linear;
+      height: 100%;
+    }
+  }
+  &-wrap {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    background-color: #fff;
+    z-index: 1012;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  &-left {
+    left: 0;
+  }
+  &-right {
+    right: 0;
+  }
+
+  &-header {
+    position: relative;
+    height: 46px;
+    border-bottom: 1px solid #dcdfe6;
+    line-height: 46px;
+    padding: 0 10px 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &-header-notitle {
+    #{$name}-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  }
+  &-close {
+    font-size: 20px;
+    transition: color 0.2s ease;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.45);
+    &:hover {
+      color: rgba(0, 0, 0, 0.75);
+      text-decoration: none;
+    }
+  }
+
+  &-body {
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+
+  &-handle {
+    position: absolute;
+    top: 240px;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+    text-align: center;
+    background-color: $theme-color;
+
+    cursor: pointer;
+    pointer-events: auto;
+    &-left {
+      border-radius: 0 4px 4px 0;
+    }
+    &-right {
+      border-radius: 4px 0 0 4px;
+    }
+    .iconfont {
+      font-size: 22px;
+      color: #fff;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@function getTheme($configKey) {
+  @if map-has-key($themes-colors, $configKey) {
+    @return map-get($themes-config, $configKey);
+  } @else {
+    @return null;
+  }
+}
+
+@mixin attrStyle($attr, $configKey) {
+  #{$attr}: map-get(map-get($themes-config, "default"), $configKey);
+  @each $key, $value in $themes-colors {
+    $theme-map: getTheme($key);
+    @if $theme-map and map-has-key($theme-map, $configKey) {
+      [data-theme="#{$key}"] & {
+        #{$attr}: map-get($theme-map, $configKey);
+      }
+    } @else {
+      @warn "The key `#{$configKey} isn't defined in the map $config`";
+    }
+  }
+}

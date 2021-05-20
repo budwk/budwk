@@ -1,0 +1,10 @@
+
+export const API_HOME_MSG_MY_LIST = '/platform/home/msg/my_msg_list'
+export const API_HOME_MSG_GET = '/platform/home/msg/get/'
+export const API_HOME_MSG_READ_ONE = '/platform/home/msg/status/read_one/'
+export const API_HOME_MSG_READ_ALL = '/platform/home/msg/status/read_all'
+export const API_HOME_MSG_READ_MORE = '/platform/home/msg/status/read_more'
+export const API_HOME_MSG_DATA = '/platform/home/msg/data'
+export const API_HOME_USER_CHANGE_PWD = '/platform/home/user/pwd'
+export const API_HOME_USER_CHANGE_INFO = '/platform/home/user/info'
+export const API_HOME_USER_SET_AVATAR = '/platform/home/user/avatar'

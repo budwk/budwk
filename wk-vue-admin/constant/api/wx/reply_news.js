@@ -1,0 +1,6 @@
+export const API_WX_REPLY_NEWS_GET = '/platform/wx/reply/news/get/'
+export const API_WX_REPLY_NEWS_DELETE = '/platform/wx/reply/news/delete/'
+export const API_WX_REPLY_NEWS_DELETE_MORE = '/platform/wx/reply/news/delete_more'
+export const API_WX_REPLY_NEWS_CREATE = '/platform/wx/reply/news/create'
+export const API_WX_REPLY_NEWS_UPDATE = '/platform/wx/reply/news/update'
+export const API_WX_REPLY_NEWS_LIST = '/platform/wx/reply/news/list'

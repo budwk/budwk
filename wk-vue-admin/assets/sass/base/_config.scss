@@ -1,0 +1,35 @@
+.platform-config {
+  &-block {
+    padding: 26px 0 16px 0;
+    border-bottom: 1px solid #eee;
+  }
+  &-form {
+    margin-top: 10px;
+  }
+  &-form-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0;
+    > * {
+      flex: auto;
+    }
+    > label {
+      text-align: left;
+    }
+    > div {
+      text-align: right;
+    }
+  }
+  &-theme {
+    &-color-lists {
+      margin-top: 10px;
+    }
+
+    &-color-item {
+      width: 20px;
+      height: 20px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+  }
+}

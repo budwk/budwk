@@ -1,0 +1,5 @@
+export const API_CMS_SITE_GET = '/cms/site/get/'
+export const API_CMS_SITE_DELETE = '/cms/site/delete/'
+export const API_CMS_SITE_LIST = '/cms/site/list'
+export const API_CMS_SITE_CREATE = '/cms/site/create'
+export const API_CMS_SITE_UPDATE = '/cms/site/update'

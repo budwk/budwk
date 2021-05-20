@@ -1,60 +1,37 @@
 # BudWk 开源企业级Java Web开发框架
 
-NutzBoot 版本(下文简称NB)
-
 [![Gitee GVP](https://gitee.com/wizzer/NutzWk/badge/star.svg?theme=gvp)](https://gitee.com/wizzer/NutzWk)
-[![GitHub release](https://img.shields.io/github/release/budwk/budwk-nutzboot.svg)](https://github.com/Wizzercn/NutzWk/releases)
+[![GitHub release](https://img.shields.io/github/release/budwk/budwk-nutzboot.svg)](https://github.com/budwk/budwk/releases)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![PowerByNutz](https://img.shields.io/badge/PowerBy-Nutz-green.svg)](https://github.com/nutzam/nutz)
 
-https://demo.budwk.com  V6演示地址
+https://budwk.com  官网
+
+https://demo.budwk.com  V7演示地址
 
 https://nutzwk.wizzer.cn  V5演示地址
 
-https://budwk.com/donation  赞助者
-
 # 前言
 
-本框架自2012年开始用于商业项目，至今已服务于全国各地公司大大小小数千个项目，行业涉及政务、电商、物联网等，随着个人经验积累及从事行业的不同分别发布了1.x至6.x多个版本，您可以根据项目规模选择不同版本。本项目案例众多，省厅级项目、市级平台、大数据项目、电商平台、物联网平台等等。
+BudWk V7 进行了大量重构，与之前版本结构大不相同，增加网关中心、认证中心、控制中心等，并且完全组件化、配置化，大大减轻开发工作量，提升开发效率的同时为产品升级迭代提供了极大便利。
 
-我们有强大的后援 —— Nutz 社区支持  https://nutz.cn  及 Nutz 使用手册 https://nutzam.com/core/nutz_preface.html
+BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源Web基础项目，集权限体系、系统参数、数据字典、站内消息、定时任务、CMS、微信等最常用功能，不庞杂、不面面俱到，使其具有上手容易、开发便捷、扩展灵活等特性，特别适合各类大中小型定制化项目需求。
+
+自2012年开源至今，以“在力所能及的情况下，最大限度的提高Web开发人员的生产力”为宗旨，紧跟时代技术发展，发布V1-V7多个版本，也尝试在开源和持续发展的道路上求索。本次V7将发布 社区开源版、商业基础版、企业高级版，社区开源版包含完整的前后端源码，采用MIT开源协议及《计算机软件著作权》版权保护。
 
 ### QQ交流群
 
-*  1群: 68428921(已满)
-*  2群: 24457628
+*  1群: 24457628
+*  2群: 68428921
 
-# 版本说明
-
-*   v6.x - nacos 微服务分布式版本 ```前后端分离,前端 nuxt + vue + elementUI```
-*   v6.x - zookeeper 微服务分布式版本 ```前后端分离,前端 nuxt + vue + elementUI```
-*   v6.x - mini 微服务单应用版本（一个 jar 或 war 包） ```前后端分离,前端 nuxt + vue + elementUI```
-*   v5.x - zookeeper 微服务分布式版本 ```前端 jQuery + bootsrtap 或 jQuery + vue.js + elementUI```
-*   v5.x - mini 微服务单应用版本（一个 jar 或 war 包） ```前端 jQuery + bootsrtap 或 jQuery + vue.js + elementUI```
-*   v4.x - 单应用版本（war 包） ```前端 jQuery + bootsrtap```
-*   v3.x - 单应用版本（war 包） ```前端 jQuery + bootsrtap```
-*   v1.x - 单应用版本（war 包）  ```前端 jQuery + easyUI```
-
-
-| 版本名称 | 版本特点 | 版本地址 | 运行方式 | 后端主要技术| 前端主要技术 | 浏览器兼容性 |
-| ---------|---------| ----------| ----------| ----------|----------|----------|
-| BudWk v6.x-nacos | 微服务分布式 + 前后端分离 |[v6.x-nacos](https://github.com/budwk/budwk/tree/v6.x-nacos)| jar,war | nutzboot + dubbo + nacos + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
-| BudWk v6.x-zookeeper | 微服务分布式 + 前后端分离 |[v6.x-zookeeper](https://github.com/budwk/budwk/tree/v6.x-zookeeper)| jar,war | nutzboot + dubbo + zookeeper + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
-| BudWk v6.x-mini | 微服务单应用 + 前后端分离 |[v6.x-mini](https://github.com/budwk/budwk/tree/v6.x-mini)| jar,war | nutzboot + shiro | nuxt + vue + elementUI | Chrome,Edge,IE12+ |
-| NutzWk v5.x| 微服务分布式 + 前端混合模式 |[v5.x](https://github.com/Wizzercn/NutzWk/tree/v5.x)| jar,war | nutzboot + dubbo + shiro + beetl | vue + elementUI + jquery 或 jquery + bootstrap 两个版本 | Chrome,IE9+ |
-| NutzWk v5.x-mini| 微服务单应用 + 前端混合模式 |[v5.x-mini](https://github.com/Wizzercn/NutzWk/tree/v5.x-mini)| jar,war | nutzboot + shiro + beetl | vue + elementUI + jquery | Chrome,IE9+ |
-| NutzWk v4.x| 模块化单应用 |[v4.x](https://github.com/Wizzercn/NutzWk/tree/v4.x)| war | nutz + shiro + beetl | jquery + bootstrap | Chrome,IE7 + |
-| NutzWk v3.x| 单应用 |[v3.x](https://github.com/Wizzercn/NutzWk/tree/v3.x)| war | nutz + shiro + beetl 或 velocity 两个版本 | jquery + bootstrap | Chrome,IE7 + |
-| NutzWk v1.x| 单应用 |[v1.x](https://github.com/Wizzercn/NutzWk/tree/v1.x)| war | nutz + shiro + velocity | jquery + easyUI | IE6 + |
-
-# 本版说明(BudWk v6.x)
+# 本版说明(BudWk v7.x)
 
 ## 运行环境
 
-*   JDK 8 181 + 或 OpenJDK 11 +
+*   JDK 11 + 或 OpenJDK 11 +
 *   Redis 4.0.8 +
 *   MySql 5.7 + 或 MariaDB、Oracle、SqlServer、达梦等
-*   Zookeeper 3.4.13 +
+*   Nacos 2.0.0 +
 
 ## 开发工具
 *   IntelliJ IDEA
@@ -64,35 +41,48 @@ https://budwk.com/donation  赞助者
 *   Git
 
 ## 目录结构
-| 模块名称                                     | 介绍                                     |
-| ---------------------------------------- | ---------------------------------------- |
-|[wk-code-generator](wk-code-generator) |代码生成器|
-|[wk-common](wk-common) |框架公共模块,工具类,枚举类,常量类等|
-|[wk-module](wk-module) |POJO类,接口类|
-|[wk-nb-service-sys](wk-nb-service-sys) |系统管理模块,dubbo服务端,组织架构/权限管理等|
-|[wk-nb-service-cms](wk-nb-service-cms) |CMS管理模块,dubbo服务端,ig主键生成器及wkcache方法缓存演示|
-|[wk-nb-service-wx](wk-nb-service-wx) |微信管理模块,dubbo服务端,微信及微信支付功能演示|
-|[wk-nb-service-slog](wk-nb-service-slog) |SLog日志服务,dubbo服务端|
-|[wk-nb-task](wk-nb-task) |定时任务模块,dubbo服务端,支持基于数据库的集群|
-|[wk-nb-web-admin](wk-nb-web-admin) |WEB管理后台API服务,dubbo消费端,Mvc Http API|
-|[wk-nb-web-api-daemon](wk-nb-api-daemon) |应用管理服务守护API,dubbo消费端,Mvc Http API|
-|[wk-nb-web-api-open](wk-nb-api-open) |API服务 Sign/JWT Token示例,dubbo消费端,Mvc Http API|
-|[wk-nb-web-app-demo](wk-nb-web-app-demo) |APP/小程序服务端示例,dubbo消费端,Mvc Http API|
+
+```lua
+budwk -- 根目录
+│  ├─wk-starter -- 组件中心
+│  │  ├─wk-starter-common -- 通用类组件
+│  │  ├─wk-starter-database -- 数据库组件
+│  │  ├─wk-starter-dependencies -- 所有依赖
+│  │  ├─wk-starter-dubbo -- Dubbo组件
+│  │  ├─wk-starter-email -- Email组件
+│  │  ├─wk-starter-gateway -- 网关组件
+│  │  ├─wk-starter-job -- 简易定时任务组件
+│  │  ├─wk-starter-log -- 日志及SLog组件
+│  │  ├─wk-starter-openapi -- 接口文档生成组件
+│  │  ├─wk-starter-security -- 权限验证组件
+│  │  ├─wk-starter-sms -- 短信发送组件
+│  │  ├─wk-starter-storage -- 文件存储组件
+│  │  ├─wk-starter-web -- WEB拦截跨越表单验证组件
+│  ├─wk-gateway -- 网关中心
+│  ├─wk-paltform -- 控制中心
+│  │  ├─wk-paltform-common -- 通用类供其他模块调用
+│  │  ├─wk-paltform-server -- 服务类提供API服务
+│  ├─wk-ucenter -- 认证中心
+│  ├─wk-cms -- 简易CMS
+│  │  ├─wk-cms-common -- 通用类供其他模块调用
+│  │  ├─wk-cms-server -- 服务类提供API服务
+│  ├─wk-vue-admin -- Vue前端代码
+```
 
 ## 技术选型
 ### 后端技术
 技术 | 名称 | 官网
 ----|------|----
-Nutz | JavaEE应用程序框架  | [https://nutzam.com](https://nutzam.com)
-NutzBoot | 微服务开发框架  | [https://github.com/nutzam/nutzboot](https://github.com/nutzam/nutzboot)
-Apache Shiro | 安全框架  | [https://shiro.apache.org](https://shiro.apache.org)
+Nutz | JavaEE应用框架  | [https://nutzam.com](https://nutzam.com)
+NutzBoot | 微服务框架  | [https://github.com/nutzam/nutzboot](https://github.com/nutzam/nutzboot)
+SaToken | 权限框架  | [http://sa-token.dev33.cn](http://sa-token.dev33.cn)
 Druid | 数据库连接池  | [https://github.com/alibaba/druid](https://github.com/alibaba/druid)
-ZooKeeper | 分布式协调服务  | [https://zookeeper.apache.org](https://zookeeper.apache.org)
+Nacos | 配置及注册中心  | [https://nacos.io](https://nacos.io)
 Dubbo | 分布式服务框架  | [https://dubbo.apache.org](https://dubbo.apache.org)
 Redis | 分布式缓存数据库  | [https://redis.io](https://redis.io)
 Quartz | 作业调度框架  | [https://www.quartz-scheduler.org](https://www.quartz-scheduler.org)
-Ehcache | 进程内缓存框架  | [https://www.ehcache.org](https://www.ehcache.org)
-Maven | 项目构建管理  | [https://maven.apache.org](https://maven.apache.org)
+IdGenerator | 雪花主键生成  | [https://github.com/yitter/IdGenerator](https://github.com/yitter/IdGenerator)
+Hutool | 工具集合  | [https://hutool.cn](https://hutool.cn)
 
 ### 前端技术
 技术 | 名称 | 官网
@@ -102,33 +92,13 @@ Nuxt.js | Vue通用应用框架 | [https://nuxtjs.org](https://nuxtjs.org)
 Element | 基于Vue的UI框架 | [https://element.eleme.io](https://element.eleme.io)
 Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
 
-## 后端开发指南
-*   确保 MySql、Redis、Zookeeper 默认端口配置并已启动好
-*   MySql 创建名为 `budwk_v6` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
+## 开发指南
+*   确保 MySql、Redis、Nacos 默认端口配置并已启动
+*   MySql 创建名为 `budwk_v7` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
-*   在项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
-*   启动顺序是 sys --> slog --> cms[可选] --> wx[可选] --> task[可选] --> web-admin --> wk-vue-admin[前端]
-*   正常启动后访问 `http://127.0.0.1:9527` 用户名 superadmin 密码 1
-*   若觉得项目复杂上手较难,可以从最简单的一个NB项目学起 [budwk.com 源码](https://github.com/Wizzercn/Demo/tree/master/nutzboot-wizzer-cn)
-
-## 前端开发指南
-*  `nuxt + vue + elementUI` 源码暂未发布
-
-## API文档
-*   基于 Swagger 2.1.1 (OpenAPI v3)
-*   web-admin 项目启动时会自动生成API文档
-*   访问文档 http://127.0.0.1:9527/swagger 
-*   导出文档 http://127.0.0.1:9527/swagger/swagger.json 或 http://127.0.0.1:9527/swagger/swagger.yaml
-*   方法上必须加 `@GET @POST @PUT @DELETE` 注解和 `@Operation` 才会被扫描
-*   路径参数/查询参数(非表单参数)定义时 `requestBody = @RequestBody(content = @Content())` 不可缺少,否则 swagger 输出的格式不正确,可能是其bug
-*   POST表单参数,使用 `@ApiFormParams` 来定义,同时支持单个字段定义和类对象映射
-*   原路径参数中的 `?` 请使用 `{变量名}` 代替，如 原 `@At("/test/?")` 改为 `@At("/test/{id}")`
-
-## 项目部署
-
-*   内置配置文件启动  `nohup java -jar wk-nb-service-sys.jar &` 带参数 `-Dnutz.profiles.active=prod` 可加载 application-prod.properties 文件
-*   外置配置文件启动  `nohup java -Dnutz.boot.configure.properties.dir=/data/nutzwk/sys/ -jar wk-nb-service-sys.jar &` 此时加载文件夹所有 *.properties 配置文件
-*   生产环境可以使用 [budwk-daemon-python](https://github.com/budwk/budwk-daemon-python) 进行部署,登陆后台运维中心可在线更新jar包及配置文件等
+*   在后端项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
+*   正常启动前端后访问 `http://127.0.0.1:8888` 用户名 superadmin 密码 1
+*   API调试 `http://127.0.0.1:9999/platform/openapi` `http://127.0.0.1:9999/ucenter/openapi` 等
 
 # 鸣谢
 
@@ -137,9 +107,3 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   [@enilu](https://github.com/enilu)
 *   [@loyalove](https://github.com/loyalove)
 *   [@threefish](https://github.com/threefish)
-
-# 关于
-
-*   提供付费的培训服务，含源码解析、设计思路、疑难解答、项目辅导等
-*   联系方式 QQ：11624317  微信：wizzer
-*   欢迎打赏，以资鼓励 [https://budwk.com/donation](https://budwk.com/donation)

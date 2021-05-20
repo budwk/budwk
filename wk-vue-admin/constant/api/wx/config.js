@@ -1,0 +1,7 @@
+export const API_WX_CONFIG_GET = '/platform/wx/conf/account/get/'
+export const API_WX_CONFIG_DELETE = '/platform/wx/conf/account/delete/'
+export const API_WX_CONFIG_CREATE = '/platform/wx/conf/account/create'
+export const API_WX_CONFIG_UPDATE = '/platform/wx/conf/account/update'
+export const API_WX_CONFIG_LIST = '/platform/wx/conf/account/list'
+export const API_WX_CONFIG_LIST_ACCOUNT = '/platform/wx/conf/account/list_account'
+export const API_WX_CONFIG_PAY_QUERY = '/platform/wx/conf/pay/query'

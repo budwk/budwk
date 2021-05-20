@@ -1,0 +1,41 @@
+nutz:
+  application:
+    name: wk-gateway
+server:
+  port: 9999
+  host: 0.0.0.0
+jetty:
+  # extports: 9990 配置多端口监听,逗号分隔
+  threadpool:
+    idleTimeout: 60000
+    minThreads: 10
+    maxThreads: 2000
+
+gateway:
+  route:
+    load-nacos: true #是否从配置中心同步路由规则
+  blacklist:
+    enable: true
+    ip:
+      - 12.34.56.78
+  # 前缀转发路由
+  budwk:
+    filter: nacos-prefix #前缀转发路由模式
+    serviceNamePrefix: budwk. #前缀名称 如请求 /platform/** 则会转发至 budwk.platform 服务
+    priority: 99 #过滤器优先级
+
+nacos:
+  discovery:
+    server-addr: 192.168.5.211:8848
+    namespace: dev
+    naming:
+      service-name: gateway
+      meta-data: "{'version':'budwk.gateway.7.0.0'}"
+  config:
+    server-addr: 192.168.5.211:8848
+    namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
+    data-id: wk-gateway
+    data-type: yaml
+log:
+  color: true
+  level: debug

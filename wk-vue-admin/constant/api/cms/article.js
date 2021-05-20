@@ -1,0 +1,8 @@
+export const API_CMS_ARTICLE_GET = '/cms/article/get/'
+export const API_CMS_ARTICLE_DELETE = '/cms/article/delete/'
+export const API_CMS_ARTICLE_DELETE_MORE = '/cms/article/delete_more'
+export const API_CMS_ARTICLE_CREATE = '/cms/article/create'
+export const API_CMS_ARTICLE_UPDATE = '/cms/article/update'
+export const API_CMS_ARTICLE_LIST = '/cms/article/list'
+export const API_CMS_ARTICLE_GET_CHANNEL_TREE = '/cms/article/get_channel_tree/'
+export const API_CMS_ARTICLE_DISABLED = '/cms/article/disabled'
