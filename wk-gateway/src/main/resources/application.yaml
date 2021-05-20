@@ -2,7 +2,7 @@ nutz:
   application:
     name: wk-gateway
 server:
-  port: 9999
+  port: 9900
   host: 0.0.0.0
 jetty:
   # extports: 9990 配置多端口监听,逗号分隔
