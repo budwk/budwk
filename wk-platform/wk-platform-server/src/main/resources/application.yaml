@@ -92,7 +92,7 @@ database:
     package:          #相关实体所在包
       - com.budwk.app
 jdbc:
-  url: jdbc:mysql://127.0.0.1:3306/budwk?useUnicode=true&characterEncoding=utf8&useSSL=false
+  url: jdbc:mysql://127.0.0.1:3306/budwk_v7?useUnicode=true&characterEncoding=utf8&useSSL=false
   username: root
   password: root
   validationQuery: select 1
