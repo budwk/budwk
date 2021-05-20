@@ -1,6 +1,5 @@
 package com.budwk.starter.database;
 
-import com.budwk.starter.database.ig.SnowFlakeIdGenerator;
 import org.nutz.boot.annotation.PropDoc;
 import org.nutz.dao.Dao;
 import org.nutz.dao.util.Daos;

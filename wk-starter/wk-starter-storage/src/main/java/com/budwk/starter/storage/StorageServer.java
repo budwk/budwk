@@ -2,7 +2,6 @@ package com.budwk.starter.storage;
 
 import com.budwk.starter.common.exception.FileStorageException;
 import com.budwk.starter.storage.service.IStorageService;
-import com.budwk.starter.storage.service.impl.CtyunStorageServiceImpl;
 import com.budwk.starter.storage.service.impl.FtpStorageServiceImpl;
 import com.budwk.starter.storage.service.impl.LocalStorageServiceImpl;
 import lombok.extern.slf4j.Slf4j;

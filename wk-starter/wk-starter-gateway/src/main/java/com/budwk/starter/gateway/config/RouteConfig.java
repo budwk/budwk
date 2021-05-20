@@ -55,8 +55,6 @@ public class RouteConfig {
 
     public void reload() throws Exception {
         List<Router> routers = new LinkedList<>();
-        blacklistEnable = conf.getBoolean(PROP_GATEWAY_BLACKLIST_ENABLE, false);
-        blacklistIp = conf.getList(PROP_GATEWAY_BLACKLIST_IP);
         for (String key : conf.getKeys()) {
             if (key.startsWith(PRE) && key.endsWith(".filter")) {
                 String name = key.substring(PRE.length(), key.length() - ".filter".length());

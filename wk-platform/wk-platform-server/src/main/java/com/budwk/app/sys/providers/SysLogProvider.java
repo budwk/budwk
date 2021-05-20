@@ -5,7 +5,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.budwk.app.sys.services.SysLogService;
 import com.budwk.starter.common.page.Pagination;
-import com.budwk.starter.database.ig.SnowFlakeIdGenerator;
 import com.budwk.starter.log.enums.LogType;
 import com.budwk.starter.log.model.Sys_log;
 import com.budwk.starter.log.provider.ISysLogProvider;
@@ -19,6 +18,7 @@ import org.nutz.lang.Strings;
 import org.nutz.mongo.ZMoCo;
 import org.nutz.mongo.ZMoDB;
 import org.nutz.mongo.ZMoDoc;
+import org.nutz.lang.random.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,6 @@ public class SysLogProvider implements ISysLogProvider {
 
     @Inject
     private PropertiesProxy conf;
-
-    @Inject
-    private SnowFlakeIdGenerator snowFlakeIdGenerator;
 
     @Inject("refer:$ioc")
     private Ioc ioc;
@@ -58,7 +55,7 @@ public class SysLogProvider implements ISysLogProvider {
     @Override
     public void saveLog(Sys_log sysLog) {
         // 因为el表达式只对dao有效,所以这里手动设置雪花ID
-        sysLog.setId(snowFlakeIdGenerator.next());
+        sysLog.setId(R.UU32());
         if ("database".equalsIgnoreCase(conf.get("log.save"))) {
             sysLogService.save(sysLog);
         } else if ("mongodb".equalsIgnoreCase(conf.get("log.save"))) {
