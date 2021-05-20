@@ -7,7 +7,7 @@ Dubbo组件
 dubbo:
   registry:
     #注意 namespace
-    address: nacos://192.168.5.211:8848?namespace=dev
+    address: nacos://127.0.0.1:8848?namespace=dev
   protocol:
     name: dubbo
     #线程数

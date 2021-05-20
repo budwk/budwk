@@ -68,14 +68,14 @@ redis:
   #nodes:
 nacos:
   discovery:
-    server-addr: 192.168.5.211:8848
+    server-addr: 127.0.0.1:8848
     namespace: dev
     naming:
       service-name: budwk.ucenter
       meta-data: "{'version':'budwk.ucenter.7.0.0'}"
 dubbo:
   registry:
-    address: nacos://192.168.5.211:8848?namespace=dev
+    address: nacos://127.0.0.1:8848?namespace=dev
   protocol:
     name: dubbo
     threads: 200
