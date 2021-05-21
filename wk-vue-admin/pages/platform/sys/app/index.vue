@@ -208,8 +208,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="addDialogVisible = false">取 消</el-button>
         <el-button
+          size="small"
           type="primary"
           :loading="btnLoading"
           @click="doAdd"
@@ -302,8 +303,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="updateDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="updateDialogVisible = false">取 消</el-button>
         <el-button
+          size="small"
           type="primary"
           :loading="btnLoading"
           @click="doUpdate"
