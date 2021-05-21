@@ -152,7 +152,7 @@
             prop="ip"
             label="IP"
             header-align="center"
-            width="110"
+            width="120"
           />
           <el-table-column
             prop="port"

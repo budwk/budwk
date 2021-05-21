@@ -265,7 +265,7 @@
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
-                <span style="background-color:rgb(135, 208, 104);color:#fff;display: inline-block;width:38px;border-radius: 2px;">{{ scope.row.executeTime }}ms</span>
+                <span style="background-color:rgb(135, 208, 104);color:#fff;display: inline-block;width:38px;border-radius: 2px;padding-left: 5px;">{{ scope.row.executeTime }}ms</span>
               </template>
             </el-table-column>
           </el-table>
