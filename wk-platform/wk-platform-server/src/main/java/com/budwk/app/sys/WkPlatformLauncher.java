@@ -261,7 +261,6 @@ public class WkPlatformLauncher {
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_COMMON_APPID).add("roleId", publicRole.getId()));
                 dao.insert("sys_unit_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("unitId", unit.getId()));
                 dao.insert("sys_role_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("roleId", role.getId()));
-                dao.insert("sys_role_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("roleId", publicRole.getId()));
                 //执行SQL脚本
                 FileSqlManager fm = new FileSqlManager("db/");
                 fm.setByRow(true);
