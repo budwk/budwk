@@ -17,3 +17,7 @@ vue + elementUI admin
 * Prettier
 * ESLint
 * Vetur
+
+## 开发说明
+
+* 按钮权限验证 `v-permission="'sys.config.key.create'"`

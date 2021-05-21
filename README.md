@@ -40,33 +40,37 @@ BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源We
 *   Maven 3.5.3 +
 *   Git
 
+## 架构图
+
+![BUDWK架构](main.png)
+
 ## 目录结构
 
 ```lua
-budwk -- 根目录
-│  ├─wk-starter -- 组件中心
-│  │  ├─wk-starter-common -- 通用类组件
-│  │  ├─wk-starter-database -- 数据库组件
-│  │  ├─wk-starter-dependencies -- 所有依赖
-│  │  ├─wk-starter-dubbo -- Dubbo组件
-│  │  ├─wk-starter-email -- Email组件
-│  │  ├─wk-starter-gateway -- 网关组件
-│  │  ├─wk-starter-job -- 简易定时任务组件
-│  │  ├─wk-starter-log -- 日志及SLog组件
-│  │  ├─wk-starter-openapi -- 接口文档生成组件
-│  │  ├─wk-starter-security -- 权限验证组件
-│  │  ├─wk-starter-sms -- 短信发送组件
-│  │  ├─wk-starter-storage -- 文件存储组件
-│  │  ├─wk-starter-web -- WEB拦截跨越表单验证组件
-│  ├─wk-gateway -- 网关中心
-│  ├─wk-paltform -- 控制中心
-│  │  ├─wk-paltform-common -- 通用类供其他模块调用
-│  │  ├─wk-paltform-server -- 服务类提供API服务
-│  ├─wk-ucenter -- 认证中心
-│  ├─wk-cms -- 简易CMS
-│  │  ├─wk-cms-common -- 通用类供其他模块调用
-│  │  ├─wk-cms-server -- 服务类提供API服务
-│  ├─wk-vue-admin -- Vue前端代码
+budwk                               -- 根目录
+│  ├─wk-starter                     -- 组件中心
+│  │  ├─wk-starter-common           -- 通用类组件
+│  │  ├─wk-starter-database         -- 数据库组件
+│  │  ├─wk-starter-dependencies     -- 所有依赖
+│  │  ├─wk-starter-dubbo            -- Dubbo组件
+│  │  ├─wk-starter-email            -- Email组件
+│  │  ├─wk-starter-gateway          -- 网关组件
+│  │  ├─wk-starter-job              -- 简易定时任务组件
+│  │  ├─wk-starter-log              -- 日志及SLog组件
+│  │  ├─wk-starter-openapi          -- 接口文档生成组件
+│  │  ├─wk-starter-security         -- 权限验证组件
+│  │  ├─wk-starter-sms              -- 短信发送组件
+│  │  ├─wk-starter-storage          -- 文件存储组件
+│  │  ├─wk-starter-web              -- WEB拦截跨越表单验证组件
+│  ├─wk-gateway                     -- 网关中心
+│  ├─wk-platform                    -- 控制中心
+│  │  ├─wk-platform-common          -- 通用类供其他模块调用
+│  │  ├─wk-platform-server          -- 服务类提供API服务
+│  ├─wk-ucenter                     -- 认证中心
+│  ├─wk-cms                         -- 简易CMS
+│  │  ├─wk-cms-common               -- 通用类供其他模块调用
+│  │  ├─wk-cms-server               -- 服务类提供API服务
+│  ├─wk-vue-admin                   -- Vue前端代码
 ```
 
 ## 技术选型
@@ -107,3 +111,4 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   [@enilu](https://github.com/enilu)
 *   [@loyalove](https://github.com/loyalove)
 *   [@threefish](https://github.com/threefish)
+*   [@syrxw](https://github.com/syrxw)
