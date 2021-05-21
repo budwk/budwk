@@ -218,7 +218,7 @@
     </el-dialog>
 
     <el-dialog
-      title="修改职务"
+      title="修改应用"
       :visible.sync="updateDialogVisible"
       :close-on-click-modal="false"
       width="35%"
