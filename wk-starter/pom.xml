@@ -25,7 +25,7 @@
     <packaging>pom</packaging>
     <properties>
         <budwk.version>7.0.0-SNAPSHOT</budwk.version>
-        <nutzboot.version>2.4.3-SNAPSHOT</nutzboot.version>
+        <nutzboot.version>2.5.0-SNAPSHOT</nutzboot.version>
 
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
