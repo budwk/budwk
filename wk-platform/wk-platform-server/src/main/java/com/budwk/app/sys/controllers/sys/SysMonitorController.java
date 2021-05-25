@@ -180,6 +180,7 @@ public class SysMonitorController {
         HardwareAbstractionLayer hal = si.getHardware();
         return Result.data(
                 NutMap.NEW().addv("cpu", OshiServer.getCpu(hal.getProcessor()))
+                        .addv("jvm", OshiServer.getJvmInfo())
                         .addv("mem", OshiServer.getMemInfo(hal.getMemory()))
                         .addv("sys", OshiServer.getSysInfo())
                         .addv("files", OshiServer.getSysFiles(si.getOperatingSystem()))
