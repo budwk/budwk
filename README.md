@@ -71,8 +71,9 @@ budwk                               -- 根目录
 │  │  ├─wk-cms-common               -- 通用类供其他模块调用
 │  │  ├─wk-cms-server               -- 服务类提供API服务
 │  ├─wk-vue-admin                   -- Vue前端代码
+│  ├─wk-vue-admin                   -- Vue前端代码
 ```
-
+* 代码生成器IDEA插件,请下载安装 [https://gitee.com/budwk/budwk-codegenerator](https://gitee.com/budwk/budwk-codegenerator)
 * 推荐组件中心、控制中心、前端等功能模块独立创建Git仓库,便于权限管理及升级迭代
 
 ## 技术选型
