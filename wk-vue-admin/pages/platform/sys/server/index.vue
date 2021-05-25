@@ -96,29 +96,24 @@
                   <tr>
                     <th class="is-leaf"><div class="cell">属性</div></th>
                     <th class="is-leaf"><div class="cell">内存</div></th>
-                    <th class="is-leaf"><div class="cell">JVM</div></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td><div class="cell">总内存</div></td>
                     <td><div v-if="serverData.mem" class="cell">{{ serverData.mem.total }}G</div></td>
-                    <td><div v-if="serverData.jvm" class="cell">{{ serverData.jvm.total }}M</div></td>
                   </tr>
                   <tr>
                     <td><div class="cell">已用内存</div></td>
                     <td><div v-if="serverData.mem" class="cell">{{ serverData.mem.used }}G</div></td>
-                    <td><div v-if="serverData.jvm" class="cell">{{ serverData.jvm.used }}M</div></td>
                   </tr>
                   <tr>
                     <td><div class="cell">剩余内存</div></td>
                     <td><div v-if="serverData.mem" class="cell">{{ serverData.mem.free }}G</div></td>
-                    <td><div v-if="serverData.jvm" class="cell">{{ serverData.jvm.free }}M</div></td>
                   </tr>
                   <tr>
                     <td><div class="cell">使用率</div></td>
                     <td><div v-if="serverData.mem" class="cell" :class="{'text-danger': serverData.mem.usage > 80}">{{ serverData.mem.usage }}%</div></td>
-                    <td><div v-if="serverData.jvm" class="cell" :class="{'text-danger': serverData.jvm.usage > 80}">{{ serverData.jvm.usage }}%</div></td>
                   </tr>
                 </tbody>
               </table>

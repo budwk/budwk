@@ -33,17 +33,17 @@ public class OshiServer {
         long irq = ticks[TickType.IRQ.getIndex()] - prevTicks[TickType.IRQ.getIndex()];
         long softirq = ticks[TickType.SOFTIRQ.getIndex()] - prevTicks[TickType.SOFTIRQ.getIndex()];
         long steal = ticks[TickType.STEAL.getIndex()] - prevTicks[TickType.STEAL.getIndex()];
-        long cSys = ticks[TickType.SYSTEM.getIndex()] - prevTicks[TickType.SYSTEM.getIndex()];
-        long used = ticks[TickType.USER.getIndex()] - prevTicks[TickType.USER.getIndex()];
+        long sys = ticks[TickType.SYSTEM.getIndex()] - prevTicks[TickType.SYSTEM.getIndex()];
+        long user = ticks[TickType.USER.getIndex()] - prevTicks[TickType.USER.getIndex()];
         long iowait = ticks[TickType.IOWAIT.getIndex()] - prevTicks[TickType.IOWAIT.getIndex()];
-        long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
-        long totalCpu = used + nice + cSys + idle + iowait + irq + softirq + steal;
+        long free = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
+        long total = user + nice + sys + free + iowait + irq + softirq + steal;
         return NutMap.NEW().addv("cpuNum", processor.getLogicalProcessorCount())
-                .addv("total", totalCpu)
-                .addv("sys", cSys)
-                .addv("used", used)
-                .addv("wait", iowait)
-                .addv("idle", idle);
+                .addv("total", NumberUtil.round(NumberUtil.mul(total, 100), 2))
+                .addv("sys", NumberUtil.round(NumberUtil.mul(NumberUtil.div(sys, total), 100), 2))
+                .addv("used", NumberUtil.round(NumberUtil.mul(NumberUtil.div(user, total), 100), 2))
+                .addv("wait", NumberUtil.round(NumberUtil.mul(NumberUtil.div(iowait, total), 100), 2))
+                .addv("free", NumberUtil.round(NumberUtil.mul(NumberUtil.div(free, total), 100), 2));
     }
 
     public static NutMap getMemInfo(GlobalMemory memory) {
