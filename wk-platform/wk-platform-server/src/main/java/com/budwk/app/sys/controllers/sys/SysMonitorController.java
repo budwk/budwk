@@ -1,5 +1,7 @@
 package com.budwk.app.sys.controllers.sys;
 
+import cn.dev33.satoken.annotation.SaCheckRole;
+import com.budwk.app.sys.commons.oshi.OshiServer;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.result.Result;
@@ -14,10 +16,9 @@ import org.nutz.ioc.loader.annotation.Value;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
-import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Ok;
-import org.nutz.mvc.annotation.POST;
-import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.annotation.*;
+import oshi.SystemInfo;
+import oshi.hardware.HardwareAbstractionLayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +83,7 @@ public class SysMonitorController {
             }
     )
     @ApiResponses
+    @SaCheckRole("sysadmin")
     public Result<?> list(@Param("serviceNameParam") String serviceNameParam, @Param("groupNameParam") String groupNameParam, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize) {
         Map<String, Object> params = new HashMap<>();
         params.put("hasIpCount", true);
@@ -106,6 +108,7 @@ public class SysMonitorController {
             }
     )
     @ApiResponses
+    @SaCheckRole("sysadmin")
     public Result<?> service( @Param("serviceName") String serviceName, @Param("groupName") String groupName) {
         Map<String, Object> params = new HashMap<>();
         params.put("accessToken", getAccessToken());
@@ -130,6 +133,7 @@ public class SysMonitorController {
             }
     )
     @ApiResponses
+    @SaCheckRole("sysadmin")
     public Result<?> detail(@Param(value = "clusterName", df = "DEFAULT") String clusterName, @Param("serviceName") String serviceName, @Param("groupName") String groupName, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize) {
         Map<String, Object> params = new HashMap<>();
         params.put("pageNo", pageNo);
@@ -141,5 +145,45 @@ public class SysMonitorController {
         params.put("groupName", groupName);
         Response res = Http.get(nacos_url + "/v1/ns/catalog/instances", params, 3000);
         return Result.data(Json.fromJson(NutMap.class, res.getContent()));
+    }
+
+    @At("/redis/info")
+    @Ok("json")
+    @GET
+    @ApiOperation(description = "Redis信息")
+    @ApiFormParams
+    @ApiResponses
+    @SaCheckRole("sysadmin")
+    public Result<?> redisInfo() {
+        NutMap nutMap = NutMap.NEW();
+        String info = redisService.info();
+        String[] infos = Strings.splitIgnoreBlank(info, "\r\n");
+        for (String str : infos) {
+            if (Strings.sNull(str).contains(":")) {
+                String[] v = Strings.splitIgnoreBlank(str, ":");
+                nutMap.put(v[0], v[1]);
+            }
+        }
+        nutMap.addv("dbSize",redisService.dbSize());
+        return Result.data(nutMap);
+    }
+
+    @At("/server/info")
+    @Ok("json")
+    @GET
+    @ApiOperation(description = "服务器信息")
+    @ApiFormParams
+    @ApiResponses
+    @SaCheckRole("sysadmin")
+    public Result<?> serverInfo() {
+        SystemInfo si = new SystemInfo();
+        HardwareAbstractionLayer hal = si.getHardware();
+        return Result.data(
+                NutMap.NEW().addv("cpu", OshiServer.getCpu(hal.getProcessor()))
+                        .addv("jvm", OshiServer.getJvmInfo())
+                        .addv("mem", OshiServer.getMemInfo(hal.getMemory()))
+                        .addv("sys", OshiServer.getSysInfo())
+                        .addv("files", OshiServer.getSysFiles(si.getOperatingSystem()))
+        );
     }
 }

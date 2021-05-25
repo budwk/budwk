@@ -36,7 +36,7 @@
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
         <hutool.version>5.6.3</hutool.version>
         <poi.version>4.1.2</poi.version>
-
+        <oshi-core.version>5.7.3</oshi-core.version>
         <maven.plugin.version>3.8.1</maven.plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
@@ -167,6 +167,12 @@
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-servlet</artifactId>
                 <version>${sa-token.version}</version>
+            </dependency>
+            <!-- oshi -->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi-core.version}</version>
             </dependency>
             <!-- dubbo-nacos -->
             <dependency>

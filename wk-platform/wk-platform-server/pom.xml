@@ -119,6 +119,11 @@
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-quartz</artifactId>
         </dependency>
+        <!-- oshi -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+        </dependency>
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>

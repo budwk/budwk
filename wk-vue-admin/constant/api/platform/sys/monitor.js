@@ -1,3 +1,5 @@
 export const API_SYS_MONITOR_NACOS_SERVICES = '/platform/sys/monitor/nacos/services'
 export const API_SYS_MONITOR_NACOS_SERVICE = '/platform/sys/monitor/nacos/service'
 export const API_SYS_MONITOR_NACOS_DETAIL = '/platform/sys/monitor/nacos/detail'
+export const API_SYS_MONITOR_REDIS_INFO = '/platform/sys/monitor/redis/info'
+export const API_SYS_MONITOR_SERVER_INFO = '/platform/sys/monitor/server/info'
