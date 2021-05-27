@@ -133,7 +133,7 @@ public class NacosServerPrefixSelectorFilter extends AbstractServerSelectorFilte
 		TService ts = new TService();
 		ts.name = name;
 		ts.instances = nacosNamingService.getAllInstances(name, group);
-		ts.prefix = "/" + ts.name.substring(serviceNamePrefix.length());
+		ts.prefix = "/" + ts.name.substring(serviceNamePrefix.length()).replace(".","/");
 		ts.listener = new EventListener() {
 			public void onEvent(Event event) {
 				NacosServerPrefixSelectorFilter.this.onEvent(event, ts);
