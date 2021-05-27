@@ -7,7 +7,7 @@ import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.log.annotation.SLog;
 import com.budwk.starter.security.utils.SecurityUtil;
-import com.budwk.starter.storage.service.IStorageService;
+import com.budwk.starter.storage.StorageServer;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -31,7 +31,7 @@ import java.util.Date;
 @Slf4j
 public class PubFileController {
     @Inject
-    private IStorageService storageService;
+    private StorageServer storageServer;
     @Inject
     private SysConfigService sysConfigService;
 
@@ -66,7 +66,7 @@ public class PubFileController {
             String filePath = sysConfigService.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/file/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
             String fileName = R.UU32() + suffixName;
             try {
-                return Result.data(storageService.upload(tf.getInputStream(), fileName, filePath));
+                return Result.data(storageServer.upload(tf.getInputStream(), fileName, filePath));
             } catch (IOException e) {
                 return Result.error(log.isDebugEnabled() ? e.getMessage() : "文件服务异常");
             }
@@ -104,7 +104,7 @@ public class PubFileController {
             String filePath = sysConfigService.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
             String fileName = R.UU32() + suffixName;
             try {
-                return Result.data(storageService.upload(tf.getInputStream(), fileName, filePath));
+                return Result.data(storageServer.upload(tf.getInputStream(), fileName, filePath));
             } catch (IOException e) {
                 return Result.error(log.isDebugEnabled() ? e.getMessage() : "文件服务异常");
             }
@@ -142,7 +142,7 @@ public class PubFileController {
             String filePath = sysConfigService.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/video/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
             String fileName = R.UU32() + suffixName;
             try {
-                return Result.data(storageService.upload(tf.getInputStream(), fileName, filePath));
+                return Result.data(storageServer.upload(tf.getInputStream(), fileName, filePath));
             } catch (IOException e) {
                 return Result.error(log.isDebugEnabled() ? e.getMessage() : "文件服务异常");
             }
