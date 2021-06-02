@@ -182,7 +182,7 @@
             </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
+                <artifactId>netty-all</artifactId>
                 <version>${netty.version}</version>
             </dependency>
             <!-- mysql -->
