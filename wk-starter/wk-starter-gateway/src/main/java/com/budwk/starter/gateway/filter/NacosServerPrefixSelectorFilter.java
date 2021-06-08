@@ -157,10 +157,32 @@ public class NacosServerPrefixSelectorFilter extends AbstractServerSelectorFilte
 			return false;
 		}
 		try {
-			Instance ins = nacosNamingService.selectOneHealthyInstance(ts.name, group);
-			if (ins != null) {
-				ctx.targetHost = ins.getIp();
-				ctx.targetPort = ins.getPort();
+			String requestVersion = ctx.headers.get("version");
+			String targetHost = "";
+			int targetPort = 0;
+			if (Strings.isNotBlank(requestVersion)) {
+				List<Instance> instanceList = nacosNamingService.getAllInstances(ts.name, group);
+				for (Instance ins : instanceList) {
+					if (ins.isEnabled() && ins.isHealthy()) {
+						targetHost = ins.getIp();
+						targetPort = ins.getPort();
+						Map<String, String> metadata = ins.getMetadata();
+						// 请求header中的 version 与 服务配置的元数据 version 一致
+						if (Strings.sNull(metadata.get("version")).equals(requestVersion)) {
+							break;
+						}
+					}
+				}
+			} else {
+				Instance ins = nacosNamingService.selectOneHealthyInstance(ts.name, group);
+				if (ins != null) {
+					targetHost = ins.getIp();
+					targetPort = ins.getPort();
+				}
+			}
+			if (Strings.isNotBlank(targetHost)) {
+				ctx.targetHost = targetHost;
+				ctx.targetPort = targetPort;
 				return true;
 			}
 		} catch (NacosException e) {
