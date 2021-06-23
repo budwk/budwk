@@ -35,10 +35,13 @@ public class SysConfigServiceImpl extends BaseServiceImpl<Sys_config> implements
     @CacheResult(cacheKey = "${appId}_getMapAll")
     public NutMap getMapAll(String appId) {
         NutMap nutMap = NutMap.NEW();
-        List<Sys_config> configs = this.query(Cnd.where("appId", "=", GlobalConstant.DEFAULT_COMMON_APPID)
-                .or("appId", "=", appId));
-        for (Sys_config config : configs) {
-            nutMap.addv(config.getConfigKey(), config.getConfigValue());
+        List<Sys_config> commonConfig = this.query(Cnd.where("appId", "=", GlobalConstant.DEFAULT_COMMON_APPID));
+        for (Sys_config config : commonConfig) {
+            nutMap.put(config.getConfigKey(), config.getConfigValue());
+        }
+        List<Sys_config> appConfig = this.query(Cnd.where("appId", "=", appId));
+        for (Sys_config config : appConfig) {
+            nutMap.put(config.getConfigKey(), config.getConfigValue());
         }
         return nutMap;
     }
@@ -47,14 +50,15 @@ public class SysConfigServiceImpl extends BaseServiceImpl<Sys_config> implements
     @CacheResult(cacheKey = "${appId}_getMapOpened")
     public NutMap getMapOpened(String appId) {
         NutMap nutMap = NutMap.NEW();
-        List<Sys_config> configs = this.query(
-                Cnd.where("opened", "=", true).and(
-                        Cnd.exps("appId", "=", GlobalConstant.DEFAULT_COMMON_APPID)
-                                .or("appId", "=", appId)
-                )
-        );
-        for (Sys_config config : configs) {
-            nutMap.addv(config.getConfigKey(), config.getConfigValue());
+        List<Sys_config> commonConfig = this.query(Cnd.where("appId", "=", GlobalConstant.DEFAULT_COMMON_APPID)
+                .and("opened", "=", true));
+        for (Sys_config config : commonConfig) {
+            nutMap.put(config.getConfigKey(), config.getConfigValue());
+        }
+        List<Sys_config> appConfig = this.query(Cnd.where("appId", "=", appId)
+                .and("opened", "=", true));
+        for (Sys_config config : appConfig) {
+            nutMap.put(config.getConfigKey(), config.getConfigValue());
         }
         return nutMap;
     }
