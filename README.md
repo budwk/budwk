@@ -37,7 +37,7 @@ BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源We
 *   IntelliJ IDEA
 *   Visual Studio Code
 *   Node 12.13.0 +
-*   Maven 3.5.3 +
+*   Maven 3.6.3 +
 *   Git
 
 ## 架构图
