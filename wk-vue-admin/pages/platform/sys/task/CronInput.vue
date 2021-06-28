@@ -21,22 +21,18 @@
       :close-on-click-modal="false"
       append-to-body
     >
-      <cron-exp
-        :cron="cron"
-        @cancelCron="cancelCron"
-        @saveCron="saveCron"
-      />
+      <vcrontab :expression="cron" @hide="dialogCronExpVisible=false" @fill="saveCron" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import CronExp from './CronExp'
+import vcrontab from 'vcrontab'
 
 export default {
   name: 'CronInput',
   components: {
-    CronExp
+    vcrontab
   },
   model: {
     // 双向绑定
