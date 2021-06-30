@@ -104,6 +104,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   MySql 创建名为 `budwk_v7` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
 *   在后端项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
+*   分别启动jar文件 `nohup java -jar budwk.jar >/dev/null 2>&1 &`
 *   正常启动前端后访问 `http://127.0.0.1:8800` 用户名 superadmin 密码 1
 *   API调试 `http://127.0.0.1:9900/platform/openapi` `http://127.0.0.1:9900/ucenter/openapi` 等
 
