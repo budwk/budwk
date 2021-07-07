@@ -17,7 +17,7 @@ public class SaCheckLoginInterceptor implements MethodInterceptor {
     public void filter(InterceptorChain chain) throws Throwable {
         Method method = chain.getCallingMethod();
         SaCheckLogin at = method.getAnnotation(SaCheckLogin.class);
-        SaManager.getStpLogic(at.key()).checkByAnnotation(at);
+        SaManager.getStpLogic(at.type()).checkByAnnotation(at);
         chain.doChain();
     }
 }

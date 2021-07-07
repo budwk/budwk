@@ -17,7 +17,7 @@ public class SaCheckPermissionInterceptor implements MethodInterceptor {
     public void filter(InterceptorChain chain) throws Throwable {
         Method method = chain.getCallingMethod();
         SaCheckPermission at = method.getAnnotation(SaCheckPermission.class);
-        SaManager.getStpLogic(at.key()).checkByAnnotation(at);
+        SaManager.getStpLogic(at.type()).checkByAnnotation(at);
         chain.doChain();
     }
 }

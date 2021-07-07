@@ -17,7 +17,7 @@ public class SaCheckRoleInterceptor implements MethodInterceptor {
     public void filter(InterceptorChain chain) throws Throwable {
         Method method = chain.getCallingMethod();
         SaCheckRole at = method.getAnnotation(SaCheckRole.class);
-        SaManager.getStpLogic(at.key()).checkByAnnotation(at);
+        SaManager.getStpLogic(at.type()).checkByAnnotation(at);
         chain.doChain();
     }
 }

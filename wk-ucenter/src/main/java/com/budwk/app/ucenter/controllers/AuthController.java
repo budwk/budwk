@@ -274,8 +274,7 @@ public class AuthController {
     @ApiResponses
     @SaCheckLogin
     public Result<?> logout() {
-        StpUtil.getTokenSession().logout();
-        StpUtil.logoutByLoginId(10001);
+        StpUtil.logout();
         return Result.success();
     }
 }
