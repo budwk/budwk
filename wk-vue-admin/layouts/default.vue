@@ -501,7 +501,7 @@ export default {
   methods: {
     wsConnect() {
       // 后台配置未启用ws则不进行初始化
-      if (this.conf.AppWebSocket === 'false') {
+      if (!this.conf.AppWebSocket) {
         return false
       }
       ws = new WebSocket(process.env.WS_URL + '/websocket')
@@ -564,7 +564,7 @@ export default {
       }
     },
     checkFristLogin() {
-      if (this.conf['AppPwdCheck'] && this.userInfo.user.needChangePwd) {
+      if (this.conf.AppPwdCheck && this.userInfo.user.needChangePwd) {
         this.$alert('首次登录，请修改密码！', '操作提示', {
           confirmButtonText: '确定',
           callback: action => {

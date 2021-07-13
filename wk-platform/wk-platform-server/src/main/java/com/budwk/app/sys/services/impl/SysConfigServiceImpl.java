@@ -1,5 +1,6 @@
 package com.budwk.app.sys.services.impl;
 
+import com.budwk.app.sys.enums.SysConfigType;
 import com.budwk.app.sys.models.Sys_config;
 import com.budwk.app.sys.services.SysAppService;
 import com.budwk.app.sys.services.SysConfigService;
@@ -37,11 +38,19 @@ public class SysConfigServiceImpl extends BaseServiceImpl<Sys_config> implements
         NutMap nutMap = NutMap.NEW();
         List<Sys_config> commonConfig = this.query(Cnd.where("appId", "=", GlobalConstant.DEFAULT_COMMON_APPID));
         for (Sys_config config : commonConfig) {
-            nutMap.put(config.getConfigKey(), config.getConfigValue());
+            if (SysConfigType.BOOL == config.getType()) {
+                nutMap.put(config.getConfigKey(), Boolean.valueOf(config.getConfigValue()));
+            } else {
+                nutMap.put(config.getConfigKey(), config.getConfigValue());
+            }
         }
         List<Sys_config> appConfig = this.query(Cnd.where("appId", "=", appId));
         for (Sys_config config : appConfig) {
-            nutMap.put(config.getConfigKey(), config.getConfigValue());
+            if (SysConfigType.BOOL == config.getType()) {
+                nutMap.put(config.getConfigKey(), Boolean.valueOf(config.getConfigValue()));
+            } else {
+                nutMap.put(config.getConfigKey(), config.getConfigValue());
+            }
         }
         return nutMap;
     }
@@ -53,12 +62,20 @@ public class SysConfigServiceImpl extends BaseServiceImpl<Sys_config> implements
         List<Sys_config> commonConfig = this.query(Cnd.where("appId", "=", GlobalConstant.DEFAULT_COMMON_APPID)
                 .and("opened", "=", true));
         for (Sys_config config : commonConfig) {
-            nutMap.put(config.getConfigKey(), config.getConfigValue());
+            if (SysConfigType.BOOL == config.getType()) {
+                nutMap.put(config.getConfigKey(), Boolean.valueOf(config.getConfigValue()));
+            } else {
+                nutMap.put(config.getConfigKey(), config.getConfigValue());
+            }
         }
         List<Sys_config> appConfig = this.query(Cnd.where("appId", "=", appId)
                 .and("opened", "=", true));
         for (Sys_config config : appConfig) {
-            nutMap.put(config.getConfigKey(), config.getConfigValue());
+            if (SysConfigType.BOOL == config.getType()) {
+                nutMap.put(config.getConfigKey(), Boolean.valueOf(config.getConfigValue()));
+            } else {
+                nutMap.put(config.getConfigKey(), config.getConfigValue());
+            }
         }
         return nutMap;
     }
