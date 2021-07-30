@@ -2,6 +2,7 @@ export function generateMenus(data, pid) {
   const tree = {}
   data.forEach((item) => {
     if (item.parentId === pid && item.type === 'menu' && item.showit) {
+      const children = generateMenus(data, item.id)
       const menuItem = {
         id: item.id,
         name: item.name,
@@ -9,7 +10,7 @@ export function generateMenus(data, pid) {
         alias: item.alias,
         type: item.type,
         showit: item.showit,
-        hasChildren: item.hasChildren,
+        hasChildren: item.hasChildren && Array.isArray(children),
         icon: item.icon,
         sortId: item.sortId,
         parentId: item.parentId,
@@ -18,7 +19,7 @@ export function generateMenus(data, pid) {
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         meta: { title: item.name, icon: item.icon },
-        children: generateMenus(data, item.id)
+        children: children
       }
       tree[item.path] = menuItem
     }
