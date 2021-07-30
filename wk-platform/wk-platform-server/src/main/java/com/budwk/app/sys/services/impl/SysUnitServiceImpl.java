@@ -31,7 +31,7 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_unit", isHash = true, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
+@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_unit", isHash = false, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
 public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements SysUnitService {
     public SysUnitServiceImpl(Dao dao) {
         super(dao);

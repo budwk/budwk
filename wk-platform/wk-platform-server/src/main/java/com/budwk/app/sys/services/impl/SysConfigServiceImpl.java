@@ -23,7 +23,7 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_config", isHash = true, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
+@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_config", isHash = false, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
 public class SysConfigServiceImpl extends BaseServiceImpl<Sys_config> implements SysConfigService {
     public SysConfigServiceImpl(Dao dao) {
         super(dao);

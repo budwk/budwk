@@ -25,7 +25,7 @@ public class RedisConstant {
     /**
      * wkcache 缓存失效时间(秒)
      */
-    public static final int WKCACHE_TIMEOUT = 900;
+    public static final int WKCACHE_TIMEOUT = 7200;
 
     /**
      * 验证码前缀

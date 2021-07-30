@@ -20,7 +20,7 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
  * @author wizzer@qq.com
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_key", isHash = true, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
+@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_key", isHash = false, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
 public class SysKeyServiceImpl extends BaseServiceImpl<Sys_key> implements SysKeyService {
     public SysKeyServiceImpl(Dao dao) {
         super(dao);

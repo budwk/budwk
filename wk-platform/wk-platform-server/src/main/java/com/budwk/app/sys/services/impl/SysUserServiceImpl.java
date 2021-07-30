@@ -35,7 +35,7 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_user", isHash = true, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
+@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_user", isHash = false, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
 @Slf4j
 public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements SysUserService {
     public SysUserServiceImpl(Dao dao) {

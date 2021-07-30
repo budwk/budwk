@@ -26,7 +26,7 @@ import java.util.Map;
  * @author wizzer@qq.com
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_dict", isHash = true, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
+@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_dict", isHash = false, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
 public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements SysDictService {
     public SysDictServiceImpl(Dao dao) {
         super(dao);

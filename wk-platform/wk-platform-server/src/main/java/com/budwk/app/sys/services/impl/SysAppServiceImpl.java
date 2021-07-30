@@ -19,7 +19,7 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 @IocBean(args = {"refer:dao"})
-@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_app", isHash = true, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
+@CacheDefaults(cacheName = RedisConstant.WKCACHE + "sys_app", isHash = false, cacheLiveTime = RedisConstant.WKCACHE_TIMEOUT)
 public class SysAppServiceImpl extends BaseServiceImpl<Sys_app> implements SysAppService {
     public SysAppServiceImpl(Dao dao) {
         super(dao);
