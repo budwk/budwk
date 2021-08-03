@@ -258,7 +258,7 @@ public class WkPlatformLauncher {
                 //不同的插入数据方式(安全)
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_COMMON_APPID).add("roleId", role.getId()));
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_PLATFORM_APPID).add("roleId", role.getId()));
-                dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_COMMON_APPID).add("roleId", publicRole.getId()));
+                dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", "CMS").add("roleId", role.getId()));
                 dao.insert("sys_unit_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("unitId", unit.getId()));
                 dao.insert("sys_role_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("roleId", role.getId()));
                 //执行SQL脚本
@@ -275,6 +275,15 @@ public class WkPlatformLauncher {
                     Sys_role_menu sysRoleMenu = new Sys_role_menu();
                     sysRoleMenu.setRoleId(role.getId());
                     sysRoleMenu.setAppId(GlobalConstant.DEFAULT_PLATFORM_APPID);
+                    sysRoleMenu.setMenuId(menu.getId());
+                    dao.insert(sysRoleMenu);
+                }
+                //菜单关联到角色
+                List<Sys_menu> cmsMenuList = dao.query(Sys_menu.class, Cnd.where("appId", "=", "CMS"));
+                for (Sys_menu menu : cmsMenuList) {
+                    Sys_role_menu sysRoleMenu = new Sys_role_menu();
+                    sysRoleMenu.setRoleId(role.getId());
+                    sysRoleMenu.setAppId("CMS");
                     sysRoleMenu.setMenuId(menu.getId());
                     dao.insert(sysRoleMenu);
                 }
