@@ -28,7 +28,7 @@ public class Sys_group extends BaseModel implements Serializable {
     @Comment("ID")
     @ApiModelProperty(description = "ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @PrevInsert(uu32 = true)
+    @PrevInsert(uu32 = true, nullEffective = true)
     private String id;
 
     @Column

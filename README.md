@@ -51,6 +51,7 @@ budwk                               -- 根目录
 │  ├─wk-starter                     -- 组件中心
 │  │  ├─wk-starter-common           -- 通用类组件
 │  │  ├─wk-starter-database         -- 数据库组件
+│  │  ├─wk-starter-config           -- 配置组件(商业版)
 │  │  ├─wk-starter-dependencies     -- 所有依赖
 │  │  ├─wk-starter-dubbo            -- Dubbo组件
 │  │  ├─wk-starter-email            -- Email组件
@@ -63,15 +64,22 @@ budwk                               -- 根目录
 │  │  ├─wk-starter-storage          -- 文件存储组件
 │  │  ├─wk-starter-web              -- WEB拦截跨越表单验证组件
 │  ├─wk-gateway                     -- 网关中心
+│  │  ├─websocket                   -- WebScoket支持(商业版)
 │  ├─wk-platform                    -- 控制中心
 │  │  ├─wk-platform-common          -- 通用类供其他模块调用
-│  │  ├─wk-platform-server          -- 服务类提供API服务
+│  │  ├─wk-platform-server          -- 服务类提供API及RPC服务
 │  ├─wk-ucenter                     -- 认证中心
-│  ├─wk-cms                         -- 简易CMS
+│  ├─wk-cms                         -- CMS管理
 │  │  ├─wk-cms-common               -- 通用类供其他模块调用
-│  │  ├─wk-cms-server               -- 服务类提供API服务
+│  │  ├─wk-cms-server               -- 服务类提供API及RPC服务
+│  ├─wk-wechat                      -- 微信管理(商业版)
+│  │  ├─wk-wechat-common            -- 通用类供其他模块调用(商业版)
+│  │  ├─wk-wechat-server            -- 服务类提供API及RPC服务(商业版)
 │  ├─wk-vue-admin                   -- Vue前端代码
-│  ├─wk-vue-admin                   -- Vue前端代码
+│  │  ├─pages-home                  -- 消息中心
+│  │  ├─pages-platform              -- 控制中心
+│  │  ├─pages-cms                   -- CMS管理
+│  │  ├─pages-wechat                -- 微信管理(商业版)
 ```
 * 代码生成器IDEA插件,请下载安装 [https://gitee.com/budwk/budwk-codegenerator](https://gitee.com/budwk/budwk-codegenerator)
 * 推荐组件中心、控制中心、前端等功能模块独立创建Git仓库,便于权限管理及升级迭代

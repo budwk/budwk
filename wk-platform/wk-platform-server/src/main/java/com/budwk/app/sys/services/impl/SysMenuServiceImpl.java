@@ -98,6 +98,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
                     m.setPath(getSubPath("sys_menu", "path", menu.getPath()));
                     m.setCreatedBy(menu.getCreatedBy());
                     m.setUpdatedBy(menu.getUpdatedBy());
+                    m.setAppId(menu.getAppId());
                     if (Strings.isNotBlank(m.getPermission())) {
                         this.insert(m);
                     }
