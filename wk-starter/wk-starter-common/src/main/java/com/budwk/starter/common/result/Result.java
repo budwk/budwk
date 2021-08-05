@@ -74,6 +74,10 @@ public class Result<T> implements Serializable {
         return this;
     }
 
+    public boolean isSuccess() {
+        return this.code == ResultCode.SUCCESS.code;
+    }
+
     public static <T> Result<T> success() {
         return new Result<>(ResultCode.SUCCESS, ResultCode.SUCCESS.getMsg());
     }
