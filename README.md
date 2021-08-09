@@ -30,8 +30,8 @@ BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源We
 
 *   JDK 11 + 或 OpenJDK 11 +
 *   Redis 4.0.8 +
-*   MySql 5.7 + 或 MariaDB、Oracle、SqlServer、达梦等
-*   Nacos 2.0.1 +
+*   MariaDB 10.x + 或 MySql 5.7、Oracle、SqlServer、达梦等
+*   Nacos 2.0.3 +
 
 ## 开发工具
 *   IntelliJ IDEA
