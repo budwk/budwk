@@ -59,8 +59,8 @@ public class WkFailProcessor extends ViewProcessor {
             NotPermissionException ee = (NotPermissionException) e;
             WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.USER_NOT_PERMISSION, ResultCode.USER_NOT_PERMISSION.getMsg() + ": " + ee.getCode()));
             return;
-        } else if (e instanceof BaseException) {    // 如果是权限异常
-            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.FAILURE, !log.isDebugEnabled() ? ResultCode.FAILURE.getMsg() :  e.getMessage()));
+        } else if (e instanceof BaseException) {    // 如果是业务异常
+            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.FAILURE, e.getMessage()));
             return;
         } else if (e instanceof RuntimeException){
             WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.SERVER_ERROR, !log.isDebugEnabled() ? ResultCode.SERVER_ERROR.getMsg() : e.getMessage()));
