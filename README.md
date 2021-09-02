@@ -116,6 +116,10 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   正常启动前端后访问 `http://127.0.0.1:8800` 用户名 superadmin 密码 1
 *   API调试 `http://127.0.0.1:9900/platform/openapi` `http://127.0.0.1:9900/ucenter/openapi` 等
 
+## 服务器部署
+
+*   指定配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-platform-server.jar >/dev/null 2>&1 &`
+
 # 鸣谢
 
 *   [@wendal](https://github.com/wendal)
