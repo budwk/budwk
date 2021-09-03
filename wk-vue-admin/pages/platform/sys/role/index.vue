@@ -174,6 +174,8 @@
               <el-row style="margin-bottom: 3px;">
                 <el-button size="mini" @click="menuRoleSelAll('tree_'+app.id)">全选</el-button>
                 <el-button size="mini" @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
+                <span style="font-size:12px;padding-left:10px;">勾选联动</span>
+                <el-switch v-model="treeCheckStrictly" size="mini" />
               </el-row>
               <el-tree
                 :ref="'tree_'+app.id"
@@ -182,7 +184,7 @@
                 default-expand-all
                 :render-content="renderContent"
                 :highlight-current="true"
-                check-strictly
+                :check-strictly="!treeCheckStrictly"
                 show-checkbox
                 node-key="id"
                 :props="treeProps"
@@ -487,6 +489,7 @@ export default {
       addDialogVisible: false,
       updateDialogVisible: false,
       userDialogVisible: false,
+      treeCheckStrictly: false,
       title: '',
       units: [],
       groups: [],
