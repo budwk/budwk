@@ -94,15 +94,15 @@ public class AuthController {
         if (user == null) {
             throw new BaseException("用户登录失败");
         }
-        StpUtil.setLoginId(user.getId());
+        StpUtil.login(user.getId());
         StpUtil.checkLogin();
         sysUserProvider.setLoginInfo(user.getId(), Lang.getIP(req));
         SaSession session = StpUtil.getSession(true);
-        session.setAttribute("loginname", Strings.sNull(user.getLoginname()));
-        session.setAttribute("username", Strings.sNull(user.getUsername()));
-        session.setAttribute("appId", Strings.sNull(appId));
-        session.setAttribute("unitId", Strings.sNull(user.getUnitId()));
-        session.setAttribute("unitPath", Strings.sNull(user.getUnitPath()));
+        session.set("loginname", Strings.sNull(user.getLoginname()));
+        session.set("username", Strings.sNull(user.getUsername()));
+        session.set("appId", Strings.sNull(appId));
+        session.set("unitId", Strings.sNull(user.getUnitId()));
+        session.set("unitPath", Strings.sNull(user.getUnitPath()));
         return Result.success().addData(StpUtil.getTokenInfo().getTokenValue());
     }
 

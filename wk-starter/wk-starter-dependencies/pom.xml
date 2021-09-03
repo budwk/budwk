@@ -21,7 +21,7 @@
         <nutzmore.version>1.r.69-SNAPSHOT</nutzmore.version>
         <swagger.version>2.1.7</swagger.version>
         <yitter-idgenerator.version>1.0.6</yitter-idgenerator.version>
-        <sa-token.version>1.21.0</sa-token.version>
+        <sa-token.version>1.25.0</sa-token.version>
         <feign.version>11.1</feign.version>
         <jetty.version>9.4.34.v20201102</jetty.version>
         <ribbon.version>2.7.18</ribbon.version>
