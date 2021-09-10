@@ -89,6 +89,7 @@ public class NacosServerPrefixSelectorFilter extends AbstractServerSelectorFilte
 							if (names.getCount() != pageSize) {
 								break;
 							}
+							++ pageNumber;
 						}
 						Set<String> lastNames = new HashSet<String>(serviceMap.keySet());
 						//log.debug("找到的服务名列表为: " + Json.toJson(serviceNames));
