@@ -96,7 +96,7 @@
                 <el-table-column type="selection" width="50" />
                 <el-table-column
                   prop="title"
-                  label="栏目标题"
+                  label="文章标题"
                   sortable
                 />
                 <el-table-column
@@ -204,7 +204,7 @@
         <el-form-item v-if="action==='add'" prop="channelName" label="所属栏目">
           {{ pageData.channelName }}
         </el-form-item>
-        <el-form-item prop="title" label="栏目标题">
+        <el-form-item prop="title" label="文章标题">
           <el-input
             v-model="formData.title"
             maxlength="255"
