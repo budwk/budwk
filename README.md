@@ -9,6 +9,8 @@ https://budwk.com  官网
 
 https://demo.budwk.com  V7演示地址
 
+https://budwk.com/docs  V7开发指南
+
 https://nutzwk.wizzer.cn  V5演示地址
 
 # 前言
