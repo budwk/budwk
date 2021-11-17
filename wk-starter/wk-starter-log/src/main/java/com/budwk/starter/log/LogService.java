@@ -117,7 +117,10 @@ public class LogService {
         sysLog.setMethod(source);
         sysLog.setMsg(msg);
         sysLog.setParams(param);
-        sysLog.setResult(result);
+        sysLog.setExecuteTime(tookTime);
+        sysLog.setCreatedAt(System.currentTimeMillis());
+        sysLog.setUpdatedAt(System.currentTimeMillis());
+        sysLog.setDelFlag(false);
         try {
             HttpServletRequest request = Mvcs.getReq();
             if (request != null) {
@@ -126,21 +129,24 @@ public class LogService {
                 sysLog.setBrowser(request.getHeader("User-Agent"));
                 sysLog.setOs(UserAgentUtil.parse(request.getHeader("User-Agent")).getOs().getName());
             }
-            sysLog.setException(ex);
-            sysLog.setExecuteTime(tookTime);
+        } catch (Exception e) {
+            ex += e.getMessage();
+            log.error(e.getMessage(), e);
+        }
+        try {
             String userId = SecurityUtil.getUserId();
             sysLog.setUserId(userId);
             sysLog.setAppId(SecurityUtil.getAppId());
             sysLog.setLoginname(SecurityUtil.getUserLoginname());
             sysLog.setUsername(SecurityUtil.getUserUsername());
             sysLog.setCreatedBy(userId);
-            sysLog.setCreatedAt(System.currentTimeMillis());
             sysLog.setUpdatedBy(userId);
-            sysLog.setUpdatedAt(System.currentTimeMillis());
-            sysLog.setDelFlag(false);
         } catch (Exception e) {
+            ex += e.getMessage();
             log.error(e.getMessage(), e);
         }
+        sysLog.setResult(Strings.isBlank(result) ? ex : result);
+        sysLog.setException(ex);
         return sysLog;
     }
 }

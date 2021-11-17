@@ -38,14 +38,14 @@ public interface AuthService {
      *
      * @param loginname 用户名
      */
-    void checkLoginname(String loginname) throws BaseException;
+    void checkLoginname(String loginname, String ip) throws BaseException;
 
     /**
      * 检查用户是否存在
      *
      * @param mobile 手机号码
      */
-    void checkMobile(String mobile) throws BaseException;
+    void checkMobile(String mobile, String ip) throws BaseException;
 
     /**
      * 通过用户名获取用户信息

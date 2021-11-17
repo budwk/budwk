@@ -83,10 +83,10 @@ public class AuthController {
                            @Param("appId") String appId, HttpServletRequest req) {
         Sys_user user = null;
         if ("password".equalsIgnoreCase(type)) {
-            authService.checkLoginname(loginname);
+            authService.checkLoginname(loginname, Lang.getIP(req));
             user = authService.loginByPassword(loginname, password, captchaKey, captchaCode);
         } else if ("mobile".equalsIgnoreCase(type)) {
-            authService.checkMobile(mobile);
+            authService.checkMobile(mobile, Lang.getIP(req));
             user = authService.loginByMobile(mobile, smscode);
         } else {
             throw new BaseException("请求方式不正确");
@@ -129,8 +129,8 @@ public class AuthController {
             @ApiFormParam(name = "mobile", description = "手机号码", required = true, check = true, validation = Validation.MOBILE)
     })
     @ApiResponses
-    public Result<?> smscode(@Param("mobile") String mobile) throws BaseException {
-        authService.checkMobile(mobile);
+    public Result<?> smscode(@Param("mobile") String mobile, HttpServletRequest req) throws BaseException {
+        authService.checkMobile(mobile, Lang.getIP(req));
         validateService.getSmsCode(mobile, SmsType.LOGIN);
         return Result.success();
     }
