@@ -11,7 +11,7 @@
 <div align="center">
 
 **[官网](https://budwk.com)** |
-**[V7演示地址](#)** |
+**[V7演示地址](https://demo.budwk.com)** |
 **[V7开发指南](https://budwk.com/docs)** |
 **[V5演示地址](https://nutzwk.wizzer.cn)** |
 **[捐赠清单](https://budwk.com/donation)** |
