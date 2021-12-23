@@ -27,7 +27,7 @@
         <ribbon.version>2.7.18</ribbon.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.2.3</logback.version>
+        <logback.version>1.2.9</logback.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
         <tencentcloud-sdk-java.version>4.0.11</tencentcloud-sdk-java.version>
         <netty.version>4.1.63.Final</netty.version>
