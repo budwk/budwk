@@ -125,7 +125,31 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 ## 服务器部署
 
+### jar 运行
+
 *   指定配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-platform-server.jar >/dev/null 2>&1 &`
+
+### docker 部署
+
+`wk-gateway`
+
+* 编译可执行jar `mvn clean package nutzboot:shade`
+
+* 编译docker image `docker build -t wizzer/budwk-wk-gateway:v7 .`
+
+`wk-platform`
+
+* 编译可执行jar `mvn clean package nutzboot:shade`
+
+* 编译docker image `docker build -t wizzer/budwk-wk-platform:v7 .`
+
+`wk-ucenter`
+
+* 编译可执行jar `mvn clean package nutzboot:shade`
+
+* 编译docker image `docker build -t wizzer/budwk-wk-ucenter:v7 .`
+
+其他NB模块省略...然后挂载 `/app` 路径 把配置文件统一放置好
 
 # 🤝 鸣谢
 
