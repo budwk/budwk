@@ -5,4 +5,4 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 EXPOSE 9900
-CMD ["java","-jar","-Dnutz.boot.configure.yaml.dir=/app","wk-gateway.jar"]
+CMD ["java","-jar","-Dnutz.boot.configure.yaml.dir=/app","/app/wk-gateway.jar"]
