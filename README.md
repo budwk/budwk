@@ -149,7 +149,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 * 编译docker image `docker build -t wizzer/budwk-wk-ucenter:v7 .`
 
-其他NB模块省略...然后挂载 `/app` 路径 把配置文件统一放置好
+其他NB模块省略...然后挂载 `/conf` 路径,把配置文件 `application.yaml` 放好
 
 # 🤝 鸣谢
 
