@@ -1111,15 +1111,15 @@ export default {
     min-height: 450px;
     font-size: 12px;
 }
-/deep/ .is-current > .el-tree-node__content {
+::v-deep .is-current > .el-tree-node__content {
      background-color: rgba(36,118,224,.1);
      color: #2476e0;
 }
-/deep/ .el-tree-node__content {
+::v-deep .el-tree-node__content {
     height: 40px;
 }
 /* 表格 */
-/deep/  .demo-table-expand {
+::v-deep  .demo-table-expand {
     font-size: 12px;
     padding-left: 115px;
     display: inline-table;
@@ -1139,7 +1139,7 @@ export default {
         font-size: 12px;
     }
 }
-/deep/  .avatar-uploader {
+::v-deep  .avatar-uploader {
     .el-upload--picture-card {
         width: 60px;
         height: 60px;

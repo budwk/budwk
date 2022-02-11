@@ -145,7 +145,7 @@ export default {
     max-height: 600px;
     overflow-y: auto;
 }
-/deep/ .ql-snow .ql-picker {
+::v-deep .ql-snow .ql-picker {
     height: auto;
     z-index: 2099;
 }
