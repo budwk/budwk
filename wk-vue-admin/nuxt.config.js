@@ -3,6 +3,7 @@ const StyleLintPlugin = require('stylelint-webpack-plugin')
 require('dotenv-flow').config()
 
 module.exports = {
+  telemetry: false,
   mode: process.env.PACKMODE,
 
   /*
