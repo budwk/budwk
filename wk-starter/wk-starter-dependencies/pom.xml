@@ -34,7 +34,7 @@
         <commons-lang3.version>3.7</commons-lang3.version>
         <mysql-connector-java.version>8.0.16</mysql-connector-java.version>
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
-        <hutool.version>5.6.3</hutool.version>
+        <hutool.version>5.7.19</hutool.version>
         <poi.version>4.1.2</poi.version>
         <oshi-core.version>5.7.3</oshi-core.version>
         <maven.plugin.version>3.8.1</maven.plugin.version>
