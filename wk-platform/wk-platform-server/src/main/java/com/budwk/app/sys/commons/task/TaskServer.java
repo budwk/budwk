@@ -53,7 +53,7 @@ public class TaskServer {
         info.setIocName(iocName);
         info.setJobName(jobName);
         info.setParams(params);
-        pubSubService.fire(RedisConstant.JOB_PUBLISH, Json.toJson(info));
+        pubSubService.fire(RedisConstant.JOB_PUBLISH + ":" + jobName, Json.toJson(info));
     }
 
     /**
