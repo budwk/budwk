@@ -1,0 +1,151 @@
+nutz:
+  application:
+    name: wk-platform
+server:
+  port: 9900
+  host: 0.0.0.0
+jetty:
+  # extports: 9990 配置多端口监听,逗号分隔
+  threadpool:
+    idleTimeout: 60000
+    minThreads: 10
+    maxThreads: 2000
+
+openapi:
+  enable: true
+  scanner:
+    package: com.budwk.app
+  info:
+    title: V7-Mini
+    version: 7.0.1
+    contact:
+      name: 大鲨鱼
+      email: wizzer@qq.com
+  servers:
+    - url: ".."
+      description: 本机环境
+  headers:
+    - value: X-Token
+      name: 用户Token
+      in: header
+      required: true
+web:
+  sql:
+    ignore:
+  cors:
+    # 正式环境请改成部署的域名或网址,增加安全性
+    origin: "*"
+  validation:
+    enable: true
+redis:
+  host: 127.0.0.1
+  port: 6379
+  timeout: 2000
+  max_redir: 10
+  database: 0
+  maxTotal: 100
+  #password: 123
+  pool:
+    maxTotal: 100
+    maxIdle: 50
+    minIdle: 10
+  # cluster 集群模式
+  mode: normal
+  # cluster 集群模式
+  #nodes:
+
+log:
+  # database=存数据库,mongodb=mongodb 此配置项只需要在 wk-platform 配置即可
+  save: database
+  color: true
+  level: debug
+database:
+  enable: true
+  ig:
+    snowflake: true  #是否启用雪花主键
+  table:
+    create: true      #是否自动建表 默认false
+    migration: true   #是否自动变更 默认false
+    add: true         #变更是否添加列 默认false
+    package:          #相关实体所在包
+      - com.budwk.app
+jdbc:
+  url: jdbc:mysql://127.0.0.1:3306/budwk_v7_mini?useUnicode=true&characterEncoding=utf8&useSSL=false
+  username: root
+  password: root
+  validationQuery: select 1
+  maxActive: 10
+  testWhileIdle: true
+  connectionProperties: druid.stat.slowSqlMillis=2000
+  defaultAutoCommit: true
+
+quartz:
+  startupDelay: 10                  #延迟启动秒数
+  scheduler:
+    instanceName: defaultScheduler  #集群名称
+    instanceId: AUTO
+    skipUpdateCheck: true
+  jobStore:
+    class: org.quartz.impl.jdbcjobstore.JobStoreTX
+    driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+    #不同数据库到适配
+    #driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+    #driverDelegateClass = org.quartz.impl.jdbcjobstore.oracle.OracleDelegate
+    dataSource: myDS                #数据源名称
+    tablePrefix: SYS_QRTZ_          #表前缀
+    isClustered: true               #启用集群模式
+    clusterCheckinInterval: 20000
+    maxMisfiresToHandleAtATime: 120
+    misfireThreshold: 120000
+    txIsolationLevelSerializable: false
+  threadPool:
+    class: org.quartz.simpl.SimpleThreadPool
+    threadCount: 2
+    threadPriority: 5
+    threadsInheritContextClassLoaderOfInitializingThread: true
+  plugin:
+    triggHistory:
+      class: org.quartz.plugins.history.LoggingJobHistoryPlugin
+    shutdownhook:
+      class: org.quartz.plugins.management.ShutdownHookPlugin
+      cleanShutdown: true
+  dataSource:
+    myDS:
+      connectionProvider:
+        #数据源
+        class: com.budwk.app.sys.commons.task.NutConnectionProvider
+
+storage:
+  enable: true
+  #本地方式
+  provider: local
+  local:
+    #本地存储位置
+    path: ~/temp/files
+
+sms:
+  enable: false
+  #服务提供商
+  provider: tencent
+  tencent:
+    secret-id: xxx
+    secret-key: xxx
+    appid: 1400463107
+    sign: 萌发开源
+  template:
+    register: 813970  #注册短信验证码模版编号
+    login: 813970     #登录短信验证码模版编号
+    password: 813970  #找回密码短信验证码模版编号
+    message:          #短信通知模版编号
+email:
+  enable: false                  #是否启用
+  HostName: smtp.qq.com  #服务器域名或IP
+  SmtpPort: 465                 #服务器端口
+  UserName: xxx@qq.com   #账号
+  Password: xxx    #密码
+  SSLOnConnect: true            #开启SSL连接
+  From: xxx@qq.com       #发件人
+  charset: UTF-8                #字符集, 默认UTF-8
+  template:
+    domain: https://budwk.com    #邮件内容中留下的域名
+    author: 萌发开源  #邮件内容中留下的落款
