@@ -149,3 +149,7 @@ email:
   template:
     domain: https://budwk.com    #邮件内容中留下的域名
     author: 萌发开源  #邮件内容中留下的落款
+
+job:
+  # 定时任务所在的包名 多个包名用,分割
+  package: com.budwk.app.sys.commons.task
