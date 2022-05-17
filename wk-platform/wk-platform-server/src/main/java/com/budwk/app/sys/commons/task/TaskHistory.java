@@ -11,7 +11,6 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
-import org.nutz.lang.random.R;
 
 /**
  * @author wizzer@qq.com
@@ -43,14 +42,6 @@ public class TaskHistory implements PubSub {
         history.setJobId(jobInfo.getJobId());
         history.setEndTime(jobInfo.getEndTime());
         history.setTookTime(jobInfo.getTookTime());
-        String uuid = R.UU32();
-        String redisVal = Strings.sNull(redisService.get(RedisConstant.JOB_HISTORY));
-        if (Strings.isBlank(redisVal)) {
-            redisService.setex(RedisConstant.JOB_HISTORY, 1, uuid);
-        }
-        redisVal = Strings.sNull(redisService.get(RedisConstant.JOB_HISTORY));
-        if (redisVal.equalsIgnoreCase(uuid)) {
-            sysTaskHistoryService.insert(history);
-        }
+        sysTaskHistoryService.insert(history);
     }
 }
