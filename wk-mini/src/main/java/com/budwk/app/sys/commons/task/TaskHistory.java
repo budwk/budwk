@@ -11,6 +11,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
+import org.nutz.lang.random.R;
 
 /**
  * @author wizzer@qq.com
@@ -42,6 +43,15 @@ public class TaskHistory implements PubSub {
         history.setJobId(jobInfo.getJobId());
         history.setEndTime(jobInfo.getEndTime());
         history.setTookTime(jobInfo.getTookTime());
-        sysTaskHistoryService.insert(history);
+        // 多实例会收到重复的多条,只需插入一条即可
+        String uuid = R.UU32();
+        String redisVal = Strings.sNull(redisService.get(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId()));
+        if (Strings.isBlank(redisVal)) {
+            redisService.setex(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId(), 3, uuid);
+        }
+        redisVal = Strings.sNull(redisService.get(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId()));
+        if (redisVal.equalsIgnoreCase(uuid)) {
+            sysTaskHistoryService.insert(history);
+        }
     }
 }
