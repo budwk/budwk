@@ -50,6 +50,7 @@
     <logger name="io.swagger.v3.core" level="INFO"/>
     <logger name="org.nutz.ioc.loader" level="INFO"/>
     <logger name="ch.qos.logback" level="ERROR"/>
+    <logger name="org.redisson" level="INFO"/>
 
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
