@@ -2,12 +2,10 @@ package com.budwk.starter.job.aop;
 
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.job.JobInfo;
-import com.budwk.starter.job.JobService;
 import com.budwk.starter.job.annotation.SJob;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.aop.InterceptorChain;
 import org.nutz.aop.MethodInterceptor;
-import org.nutz.integration.jedis.RedisService;
 import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -16,6 +14,8 @@ import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
@@ -23,19 +23,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author wizzer@qq.com
  */
-@IocBean(singleton = false, create = "init")
+@IocBean(singleton = false)
 @Slf4j
-public class SJobAopInterceptor extends JobService implements MethodInterceptor {
+public class SJobAopInterceptor implements MethodInterceptor {
     @Inject("refer:$ioc")
     protected Ioc ioc;
     @Inject
-    private RedisService redisService;
+    private RedissonClient redissonClient;
     @Inject
     private PubSubService pubSubService;
-
-    public void init() {
-        super.init(redisService);
-    }
+    private static final String instanceId = R.UU32();
 
     @Override
     public void filter(InterceptorChain chain) throws Throwable {
@@ -51,13 +48,15 @@ public class SJobAopInterceptor extends JobService implements MethodInterceptor 
         long tookTime = 0L;
         String jobId = R.UU32();
         try {
-            if (!canExecute(iocBean.name() + "_" + sJob.value(), jobId)) {
-                return;
+            RLock rLock = redissonClient.getLock(RedisConstant.JOB_EXECUTE + iocBean.name() + ":" + sJob.value());
+            if (rLock.tryLock(3, TimeUnit.SECONDS)) {
+                chain.doChain();
+                tookTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+                doSendMessage(null, tookTime, sJob.value(), taskId, instanceId, jobId);
+                log.info("SJob iocName:{} jobName:{} taskId:{} instanceId:{} jobId:{} - Success", iocBean.name(), sJob.value(), taskId, instanceId, jobId);
+            } else {
+                log.info("SJob iocName:{} jobName:{} Locked", iocBean.name(), sJob.value());
             }
-            chain.doChain();
-            tookTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-            doSendMessage(null, tookTime, sJob.value(), taskId, instanceId, jobId);
-            log.info("SJob iocName:{} jobName:{} taskId:{} instanceId:{} jobId:{} - Success", iocBean.name(), sJob.value(), taskId, instanceId, jobId);
         } catch (Throwable e) {
             tookTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
             doSendMessage(e, tookTime, sJob.value(), taskId, instanceId, jobId);

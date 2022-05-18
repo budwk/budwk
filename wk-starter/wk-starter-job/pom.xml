@@ -31,5 +31,9 @@
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-redisson</artifactId>
+        </dependency>
     </dependencies>
 </project>

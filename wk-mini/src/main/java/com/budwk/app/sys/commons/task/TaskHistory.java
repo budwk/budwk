@@ -4,24 +4,28 @@ import com.budwk.app.sys.models.Sys_task_history;
 import com.budwk.app.sys.services.SysTaskHistoryService;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.job.JobInfo;
-import org.nutz.integration.jedis.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.nutz.integration.jedis.pubsub.PubSub;
 import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
-import org.nutz.lang.random.R;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wizzer@qq.com
  */
 @IocBean(create = "init")
+@Slf4j
 public class TaskHistory implements PubSub {
     @Inject
     private PubSubService pubSubService;
     @Inject
-    private RedisService redisService;
+    private RedissonClient redissonClient;
     @Inject
     private SysTaskHistoryService sysTaskHistoryService;
 
@@ -44,14 +48,13 @@ public class TaskHistory implements PubSub {
         history.setEndTime(jobInfo.getEndTime());
         history.setTookTime(jobInfo.getTookTime());
         // 多实例会收到重复的多条,只需插入一条即可
-        String uuid = R.UU32();
-        String redisVal = Strings.sNull(redisService.get(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId()));
-        if (Strings.isBlank(redisVal)) {
-            redisService.setex(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId(), 3, uuid);
-        }
-        redisVal = Strings.sNull(redisService.get(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId()));
-        if (redisVal.equalsIgnoreCase(uuid)) {
-            sysTaskHistoryService.insert(history);
+        try {
+            RLock rLock = redissonClient.getLock(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId());
+            if (rLock.tryLock(3, TimeUnit.SECONDS)) {
+                sysTaskHistoryService.insert(history);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 }
