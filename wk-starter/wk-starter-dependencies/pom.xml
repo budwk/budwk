@@ -10,12 +10,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <version>7.0.1-SNAPSHOT</version>
+    <version>7.0.2-SNAPSHOT</version>
     <groupId>com.budwk.starter</groupId>
     <artifactId>wk-starter-dependencies</artifactId>
 
     <properties>
-        <budwk.version>7.0.1-SNAPSHOT</budwk.version>
+        <budwk.version>7.0.2-SNAPSHOT</budwk.version>
         <lombok.version>1.18.18</lombok.version>
         <nutz.version>1.r.69-SNAPSHOT</nutz.version>
         <nutzmore.version>1.r.69-SNAPSHOT</nutzmore.version>

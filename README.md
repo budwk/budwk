@@ -82,6 +82,7 @@ budwk                               -- 根目录
 │  ├─wk-wechat                      -- 微信管理(商业版)
 │  │  ├─wk-wechat-common            -- 通用类供其他模块调用(商业版)
 │  │  ├─wk-wechat-server            -- 服务类提供API及RPC服务(商业版)
+│  ├─wk-mini                        -- 单应用Mini版本
 │  ├─wk-vue-admin                   -- Vue前端代码
 │  │  ├─pages-home                  -- 消息中心
 │  │  ├─pages-platform              -- 控制中心

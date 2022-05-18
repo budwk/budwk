@@ -5,10 +5,10 @@
     <parent>
         <artifactId>wk-cms</artifactId>
         <groupId>com.budwk</groupId>
-        <version>7.0.1-SNAPSHOT</version>
+        <version>7.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>7.0.1-SNAPSHOT</version>
+    <version>7.0.2-SNAPSHOT</version>
     <groupId>com.budwk.app</groupId>
     <artifactId>wk-cms-common</artifactId>
 
