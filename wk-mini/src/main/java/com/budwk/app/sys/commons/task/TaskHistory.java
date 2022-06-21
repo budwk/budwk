@@ -49,7 +49,7 @@ public class TaskHistory implements PubSub {
         history.setTookTime(jobInfo.getTookTime());
         // 多实例会收到重复的多条,只需插入一条即可
         try {
-            RLock rLock = redissonClient.getLock(RedisConstant.JOB_HISTORY + history.getInstanceId() + ":" + history.getJobId());
+            RLock rLock = redissonClient.getLock(RedisConstant.JOB_HISTORY + jobInfo.getTaskId());
             if (rLock.tryLock(3, TimeUnit.SECONDS)) {
                 sysTaskHistoryService.insert(history);
             }
