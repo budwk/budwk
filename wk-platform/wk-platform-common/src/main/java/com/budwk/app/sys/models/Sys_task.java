@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_task")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统定时任务表")
 public class Sys_task extends BaseModel implements Serializable {
 

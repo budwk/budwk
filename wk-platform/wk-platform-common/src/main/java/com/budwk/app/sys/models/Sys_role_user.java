@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_role_user")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 public class Sys_role_user extends BaseModel implements Serializable {
 
     private static final long serialVersionUID = -507747309971899026L;

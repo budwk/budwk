@@ -20,6 +20,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_unit")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统单位表")
 @TableIndexes({@Index(name = "INDEX_SYS_UNIT_PATH", fields = {"path"}, unique = true),
         @Index(name = "INDEX_SYS_UNIT_UNITCODE", fields = {"unitcode"}, unique = true)

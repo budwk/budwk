@@ -19,6 +19,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_user")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统用户表")
 @TableIndexes({@Index(name = "INDEX_SYS_USER_LOGINNAMAE", fields = {"loginname"}, unique = true)})
 public class Sys_user extends BaseModel implements Serializable {

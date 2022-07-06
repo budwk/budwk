@@ -19,6 +19,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_app")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统应用表")
 public class Sys_app extends BaseModel implements Serializable {
     private static final long serialVersionUID = 7641962702833856043L;

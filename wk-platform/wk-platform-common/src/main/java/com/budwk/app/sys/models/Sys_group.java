@@ -19,6 +19,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_group")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统角色分组表")
 public class Sys_group extends BaseModel implements Serializable {
     private static final long serialVersionUID = 8106561665016556432L;

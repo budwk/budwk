@@ -20,6 +20,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_config")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({@Index(name = "INDEX_SYS_CONFIG", fields = {"appId", "configKey"}, unique = true)})
 @ApiModel(description = "系统参数配置表")
 public class Sys_config extends BaseModel implements Serializable {

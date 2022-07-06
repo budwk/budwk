@@ -18,6 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_key")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统密钥表")
 @TableIndexes({@Index(name = "INDEX_SYS_KEY", fields = {"appid"}, unique = true)})
 public class Sys_key extends BaseModel implements Serializable {
