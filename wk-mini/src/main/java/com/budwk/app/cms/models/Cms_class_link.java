@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("cms_class_link")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 public class Cms_class_link extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 

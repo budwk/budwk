@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("cms_site")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "CMS站点信息")
 public class Cms_site extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;

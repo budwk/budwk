@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_msg_user")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({@Index(name = "INDEX_SYS_MSG_USER", fields = {"userId"}, unique = false)})
 public class Sys_msg_user extends BaseModel implements Serializable {
     private static final long serialVersionUID = -7441095920677030072L;

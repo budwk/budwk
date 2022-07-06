@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_role_menu")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({@Index(name = "INDEX_SYS_ROLE_MENU", fields = {"appId", "roleId", "menuId"}, unique = true)})
 public class Sys_role_menu extends BaseModel implements Serializable {
 

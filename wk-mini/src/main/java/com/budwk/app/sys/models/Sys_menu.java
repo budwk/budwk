@@ -21,6 +21,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("sys_menu")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "系统菜单表")
 @TableIndexes({@Index(name = "INDEX_SYS_MENU_PATH", fields = {"appId", "path"}, unique = true), @Index(name = "INDEX_SYS_MENU_PREM", fields = {"permission"}, unique = true)})
 public class Sys_menu extends BaseModel implements Serializable {

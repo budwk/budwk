@@ -18,6 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("cms_channel")
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({@Index(name = "INDEX_CHANNEL", fields = {"code"}, unique = true)})
 @ApiModel(description = "CMS栏目")
 public class Cms_channel extends BaseModel implements Serializable {
