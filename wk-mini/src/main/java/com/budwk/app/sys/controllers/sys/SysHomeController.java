@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wizzer@qq.com
  */
 @IocBean
-@At("/home")
+@At("/platform/home")
 @SLog(tag = "用户中心")
 @ApiDefinition(tag = "用户中心")
 @Slf4j
