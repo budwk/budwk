@@ -82,9 +82,6 @@ public class SysMenuController {
         cnd.asc("location").asc("path");
         list = sysMenuService.query(cnd);
         for (Sys_menu menu : list) {
-            if (sysMenuService.count(Cnd.where("parentId", "=", menu.getId())) > 0) {
-                menu.setHasChildren(true);
-            }
             NutMap map = Lang.obj2nutmap(menu);
             map.addv("expanded", false);
             map.addv("children", new ArrayList<>());

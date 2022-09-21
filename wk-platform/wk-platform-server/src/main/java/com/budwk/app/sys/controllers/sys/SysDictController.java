@@ -59,9 +59,6 @@ public class SysDictController {
         cnd.asc("location").asc("path");
         list = sysDictService.query(cnd);
         for (Sys_dict dict : list) {
-            if (sysDictService.count(Cnd.where("parentId", "=", dict.getId())) > 0) {
-                dict.setHasChildren(true);
-            }
             NutMap map = Lang.obj2nutmap(dict);
             map.addv("expanded", false);
             map.addv("children", new ArrayList<>());
