@@ -23,7 +23,7 @@ public enum ResultCode implements IResultCode {
     DAO_ERROR(500600,"DAO数据库查询错误"),
     DEMO_ERROR(500700,"演示环境，限制操作"),
 
-    USER_NOT_LOGIN(600098, "用户未登录"),
+    USER_NOT_LOGIN(600098, "用户失效"),
     USER_NOT_ROLE(600099, "无此角色"),
     USER_NOT_PERMISSION(600100, "无此权限"),
     USER_NOT_FOUND(600101, "用户不存在"),
