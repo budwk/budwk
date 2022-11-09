@@ -1,4 +1,5 @@
 export const API_SYS_UNIT_CHILD = '/platform/sys/unit/child'
+export const API_SYS_UNIT_LIST = '/platform/sys/unit/list'
 export const API_SYS_UNIT_CREATE = '/platform/sys/unit/create'
 export const API_SYS_UNIT_DELETE = '/platform/sys/unit/delete/'
 export const API_SYS_UNIT_GET = '/platform/sys/unit/get/'
@@ -8,6 +9,14 @@ export const API_SYS_UNIT_SORT = '/platform/sys/unit/sort'
 export const API_SYS_UNIT_SEARCH_USER = '/platform/sys/unit/search_user'
 
 import request from '/@/utils/request'
+
+export function getList(name: string,leaderName:string) {
+    return request({
+        url: API_SYS_UNIT_LIST,
+        method: 'GET',
+        data: {name: name,leaderName: leaderName}
+    })
+}
 
 export function getChild(pid: string) {
     return request({

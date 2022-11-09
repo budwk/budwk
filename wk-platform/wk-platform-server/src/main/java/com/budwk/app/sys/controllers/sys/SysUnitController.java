@@ -46,6 +46,35 @@ public class SysUnitController {
     @Inject
     private SysUnitUserService sysUnitUserService;
 
+    @At
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "分页查询")
+    @ApiFormParams(
+            {
+                    @ApiFormParam(name = "name", example = "", description = "用户名"),
+                    @ApiFormParam(name = "leaderName", example = "", description = "部门负责人")
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckPermission("sys.manage.unit")
+    public Result<?> list(
+                          @Param("name") String name,
+                          @Param("leaderName") String leaderName) {
+        Cnd cnd = Cnd.NEW();
+        if(Strings.isNotBlank(name)){
+            cnd.and("name", "like", "%"+name+"%");
+        }
+        if(Strings.isNotBlank(leaderName)){
+            cnd.and("leaderName", "like", "%"+name+"%");
+        }
+        cnd.asc("path");
+        return Result.success().addData(sysUnitService.query(cnd));
+    }
+
+
     @At("/child")
     @Ok("json")
     @GET

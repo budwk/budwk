@@ -23,14 +23,6 @@
 ### svg图标    
     * 使用方式: `<svg-icon icon-class="reload" />`
 
-## 页面布局
-
-```
-<route lang="yaml">
-    meta:
-      layout: platform/index
-</route>
-```
 ## 页面名称
 
 * 组件名称严格按照文件夹名称命名,多级文件夹用-分割
@@ -44,4 +36,13 @@ export default defineComponent({
     name: 'platform-sys-unit'
 })
 </script>
+```
+
+## 页面布局
+
+```
+<route lang="yaml">
+    meta:
+      layout: platform/index
+</route>
 ```

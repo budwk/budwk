@@ -2,7 +2,6 @@ package com.budwk.app.sys.controllers.sys;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
-import com.budwk.app.sys.enums.SysUnitType;
 import com.budwk.app.sys.models.Sys_unit;
 import com.budwk.app.sys.models.Sys_unit_user;
 import com.budwk.app.sys.services.SysUnitService;
@@ -49,16 +48,12 @@ public class SysUnitController {
 
     @At
     @Ok("json")
-    @POST
+    @GET
     @ApiOperation(name = "分页查询")
     @ApiFormParams(
             {
                     @ApiFormParam(name = "name", example = "", description = "用户名"),
-                    @ApiFormParam(name = "leaderName", example = "", description = "部门负责人"),
-                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
-                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
-                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
-                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+                    @ApiFormParam(name = "leaderName", example = "", description = "部门负责人")
             }
     )
     @ApiResponses(
@@ -67,8 +62,7 @@ public class SysUnitController {
     @SaCheckPermission("sys.manage.unit")
     public Result<?> list(
                           @Param("name") String name,
-                          @Param("leaderName") String leaderName,
-                          @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+                          @Param("leaderName") String leaderName) {
         Cnd cnd = Cnd.NEW();
         if(Strings.isNotBlank(name)){
             cnd.and("name", "like", "%"+name+"%");
@@ -77,7 +71,8 @@ public class SysUnitController {
             cnd.and("leaderName", "like", "%"+name+"%");
         }
         cnd.asc("path");
-        return Result.success().addData(sysUnitService.listPage(pageNo, pageSize, cnd));
+        cnd.asc("location");
+        return Result.success().addData(sysUnitService.query(cnd));
     }
 
 

@@ -15,11 +15,11 @@
         </el-form>
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button type="primary" plain icon="Plus" @click="handleCreate"
+                <el-button type="primary" plain @click="handleCreate"
                     v-permission="['sys.manage.unit.create']">新增</el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button type="info" plain icon="Sort" @click="toggleExpandAll">展开/折叠</el-button>
+                <el-button type="info" plain @click="toggleExpandAll">展开/折叠</el-button>
             </el-col>
             <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                 @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过单位名称搜索" />
@@ -27,23 +27,29 @@
 
         <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
             :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-            <el-table-column :prop="columns[0].prop" :label="columns[0].label" :fixed="columns[0].fixed"
+            <el-table-column prop="name" :label="columns[0].label" :fixed="columns[0].fixed"
                 v-if="columns[0].show" width="260"></el-table-column>
-            <el-table-column :prop="columns[1].prop" :label="columns[1].label" :fixed="columns[1].fixed"
-                v-if="columns[1].show" width="260"></el-table-column>
-            <el-table-column :prop="columns[2].prop" :label="columns[2].label" :fixed="columns[2].fixed"
-                v-if="columns[2].show" width="260">
+            <el-table-column prop="type" :label="columns[1].label" :fixed="columns[1].fixed"
+                v-if="columns[1].show" width="260">
+                <template #default="scope">
+                    <span>{{ scope.row.type?.text }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="disabled" :label="columns[2].label" :fixed="columns[2].fixed"
+                v-if="columns[2].show" width="260"></el-table-column>
+            <el-table-column prop="createdAt" :label="columns[3].label" :fixed="columns[3].fixed"
+                v-if="columns[3].show" width="260">
                 <template #default="scope">
                     <span>{{ formatTime(scope.row.createdAt) }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
-                    <el-button type="text" icon="Edit" @click="handleUpdate(scope.row)"
+                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                         v-permission="['sys.manage.unit.update']">修改</el-button>
-                    <el-button type="text" icon="Plus" @click="handleCreate(scope.row)"
+                    <el-button link type="primary" icon="Plus" @click="handleCreate(scope.row)"
                         v-permission="['sys.manage.unit.create']">新增</el-button>
-                    <el-button v-if="scope.row.parentId != 0" type="text" icon="Delete" @click="handleDelete(scope.row)"
+                    <el-button v-if="scope.row.parentId != ''" link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                         v-permission="['sys.manage.unit.delete']">删除</el-button>
                 </template>
             </el-table-column>
@@ -51,7 +57,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref, toRefs } from 'vue'
+import { onMounted, reactive, ref, toRefs } from 'vue'
+import { getList } from '/@/api/platform/sys/unit'
+import { handleTree } from '/@/utils/common'
 
 const isExpandAll = ref(true)
 const showSearch = ref(false)
@@ -62,8 +70,8 @@ const tableData = ref([])
 const data = reactive({
     formData: {},
     queryParams: {
-        name: undefined,
-        leaderName: undefined,
+        name: '',
+        leaderName: '',
     },
     formRules: {
         parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
@@ -76,14 +84,29 @@ const data = reactive({
 const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
-    { prop: 'name', label: `单位名称`, show: true, fixed: 'left' },
+    { prop: 'name', label: `单位名称`, show: true, fixed: false },
+    { prop: 'type', label: `单位类型`, show: true, fixed: false },
     { prop: 'disabled', label: `状态`, show: true, fixed: false },
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
 ])
 
+const listPage = () => {
+    tableLoading.value = true
+    getList(queryParams.value.name, queryParams.value.leaderName).then((res)=>{
+        tableLoading.value = false
+        tableData.value = handleTree(res.data, "id") as never
+        console.log(tableData.value)
+    })
+} 
+
+onMounted(()=>{
+    listPage()
+})
+
 const quickSearch = (data: any) => {
-    console.log('quickSearch')
-    console.log(data)
+    queryParams.value.name = data.keyword
+    queryParams.value.leaderName = ''
+    listPage()
 }
 
 const handleSearch = () => {
