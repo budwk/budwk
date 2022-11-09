@@ -5,7 +5,8 @@
                 <el-input v-model="queryParams.name" placeholder="请输入单位名称" clearable @keyup.enter="handleSearch" />
             </el-form-item>
             <el-form-item label="部门负责人" prop="leaderName">
-                <el-input v-model="queryParams.leaderName" placeholder="请输入部门负责人" clearable
+                <el-input
+v-model="queryParams.leaderName" placeholder="请输入部门负责人" clearable
                     @keyup.enter="handleSearch" />
             </el-form-item>
             <el-form-item>
@@ -15,41 +16,43 @@
         </el-form>
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button type="primary" plain @click="handleCreate"
+                <el-button
+type="primary" plain @click="handleCreate"
                     v-permission="['sys.manage.unit.create']">新增</el-button>
             </el-col>
             <el-col :span="1.5">
                 <el-button type="info" plain @click="toggleExpandAll">展开/折叠</el-button>
             </el-col>
-            <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
+            <right-toolbar
+v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                 @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过单位名称搜索" />
         </el-row>
 
-        <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
+        <el-table
+v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
             :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-            <el-table-column prop="name" :label="columns[0].label" :fixed="columns[0].fixed"
-                v-if="columns[0].show" width="260"></el-table-column>
-            <el-table-column prop="type" :label="columns[1].label" :fixed="columns[1].fixed"
-                v-if="columns[1].show" width="260">
+            <template v-for="(item,idx) in columns" :key="idx">
+                <el-table-column
+:prop="item.prop" :label="item.label" :fixed="item.fixed"
+                v-if="item.show">
+                    <template v-if="item.prop=='type'" #default="scope">
+                        <span>{{ scope.row.type?.text }}</span>
+                    </template>
+                    <template v-if="item.prop=='createdAt'" #default="scope">
+                        <span>{{ formatTime(scope.row.createdAt) }}</span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column fixed="right" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
-                    <span>{{ scope.row.type?.text }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="disabled" :label="columns[2].label" :fixed="columns[2].fixed"
-                v-if="columns[2].show" width="260"></el-table-column>
-            <el-table-column prop="createdAt" :label="columns[3].label" :fixed="columns[3].fixed"
-                v-if="columns[3].show" width="260">
-                <template #default="scope">
-                    <span>{{ formatTime(scope.row.createdAt) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" class-name="small-padding fixed-width">
-                <template #default="scope">
-                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                    <el-button
+link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                         v-permission="['sys.manage.unit.update']">修改</el-button>
-                    <el-button link type="primary" icon="Plus" @click="handleCreate(scope.row)"
+                    <el-button
+link type="primary" icon="Plus" @click="handleCreate(scope.row)"
                         v-permission="['sys.manage.unit.create']">新增</el-button>
-                    <el-button v-if="scope.row.parentId != ''" link type="danger" icon="Delete" @click="handleDelete(scope.row)"
+                    <el-button
+v-if="scope.row.path != '0001'" link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                         v-permission="['sys.manage.unit.delete']">删除</el-button>
                 </template>
             </el-table-column>
@@ -57,7 +60,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref, toRefs } from 'vue'
+import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { getList } from '/@/api/platform/sys/unit'
 import { handleTree } from '/@/utils/common'
 
@@ -86,6 +89,7 @@ const { queryParams, formData, formRules } = toRefs(data)
 const columns = ref([
     { prop: 'name', label: `单位名称`, show: true, fixed: false },
     { prop: 'type', label: `单位类型`, show: true, fixed: false },
+    { prop: 'leaderName', label: `部门负责人`, show: true, fixed: false },
     { prop: 'disabled', label: `状态`, show: true, fixed: false },
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
 ])
@@ -118,7 +122,11 @@ const resetSearch = () => {
 }
 
 const toggleExpandAll = () => {
-
+    refreshTable.value = false;
+    isExpandAll.value = !isExpandAll.value
+    nextTick(() => {
+        refreshTable.value = true
+    })
 }
 
 const handleCreate = (row: any) => {
