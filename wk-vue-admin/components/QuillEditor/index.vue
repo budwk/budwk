@@ -40,7 +40,7 @@ export default {
         return {
             content: this.text,
             headers: {
-                "X-Token": Cookie.get("X-Token")
+                "wk-user-token": Cookie.get("wk-user-token")
             },
             editorOption: {
                 // some quill options
@@ -102,7 +102,7 @@ export default {
             document.querySelector("#uploadImg .el-upload").click()
         },
         beforeUpload() {
-            this.headers["X-Token"] = Cookie.get("X-Token")
+            this.headers["wk-user-token"] = Cookie.get("wk-user-token")
         },
         // 图片上传成功方法
         handleSuccess(response, file, fileList) {

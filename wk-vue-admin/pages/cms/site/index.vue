@@ -578,7 +578,7 @@ export default {
       },
       activeName: 'base',
       headers: {
-        'X-Token': this.$cookies.get('X-Token')
+        'wk-user-token': this.$cookies.get('wk-user-token')
       },
       uploadUrl: process.env.API + API_UPLOAD_IMAGE // 图片上传路径
     }

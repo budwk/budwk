@@ -506,7 +506,7 @@ export default {
       }
       ws = new WebSocket(process.env.WS_URL + '/websocket')
       ws.onopen = (event) => {
-        ws.send(JSON.stringify({ userId: this.userInfo.user.id, action: 'join', token: this.$cookies.get('X-Token') }))
+        ws.send(JSON.stringify({ userId: this.userInfo.user.id, action: 'join', token: this.$cookies.get('wk-user-token') }))
       }
       ws.onmessage = (event) => {
         var re = JSON.parse(event.data)
@@ -543,7 +543,7 @@ export default {
       window.onunload = () => {
         _gap_time = new Date().getTime() - _beforeUnload_time
         if (_gap_time <= 5) {
-          ws.send(JSON.stringify({ userId: this.userInfo.user.id, action: 'left', token: this.$cookies.get('X-Token') }))
+          ws.send(JSON.stringify({ userId: this.userInfo.user.id, action: 'left', token: this.$cookies.get('wk-user-token') }))
         } else {
           // 浏览器刷新
         }
@@ -551,7 +551,7 @@ export default {
       window.onbeforeunload = () => {
         _beforeUnload_time = new Date().getTime()
         if (is_fireFox) { // 火狐关闭执行,但是IE关闭好像不起作用 todo
-          ws.send(JSON.stringify({ userId: this.userInfo.user.id, action: 'left', token: this.$cookies.get('X-Token') }))
+          ws.send(JSON.stringify({ userId: this.userInfo.user.id, action: 'left', token: this.$cookies.get('wk-user-token') }))
         }
       }
     },

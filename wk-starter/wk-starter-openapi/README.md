@@ -28,7 +28,7 @@ openapi:
       description: 演示环境
     # 头域传递都token参数名称
   headers:
-    - value: X-Token
+    - value: wk-user-token
       name: 用户Token
       in: header
       required: true

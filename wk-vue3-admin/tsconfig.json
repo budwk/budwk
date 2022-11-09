@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "useDefineForClassFields": true,
+        "suppressImplicitAnyIndexErrors": false,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "removeComments": false,
+        "strict": true,
+        "jsx": "preserve",
+        "sourceMap": false,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "lib": ["esnext", "dom"],
+        "isolatedModules": true,
+        "baseUrl": "./",
+        "paths": {
+            "/@/*": ["src/*"]
+        },
+        "types": ["element-plus/global", "vite-plugin-vue-layouts/client"]
+    },
+    "exclude": ["node_modules"]
+}

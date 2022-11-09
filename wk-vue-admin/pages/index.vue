@@ -385,7 +385,7 @@ export default {
           return
         }
         // 登录成功后设置cookie值,但不设置state.auth 这样才可以再进入系统后获取菜单及用户信息
-        this.$cookies.set('X-Token', data)
+        this.$cookies.set('wk-user-token', data)
         this.$cookies.set('appId', this.siteInfo.appId)
         this.$cookies.set('appPath', this.siteInfo.appPath)
         window.location.href = this.siteInfo.appPath

@@ -4,7 +4,7 @@ import { SUCCESS_CODE } from '@/constant/code'
 export default function({ $axios, redirect, store, app }) {
   $axios.defaults.baseURL = process.env.API
   $axios.onRequest((config) => {
-    $axios.setHeader('X-Token', app.$cookies.get('X-Token'))
+    $axios.setHeader('wk-user-token', app.$cookies.get('wk-user-token'))
     // console.log('发起请求::' + config.url)
   })
 
@@ -36,7 +36,7 @@ export default function({ $axios, redirect, store, app }) {
       }
       // 登录过期删除token信息
       if (res.data.code === 600098) {
-        app.$cookies.remove('X-Token')
+        app.$cookies.remove('wk-user-token')
         app.store.commit('setAuth', '')
       }
       return Promise.resolve(res)
