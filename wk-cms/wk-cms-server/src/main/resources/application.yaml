@@ -90,7 +90,7 @@ database:
     package:          #相关实体所在包
       - com.budwk.app
 jdbc:
-  url: jdbc:mysql://127.0.0.1:3306/budwk_v7?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+  url: jdbc:mysql://127.0.0.1:3306/budwk_v8?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
   username: root
   password: root
   validationQuery: select 1

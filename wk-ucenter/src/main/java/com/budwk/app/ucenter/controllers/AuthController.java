@@ -245,6 +245,7 @@ public class AuthController {
                 .addv("user", user)
                 .addv("token", StpUtil.getTokenInfo())
                 .addv("apps", sysUserProvider.getAppList(SecurityUtil.getUserId()))
+                .addv("permissions", sysUserProvider.getPermissionList(SecurityUtil.getUserId()))
                 .addv("menus", map)
                 .addv("roles", sysUserProvider.getRoleList(SecurityUtil.getUserId())));
     }

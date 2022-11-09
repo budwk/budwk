@@ -112,7 +112,7 @@ Hutool | 工具集合  | [https://hutool.cn](https://hutool.cn)
 ----|------|----
 Vue3 | MVVM框架 | [https://vuejs.org](https://vuejs.org)
 Vite | 应用框架 | [https://vitejs.dev](https://vitejs.dev)
-Element-Plus | 基于Vue3的UI框架 | [https://element-plus.gitee.io/zh-CN/](https://element-plus.gitee.io/zh-CN/)
+Element-Plus | 基于Vue3的UI框架 | [https://element-plus.gitee.io/zh-CN](https://element-plus.gitee.io/zh-CN/)
 Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
 
 ### Vue2前端技术
@@ -127,7 +127,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 ### Java后端
 *   确保 MySql、Redis、Nacos 默认端口配置并已启动
-*   MySql 创建名为 `budwk_v7` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
+*   MySql 创建名为 `budwk_v8` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
 *   在后端项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
 *   分别启动jar文件 `nohup java -jar budwk.jar >/dev/null 2>&1 &`
