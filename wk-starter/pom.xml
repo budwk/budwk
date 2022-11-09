@@ -11,6 +11,8 @@
         <module>wk-starter-openapi</module>
         <module>wk-starter-dependencies</module>
         <module>wk-starter-common</module>
+        <module>wk-starter-apiauth</module>
+        <module>wk-starter-config</module>
         <module>wk-starter-web</module>
         <module>wk-starter-security</module>
         <module>wk-starter-log</module>

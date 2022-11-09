@@ -85,7 +85,7 @@ budwk                               -- 根目录
 │  ├─wk-wechat                      -- 微信管理
 │  │  ├─wk-wechat-common            -- 通用类供其他模块调用
 │  │  ├─wk-wechat-server            -- 服务类提供API及RPC服务
-│  ├─wk-mini                        -- 单应用Mini版本
+│  ├─wk-mini                        -- 可独立运行单应用版本
 │  ├─wk-vue-admin                   -- Vue2前端代码 JS + Nuxt + ElmentUI
 │  ├─wk-vue3-admin                  -- Vue3前端代码 TS + Vite + Elment-Plus
 ```

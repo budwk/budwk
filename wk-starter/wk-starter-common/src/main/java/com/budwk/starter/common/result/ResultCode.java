@@ -23,6 +23,12 @@ public enum ResultCode implements IResultCode {
     DAO_ERROR(500600,"DAO数据库查询错误"),
     DEMO_ERROR(500700,"演示环境，限制操作"),
 
+    APPID_ERROR(500801, "应用ID错误"),
+    TIMESTAMP_ERROR(500802, "时间戳不正确"),
+    NONCE_ERROR(500803, "随机字符串缺失"),
+    NONCE_DUPLICATION(500804, "随机字符串重复"),
+    SIGIN_ERROR(500805, "签名错误"),
+
     USER_NOT_LOGIN(600098, "登录失效"),
     USER_NOT_ROLE(600099, "无此角色"),
     USER_NOT_PERMISSION(600100, "无此权限"),

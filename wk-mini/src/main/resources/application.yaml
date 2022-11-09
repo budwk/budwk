@@ -16,7 +16,7 @@ openapi:
   scanner:
     package: com.budwk.app
   info:
-    title: V7-Mini
+    title: V8-Mini
     version: 7.0.1
     contact:
       name: 大鲨鱼
@@ -92,7 +92,7 @@ database:
     package:          #相关实体所在包
       - com.budwk.app
 jdbc:
-  url: jdbc:mysql://127.0.0.1:3306/budwk_v8_mini?useUnicode=true&characterEncoding=utf8&useSSL=false
+  url: jdbc:mysql://127.0.0.1:3306/budwk_v8?useUnicode=true&characterEncoding=utf8&useSSL=false
   username: root
   password: root
   validationQuery: select 1
