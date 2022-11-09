@@ -36,7 +36,7 @@ nacos:
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
     naming:
       service-name: gateway
-      meta-data: "{'version':'budwk.gateway.7.0.0'}"
+      meta-data: "{'version':'budwk.gateway.8.0.0'}"
   config:
     server-addr: 192.168.198.19:8848,192.168.198.19:8849,192.168.198.18:8849,192.168.198.18:8848
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
@@ -58,7 +58,7 @@ nacos:
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
     naming:
       service-name: budwk.platform
-      meta-data: "{'version':'budwk.platform.7.0.0'}"
+      meta-data: "{'version':'budwk.platform.8.0.0'}"
 ```
 
 * 二级路径路由
@@ -72,5 +72,5 @@ nacos:
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
     naming:
       service-name: budwk.demo.admin #对应 /demo/admin
-      meta-data: "{'version':'budwk.demo.admin.7.0.0'}"
+      meta-data: "{'version':'budwk.demo.admin.8.0.0'}"
 ```

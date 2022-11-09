@@ -42,7 +42,8 @@ public class GatewayServletStarter extends AsyncMiddleManServlet implements WebS
     protected RouteConfig routeConfig;
 
     @Override
-    protected void service(HttpServletRequest clientRequest, HttpServletResponse proxyResponse) throws ServletException, IOException {
+    protected void service(HttpServletRequest clientRequest, HttpServletResponse proxyResponse)
+            throws ServletException, IOException {
         RouteContext ctx = new RouteContext();
         ctx.setup(clientRequest, proxyResponse);
         clientRequest.setAttribute(NAME_ROUTE_CONCEXT, ctx);
@@ -109,7 +110,7 @@ public class GatewayServletStarter extends AsyncMiddleManServlet implements WebS
 
     @Override
     protected void onProxyResponseFailure(HttpServletRequest clientRequest, HttpServletResponse proxyResponse,
-                                          Response serverResponse, Throwable failure) {
+            Response serverResponse, Throwable failure) {
         RouteContext ctx = (RouteContext) clientRequest.getAttribute(NAME_ROUTE_CONCEXT);
         try {
             ctx.respFail = true;
@@ -124,7 +125,7 @@ public class GatewayServletStarter extends AsyncMiddleManServlet implements WebS
 
     @Override
     protected void onProxyResponseSuccess(HttpServletRequest clientRequest, HttpServletResponse proxyResponse,
-                                          Response serverResponse) {
+            Response serverResponse) {
         RouteContext ctx = (RouteContext) clientRequest.getAttribute(NAME_ROUTE_CONCEXT);
         try {
             ctx.respFail = false;

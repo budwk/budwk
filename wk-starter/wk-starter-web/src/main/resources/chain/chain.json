@@ -6,6 +6,7 @@ var chain={
 		      "org.nutz.mvc.impl.processor.EncodingProcessor",
 		      "org.nutz.mvc.impl.processor.ModuleProcessor",
 		      "org.nutz.mvc.impl.processor.ActionFiltersProcessor",
+			  "com.budwk.starter.web.processor.WkValidationProcessor",
 			  "org.nutz.mvc.impl.processor.AdaptorProcessor",
 		      "org.nutz.mvc.impl.processor.MethodInvokeProcessor",
 			  "org.nutz.mvc.impl.processor.ViewProcessor"

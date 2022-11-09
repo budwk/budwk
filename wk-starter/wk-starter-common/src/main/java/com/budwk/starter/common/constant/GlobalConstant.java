@@ -4,7 +4,7 @@ public class GlobalConstant {
     /**
      * 软件版本号
      */
-    public static final String VERSION = "7.0.0";
+    public static final String VERSION = "8.0.0";
 
     /**
      * 默认时间格式
@@ -64,7 +64,7 @@ public class GlobalConstant {
     /**
      * X_POWER_BY
      */
-    public static final String X_POWER_BY = "BUDWK V7 <budwk.com>";
+    public static final String X_POWER_BY = "BUDWK V8 <budwk.com>";
 
     /**
      * json类型报文
@@ -84,7 +84,7 @@ public class GlobalConstant {
     /**
      * 用户Token参数名
      */
-    public static final String HEADER_TOKEN = "X-Token";
+    public static final String HEADER_TOKEN = "wk-user-token";
     /**
      * 公共应用ID
      */

@@ -23,6 +23,10 @@ gateway:
     filter: nacos-prefix #前缀转发路由模式
     serviceNamePrefix: budwk. #前缀名称 如请求 /platform/** 则会转发至 budwk.platform 服务
     priority: 99 #过滤器优先级
+  websocket:
+    group: DEFAULT_GROUP #nacos服务组,默认 DEFAULT_GROUP
+    serviceName: budwk.platform #提供websocket服务的服务名
+    url: /platform/websocket #转发路径
 
 nacos:
   discovery:
@@ -30,7 +34,7 @@ nacos:
     namespace: dev
     naming:
       service-name: gateway
-      meta-data: "{'version':'budwk.gateway.7.0.0'}"
+      meta-data: "{'version':'budwk.gateway.8.0.0'}"
   config:
     server-addr: 127.0.0.1:8848
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!

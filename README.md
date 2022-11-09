@@ -22,16 +22,18 @@
 
 # 🚀 简介
 
-BudWk V7 进行了大量重构，与之前版本结构大不相同，增加网关中心、认证中心、控制中心等，并且完全组件化、配置化，大大减轻开发工作量，提升开发效率的同时为产品升级迭代提供了极大便利。
+BudWk V8/V7 进行了大量重构，与之前版本结构大不相同，增加网关中心、认证中心、控制中心等，并且完全组件化、配置化，大大减轻开发工作量，提升开发效率的同时为产品升级迭代提供了极大便利。
 
 BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源Web基础项目，集权限体系、系统参数、数据字典、站内消息、定时任务、CMS、微信等最常用功能，不庞杂、不面面俱到，使其具有上手容易、开发便捷、扩展灵活等特性，特别适合各类大中小型定制化项目需求。
+
+前端分别采用 Vue2、Vue3 技术，Vue3 采用 Vite + Element-Plus + TypeScript 开发，Vue2 采用 Nuxt + ElementUI + JavaScript 开发。
 
 ### QQ交流群
 
 *  1群: 24457628
 *  2群: 68428921
 
-# 🎉 本版说明(BudWk v7.x)
+# 🎉 本版说明(BudWk v8.x)
 
 ## 运行环境
 
@@ -55,10 +57,11 @@ BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源We
 
 ```lua
 budwk                               -- 根目录
-│  ├─wk-starter                     -- 组件中心
+│  ├─wk-starter                     -- 组件仓库
 │  │  ├─wk-starter-common           -- 通用类组件
 │  │  ├─wk-starter-database         -- 数据库组件
-│  │  ├─wk-starter-config           -- 配置组件(商业版)
+│  │  ├─wk-starter-apiauth          -- API接口权限组件
+│  │  ├─wk-starter-config           -- 配置组件(支持Nacos配置中心)
 │  │  ├─wk-starter-dependencies     -- 所有依赖
 │  │  ├─wk-starter-dubbo            -- Dubbo组件
 │  │  ├─wk-starter-email            -- Email组件
@@ -71,7 +74,7 @@ budwk                               -- 根目录
 │  │  ├─wk-starter-storage          -- 文件存储组件
 │  │  ├─wk-starter-web              -- WEB拦截跨越表单验证组件
 │  ├─wk-gateway                     -- 网关中心
-│  │  ├─websocket                   -- WebScoket支持(商业版)
+│  │  ├─websocket                   -- WebScoket支持
 │  ├─wk-platform                    -- 控制中心
 │  │  ├─wk-platform-common          -- 通用类供其他模块调用
 │  │  ├─wk-platform-server          -- 服务类提供API及RPC服务
@@ -79,20 +82,17 @@ budwk                               -- 根目录
 │  ├─wk-cms                         -- CMS管理
 │  │  ├─wk-cms-common               -- 通用类供其他模块调用
 │  │  ├─wk-cms-server               -- 服务类提供API及RPC服务
-│  ├─wk-wechat                      -- 微信管理(商业版)
-│  │  ├─wk-wechat-common            -- 通用类供其他模块调用(商业版)
-│  │  ├─wk-wechat-server            -- 服务类提供API及RPC服务(商业版)
+│  ├─wk-wechat                      -- 微信管理
+│  │  ├─wk-wechat-common            -- 通用类供其他模块调用
+│  │  ├─wk-wechat-server            -- 服务类提供API及RPC服务
 │  ├─wk-mini                        -- 单应用Mini版本
-│  ├─wk-vue-admin                   -- Vue前端代码
-│  │  ├─pages-home                  -- 消息中心
-│  │  ├─pages-platform              -- 控制中心
-│  │  ├─pages-cms                   -- CMS管理
-│  │  ├─pages-wechat                -- 微信管理(商业版)
+│  ├─wk-vue-admin                   -- Vue2前端代码 JS + Nuxt + ElmentUI
+│  ├─wk-vue3-admin                  -- Vue3前端代码 TS + Vite + Elment-Plus
 ```
 * 代码生成器IDEA插件,请下载安装 [https://gitee.com/budwk/budwk-codegenerator](https://gitee.com/budwk/budwk-codegenerator)
 * 推荐组件中心、控制中心、前端等功能模块独立创建Git仓库,便于权限管理及升级迭代
 
-## 技术选型
+## V8技术选型
 ### 后端技术
 技术 | 名称 | 官网
 ----|------|----
@@ -107,15 +107,25 @@ Quartz | 作业调度框架  | [https://www.quartz-scheduler.org](https://www.qu
 IdGenerator | 雪花主键生成  | [https://github.com/yitter/IdGenerator](https://github.com/yitter/IdGenerator)
 Hutool | 工具集合  | [https://hutool.cn](https://hutool.cn)
 
-### 前端技术
+### Vue3前端技术
 技术 | 名称 | 官网
 ----|------|----
-Vue.js | MVVM框架 | [https://vuejs.org](https://vuejs.org)
-Nuxt.js | Vue通用应用框架 | [https://nuxtjs.org](https://nuxtjs.org)
-Element | 基于Vue的UI框架 | [https://element.eleme.io](https://element.eleme.io)
+Vue3 | MVVM框架 | [https://vuejs.org](https://vuejs.org)
+Vite | 应用框架 | [https://vitejs.dev](https://vitejs.dev)
+Element-Plus | 基于Vue3的UI框架 | [https://element-plus.gitee.io/zh-CN/](https://element-plus.gitee.io/zh-CN/)
 Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
 
-## 开发指南
+### Vue2前端技术
+技术 | 名称 | 官网
+----|------|----
+Vue2 | MVVM框架 | [https://vuejs.org](https://vuejs.org)
+Nuxt | 应用框架 | [https://nuxtjs.org](https://nuxtjs.org)
+ElementUI | 基于Vue的UI框架 | [https://element.eleme.io](https://element.eleme.io)
+Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
+
+## 简易开发指南
+
+### Java后端
 *   确保 MySql、Redis、Nacos 默认端口配置并已启动
 *   MySql 创建名为 `budwk_v7` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
 *   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
@@ -125,31 +135,47 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   API调试 `http://127.0.0.1:9900/platform/openapi` `http://127.0.0.1:9900/ucenter/openapi` 等 
 *   wk-mini 单应用版本API调试路径为 `http://127.0.0.1:9900/openapi`
 
+### Vue3前端(wk-vue3-admin)
+
+* `npm install pnpm`
+* `pnpm install`
+* `pnpm run dev`
+
+### Vue2前端(wk-vue-admin)
+
+* `npm install yarn`
+* `yarn install`
+* `yarn run dev`
+
+## 详细开发指南
+
+[https://budwk.com](https://budwk.com)
+
 ## 服务器部署
 
 ### jar 运行
 
 *   指定配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-platform-server.jar >/dev/null 2>&1 &`
 
-### docker 部署
+### docker 部署示例
 
 `wk-gateway`
 
 * 编译可执行jar `mvn clean package nutzboot:shade`
 
-* 编译docker image `docker build -t wizzer/budwk-wk-gateway:v7 .`
+* 编译docker image `docker build -t wizzer/budwk-wk-gateway:v8 .`
 
 `wk-platform`
 
 * 编译可执行jar `mvn clean package nutzboot:shade`
 
-* 编译docker image `docker build -t wizzer/budwk-wk-platform:v7 .`
+* 编译docker image `docker build -t wizzer/budwk-wk-platform:v8 .`
 
 `wk-ucenter`
 
 * 编译可执行jar `mvn clean package nutzboot:shade`
 
-* 编译docker image `docker build -t wizzer/budwk-wk-ucenter:v7 .`
+* 编译docker image `docker build -t wizzer/budwk-wk-ucenter:v8 .`
 
 其他NB模块省略...然后挂载 `/conf` 路径,把配置文件 `application.yaml` 放好
 

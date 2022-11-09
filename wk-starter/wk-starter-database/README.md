@@ -28,7 +28,6 @@ database:
 
 * 启用雪花主键需启用 redis
 * Redis雪花算法说明
-* 开源版本不提供实现代码
 
 ```java
     @Column

@@ -18,7 +18,6 @@ package com.budwk.starter.dubbo.nacos;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
-import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.common.utils.UrlUtils;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.support.FailbackRegistry;
@@ -29,13 +28,18 @@ import com.alibaba.nacos.api.naming.listener.EventListener;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.alibaba.nacos.api.naming.pojo.ListView;
+import com.budwk.starter.dubbo.utils.NetUtils;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.Pattern;
 
 import static com.alibaba.dubbo.common.Constants.*;
 
@@ -82,6 +86,13 @@ public class NacosRegistry extends FailbackRegistry {
      */
     private static final long LOOKUP_INTERVAL = Long.getLong("nacos.service.names.lookup.interval", 30);
 
+        /**
+     * 获取的IP前缀规则，当前就是一个正则表达式
+     */
+    private static final String PREFERRED_NETWORKS = System.getProperty("nacos.inetutils.preferredNetworks");
+
+    private static Pattern PREFERRED_NETWORKS_PATTERN = null;
+    
     /**
      * {@link ScheduledExecutorService} lookup Nacos service names(only for Dubbo-OPS)
      */
@@ -409,7 +420,7 @@ public class NacosRegistry extends FailbackRegistry {
         String category = url.getParameter(Constants.CATEGORY_KEY, Constants.DEFAULT_CATEGORY);
         URL newURL = url.addParameter(Constants.CATEGORY_KEY, category);
         newURL = newURL.addParameter(Constants.PROTOCOL_KEY, url.getProtocol());
-        String ip = NetUtils.getLocalHost();
+        String ip = getIp();
         int port = newURL.getParameter(Constants.BIND_PORT_KEY, url.getPort());
         Instance instance = new Instance();
         instance.setIp(ip);
@@ -418,6 +429,31 @@ public class NacosRegistry extends FailbackRegistry {
         instance.setMetadata(new HashMap<String, String>(newURL.getParameters()));
         return instance;
     }
+
+
+    private String getIp() {
+
+        List<String> availableIp = NetUtils.getAvailableIp();
+        if (logger.isDebugEnabled()) {
+            logger.debug("[GET IP] available ip {}", String.join(",", availableIp));
+        }
+        if (Lang.isEmpty(availableIp)) {
+            return NetUtils.getLocalHost();
+        }
+        logger.debug("[GET IP] PREFERRED_NETWORKS {}", PREFERRED_NETWORKS);
+        if (Strings.isBlank(PREFERRED_NETWORKS)) {
+            return availableIp.get(0);
+        }
+        if (null == PREFERRED_NETWORKS_PATTERN) {
+            PREFERRED_NETWORKS_PATTERN = Pattern.compile(PREFERRED_NETWORKS);
+        }
+        return availableIp.stream()
+                .filter(ip -> PREFERRED_NETWORKS_PATTERN.matcher(ip).find())
+                .findFirst()
+                .orElse(availableIp.get(0));
+
+    }
+
 
     private String getServiceName(URL url) {
         String category = url.getParameter(Constants.CATEGORY_KEY, Constants.DEFAULT_CATEGORY);

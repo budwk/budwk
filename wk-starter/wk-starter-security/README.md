@@ -7,8 +7,8 @@
 ```yaml
 security:
   st:
-    # token参数名称,默认 X-Token
-    tokenName: X-Token
+    # token参数名称,默认 wk-user-token
+    tokenName: wk-user-token
     # 超时时间(单位s,默认1天)
     timeout: 86400
     # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)

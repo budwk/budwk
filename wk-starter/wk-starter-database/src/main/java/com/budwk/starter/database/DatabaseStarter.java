@@ -11,6 +11,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.budwk.starter.database.ig.SnowFlakeIdGenerator;
+
 import java.util.List;
 
 /**
@@ -70,6 +72,9 @@ public class DatabaseStarter {
             return;
         }
         Dao dao = ioc.get(Dao.class);
+        if (conf.getBoolean(PROP_DATABASE_IG_SNOWFLAKE, false)) {
+            CustomMake.me().register("snowflake", ioc.get(SnowFlakeIdGenerator.class));
+        }
         if (conf.getBoolean(PROP_DATABASE_GLOBAL_CHECKCOLUMNNAMEKEYWORD, false)) {
             Daos.CHECK_COLUMN_NAME_KEYWORD = true;
         }

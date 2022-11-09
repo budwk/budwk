@@ -137,6 +137,13 @@ export default {
           size: 'large',
           type: 'primary',
           icon: 'el-icon-more'
+        },
+        {
+          content: 'BudWk V8.0.0 - 微服务 + 微网关 + 组件化 + Vue3 Elemnet-Plus Vite 前后端完全分离 发布',
+          timestamp: '2022-11',
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-more'
         }
       ]
     }

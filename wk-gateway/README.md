@@ -30,7 +30,7 @@ nacos:
     server-addr: 192.168.198.19:8848,192.168.198.19:8849,192.168.198.18:8849,192.168.198.18:8848
     naming:
       service-name: gateway
-      meta-data: "{'version':'budwk.gateway.7.0.0'}"
+      meta-data: "{'version':'budwk.gateway.8.0.0'}"
   config:
     server-addr: 192.168.198.19:8848,192.168.198.19:8849,192.168.198.18:8849,192.168.198.18:8848
     namespace: public #默认 public
@@ -51,5 +51,5 @@ nacos:
     server-addr: 192.168.198.19:8848,192.168.198.19:8849,192.168.198.18:8849,192.168.198.18:8848
     naming:
       service-name: budwk.platform
-      meta-data: "{'version':'budwk.platform.7.0.0'}"
+      meta-data: "{'version':'budwk.platform.8.0.0'}"
 ```

@@ -49,7 +49,7 @@ public class WebFilterStarter implements WebFilterFace {
     @PropDoc(value = "web 跨站请求方法", defaultValue = "GET,POST,PUT,DELETE")
     public static final String PROP_WEB_CORS_METHODS = PRE + "cors.methods";
 
-    @PropDoc(value = "web 跨站请求域参数名", defaultValue = "X-Requested-With,X-Token")
+    @PropDoc(value = "web 跨站请求域参数名", defaultValue = "X-Requested-With,Content-Type,lang,wk-member-token,wk-user-token")
     public static final String PROP_WEB_CORS_HEADERS = PRE + "cors.headers";
 
     private boolean xssEnable;
@@ -71,7 +71,7 @@ public class WebFilterStarter implements WebFilterFace {
         // getOrder = 40 ,在 NutFilter 之前,才能设置自定义动作链文件
         conf.set("web.filter.chain.path", "chain/chain.json");
         // 设置默认忽略文件
-        conf.set("nutz.mvc.ignore",conf.get("nutz.mvc.ignore","^.+\\.(jsp|png|gif|jpg|js|css|jspx|jpeg|swf|ico|map|mp3|mp4)$"));
+        conf.set("nutz.mvc.ignore",conf.get("nutz.mvc.ignore","^.+\\.(jsp|png|gif|jpg|js|css|jspx|jpeg|swf|ico|map|mp3|mp4|apk)$"));
         // 设置排除路径
         conf.set("nutz.mvc.exclusions",conf.get("nutz.mvc.exclusions","/druid/*,/upload/*,/openapi/*"));
 
@@ -82,7 +82,7 @@ public class WebFilterStarter implements WebFilterFace {
         corsOrigin = conf.get(PROP_WEB_CORS_ORIGIN, "*");
         corsMaxAge = conf.getInt(PROP_WEB_CORS_MAXAGE, 1800);
         corsMethods = conf.get(PROP_WEB_CORS_METHODS, "GET,POST,PUT,DELETE");
-        corsHeaders = conf.get(PROP_WEB_CORS_HEADERS, "X-Requested-With,X-Token");
+        corsHeaders = conf.get(PROP_WEB_CORS_HEADERS, "X-Requested-With,Content-Type,lang,wk-member-token,wk-user-token");
         Mvcs.X_POWERED_BY = GlobalConstant.X_POWER_BY;
     }
 

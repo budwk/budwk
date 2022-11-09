@@ -24,8 +24,8 @@ web:
     maxage: 1800
     # 请求方法默认 GET,POST,PUT,DELETE 可不配置
     methods: GET,POST,PUT,DELETE
-    # 默认 X-Requested-With,X-Token可不配置
-    headers: X-Requested-With,X-Token
+    # 请求头跨域
+    headers: X-Requested-With,Content-Type,lang,wk-member-token,wk-user-token
   validation:
     # 表单验证默认false
     enable: true

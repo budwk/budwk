@@ -16,7 +16,7 @@ openapi:
     package: com.budwk.app
   info:
     title: CMS内容管理
-    version: 7.0.0
+    version: 8.0.0
     contact:
       name: 大鲨鱼
       email: wizzer@qq.com
@@ -24,7 +24,7 @@ openapi:
     - url: ".."
       description: 本机环境
   headers:
-    - value: X-Token
+    - value: wk-user-token
       name: 用户Token
       in: header
       required: true
@@ -58,7 +58,7 @@ nacos:
     namespace: dev
     naming:
       service-name: budwk.cms
-      meta-data: "{'version':'budwk.cms.7.0.0'}"
+      meta-data: "{'version':'budwk.cms.8.0.0'}"
   config:
     server-addr: 127.0.0.1:8848
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!

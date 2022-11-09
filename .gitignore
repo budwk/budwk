@@ -5,6 +5,7 @@
 .settings/
 .idea/
 .git/
+.DS_Store
 
 # Log file
 *.log
