@@ -3,6 +3,7 @@ package com.budwk.app.sys.services;
 import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_menu;
 import com.budwk.app.sys.models.Sys_user;
+import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.database.service.BaseService;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 public interface SysUserService extends BaseService<Sys_user> {
+
+    Sys_user_security getUserSecurity();
     /**
      * 获取用户权限
      *
@@ -77,6 +80,23 @@ public interface SysUserService extends BaseService<Sys_user> {
      * @param mobile 手机号码
      */
     void checkMobile(String mobile) throws BaseException;
+
+    /**
+     * 检查密码是否过期
+     *
+     * @param userId     用户ID
+     * @param pwdResetAt 密码重置时间
+     */
+    void checkPwdTimeout(String userId, Long pwdResetAt) throws BaseException;
+
+    /**
+     * 密码规则校验
+     *
+     * @param user 用户对象
+     * @param pwd  密码
+     * @throws BaseException
+     */
+    void checkPassword(Sys_user user, String pwd) throws BaseException;
 
     /**
      * 通过用户名和密码获取用户信息

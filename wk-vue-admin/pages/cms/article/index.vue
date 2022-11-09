@@ -208,7 +208,7 @@
           <el-input
             v-model="formData.title"
             maxlength="255"
-            placeholder="栏目标题"
+            placeholder="文章标题"
             auto-complete="off"
             tabindex="1"
             type="text"

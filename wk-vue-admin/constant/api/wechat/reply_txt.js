@@ -1,0 +1,6 @@
+export const API_WX_REPLY_TXT_GET = '/wechat/admin/reply/txt/get/'
+export const API_WX_REPLY_TXT_DELETE = '/wechat/admin/reply/txt/delete/'
+export const API_WX_REPLY_TXT_DELETE_MORE = '/wechat/admin/reply/txt/delete_more'
+export const API_WX_REPLY_TXT_CREATE = '/wechat/admin/reply/txt/create'
+export const API_WX_REPLY_TXT_UPDATE = '/wechat/admin/reply/txt/update'
+export const API_WX_REPLY_TXT_LIST = '/wechat/admin/reply/txt/list'

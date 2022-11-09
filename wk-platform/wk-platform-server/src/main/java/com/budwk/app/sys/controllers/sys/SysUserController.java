@@ -198,10 +198,18 @@ public class SysUserController {
     )
     @ApiResponses
     public Result<?> group(@Param("unitId") String unitId, HttpServletRequest req) {
-        return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
-                sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
-                // 排除public角色,公共角色无需分配即可拥有
-                Cnd.where("code", "<>", "public")));
+        if (StpUtil.hasPermission("sys.manage.role.system")){
+            //有系统公用权限可分配公用角色
+            return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
+                    sysUnitService.getMasterCompanyId(unitId)).or("unitid","=","").asc("createdAt"), "roles",
+                    // 排除public角色,公共角色无需分配即可拥有
+                    Cnd.where("code", "<>", "public")));
+        }else {
+            return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
+                    sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
+                    // 排除public角色,公共角色无需分配即可拥有
+                    Cnd.where("code", "<>", "public")));
+        }
     }
 
     @At("/create")

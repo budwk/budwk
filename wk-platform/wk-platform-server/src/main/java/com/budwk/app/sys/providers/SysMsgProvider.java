@@ -72,6 +72,14 @@ public class SysMsgProvider implements ISysMsgProvider {
         return keyList;
     }
 
+    @Override
+    public void wsSendMsg(String userId, String token, String msg) {
+        String matchString = RedisConstant.WS_ROOM + userId + ":" + token;
+        List<String> keyList = getRedisKeys(matchString);
+        for (String key : keyList) {
+            pubSubService.fire(key, msg);
+        }
+    }
 
     @Override
     public void wsSendMsg(String userId, String msg) {

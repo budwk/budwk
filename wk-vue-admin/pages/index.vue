@@ -54,7 +54,7 @@
                       @keyup.enter.native="handleLogin"
                     />
                   </el-form-item>
-                  <el-form-item prop="captchaCode">
+                  <el-form-item v-if="captchaHasEnabled" prop="captchaCode">
                     <el-input
                       v-model="loginForm.captchaCode"
                       auto-complete="off"
@@ -251,8 +251,10 @@
 </template>
 
 <script>
-import { API_AUTH_LOGIN, API_AUTH_CAPTCHA, API_AUTH_SMSCODE, API_AUTH_CHECK_LOGINNAME, API_AUTH_PWD_SENDCODE, API_AUTH_PWD_SAVE } from '@/constant/api/ucenter/auth'
+import { API_AUTH_LOGIN, API_AUTH_CAPTCHA, API_AUTH_RSA, API_AUTH_SMSCODE, API_AUTH_CHECK_LOGINNAME, API_AUTH_PWD_SENDCODE, API_AUTH_PWD_SAVE } from '@/constant/api/ucenter/auth'
 import { mapState } from 'vuex'
+import JSencrypt from 'jsencrypt'
+import _ from 'lodash'
 const MSGINIT = '发送验证码'
 const MSGSCUCCESS = '{time}秒后重发'
 const MSGTIME = 60
@@ -290,7 +292,7 @@ export default {
             trigger: 'blur'
           },
           {
-            pattern: /[\w](?:[\w-]*[\w])?/, message: '请輸入4位验证码', trigger: 'blur'
+            max: 4, message: '请輸入验证码', trigger: 'blur'
           }
         ]
       },
@@ -324,8 +326,10 @@ export default {
         captchaKey: '',
         captchaCode: '',
         type: 'password',
-        appId: ''
+        appId: '',
+        rsaKey: ''
       },
+      rsaPublicKey: '',
       btnLoading: false,
       pwdFormData: {
         loginname: '',
@@ -343,7 +347,8 @@ export default {
       pwdVisible: false,
       pwdStep: 1,
       pwdMsg: '',
-      pwdBtnLoading: false
+      pwdBtnLoading: false,
+      captchaHasEnabled: false
     }
   },
   computed: {
@@ -360,6 +365,7 @@ export default {
   },
   created() {
     this.year = new Date().getFullYear()
+    this.getRsa()
     this.getCaptchaCode()
     this.loginForm.appId = this.siteInfo.appId
   },
@@ -374,10 +380,15 @@ export default {
           formName = 'smsLoginForm'
         }
         await this.$refs[formName].validate()
+        const formParams = _.cloneDeep(this.loginForm)
+        const encrypt = new JSencrypt()
+        encrypt.setPublicKey(this.rsaPublicKey)
+        const newpwd = encrypt.encrypt(this.loginForm.password)
+        this.$set(formParams, 'password', newpwd)
         this.btnLoading = true
         const { data, code } = await this.$axios.$post(
           API_AUTH_LOGIN,
-          this.loginForm
+          formParams
         )
         this.btnLoading = false
         if (code !== 0) {
@@ -428,11 +439,19 @@ export default {
     checkMobile(str) {
       return MOBILE_REGEX.test(str)
     },
+    async getRsa() {
+      const { data, code } = await this.$axios.$get(API_AUTH_RSA)
+      if (code === 0) {
+        this.loginForm.rsaKey = data.rsaKey
+        this.rsaPublicKey = data.rsaPublicKey
+      }
+    },
     async getCaptchaCode() {
       const { data, code } = await this.$axios.$get(API_AUTH_CAPTCHA)
       if (code === 0) {
         this.loginForm.captchaKey = data.key
         this.captchaCodeImg = data.code
+        this.captchaHasEnabled = data.captchaHasEnabled
       }
     },
     showSetPwd() {

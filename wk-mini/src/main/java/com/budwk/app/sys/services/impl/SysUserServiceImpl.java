@@ -1,10 +1,7 @@
 package com.budwk.app.sys.services.impl;
 
 import cn.hutool.core.util.RandomUtil;
-import com.budwk.app.sys.models.Sys_app;
-import com.budwk.app.sys.models.Sys_menu;
-import com.budwk.app.sys.models.Sys_role;
-import com.budwk.app.sys.models.Sys_user;
+import com.budwk.app.sys.models.*;
 import com.budwk.app.sys.services.*;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.exception.BaseException;
@@ -18,10 +15,12 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.Times;
 import org.nutz.lang.random.R;
 import org.nutz.plugins.wkcache.annotation.CacheDefaults;
 import org.nutz.plugins.wkcache.annotation.CacheRemove;
@@ -29,6 +28,7 @@ import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,6 +53,20 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Inject
     private SysUnitService sysUnitService;
+
+    @Inject
+    private SysUserSecurityService sysUserSecurityService;
+
+    @Inject
+    private SysUserPwdService sysUserPwdService;
+
+    @Inject
+    private RedisService redisService;
+
+    @Override
+    public Sys_user_security getUserSecurity() {
+        return sysUserSecurityService.getWithCache();
+    }
 
     @Override
     @CacheResult(cacheKey = "${userId}_getPermissionList")
@@ -157,6 +171,69 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     }
 
     @Override
+    public void checkPwdTimeout(String userId, Long pwdResetAt) throws BaseException {
+        Sys_user_security security = sysUserSecurityService.getWithCache();
+        if (security != null && security.getHasEnabled() && security.getPwdTimeoutDay() > 0 && pwdResetAt != null) {
+            if (System.currentTimeMillis() > pwdResetAt + (security.getPwdTimeoutDay() * 86400 * 1000)) {
+                throw new BaseException("密码已过期，请及时修改");
+            }
+        }
+    }
+
+    @Override
+    public void checkPassword(Sys_user user, String pwd) throws BaseException {
+        Sys_user_security security = sysUserSecurityService.getWithCache();
+        if (security != null && security.getHasEnabled()) {
+            if (Strings.sNull(pwd).length() < security.getPwdLengthMin()) {
+                throw new BaseException("密码最小长度为" + security.getPwdLengthMin());
+            }
+            if (Strings.sNull(pwd).length() > security.getPwdLengthMax()) {
+                throw new BaseException("密码最大长度为" + security.getPwdLengthMax());
+            }
+            // 密码必须同时包含字母和数字，可以含特殊字符
+            if (1 == security.getPwdCharMust()) {
+                String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)(?!\\W+$)(?![0-9\\W]+$)(?![a-zA-Z\\W]+$)[0-9A-Za-z\\W]*$";
+                if (!pwd.matches(regex)) {
+                    throw new BaseException("密码必须同时包含字母和数字");
+                }
+            }
+            // 必须同时包含大写字母、小写字母、和数字，可以含特殊字符
+            if (2 == security.getPwdCharMust()) {
+                String regex = "^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!\\W+$)(?![a-zA-Z]+$)(?![0-9a-z\\W]+$)(?![0-9A-Z\\W]+$)(?![a-zA-Z\\W]+$)[0-9A-Za-z\\W]*$";
+                if (!pwd.matches(regex)) {
+                    throw new BaseException("密码必须同时包含大写字母、小写字母、和数字");
+                }
+            }
+            // 必须同时包含大写、小写字母、特殊字符、数字
+            if (3 == security.getPwdCharMust()) {
+                String regex = "^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]*$";
+                if (!pwd.matches(regex)) {
+                    throw new BaseException("密码必须同时包含大写、小写字母、特殊字符、数字");
+                }
+            }
+            if (Strings.isNotBlank(security.getPwdCharNot())) {
+                if (security.getPwdCharNot().contains("loginname") && Strings.isNotBlank(user.getLoginname()) && pwd.contains(user.getLoginname())) {
+                    throw new BaseException("密码中不可包含用户名");
+                }
+                if (security.getPwdCharNot().contains("email") && Strings.isNotBlank(user.getEmail()) && pwd.toLowerCase().contains(user.getEmail())) {
+                    throw new BaseException("密码中不可包含用户电子邮箱");
+                }
+                if (security.getPwdCharNot().contains("mobile") && Strings.isNotBlank(user.getEmail()) && pwd.toLowerCase().contains(user.getEmail())) {
+                    throw new BaseException("密码中不可包含用户手机号码");
+                }
+            }
+            if (security.getPwdRepeatCheck()) {
+                List<Sys_user_pwd> pwdList = sysUserPwdService.query(Cnd.where("userId", "=", user.getId()));
+                for (Sys_user_pwd userPwd : pwdList) {
+                    if (userPwd.getPassword().equals(PwdUtil.getPassword(pwd, userPwd.getSalt()))) {
+                        throw new BaseException("您在系统中曾经使用过此密码，请更换");
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public Sys_user loginByPassword(String loginname, String passowrd) throws BaseException {
         Sys_user user = this.fetch(Cnd.where("loginname", "=", loginname));
         if (user == null) {
@@ -165,10 +242,40 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         if (user.isDisabled()) {
             throw new BaseException("用户被禁用");
         }
+        if (user.isDisabledLogin() && user.getDisabledLoginAt() != null) {
+            Sys_user_security security = sysUserSecurityService.getWithCache();
+            // 是否临时被禁用,只判断 pwdRetryTime 值,不判断锁定账号是否启用==启用后对上次设置有效
+            if (security != null && security.getHasEnabled() && security.getPwdRetryTime() > 0) {
+                if (System.currentTimeMillis() > user.getDisabledLoginAt() + (security.getPwdRetryTime() * 1000)) {
+                    redisService.del(RedisConstant.PRE + user.getId() + ":pwdretrynum");
+                    this.update(Chain.make("disabledLogin", false).add("disabledLoginAt", null), Cnd.where("id", "=", user.getId()));
+                } else {
+                    throw new BaseException("禁止登录，解锁时间：" + Times.format("MM月dd HH:mm:ss", new Date(user.getDisabledLoginAt() + (security.getPwdRetryTime() * 1000))));
+                }
+            }
+        }
         String hashedPassword = PwdUtil.getPassword(passowrd, user.getSalt());
         if (!Strings.sNull(hashedPassword).equalsIgnoreCase(user.getPassword())) {
+            // 一天内密码错误次数超过最大重试次数锁定账号
+            Sys_user_security security = sysUserSecurityService.getWithCache();
+            if (security != null && security.getHasEnabled() && security.getPwdRetryLock() && security.getPwdRetryNum() > 0) {
+                int errNum = Integer.parseInt(Strings.sNull(redisService.get(RedisConstant.PRE + user.getId() + ":pwdretrynum"), "0"));
+                redisService.setex(RedisConstant.PRE + user.getId() + ":pwdretrynum", 86400, "" + (errNum + 1));
+                // 重试次数大于配置
+                if (errNum + 1 > security.getPwdRetryNum()) {
+                    // 锁定账户
+                    if (1 == security.getPwdRetryAction()) {
+                        this.update(Chain.make("disabled", true).add("updatedAt", System.currentTimeMillis()), Cnd.where("id", "=", user.getId()));
+                    }
+                    // 指定时间禁止登录
+                    if (2 == security.getPwdRetryAction() && security.getPwdRetryTime() > 0) {
+                        this.update(Chain.make("disabledLogin", true).add("disabledLoginAt", System.currentTimeMillis()), Cnd.where("id", "=", user.getId()));
+                    }
+                }
+            }
             throw new BaseException("密码不正确");
         }
+        redisService.del(RedisConstant.PRE + user.getId() + ":pwdretrynum");
         return user;
     }
 
@@ -207,10 +314,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         if (user == null) {
             throw new BaseException("用户不存在");
         }
+        this.checkPassword(user, password);
         String salt = R.UU32();
-        this.update(Chain.make("salt", salt).add("password", PwdUtil.getPassword(password, salt)),
+        String dbpwd = PwdUtil.getPassword(password, salt);
+        this.update(Chain.make("salt", salt).add("password", dbpwd).add("pwdResetAt", System.currentTimeMillis()),
                 Cnd.where("loginname", "=", loginname));
         this.cacheRemove(user.getId());
+        this.recordPwd(user.getId(), dbpwd, salt);
     }
 
     public void setPwdById(String id, String password) throws BaseException {
@@ -218,10 +328,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         if (user == null) {
             throw new BaseException("用户不存在");
         }
+        this.checkPassword(user, password);
         String salt = R.UU32();
-        this.update(Chain.make("salt", salt).add("password", PwdUtil.getPassword(password, salt)),
+        String dbpwd = PwdUtil.getPassword(password, salt);
+        this.update(Chain.make("salt", salt).add("password", dbpwd).add("pwdResetAt", System.currentTimeMillis()),
                 Cnd.where("id", "=", id));
         this.cacheRemove(user.getId());
+        this.recordPwd(user.getId(), dbpwd, salt);
     }
 
     public void setThemeConfig(String id, String themeConfig) {
@@ -241,10 +354,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
             password = user.getMobile().substring(user.getMobile().length() - 6);
         }
         String salt = R.UU32();
-        user.setPassword(PwdUtil.getPassword(password, salt));
+        String dbpwd = PwdUtil.getPassword(password, salt);
+        user.setPassword(dbpwd);
         user.setSalt(salt);
         user.setLoginCount(0);
-        user.setNeedChangePwd(true);
+        user.setNeedChangePwd(false);
+        // 后台重置密码后下次登录是否强制修改密码
+        Sys_user_security security = sysUserSecurityService.getWithCache();
+        if (security != null && security.getHasEnabled() && security.getPwdRepeatCheck() && security.getPwdRepeatNum() > 0) {
+            user.setNeedChangePwd(true);
+        }
+        user.setPwdResetAt(System.currentTimeMillis());
         user.setCompanyId(sysUnitService.getMasterCompanyId(user.getUnitId()));
         this.insert(user);
         if (roleIds != null) {
@@ -252,6 +372,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
                 this.dao().insert("sys_role_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("roleId", roleId));
             }
         }
+        this.recordPwd(user.getId(), dbpwd, salt);
     }
 
     @Override
@@ -271,21 +392,47 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Override
     public String resetPwd(String userId) {
+        boolean needChangePwd = false;
         String salt = R.UU32();
         String password = RandomUtil.randomNumbers(6);
-        this.update(Chain.make("password", PwdUtil.getPassword(password, salt))
-                .add("salt", salt).add("needChangePwd", true), Cnd.where("id", "=", userId));
+        // 后台重置密码后下次登录是否强制修改密码
+        Sys_user_security security = sysUserSecurityService.getWithCache();
+        if (security != null && security.getHasEnabled() && security.getPwdRepeatCheck() && security.getPwdRepeatNum() > 0) {
+            needChangePwd = true;
+        }
+        String dbpwd = PwdUtil.getPassword(password, salt);
+        this.update(Chain.make("password", dbpwd)
+                .add("salt", salt).add("needChangePwd", needChangePwd), Cnd.where("id", "=", userId));
         this.cacheRemove(userId);
+        this.recordPwd(userId, dbpwd, salt);
         return password;
     }
 
     @Override
-    public String resetPwd(String userId, String password,boolean needChangePwd) {
+    public String resetPwd(String userId, String password, boolean needChangePwd) {
         String salt = R.UU32();
-        this.update(Chain.make("password", PwdUtil.getPassword(password, salt))
+        String dbpwd = PwdUtil.getPassword(password, salt);
+        this.update(Chain.make("password", dbpwd)
                 .add("salt", salt).add("needChangePwd", needChangePwd), Cnd.where("id", "=", userId));
         this.cacheRemove(userId);
+        this.recordPwd(userId, dbpwd, salt);
         return password;
+    }
+
+    @Async
+    public void recordPwd(String userId, String password, String salt) {
+        Sys_user_security security = sysUserSecurityService.getWithCache();
+        if (security != null && security.getHasEnabled() && security.getPwdRepeatCheck() && security.getPwdRepeatNum() > 0) {
+            Sys_user_pwd userPwd = new Sys_user_pwd();
+            userPwd.setUserId(userId);
+            userPwd.setPassword(password);
+            userPwd.setSalt(salt);
+            sysUserPwdService.insert(userPwd);
+            Sql sql = Sqls.create("delete from sys_user_pwd where userId=@userId and id not in(select t.id FROM (SELECT * from sys_user_pwd where userId=@userId order by createdAt desc limit $num)as t)");
+            sql.setParam("userId", userId);
+            sql.setVar("num", security.getPwdRepeatNum());
+            sysUserPwdService.execute(sql);
+        }
     }
 
     @Override

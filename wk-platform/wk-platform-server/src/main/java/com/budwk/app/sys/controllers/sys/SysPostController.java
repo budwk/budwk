@@ -119,7 +119,7 @@ public class SysPostController {
     )
     @ApiResponses
     @SLog("删除职务,职务:")
-    @SaCheckPermission("sys.manage.post")
+    @SaCheckPermission("sys.manage.post.delete")
     public Result<?> delete(String id, HttpServletRequest req) {
         Sys_post post = sysPostService.fetch(id);
         if (post == null) {

@@ -106,32 +106,18 @@ public class WkPlatformLauncher {
                 log.info("开始初始化数据库...");
                 //初始化配置表
                 Sys_config conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
+                conf.setAppId(GlobalConstant.DEFAULT_PLATFORM_APPID);
                 conf.setType(SysConfigType.TEXT);
                 conf.setConfigKey("AppName");
                 conf.setConfigValue("BudWk开发框架");
                 conf.setNote("系统名称");
                 dao.insert(conf);
                 conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
+                conf.setAppId(GlobalConstant.DEFAULT_PLATFORM_APPID);
                 conf.setType(SysConfigType.TEXT);
                 conf.setConfigKey("AppShrotName");
-                conf.setConfigValue("BudWK");
+                conf.setConfigValue("BudWk");
                 conf.setNote("系统短名称");
-                dao.insert(conf);
-                conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
-                conf.setType(SysConfigType.TEXT);
-                conf.setConfigKey("AppVersion");
-                conf.setConfigValue("V8.0.0");
-                conf.setNote("系统版本号");
-                dao.insert(conf);
-                conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
-                conf.setType(SysConfigType.TEXT);
-                conf.setConfigKey("AppDefault");
-                conf.setConfigValue("PLATFORM");
-                conf.setNote("前端默认登录APP");
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -171,9 +157,9 @@ public class WkPlatformLauncher {
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
                 conf.setType(SysConfigType.BOOL);
-                conf.setConfigKey("AppPwdCheck");
+                conf.setConfigKey("AppSessionOnlyOne");
                 conf.setConfigValue("true");
-                conf.setNote("是否启用弱密码检查");
+                conf.setNote("是否启用用户单一登录(踢其他会话下线)");
                 dao.insert(conf);
 
                 Sys_app sysApp = new Sys_app();
@@ -195,6 +181,13 @@ public class WkPlatformLauncher {
                 sysApp.setDisabled(false);
                 sysApp.setLocation(3);
                 sysApp.setPath("/cms");
+                dao.insert(sysApp);
+                sysApp = new Sys_app();
+                sysApp.setName("微信管理");
+                sysApp.setId("WECHAT");
+                sysApp.setDisabled(false);
+                sysApp.setLocation(3);
+                sysApp.setPath("/wechat");
                 dao.insert(sysApp);
 
                 //初始化单位
@@ -232,6 +225,12 @@ public class WkPlatformLauncher {
                 group.setUnitId(headUnit.getId());
                 group.setUnitPath(headUnit.getPath());
                 dao.insert(group);
+                group = new Sys_group();
+                group.setId("PUBLIC");
+                group.setName("系统公用组");
+                group.setUnitId("");
+                group.setUnitPath("");
+                dao.insert(group);
 
                 //初始化角色
                 Sys_role publicRole = new Sys_role();
@@ -239,8 +238,8 @@ public class WkPlatformLauncher {
                 publicRole.setCode("public");
                 publicRole.setNote("所有用户默认分配");
                 publicRole.setDisabled(false);
-                publicRole.setUnitId(headUnit.getId());
-                publicRole.setGroupId(group.getId());
+                publicRole.setUnitId("");
+                publicRole.setGroupId("PUBLIC");
                 dao.insert(publicRole);
                 Sys_role role = new Sys_role();
                 role.setName("超级管理员");
@@ -248,7 +247,7 @@ public class WkPlatformLauncher {
                 role.setNote("超级管理员角色");
                 role.setDisabled(false);
                 role.setUnitId(headUnit.getId());
-                role.setGroupId(group.getId());
+                role.setGroupId("SYSTEM");
                 dao.insert(role);
 
                 //初始化用户
@@ -263,6 +262,9 @@ public class WkPlatformLauncher {
                 user.setLoginAt(0L);
                 user.setLoginCount(0);
                 user.setNeedChangePwd(false);
+                user.setNeedChangePwd(false);
+                user.setDisabledLogin(false);
+                user.setPwdResetAt(System.currentTimeMillis());
                 user.setEmail("wizzer@qq.com");
                 user.setUnitId(unit.getId());
                 user.setUnitPath(unit.getPath());
@@ -273,6 +275,7 @@ public class WkPlatformLauncher {
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_COMMON_APPID).add("roleId", role.getId()));
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_PLATFORM_APPID).add("roleId", role.getId()));
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", "CMS").add("roleId", role.getId()));
+                dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", "WECHAT").add("roleId", role.getId()));
                 dao.insert("sys_unit_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("unitId", unit.getId()));
                 dao.insert("sys_role_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("roleId", role.getId()));
                 //执行SQL脚本
@@ -298,6 +301,15 @@ public class WkPlatformLauncher {
                     Sys_role_menu sysRoleMenu = new Sys_role_menu();
                     sysRoleMenu.setRoleId(role.getId());
                     sysRoleMenu.setAppId("CMS");
+                    sysRoleMenu.setMenuId(menu.getId());
+                    dao.insert(sysRoleMenu);
+                }
+                //菜单关联到角色
+                List<Sys_menu> wechatMenuList = dao.query(Sys_menu.class, Cnd.where("appId", "=", "WECHAT"));
+                for (Sys_menu menu : wechatMenuList) {
+                    Sys_role_menu sysRoleMenu = new Sys_role_menu();
+                    sysRoleMenu.setRoleId(role.getId());
+                    sysRoleMenu.setAppId("WECHAT");
                     sysRoleMenu.setMenuId(menu.getId());
                     dao.insert(sysRoleMenu);
                 }

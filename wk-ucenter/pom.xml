@@ -88,6 +88,11 @@
             <groupId>com.tencentcloudapi</groupId>
             <artifactId>tencentcloud-sdk-java</artifactId>
         </dependency>
+         <!-- rsa -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+        </dependency>       
         <!-- captcha -->
         <dependency>
             <groupId>com.github.whvcse</groupId>

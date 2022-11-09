@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_menu;
 import com.budwk.app.sys.models.Sys_user;
+import com.budwk.app.sys.models.Sys_user_security;
+import com.budwk.app.sys.services.SysUserSecurityService;
 import com.budwk.app.sys.services.SysUserService;
 import com.budwk.starter.common.exception.BaseException;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -19,6 +21,14 @@ import java.util.List;
 public class SysUserProvider implements ISysUserProvider {
     @Inject
     private SysUserService sysUserService;
+
+    @Inject
+    private SysUserSecurityService sysUserSecurityService;
+
+    @Override
+    public Sys_user_security getUserSecurity() {
+        return sysUserSecurityService.getWithCache();
+    }
 
     @Override
     public List<String> getPermissionList(String userId) {
@@ -53,6 +63,11 @@ public class SysUserProvider implements ISysUserProvider {
     @Override
     public void checkMobile(String mobile) throws BaseException {
         sysUserService.checkMobile(mobile);
+    }
+
+    @Override
+    public void checkPwdTimeout(String userId, Long pwdResetAt) throws BaseException {
+        sysUserService.checkPwdTimeout(userId, pwdResetAt);
     }
 
     @Override

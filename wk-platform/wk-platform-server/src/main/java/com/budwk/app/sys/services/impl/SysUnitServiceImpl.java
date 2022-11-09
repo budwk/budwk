@@ -148,6 +148,21 @@ public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements Sys
         }
     }
 
+    @Override
+    public Sys_unit getMasterCompany(String unitId) {
+        Sys_unit unit = this.fetch(unitId);
+        if (unit == null) {
+            throw new BaseException(ResultCode.NULL_DATA_ERROR.getMsg());
+        }
+        if (SysUnitType.GROUP == unit.getType() || SysUnitType.COMPANY == unit.getType()) {
+            return unit;
+        } else if (Strings.isNotBlank(unit.getParentId())) {
+            return getMasterCompany(unit.getParentId());
+        } else {
+            return null;
+        }
+    }
+
     public List<String> getSubUnitIds(String parentId) {
         List<Sys_unit> list = this.query();
         //转为树形数据

@@ -1,0 +1,7 @@
+export const API_WX_CONFIG_GET = '/wechat/admin/conf/account/get/'
+export const API_WX_CONFIG_DELETE = '/wechat/admin/conf/account/delete/'
+export const API_WX_CONFIG_CREATE = '/wechat/admin/conf/account/create'
+export const API_WX_CONFIG_UPDATE = '/wechat/admin/conf/account/update'
+export const API_WX_CONFIG_LIST = '/wechat/admin/conf/account/list'
+export const API_WX_CONFIG_LIST_ACCOUNT = '/wechat/admin/conf/account/list_account'
+export const API_WX_CONFIG_PAY_QUERY = '/wechat/admin/conf/pay/query'

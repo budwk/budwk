@@ -265,6 +265,11 @@
                 <artifactId>hutool-http</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-crypto</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>   
             <!-- poi -->
             <dependency>
                    <groupId>org.apache.poi</groupId>

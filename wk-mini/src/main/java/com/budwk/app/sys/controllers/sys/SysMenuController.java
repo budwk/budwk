@@ -223,9 +223,9 @@ public class SysMenuController {
             return Result.error(ResultCode.NULL_DATA_ERROR);
         }
         req.setAttribute("_slog_msg", menu.getName());
-        if (Strings.sNull(menu.getPath()).startsWith("0001")) {
-            return Result.error("系统菜单禁止操作");
-        }
+        // if (Strings.sNull(menu.getPath()).startsWith("0001")) {
+        //     return Result.error("系统菜单禁止操作");
+        // }
         sysMenuService.deleteAndChild(menu);
         return Result.success();
     }

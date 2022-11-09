@@ -1,0 +1,7 @@
+export const API_WX_REPLY_CONF_GET = '/wechat/admin/reply/conf/get/'
+export const API_WX_REPLY_CONF_DELETE = '/wechat/admin/reply/conf/delete/'
+export const API_WX_REPLY_CONF_DELETE_MORE = '/wechat/admin/reply/conf/delete_more'
+export const API_WX_REPLY_CONF_CREATE = '/wechat/admin/reply/conf/create'
+export const API_WX_REPLY_CONF_UPDATE = '/wechat/admin/reply/conf/update'
+export const API_WX_REPLY_CONF_LIST = '/wechat/admin/reply/conf/list'
+export const API_WX_REPLY_CONF_LIST_CONTENT = '/wechat/admin/reply/conf/list_content'

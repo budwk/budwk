@@ -1,0 +1,6 @@
+export const API_WX_REPLY_NEWS_GET = '/wechat/admin/reply/news/get/'
+export const API_WX_REPLY_NEWS_DELETE = '/wechat/admin/reply/news/delete/'
+export const API_WX_REPLY_NEWS_DELETE_MORE = '/wechat/admin/reply/news/delete_more'
+export const API_WX_REPLY_NEWS_CREATE = '/wechat/admin/reply/news/create'
+export const API_WX_REPLY_NEWS_UPDATE = '/wechat/admin/reply/news/update'
+export const API_WX_REPLY_NEWS_LIST = '/wechat/admin/reply/news/list'

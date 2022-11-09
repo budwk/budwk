@@ -15,4 +15,9 @@ public class TestJob {
     public void demo(String taskId, String params) {
         log.info("sjob:{} taskId:{} params:{}", "demo", taskId, params);
     }
+
+    @SJob("test")
+    public void test(String taskId, String params) {
+        log.info("sjob:{} taskId:{} params:{}", "test", taskId, params);
+    }
 }

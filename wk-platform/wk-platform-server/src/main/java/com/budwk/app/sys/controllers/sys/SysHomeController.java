@@ -209,7 +209,7 @@ public class SysHomeController {
     @ApiFormParams(
             {
                     @ApiFormParam(name = "oldPassword", example = "", description = "原密码", required = true),
-                    @ApiFormParam(name = "newPassword", example = "", description = "新密码", required = true, check = true, validation = Validation.PASSWORD)
+                    @ApiFormParam(name = "newPassword", example = "", description = "新密码", required = true, check = true)
             }
     )
     @ApiResponses

@@ -15,7 +15,7 @@ import org.quartz.JobExecutionException;
 /**
  * @author wizzer@qq.com
  */
-@IocBean
+@IocBean(singleton = false)
 @Slf4j
 public class TaskJob implements Job {
     @Inject
@@ -25,6 +25,6 @@ public class TaskJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         log.debug("[TaskJob] 执行任务：{}，执行时间 {}", jobDataMap.getString("jobName"), Times.getNowSDT());
-        pubSubService.fire(RedisConstant.JOB_PUBLISH + ":" + jobDataMap.getString("jobName"), Json.toJson(jobExecutionContext.getJobDetail().getJobDataMap()));
+        pubSubService.fire(RedisConstant.JOB_PUBLISH+":"+jobDataMap.getString("jobName"), Json.toJson(jobExecutionContext.getJobDetail().getJobDataMap()));
     }
 }

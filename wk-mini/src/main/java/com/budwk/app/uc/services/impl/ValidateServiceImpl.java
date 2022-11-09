@@ -1,5 +1,7 @@
 package com.budwk.app.uc.services.impl;
 
+import com.budwk.app.sys.models.Sys_user_security;
+import com.budwk.app.sys.services.SysUserService;
 import com.budwk.app.uc.services.ValidateService;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.exception.CaptchaException;
@@ -9,7 +11,7 @@ import com.budwk.starter.common.result.Result;
 import com.budwk.starter.email.EmailSendServer;
 import com.budwk.starter.sms.SmsSendServer;
 import com.budwk.starter.sms.enums.SmsType;
-import com.wf.captcha.ArithmeticCaptcha;
+import com.wf.captcha.*;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -31,6 +33,8 @@ public class ValidateServiceImpl implements ValidateService {
     private SmsSendServer smsSendServer;
     @Inject
     private EmailSendServer emailSendServer;
+    @Inject
+    private SysUserService sysUserProvider;
 
     /**
      * 获取验证码
@@ -39,11 +43,81 @@ public class ValidateServiceImpl implements ValidateService {
      */
     public Result<NutMap> getCaptcha() {
         String uuid = R.UU32();
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(120, 40);
-        captcha.getArithmeticString();  // 获取运算的公式：3+2=?
-        String text = captcha.text();
-        redisService.setex(RedisConstant.UCENTER_CAPTCHA + uuid, 180, text);
-        return Result.data(NutMap.NEW().addv("key", uuid).addv("code", captcha.toBase64()));
+        Sys_user_security security = sysUserProvider.getUserSecurity();
+        if (security != null && security.getCaptchaHasEnabled() != null && security.getCaptchaHasEnabled()) {
+            String text = "";
+            String base64 = null;
+            int w = 120;
+            int h = 40;
+            switch (security.getCaptchaType()) {
+                case 1:
+                    SpecCaptcha captcha1 = new SpecCaptcha(120, 40, 4);
+                    captcha1.setCharType(2);// 纯数字
+                    text = captcha1.text();
+                    base64 = captcha1.toBase64();
+                    break;
+                case 2:
+                    SpecCaptcha captcha2 = new SpecCaptcha(120, 40, 4);
+                    captcha2.setCharType(3);// 纯字母
+                    text = captcha2.text();
+                    base64 = captcha2.toBase64();
+                    break;
+                case 3:
+                    SpecCaptcha captcha3 = new SpecCaptcha(120, 40, 4);
+                    captcha3.setCharType(1);// 字母数字混合
+                    text = captcha3.text();
+                    base64 = captcha3.toBase64();
+                    break;
+                case 4:
+                    ChineseCaptcha captcha4 = new ChineseCaptcha(120, 40, 4);
+                    text = captcha4.text();
+                    base64 = captcha4.toBase64();
+                    break;
+                case 5:
+                    ChineseCaptcha captcha5 = new ChineseCaptcha(120, 40, 2);
+                    text = captcha5.text();
+                    base64 = captcha5.toBase64();
+                    break;
+                case 11:
+                    GifCaptcha captcha11 = new GifCaptcha(120, 40, 4);
+                    captcha11.setCharType(2);// 纯数字
+                    text = captcha11.text();
+                    base64 = captcha11.toBase64();
+                    break;
+                case 22:
+                    GifCaptcha captcha22 = new GifCaptcha(120, 40, 4);
+                    captcha22.setCharType(3);// 纯字母
+                    text = captcha22.text();
+                    base64 = captcha22.toBase64();
+                    break;
+                case 33:
+                    GifCaptcha captcha33 = new GifCaptcha(120, 40, 4);
+                    captcha33.setCharType(1);// 字母数字混合
+                    text = captcha33.text();
+                    base64 = captcha33.toBase64();
+                    break;
+                case 44:
+                    ChineseGifCaptcha captcha44 = new ChineseGifCaptcha(120, 40, 4);
+                    text = captcha44.text();
+                    base64 = captcha44.toBase64();
+                    break;
+                case 55:
+                    ChineseGifCaptcha captcha55 = new ChineseGifCaptcha(120, 40, 2);
+                    text = captcha55.text();
+                    base64 = captcha55.toBase64();
+                    break;
+                case 0:
+                default:
+                    ArithmeticCaptcha captcha = new ArithmeticCaptcha(w, h);
+                    captcha.getArithmeticString();  // 获取运算的公式：3+2=?
+                    text = captcha.text();
+                    base64 = captcha.toBase64();
+                    break;
+            }
+            redisService.setex(RedisConstant.UCENTER_CAPTCHA + uuid, 180, text);
+            return Result.data(NutMap.NEW().addv("key", uuid).addv("code", base64).addv("captchaHasEnabled", true));
+        }
+        return Result.data(NutMap.NEW().addv("key", "").addv("code", "").addv("captchaHasEnabled", false));
     }
 
     /**

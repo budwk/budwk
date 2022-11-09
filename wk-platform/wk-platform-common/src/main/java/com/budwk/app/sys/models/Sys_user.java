@@ -118,6 +118,22 @@ public class Sys_user extends BaseModel implements Serializable {
     private boolean needChangePwd;
 
     @Column
+    @Comment("是否禁止登录")
+    @ApiModelProperty(description = "是否禁止登录")
+    @ColDefine(type = ColType.BOOLEAN)
+    private boolean disabledLogin;
+
+    @Column
+    @Comment("禁止登录时间")
+    @ApiModelProperty(description = "禁止登录时间")
+    private Long disabledLoginAt;
+
+    @Column
+    @Comment("密码重置时间")
+    @ApiModelProperty(description = "密码重置时间")
+    private Long pwdResetAt;
+
+    @Column
     @Comment("布局样式")
     @ApiModelProperty(description = "布局样式")
     @ColDefine(type = ColType.VARCHAR, width = 255)

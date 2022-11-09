@@ -105,21 +105,34 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
 
     @Override
     public Pagination getSelUserListPage(String roleId, String username, boolean sysadmin, String unitId, int pageNo, int pageSize, String pageOrderName, String pageOrderBy) {
-        Sql sql = Sqls.create("SELECT " +
-                " a.*,b.name as unitname " +
-                " FROM " +
-                " sys_user a " +
-                " LEFT JOIN sys_unit b ON a.unitId = b.id " +
-                " WHERE " +
-                " a.id NOT IN ( SELECT c.userId FROM sys_role_user c WHERE c.roleId = @roleId ) " +
-                " and (a.unitId=@masterId or a.unitId in (@unitIds) ) $s2 $order");
-        sql.params().set("roleId", roleId);
-        //获取总公司或分公司ID
-        String masterId = sysUnitService.getMasterCompanyId(unitId);
-        //查询出直属及下属部门用户(不垮分公司)
-        sql.params().set("masterId", masterId);
-        sql.params().set("unitIds", sysUnitService.getSubUnitIds(masterId).toArray());
-
+        Sql sql;
+        if(Strings.isNotBlank(unitId)) {
+            sql
+                    = Sqls.create("SELECT " +
+                    " a.*,b.name as unitname " +
+                    " FROM " +
+                    " sys_user a " +
+                    " LEFT JOIN sys_unit b ON a.unitId = b.id " +
+                    " WHERE " +
+                    " a.id NOT IN ( SELECT c.userId FROM sys_role_user c WHERE c.roleId = @roleId ) " +
+                    " and (a.unitId=@masterId or a.unitId in (@unitIds) ) $s2 $order");
+            sql.params().set("roleId", roleId);
+            //获取总公司或分公司ID
+            String masterId = sysUnitService.getMasterCompanyId(unitId);
+            //查询出直属及下属部门用户(不垮分公司)
+            sql.params().set("masterId", masterId);
+            sql.params().set("unitIds", sysUnitService.getSubUnitIds(masterId).toArray());
+        }else {
+            sql
+                    = Sqls.create("SELECT " +
+                    " a.*,b.name as unitname " +
+                    " FROM " +
+                    " sys_user a " +
+                    " LEFT JOIN sys_unit b ON a.unitId = b.id " +
+                    " WHERE " +
+                    " a.id NOT IN ( SELECT c.userId FROM sys_role_user c WHERE c.roleId = @roleId ) " +
+                    " $s2 $order");
+        }
 
         if (Strings.isNotBlank(username)) {
             sql.vars().set("s2", " and (a.loginname like '%" + username + "%' or a.username like '%" + username + "%')");

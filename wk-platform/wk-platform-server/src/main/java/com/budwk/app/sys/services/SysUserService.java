@@ -79,6 +79,23 @@ public interface SysUserService extends BaseService<Sys_user> {
     void checkMobile(String mobile) throws BaseException;
 
     /**
+     * 检查密码是否过期
+     *
+     * @param userId     用户ID
+     * @param pwdResetAt 密码重置时间
+     */
+    void checkPwdTimeout(String userId, Long pwdResetAt) throws BaseException;
+
+    /**
+     * 密码规则校验
+     *
+     * @param user 用户对象
+     * @param pwd  密码
+     * @throws BaseException
+     */
+    void checkPassword(Sys_user user, String pwd) throws BaseException;
+
+    /**
      * 通过用户名和密码获取用户信息
      *
      * @param loginname 用户名

@@ -38,14 +38,14 @@ public interface AuthService {
      *
      * @param loginname 用户名
      */
-    void checkLoginname(String loginname) throws BaseException;
+    void checkLoginname(String loginname, String ip, boolean nameRetryLock, int nameRetryNum, int nameTimeout) throws BaseException;
 
     /**
      * 检查用户是否存在
      *
      * @param mobile 手机号码
      */
-    void checkMobile(String mobile) throws BaseException;
+    void checkMobile(String mobile, String ip, boolean nameRetryLock, int nameRetryNum, int nameTimeout) throws BaseException;
 
     /**
      * 通过用户名获取用户信息
@@ -54,7 +54,8 @@ public interface AuthService {
      * @return
      * @throws BaseException
      */
-    Sys_user getUserByLoginname(String loginname) throws BaseException;
+    Sys_user getUserByLoginname(String loginname, String ip, boolean nameRetryLock, int nameRetryNum, int nameTimeout) throws BaseException;
+
 
     /**
      * 通过用户ID获取用户信息

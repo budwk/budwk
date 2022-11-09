@@ -11,7 +11,6 @@ import com.budwk.app.sys.services.SysUserService;
 import com.budwk.starter.common.constant.GlobalConstant;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
-import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -46,39 +45,6 @@ public class SysUnitController {
     private SysUserService sysUserService;
     @Inject
     private SysUnitUserService sysUnitUserService;
-
-    @At
-    @Ok("json")
-    @POST
-    @ApiOperation(name = "分页查询")
-    @ApiFormParams(
-            {
-                    @ApiFormParam(name = "name", example = "", description = "用户名"),
-                    @ApiFormParam(name = "leaderName", example = "", description = "部门负责人"),
-                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
-                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
-                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
-                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
-            }
-    )
-    @ApiResponses(
-            implementation = Pagination.class
-    )
-    @SaCheckPermission("sys.manage.unit")
-    public Result<?> list(
-                          @Param("name") String name,
-                          @Param("leaderName") String leaderName,
-                          @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
-        Cnd cnd = Cnd.NEW();
-        if(Strings.isNotBlank(name)){
-            cnd.and("name", "like", "%"+name+"%");
-        }
-        if(Strings.isNotBlank(leaderName)){
-            cnd.and("leaderName", "like", "%"+name+"%");
-        }
-        cnd.asc("path");
-        return Result.success().addData(sysUnitService.listPage(pageNo, pageSize, cnd));
-    }
 
     @At("/child")
     @Ok("json")

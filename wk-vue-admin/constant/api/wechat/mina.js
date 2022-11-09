@@ -1,0 +1,6 @@
+export const API_WX_CONF_MINA_GET = '/wechat/admin/conf/mina/get/'
+export const API_WX_CONF_MINA_DELETE = '/wechat/admin/conf/mina/delete/'
+export const API_WX_CONF_MINA_CREATE = '/wechat/admin/conf/mina/create'
+export const API_WX_CONF_MINA_UPDATE = '/wechat/admin/conf/mina/update'
+export const API_WX_CONF_MINA_LIST = '/wechat/admin/conf/mina/list'
+export const API_WX_CONFIG_PAY_QUERY = '/wechat/admin/conf/pay/query'

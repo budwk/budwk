@@ -1,0 +1,6 @@
+export const API_WX_MSG_MASS_LIST = '/wechat/admin/msg/mass/list'
+export const API_WX_MSG_MASS_NEWS_LIST = '/wechat/admin/msg/mass/news_list'
+export const API_WX_MSG_MASS_NEWS_CREATE = '/wechat/admin/msg/mass/news_create'
+export const API_WX_MSG_MASS_NEWS_DETAIL = '/wechat/admin/msg/mass/news_detail/'
+export const API_WX_MSG_MASS_NEWS_DELETE = '/wechat/admin/msg/mass/news_delete/'
+export const API_WX_MSG_MASS_PUSH = '/wechat/admin/msg/mass/push'

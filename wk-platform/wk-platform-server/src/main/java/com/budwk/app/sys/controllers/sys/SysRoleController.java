@@ -85,11 +85,14 @@ public class SysRoleController {
     @ApiOperation(name = "获取角色组")
     @ApiImplicitParams(
             {
-                    @ApiImplicitParam(name = "unitId", description = "单位ID", required = true, check = true)
+                    @ApiImplicitParam(name = "unitId", description = "单位ID")
             }
     )
     @ApiResponses
     public Result<?> group(@Param("unitId") String unitId, HttpServletRequest req) {
+        if (!StpUtil.hasPermission("sys.manage.role.system") && Strings.isBlank(unitId)) {
+            return Result.error(ResultCode.USER_NOT_PERMISSION);
+        }
         return Result.data(sysGroupService.query(Cnd.where("unitId", "=", unitId).asc("createdAt"), "roles"));
     }
 
@@ -149,7 +152,7 @@ public class SysRoleController {
             }
             Sys_role role = new Sys_role();
             role.setGroupId(groupId);
-            role.setUnitId(unitId);
+            role.setUnitId(Strings.sNull(unitId));
             role.setCode(code);
             role.setDisabled(disabled);
             role.setCreatedBy(SecurityUtil.getUserId());
@@ -161,7 +164,7 @@ public class SysRoleController {
             group.setUnitId(unitId);
             group.setCreatedBy(SecurityUtil.getUserId());
             group.setName(name);
-            group.setUnitPath(sysUnitService.fetch(unitId).getPath());
+            group.setUnitPath(Strings.isBlank(unitId) ? "" : sysUnitService.fetch(unitId).getPath());
             sysGroupService.insert(group);
         }
         return Result.success();
@@ -199,7 +202,7 @@ public class SysRoleController {
             }
             Sys_role role = new Sys_role();
             role.setGroupId(groupId);
-            role.setUnitId(unitId);
+            role.setUnitId(Strings.sNull(unitId));
             role.setCode(code);
             role.setDisabled(disabled);
             role.setCreatedBy(SecurityUtil.getUserId());
@@ -211,11 +214,11 @@ public class SysRoleController {
         }
         if ("group".equals(type)) {
             Sys_group group = new Sys_group();
-            group.setUnitId(unitId);
+            group.setUnitId(Strings.sNull(unitId));
             group.setCreatedBy(SecurityUtil.getUserId());
             group.setName(name);
             group.setId(id);
-            group.setUnitPath(sysUnitService.fetch(unitId).getPath());
+            group.setUnitPath(Strings.isBlank(unitId) ? "" : sysUnitService.fetch(unitId).getPath());
             sysGroupService.updateIgnoreNull(group);
         }
         return Result.success();
@@ -256,8 +259,8 @@ public class SysRoleController {
             if (group == null) {
                 return Result.error(ResultCode.NULL_DATA_ERROR);
             }
-            if ("SYSTEM".equals(group.getId())) {
-                return Result.error("系统管理组 不可被删除");
+            if ("PUBLIC".equals(group.getId()) || "SYSTEM".equals(group.getId())) {
+                return Result.error("系统内置角色组 不可被删除");
             }
             sysGroupService.clearGroup(id);
         }
@@ -306,6 +309,9 @@ public class SysRoleController {
     )
     @SaCheckPermission("sys.manage.role")
     public Result<?> getSelectUser(@Param("roleId") String roleId, @Param("unitId") String unitId, @Param("username") String username, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+        if (!StpUtil.hasPermission("sys.manage.role.system") && Strings.isBlank(unitId)) {
+            return Result.error(ResultCode.USER_NOT_PERMISSION);
+        }
         return Result.data(sysRoleService.getSelUserListPage(roleId, username, StpUtil.hasRole("sysadmin"), unitId, pageNo, pageSize, pageOrderName, pageOrderBy));
     }
 

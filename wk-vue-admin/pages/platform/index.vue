@@ -24,7 +24,7 @@
             <span> 总是想窥探这个世界，却求而不得</span>现在有一把钥匙就在眼前
           </div>
           <div class="item_limited"><span class="item_bywave_url"><a
-            href="https://bywave.io/aff.php?aff=3368"
+            href="https://bywave.art/aff.php?aff=3368"
             target="_blank"
           >现在开始</a></span></div>
         </div>
@@ -134,13 +134,6 @@ export default {
         {
           content: 'BudWk V7.0.0 - 微服务 + 微网关 + 组件化 + Vue ElemnetUI 前后端完全分离 发布',
           timestamp: '2021-05',
-          size: 'large',
-          type: 'primary',
-          icon: 'el-icon-more'
-        },
-        {
-          content: 'BudWk V8.0.0 - 微服务 + 微网关 + 组件化 + Vue3 Elemnet-Plus Vite 前后端完全分离 发布',
-          timestamp: '2022-11',
           size: 'large',
           type: 'primary',
           icon: 'el-icon-more'

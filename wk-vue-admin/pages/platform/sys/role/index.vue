@@ -41,6 +41,13 @@
         <el-row>
           <el-select v-model="unitId" size="small" style="width:100%;" @change="unitChange">
             <el-option
+              v-permission="'sys.manage.role.system'"
+              :value="''"
+              :label="'系统公共'"
+            >
+              系统公共
+            </el-option>
+            <el-option
               v-for="unit in units"
               :key="unit.id"
               :value="unit.id"

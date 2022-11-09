@@ -127,6 +127,24 @@ public class Sys_unit extends BaseModel implements Serializable {
     private String website;
 
     @Column
+    @Comment("负责人姓名")
+    @ApiModelProperty(description = "负责人姓名")
+    @ColDefine(type = ColType.VARCHAR, width = 50)
+    private String leaderName;
+
+    @Column
+    @Comment("负责人电话")
+    @ApiModelProperty(description = "负责人电话")
+    @ColDefine(type = ColType.VARCHAR, width = 20)
+    private String leaderMobile;
+
+    @Column
+    @Comment("是否禁用")
+    @ApiModelProperty(description = "是否禁用")
+    @ColDefine(type = ColType.BOOLEAN)
+    private boolean disabled;
+
+    @Column
     @Comment("排序字段")
     @ApiModelProperty(description = "排序字段")
     @Prev({

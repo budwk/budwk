@@ -179,6 +179,16 @@
                   </el-form-item>
 
                   <el-form-item
+                    label="操作系统"
+                  >
+                    <span>
+                      {{
+                        scope.row.os ||
+                          ''
+                      }}</span>
+                  </el-form-item>
+
+                  <el-form-item
                     label="执行类"
                   >
                     <span>

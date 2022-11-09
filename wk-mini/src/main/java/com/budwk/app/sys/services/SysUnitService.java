@@ -60,6 +60,14 @@ public interface SysUnitService extends BaseService<Sys_unit> {
     String getMasterCompanyPath(String unitId);
 
     /**
+     * 获取单位所在分公司/总公司
+     *
+     * @param unitId 单位ID
+     * @return
+     */
+    Sys_unit getMasterCompany(String unitId);
+
+    /**
      * 获取公司直属部门及子部门(不含分公司/分公司部门)
      * @param parentId
      * @return
