@@ -278,8 +278,6 @@ function handleScroll() {
           color: #fff;
           border-color: #42b983;
           &::before {
-            content: "";
-            background: #fff;
             display: inline-block;
             width: 8px;
             height: 8px;
