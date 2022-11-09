@@ -114,7 +114,7 @@ const handleDelete = (row: any) => {
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
-    name: 'sys/unit',
+    name: 'platform-sys-unit'
 })
 </script>
 <route lang="yaml">
