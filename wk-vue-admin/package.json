@@ -25,7 +25,6 @@
         "echarts": "^4.4.0",
         "element-ui": "^2.13.0",
         "eslint-loader": "^3.0.2",
-        "husky": "^3.0.9",
         "js-beautify": "^1.10.2",
         "js-cookie": "^2.2.1",
         "jsencrypt": "^3.3.1",
