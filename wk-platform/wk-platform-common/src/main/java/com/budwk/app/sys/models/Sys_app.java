@@ -50,6 +50,12 @@ public class Sys_app extends BaseModel implements Serializable {
     private String icon;
 
     @Column
+    @Comment("是否隐藏")
+    @ApiModelProperty(description = "是否隐藏")
+    @ColDefine(type = ColType.BOOLEAN)
+    private boolean hidden;
+
+    @Column
     @Comment("是否禁用")
     @ApiModelProperty(description = "是否禁用")
     @ColDefine(type = ColType.BOOLEAN)

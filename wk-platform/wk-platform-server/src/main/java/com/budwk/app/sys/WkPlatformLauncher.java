@@ -165,12 +165,14 @@ public class WkPlatformLauncher {
                 Sys_app sysApp = new Sys_app();
                 sysApp.setName("系统公用");
                 sysApp.setId(GlobalConstant.DEFAULT_COMMON_APPID);
+                sysApp.setHidden(true);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(1);
                 dao.insert(sysApp);
                 sysApp = new Sys_app();
                 sysApp.setName("控制中心");
                 sysApp.setId(GlobalConstant.DEFAULT_PLATFORM_APPID);
+                sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(2);
                 sysApp.setPath("/platform");
@@ -178,6 +180,7 @@ public class WkPlatformLauncher {
                 sysApp = new Sys_app();
                 sysApp.setName("内容管理");
                 sysApp.setId("CMS");
+                sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(3);
                 sysApp.setPath("/cms");
@@ -185,6 +188,7 @@ public class WkPlatformLauncher {
                 sysApp = new Sys_app();
                 sysApp.setName("微信管理");
                 sysApp.setId("WECHAT");
+                sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(3);
                 sysApp.setPath("/wechat");

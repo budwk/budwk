@@ -40,6 +40,19 @@
               label="请求路径"
             />
             <el-table-column
+              label="是否隐藏"
+              header-align="left"
+              prop="hidden"
+              align="left"
+              width="120px"
+              :show-overflow-tooltip="true"
+            >
+              <template slot-scope="scope">
+                <span v-if="scope.row.hidden" style="color:red">隐藏</span>
+                <span v-else style="color:green">显示</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               label="启用状态"
               header-align="left"
               prop="disabled"
@@ -195,6 +208,16 @@
             >
             <i v-else class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
+        </el-form-item>
+        <el-form-item prop="hidden" label="是否隐藏">
+          <el-switch
+            v-model="formData.hidden"
+            size="small"
+            :active-value="true"
+            :inactive-value="false"
+            active-color="red"
+            inactive-color="green"
+          />
         </el-form-item>
         <el-form-item prop="disabled" label="启用状态">
           <el-switch

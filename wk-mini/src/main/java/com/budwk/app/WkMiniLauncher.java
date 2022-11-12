@@ -176,12 +176,14 @@ public class WkMiniLauncher {
                 Sys_app sysApp = new Sys_app();
                 sysApp.setName("系统公用");
                 sysApp.setId(GlobalConstant.DEFAULT_COMMON_APPID);
+                sysApp.setHidden(true);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(1);
                 dao.insert(sysApp);
                 sysApp = new Sys_app();
                 sysApp.setName("控制中心");
                 sysApp.setId(GlobalConstant.DEFAULT_PLATFORM_APPID);
+                sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(2);
                 sysApp.setPath("/platform");
@@ -189,9 +191,18 @@ public class WkMiniLauncher {
                 sysApp = new Sys_app();
                 sysApp.setName("内容管理");
                 sysApp.setId("CMS");
+                sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(3);
                 sysApp.setPath("/cms");
+                dao.insert(sysApp);
+                sysApp = new Sys_app();
+                sysApp.setName("微信管理");
+                sysApp.setId("WECHAT");
+                sysApp.setHidden(false);
+                sysApp.setDisabled(false);
+                sysApp.setLocation(3);
+                sysApp.setPath("/wechat");
                 dao.insert(sysApp);
 
                 //初始化单位
@@ -270,6 +281,7 @@ public class WkMiniLauncher {
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_COMMON_APPID).add("roleId", role.getId()));
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_PLATFORM_APPID).add("roleId", role.getId()));
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", "CMS").add("roleId", role.getId()));
+                dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", "WECHAT").add("roleId", role.getId()));
                 dao.insert("sys_unit_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("unitId", unit.getId()));
                 dao.insert("sys_role_user", Chain.make("id", R.UU32()).add("userId", user.getId()).add("roleId", role.getId()));
                 //执行SQL脚本
@@ -295,6 +307,15 @@ public class WkMiniLauncher {
                     Sys_role_menu sysRoleMenu = new Sys_role_menu();
                     sysRoleMenu.setRoleId(role.getId());
                     sysRoleMenu.setAppId("CMS");
+                    sysRoleMenu.setMenuId(menu.getId());
+                    dao.insert(sysRoleMenu);
+                }
+                //菜单关联到角色
+                List<Sys_menu> wechatMenuList = dao.query(Sys_menu.class, Cnd.where("appId", "=", "WECHAT"));
+                for (Sys_menu menu : wechatMenuList) {
+                    Sys_role_menu sysRoleMenu = new Sys_role_menu();
+                    sysRoleMenu.setRoleId(role.getId());
+                    sysRoleMenu.setAppId("WECHAT");
                     sysRoleMenu.setMenuId(menu.getId());
                     dao.insert(sysRoleMenu);
                 }

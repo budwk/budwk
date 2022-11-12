@@ -17,11 +17,11 @@ v-model="queryParams.leaderName" placeholder="请输入部门负责人" clearabl
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-button
-type="primary" plain @click="handleCreate"
+type="primary" @click="handleCreate"
                     v-permission="['sys.manage.unit.create']">新增</el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button type="info" plain @click="toggleExpandAll">展开/折叠</el-button>
+                <el-button type="info" @click="toggleExpandAll">{{isExpandAll?'折叠':'展开'}}</el-button>
             </el-col>
             <right-toolbar
 v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
@@ -29,12 +29,16 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
         </el-row>
 
         <el-table
-v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
-            :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+            v-if="refreshTable" 
+            v-loading="tableLoading" 
+            :data="tableData" 
+            row-key="id"
+            :default-expand-all="isExpandAll" 
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
             <template v-for="(item,idx) in columns" :key="idx">
                 <el-table-column
 :prop="item.prop" :label="item.label" :fixed="item.fixed"
-                v-if="item.show">
+                v-if="item.show" :show-overflow-tooltip="true">
                     <template v-if="item.prop=='type'" #default="scope">
                         <span>{{ scope.row.type?.text }}</span>
                     </template>
@@ -46,7 +50,7 @@ v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
             <el-table-column fixed="right" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-button
-link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+link type="primary" @click="handleUpdate(scope.row)"
                         v-permission="['sys.manage.unit.update']">修改</el-button>
                     <el-button
 link type="primary" icon="Plus" @click="handleCreate(scope.row)"
@@ -98,8 +102,7 @@ const listPage = () => {
     tableLoading.value = true
     getList(queryParams.value.name, queryParams.value.leaderName).then((res)=>{
         tableLoading.value = false
-        tableData.value = handleTree(res.data, "id") as never
-        console.log(tableData.value)
+        tableData.value = handleTree(res.data) as never
     })
 } 
 

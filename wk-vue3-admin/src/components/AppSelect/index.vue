@@ -10,7 +10,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <template v-for="item of apps" >
-            <el-dropdown-item v-if="'COMMON'!=item.id" :key="item.id" :command="item.id">
+            <el-dropdown-item v-if="!item.hidden" :key="item.id" :command="item.id">
               {{ item.name }}
             </el-dropdown-item>
             </template>

@@ -353,12 +353,14 @@ export const padStart = (str: string, maxLength: number, fillString = ' ') => {
 /**
  * 构造树型结构数据
  * @param {*} data 数据源
+ * @param {*} lazy 是否lazy加载(非lazy加载要排除hasChildren字段)
  * @param {*} id id字段 默认 'id'
  * @param {*} parentId 父节点字段 默认 'parentId'
  * @param {*} children 孩子节点字段 默认 'children'
  */
-export const handleTree = (data: any, id='id', parentId='parentId', children='children') => {
+export const handleTree = (data: any, lazy=false, id='id', parentId='parentId', children='children') => {
     const config = {
+        lazy: lazy,
         id: id,
         parentId: parentId,
         childrenList: children
@@ -373,6 +375,9 @@ export const handleTree = (data: any, id='id', parentId='parentId', children='ch
         if (childrenListMap[parentId] == null) {
             childrenListMap[parentId] = [];
         }
+        if(!config.lazy){
+            d.hasChildren = undefined
+        }
         nodeIds[d[config.id]] = d;
         childrenListMap[parentId].push(d);
     }
@@ -380,6 +385,9 @@ export const handleTree = (data: any, id='id', parentId='parentId', children='ch
     for (const d of data) {
         const parentId = d[config.parentId];
         if (nodeIds[parentId] == null) {
+            if(!config.lazy){
+                d.hasChildren = undefined
+            }
             tree.push(d);
         }
     }
@@ -391,6 +399,58 @@ export const handleTree = (data: any, id='id', parentId='parentId', children='ch
     function adaptToChildrenList(o: any) {
         if (childrenListMap[o[config.id]] !== null) {
             o[config.childrenList] = childrenListMap[o[config.id]];
+        }
+        if (o[config.childrenList]) {
+            for (const c of o[config.childrenList]) {
+                adaptToChildrenList(c);
+            }
+        }
+    }
+    return tree;
+}
+
+/**
+ * 构造树型结构数据
+ * @param {*} data 数据源
+ * @param {*} children 孩子节点字段 默认 'children'
+ */
+export const handleTreeWithPath = (data: any, children='children') => {
+    const config = {
+        childrenList: children
+    }
+  
+    const childrenListMap: any = {}
+    const nodeIds:any = {}
+    const tree = []
+  
+    for (const d of data) {
+        const parentId = getParentId(d['path'])
+        if (childrenListMap[parentId] == null) {
+            childrenListMap[parentId] = []
+        }
+        nodeIds[d['path']] = d
+        childrenListMap[parentId].push(d)
+    }
+  
+    for (const d of data) {
+        const parentId = getParentId(d['path'])
+        if (nodeIds[parentId] == null) {
+            tree.push(d)
+        }
+    }
+  
+    for (const t of tree) {
+        adaptToChildrenList(t)
+    }
+  
+    function getParentId(path: string) {
+        if( path==null || path==undefined) return ''
+        return path.substring(0,path.length -4)
+    }
+
+    function adaptToChildrenList(o: any) {
+        if (childrenListMap[o['path']] !== null) {
+            o[config.childrenList] = childrenListMap[o['path']];
         }
         if (o[config.childrenList]) {
             for (const c of o[config.childrenList]) {
