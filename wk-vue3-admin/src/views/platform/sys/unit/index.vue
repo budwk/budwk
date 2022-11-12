@@ -100,7 +100,7 @@ const columns = ref([
 
 const listPage = () => {
     tableLoading.value = true
-    getList(queryParams.value.name, queryParams.value.leaderName).then((res)=>{
+    getList(queryParams.value).then((res)=>{
         tableLoading.value = false
         tableData.value = handleTree(res.data) as never
     })
@@ -117,7 +117,7 @@ const quickSearch = (data: any) => {
 }
 
 const handleSearch = () => {
-
+    listPage()
 }
 
 const resetSearch = () => {

@@ -49,7 +49,7 @@ public class SysUnitController {
     @At
     @Ok("json")
     @GET
-    @ApiOperation(name = "分页查询")
+    @ApiOperation(name = "Vue3树形列表查询")
     @ApiFormParams(
             {
                     @ApiFormParam(name = "name", example = "", description = "用户名"),
@@ -80,7 +80,7 @@ public class SysUnitController {
     @Ok("json")
     @GET
     @SaCheckPermission("sys.manage.unit")
-    @ApiOperation(name = "获取列表树型数据")
+    @ApiOperation(name = "Vue2获取列表树型数据")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "pid", description = "父级ID")

@@ -10,11 +10,11 @@ export const API_SYS_UNIT_SEARCH_USER = '/platform/sys/unit/search_user'
 
 import request from '/@/utils/request'
 
-export function getList(name: string,leaderName:string) {
+export function getList(data: object) {
     return request({
         url: API_SYS_UNIT_LIST,
         method: 'GET',
-        data: {name: name,leaderName: leaderName}
+        params: data
     })
 }
 
