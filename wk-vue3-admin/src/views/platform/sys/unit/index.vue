@@ -15,10 +15,14 @@
         </el-form>
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button type="primary" @click="handleCreate" v-permission="['sys.manage.unit.create']">新增</el-button>
+                <el-button type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.unit.create']">新增</el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button type="info" @click="toggleExpandAll">{{ isExpandAll ? '折叠' : '展开' }}</el-button>
+                <el-button icon="Sort" @click="toggleExpandAll" v-permission="['sys.manage.unit.update']">排序</el-button>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button v-if="isExpandAll" type="info" icon="FolderOpened" @click="toggleExpandAll">展开</el-button>
+                <el-button v-else type="info" icon="Folder" @click="toggleExpandAll">折叠</el-button>
             </el-col>
             <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                 @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过单位名称搜索" />
@@ -27,8 +31,7 @@
         <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
             :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
             <template v-for="(item, idx) in columns" :key="idx">
-                <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
-                    :show-overflow-tooltip="true">
+                <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show" :show-overflow-tooltip="true">
                     <template v-if="item.prop == 'name'" #default="scope">
                         <i v-if="scope.row.type && scope.row.type.value === 'GROUP'" class="fa fa-building" />
                         <i v-if="scope.row.type && scope.row.type.value === 'COMPANY'" class="fa fa-home" />
@@ -48,10 +51,10 @@
             </template>
             <el-table-column fixed="right" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
-                    <el-button link type="primary" @click="handleUpdate(scope.row)"
-                        v-permission="['sys.manage.unit.update']">修改</el-button>
                     <el-button link type="primary" icon="Plus" @click="handleCreate(scope.row)"
                         v-permission="['sys.manage.unit.create']">新增</el-button>
+                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                        v-permission="['sys.manage.unit.update']">修改</el-button>
                     <el-button v-if="scope.row.path != '0001'" link type="danger" icon="Delete"
                         @click="handleDelete(scope.row)" v-permission="['sys.manage.unit.delete']">删除</el-button>
                 </template>
@@ -75,7 +78,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="单位类型" prop="type">
-                            <el-radio-group v-model="formData.type">
+                            <el-radio-group v-model="formData.type" @change="typeChange">
                                 <el-radio v-for="item in types" :key="item.value" :label="item.value">
                                     {{ item.label }}
                                 </el-radio>
@@ -176,12 +179,18 @@ const data = reactive({
         website: '',
         leaderName: '',
         leaderMobile: '',
-        note: ''
+        note: '',
     },
     types: [
         { value: 'COMPANY', label: '分公司' },
         { value: 'UNIT', label: '部门' }
     ],
+    leaders: [],
+    highers: [],
+    assigners: [],
+    selectLeaders: [],
+    selectHighers: [],
+    selectAssigners: [],
     queryParams: {
         name: '',
         leaderName: '',
@@ -189,11 +198,11 @@ const data = reactive({
     formRules: {
         parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
         name: [{ required: true, message: "单位名称不能为空", trigger: "blur" }],
-        email: [buildValidatorData({ name: 'email' })],
+        email: [buildValidatorData({ name: 'email', title:'电子邮箱' })],
         leaderMobile: [buildValidatorData({ name: 'mobile' })]
     },
 })
-const { queryParams, formData, formRules, types } = toRefs(data)
+const { queryParams, formData, formRules, types,leaders,highers,assigners,selectLeaders,selectHighers,selectAssigners } = toRefs(data)
 
 const columns = ref([
     { prop: 'name', label: `单位名称`, show: true, fixed: false },
@@ -259,6 +268,19 @@ const toggleExpandAll = () => {
     })
 }
 
+const typeChange = () => {
+    formData.value.address = ''
+    formData.value.website = ''
+    formData.value.telephone = ''
+    formData.value.email = ''
+    formData.value.leaderName = ''
+    formData.value.leaderMobile = ''
+}
+
+const searchUser = () =>{
+
+}
+
 const handleCreate = (row: any) => {
     resetForm(createRef.value)
     showCreate.value = true
@@ -273,7 +295,12 @@ const handleDelete = (row: any) => {
 }
 
 const create = () => {
-
+    if (!createRef.value) return
+    createRef.value.validate((valid) => {
+        if (valid) {
+            
+        }
+    })
 }
 
 </script>
