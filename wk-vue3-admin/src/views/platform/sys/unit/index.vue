@@ -45,6 +45,9 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                     <template v-if="item.prop=='createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
+                    <template v-if="item.prop=='disabled'" #default="scope">
+                        <span>{{ scope.row.disabled }}</span>
+                    </template>
                 </el-table-column>
             </template>
             <el-table-column fixed="right" label="操作" class-name="small-padding fixed-width">

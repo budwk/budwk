@@ -15,6 +15,7 @@ import SvgIcon from '/@/components/SvgIcon/index.vue'
 // 自定义表格工具组件
 import RightToolbar from '/@/components/RightToolbar/index.vue'
 import Cookies from 'js-cookie'
+import 'default-passive-events'
 
 
 async function start() {
