@@ -152,6 +152,7 @@ import { ElForm } from 'element-plus'
 import { doCreate, getList } from '/@/api/platform/sys/unit'
 import { handleTree } from '/@/utils/common'
 import { buildValidatorData } from '/@/utils/validate'
+import modal from '/@/utils/modal'
 
 const queryRef = ref<InstanceType<typeof ElForm>>()
 const createRef = ref<InstanceType<typeof ElForm>>()
@@ -198,6 +199,7 @@ const data = reactive({
     formRules: {
         parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
         name: [{ required: true, message: "单位名称不能为空", trigger: "blur" }],
+        unitcode: [{ required: true, message: "单位编码不能为空", trigger: "blur" }],
         email: [buildValidatorData({ name: 'email', title:'电子邮箱' })],
         leaderMobile: [buildValidatorData({ name: 'mobile' })]
     },
@@ -298,7 +300,11 @@ const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
-            
+            doCreate(formData.value).then((res)=>{
+                modal.msgSuccess(res.msg)
+                showCreate.value = false
+                resetSearch()
+            })
         }
     })
 }
