@@ -199,7 +199,7 @@ const data = reactive({
     formRules: {
         parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
         name: [{ required: true, message: "单位名称不能为空", trigger: "blur" }],
-        unitcode: [{ required: true, message: "单位编码不能为空", trigger: "blur" }],
+        unitcode: [{ required: true, message: "单位编码不能为空", trigger: "blur" }, buildValidatorData({ name: 'code', title:'单位编码' })],
         email: [buildValidatorData({ name: 'email', title:'电子邮箱' })],
         leaderMobile: [buildValidatorData({ name: 'mobile' })]
     },

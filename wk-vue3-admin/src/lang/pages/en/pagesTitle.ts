@@ -8,5 +8,4 @@ export default {
     Loading: 'Loading...',
     User: 'Member Center',
     userLogin: 'Menber Login',
-    dashboard: 'Dashboard'
 }
