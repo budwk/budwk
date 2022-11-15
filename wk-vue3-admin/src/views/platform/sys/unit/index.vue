@@ -68,7 +68,7 @@
                         <el-form-item label="上级单位" prop="parentId">
                             <el-tree-select v-model="formData.parentId" :data="unitOptions"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
-                                placeholder="选择上级单位" check-strictly style="width:100%"/>
+                                placeholder="选择上级单位" check-strictly :render-after-expand="false" style="width:100%"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -156,12 +156,101 @@
                 </div>
             </template>
         </el-dialog>
+
+        <el-dialog title="修改单位" v-model="showUpdate" width="50%" append-to-body>
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="120px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="单位名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入单位名称" maxlength="100" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="单位类型" prop="type">
+                            <el-radio-group v-model="formData.type" @change="typeChange">
+                                <el-radio v-for="item in types" :key="item.value" :label="item.value">
+                                    {{ item.label }}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="单位别名" prop="aliasName">
+                            <el-input v-model="formData.aliasName" placeholder="单位别名" maxlength="100"
+                                auto-complete="off" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="单位编码" prop="unitcode">
+                            <el-input v-model="formData.unitcode" placeholder="单位编码" maxlength="32" auto-complete="off"
+                                type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" v-if="formData.type !== 'UNIT'">
+                        <el-form-item label="单位地址" prop="address">
+                            <el-input v-model="formData.address" placeholder="单位详细地址" auto-complete="off" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" v-if="formData.type !== 'UNIT'">
+                        <el-form-item label="固定电话" prop="telephone">
+                            <el-input v-model="formData.telephone" placeholder="单位固定电话" auto-complete="off"
+                                type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" v-if="formData.type !== 'UNIT'">
+                        <el-form-item label="电子邮箱" prop="email">
+                            <el-input v-model="formData.email" placeholder="单位电子邮箱" auto-complete="off" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" v-if="formData.type !== 'UNIT'">
+                        <el-form-item label="单位网站" prop="website">
+                            <el-input v-model="formData.website" placeholder="单位网站" auto-complete="off" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" v-if="formData.type == 'UNIT'">
+                        <el-form-item label="部门负责人" prop="leaderName">
+                            <el-input v-model="formData.leaderName" placeholder="负责人姓名" auto-complete="off"
+                                type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" v-if="formData.type == 'UNIT'">
+                        <el-form-item label="负责人电话" prop="leaderMobile">
+                            <el-input v-model="formData.leaderMobile" placeholder="负责人电话" auto-complete="off"
+                                type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" >
+                        <el-form-item label="单位状态" prop="disabled">
+                            <el-radio-group v-model="formData.disabled">
+                                <el-radio :label="false">
+                                    启用
+                                </el-radio>
+                                <el-radio :label="true">
+                                    禁用
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="note" label="备注">
+                            <el-input v-model="formData.note" type="textarea" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="update">确 定</el-button>
+                    <el-button @click="showUpdate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
-import { doCreate, getList } from '/@/api/platform/sys/unit'
+import { doCreate, getInfo, getList } from '/@/api/platform/sys/unit'
 import { handleTree } from '/@/utils/common'
 import { buildValidatorData } from '/@/utils/validate'
 import modal from '/@/utils/modal'
@@ -176,6 +265,7 @@ const tableLoading = ref(false)
 const tableData = ref([])
 const unitOptions = ref([]);
 const showCreate = ref(false)
+const showUpdate = ref(false)
 
 
 const data = reactive({
@@ -227,16 +317,6 @@ const columns = ref([
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
 ])
 
-// 查询表格
-const list = () => {
-    tableLoading.value = true
-    getList(queryParams.value).then((res) => {
-        tableLoading.value = false
-        tableData.value = handleTree(res.data) as never
-        unitOptions.value = handleTree(res.data) as never
-    })
-}
-
 // 重置表单
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     if (!formEl) return
@@ -258,6 +338,18 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     }
     formEl?.resetFields()
 }
+
+
+// 查询表格
+const list = () => {
+    tableLoading.value = true
+    getList(queryParams.value).then((res) => {
+        tableLoading.value = false
+        tableData.value = handleTree(res.data) as never
+        unitOptions.value = handleTree(res.data) as never
+    })
+}
+
 
 onMounted(() => {
     list()
@@ -315,7 +407,10 @@ const handleCreate = (row: any) => {
 }
 
 const handleUpdate = (row: any) => {
-
+    getInfo(row.id).then((res:any)=>{
+        formData.value = res.data
+        showUpdate.value = true
+    })
 }
 
 const handleDelete = (row: any) => {
@@ -327,11 +422,21 @@ const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
-            doCreate(formData.value).then((res)=>{
+            doCreate(formData.value).then((res: any)=>{
                 modal.msgSuccess(res.msg)
                 showCreate.value = false
                 resetSearch()
             })
+        }
+    })
+}
+
+// 提交修改
+const update = () => {
+    if (!updateRef.value) return
+    updateRef.value.validate((valid) => {
+        if (valid) {
+            //...
         }
     })
 }
