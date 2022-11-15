@@ -175,7 +175,7 @@ public class WkPlatformLauncher {
                 sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(2);
-                sysApp.setPath("/platform");
+                sysApp.setPath("/platform/dashboard");
                 dao.insert(sysApp);
                 sysApp = new Sys_app();
                 sysApp.setName("内容管理");
@@ -183,7 +183,7 @@ public class WkPlatformLauncher {
                 sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(3);
-                sysApp.setPath("/cms");
+                sysApp.setPath("/platform/dashboard");
                 dao.insert(sysApp);
                 sysApp = new Sys_app();
                 sysApp.setName("微信管理");
@@ -191,7 +191,7 @@ public class WkPlatformLauncher {
                 sysApp.setHidden(false);
                 sysApp.setDisabled(false);
                 sysApp.setLocation(3);
-                sysApp.setPath("/wechat");
+                sysApp.setPath("/platform/dashboard");
                 dao.insert(sysApp);
 
                 //初始化单位
@@ -203,6 +203,7 @@ public class WkPlatformLauncher {
                 headUnit.setAddress("银河-太阳系-地球");
                 headUnit.setEmail("");
                 headUnit.setTelephone("");
+                headUnit.setDisabled(false);
                 headUnit.setHasChildren(true);
                 headUnit.setParentId("");
                 headUnit.setWebsite("https://budwk.com");
@@ -216,6 +217,7 @@ public class WkPlatformLauncher {
                 unit.setAddress("银河-太阳系-地球");
                 unit.setEmail("wizzer@qq.com");
                 unit.setTelephone("");
+                unit.setDisabled(false);
                 unit.setHasChildren(false);
                 unit.setParentId(headUnit.getId());
                 unit.setWebsite("https://budwk.com");

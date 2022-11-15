@@ -130,6 +130,18 @@
                                 type="text" />
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12" >
+                        <el-form-item label="单位状态" prop="disabled">
+                            <el-radio-group v-model="formData.disabled">
+                                <el-radio :label="false">
+                                    启用
+                                </el-radio>
+                                <el-radio :label="true">
+                                    禁用
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="24">
                         <el-form-item prop="note" label="备注">
                             <el-input v-model="formData.note" type="textarea" />
@@ -181,6 +193,7 @@ const data = reactive({
         leaderName: '',
         leaderMobile: '',
         note: '',
+        disabled: false
     },
     types: [
         { value: 'COMPANY', label: '分公司' },
@@ -214,7 +227,8 @@ const columns = ref([
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
 ])
 
-const listPage = () => {
+// 查询表格
+const list = () => {
     tableLoading.value = true
     getList(queryParams.value).then((res) => {
         tableLoading.value = false
@@ -223,6 +237,7 @@ const listPage = () => {
     })
 }
 
+// 重置表单
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     if (!formEl) return
     formData.value = {
@@ -238,30 +253,35 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         website: '',
         leaderName: '',
         leaderMobile: '',
-        note: ''
+        note: '',
+        disabled: false
     }
     formEl?.resetFields()
 }
 
 onMounted(() => {
-    listPage()
+    list()
 })
 
+// 快速搜索
 const quickSearch = (data: any) => {
     queryParams.value.name = data.keyword
     queryParams.value.leaderName = ''
-    listPage()
+    list()
 }
 
+// 高级搜索
 const handleSearch = () => {
-    listPage()
+    list()
 }
 
+// 重置搜索
 const resetSearch = () => {
     queryRef.value?.resetFields()
-    listPage()
+    list()
 }
 
+// 展开/折叠
 const toggleExpandAll = () => {
     refreshTable.value = false;
     isExpandAll.value = !isExpandAll.value
@@ -270,6 +290,7 @@ const toggleExpandAll = () => {
     })
 }
 
+// 表单切换单位类型
 const typeChange = () => {
     formData.value.address = ''
     formData.value.website = ''
@@ -279,12 +300,17 @@ const typeChange = () => {
     formData.value.leaderMobile = ''
 }
 
+// 查询用户
 const searchUser = () =>{
 
 }
 
+// 新增按钮
 const handleCreate = (row: any) => {
     resetForm(createRef.value)
+    if(row && row.id){
+        formData.value.parentId = row.id
+    }
     showCreate.value = true
 }
 
@@ -296,6 +322,7 @@ const handleDelete = (row: any) => {
 
 }
 
+// 提交新增
 const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
