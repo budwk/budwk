@@ -113,9 +113,9 @@ public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements Sys
         sql.setParam("unitPath", path + "____");
         sql.setParam("unitId", unitId);
         if (Strings.isNotBlank(username)) {
-            sql.setVar("s", " and username like '%" + username + "%' ");
+            sql.setVar("s", " and (username like '%" + username + "%' or loginname like '%"+username+"%')");
         }
-        return this.listPage(1, 100, sql);
+        return this.listPage(1, 20, sql);
     }
 
     @Override

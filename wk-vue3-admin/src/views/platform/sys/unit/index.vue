@@ -166,15 +166,6 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="单位类型" prop="type">
-                            <el-radio-group v-model="formData.type" @change="typeChange">
-                                <el-radio v-for="item in types" :key="item.value" :label="item.value">
-                                    {{ item.label }}
-                                </el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
                         <el-form-item label="单位别名" prop="aliasName">
                             <el-input v-model="formData.aliasName" placeholder="单位别名" maxlength="100"
                                 auto-complete="off" type="text" />
@@ -219,6 +210,30 @@
                                 type="text" />
                         </el-form-item>
                     </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="leader" label="单位领导">
+                            <el-select
+                                v-model="selectLeaders"
+                                style="width: 65%"
+                                class="span_n"
+                                multiple
+                                filterable
+                                remote
+                                default-first-option
+                                reserve-keyword
+                                :remote-method="(query) => searchUser(query,'leaders')"
+                                placeholder="输入姓名进行查询"
+                                autocomplete="off"
+                            >
+                                <el-option
+                                v-for="item in leaders"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="12" >
                         <el-form-item label="单位状态" prop="disabled">
                             <el-radio-group v-model="formData.disabled">
@@ -250,7 +265,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
-import { doCreate, getInfo, getList } from '/@/api/platform/sys/unit'
+import { doCreate, doSearchUser, getInfo, getList } from '/@/api/platform/sys/unit'
 import { handleTree } from '/@/utils/common'
 import { buildValidatorData } from '/@/utils/validate'
 import modal from '/@/utils/modal'
@@ -393,8 +408,24 @@ const typeChange = () => {
 }
 
 // 查询用户
-const searchUser = () =>{
-
+const searchUser = (query: string,type: string) =>{
+    let unitId = ''
+    if('leaders'===type){
+        unitId = formData.value.id
+    } else{
+        unitId = formData.value.parentId
+    }
+    doSearchUser(query,unitId).then((res:any)=>{
+        if('leaders'===type){
+            leaders.value = res.data.list
+        }
+        if('highers'===type){
+            highers.value = res.data.list
+        }
+        if('assigners'===type){
+            assigners.value = res.data.list
+        }
+    })
 }
 
 // 新增按钮
@@ -408,7 +439,9 @@ const handleCreate = (row: any) => {
 
 const handleUpdate = (row: any) => {
     getInfo(row.id).then((res:any)=>{
-        formData.value = res.data
+        formData.value = res.data.unit
+        formData.value.type = formData.value.type.value
+
         showUpdate.value = true
     })
 }
