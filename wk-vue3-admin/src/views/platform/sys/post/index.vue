@@ -1,24 +1,19 @@
 <template>
     <div>
-        <el-alert>platformSysUser!</el-alert>
-        <el-button @click="getUserInfo('PLATFORM')">ddddd</el-button>
-    </div>
+
+</div>
 </template>
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { getUserInfo } from '/@/api/ucenter/auth'
-
-const route = useRoute()
 
 onMounted(()=>{
-    console.log('user!')
+    console.log('post!')
 })
 </script>
 <!--定义组件名用于keep-alive页面缓存-->
 <script lang="ts">
 export default{
-    name: 'platform-sys-user'
+    name: 'platform-sys-post'
 }
 </script>
 <!--定义布局-->

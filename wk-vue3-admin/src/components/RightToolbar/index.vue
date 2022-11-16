@@ -68,7 +68,7 @@
 
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, nextTick, onUnmounted } from "vue"
+import { computed, onMounted, reactive, ref, nextTick, onUnmounted, unref } from "vue"
 import { debounce } from '/@/utils/common'
 import Sortablejs from 'sortablejs'
 import { cloneDeep } from "lodash"
@@ -117,7 +117,12 @@ const style = computed(() => {
 
 onMounted(()=>{
     nextTick(()=>{
-        Sortablejs.create(rightToolbarDropdownMenuRef.value?.$el, {
+        //console.log(document.querySelectorAll('.dropdown-column'))
+        const columnListEl = unref(rightToolbarDropdownMenuRef)
+        if (!columnListEl) return
+        const el = columnListEl.$el as any
+        if (!el) return
+        Sortablejs.create(unref(el), {
             animation: 500,
             delay: 400,
             delayOnTouchOnly: true,

@@ -63,7 +63,7 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog title="新增单位" v-model="showCreate" width="50%" append-to-body>
+        <el-dialog title="新增单位" v-model="showCreate" width="50%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="120px">
                 <el-row>
                     <el-col :span="24">
@@ -163,7 +163,7 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改单位" v-model="showUpdate" width="50%" append-to-body>
+        <el-dialog title="修改单位" v-model="showUpdate" width="50%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="120px">
                 <el-row>
                     <el-col :span="12">
@@ -276,7 +276,7 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="单位排序" v-model="showSort" width="30%" append-to-body>
+        <el-dialog title="单位排序" v-model="showSort" width="30%">
             <el-tree ref="sortTree" :data="sortData" draggable :allow-drop="sortAllowDrop" node-key="id"
                 :props="{ label: 'name', children: 'children' }">
             </el-tree>
