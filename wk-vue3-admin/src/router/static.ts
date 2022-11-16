@@ -73,7 +73,7 @@ const platformBaseRoute: RouteRecordRaw = {
     children: [
         {
             path: '/platform/loading',
-            component: () => import('/@/layouts/common/components/loading.vue'),
+            component: () => import('/@/layouts/platform/components/Loading/index.vue'),
             meta: {
                 title: '加载中...',
             },
