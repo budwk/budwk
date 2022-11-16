@@ -11,6 +11,7 @@ import org.nutz.castor.FailToCastObjectException;
 import org.nutz.dao.DaoException;
 import org.nutz.ioc.IocException;
 import org.nutz.ioc.ObjectLoadException;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.ActionContext;
@@ -40,12 +41,12 @@ public class WkFailProcessor extends ViewProcessor {
         Throwable e = ac.getError();
         // 捕获Ioc异常
         if (e instanceof IocException || e instanceof ObjectLoadException) {
-            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.IOC_ERROR, !log.isDebugEnabled() ? ResultCode.IOC_ERROR.getMsg() :e.getMessage()));
+            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.IOC_ERROR, !log.isDebugEnabled() ? ResultCode.IOC_ERROR.getMsg() : e.getMessage()));
             return;
         } else if (e instanceof DaoException) {
-            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.DAO_ERROR, !log.isDebugEnabled() ? ResultCode.DAO_ERROR.getMsg() :  e.getMessage()));
+            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.DAO_ERROR, !log.isDebugEnabled() ? ResultCode.DAO_ERROR.getMsg() : e.getMessage()));
             return;
-        }  else if (e instanceof FailToCastObjectException) { // 捕获类型转换异常
+        } else if (e instanceof FailToCastObjectException) { // 捕获类型转换异常
             WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.PARAM_ERROR, !log.isDebugEnabled() ? ResultCode.PARAM_ERROR.getMsg() : e.getMessage()));
             return;
         } else if (e instanceof NotLoginException) {    // 如果是未登录异常
@@ -62,8 +63,8 @@ public class WkFailProcessor extends ViewProcessor {
         } else if (e instanceof BaseException) {    // 如果是业务异常
             WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.FAILURE, e.getMessage()));
             return;
-        } else if (e instanceof RuntimeException){
-            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.SERVER_ERROR, !log.isDebugEnabled() ? ResultCode.SERVER_ERROR.getMsg() : e.getMessage()));
+        } else if (e instanceof RuntimeException) {
+            WebUtil.rendAjaxResp(ac.getRequest(), ac.getResponse(), Result.error(ResultCode.SERVER_ERROR, !log.isDebugEnabled() ? ResultCode.SERVER_ERROR.getMsg() : Strings.isBlank(e.getMessage()) ? e.toString() : e.getMessage()));
             return;
         }
         super.process(ac);
