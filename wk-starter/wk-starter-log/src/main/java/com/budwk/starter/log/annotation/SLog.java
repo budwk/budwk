@@ -39,13 +39,13 @@ public @interface SLog {
      *
      * @return
      */
-    boolean param() default false;
+    boolean param() default true;
 
     /**
      * 是否记录执行结果
      *
      * @return
      */
-    boolean result() default false;
+    boolean result() default true;
 
 }

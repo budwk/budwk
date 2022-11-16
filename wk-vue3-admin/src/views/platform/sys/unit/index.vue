@@ -5,7 +5,8 @@
                 <el-input v-model="queryParams.name" placeholder="请输入单位名称" clearable @keyup.enter="handleSearch" />
             </el-form-item>
             <el-form-item label="部门负责人" prop="leaderName">
-                <el-input v-model="queryParams.leaderName" placeholder="请输入部门负责人" clearable
+                <el-input
+v-model="queryParams.leaderName" placeholder="请输入部门负责人" clearable
                     @keyup.enter="handleSearch" />
             </el-form-item>
             <el-form-item>
@@ -24,11 +25,13 @@
                 <el-button v-if="isExpandAll" type="info" icon="FolderOpened" @click="toggleExpandAll">展开</el-button>
                 <el-button v-else type="info" icon="Folder" @click="toggleExpandAll">折叠</el-button>
             </el-col>
-            <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
+            <right-toolbar
+v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                 @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过单位名称搜索" />
         </el-row>
 
-        <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
+        <el-table
+v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id"
             :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show" :show-overflow-tooltip="true">
@@ -51,11 +54,14 @@
             </template>
             <el-table-column fixed="right" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
-                    <el-button link type="primary" icon="Plus" @click="handleCreate(scope.row)"
+                    <el-button
+link type="primary" icon="Plus" @click="handleCreate(scope.row)"
                         v-permission="['sys.manage.unit.create']">新增</el-button>
-                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                    <el-button
+link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                         v-permission="['sys.manage.unit.update']">修改</el-button>
-                    <el-button v-if="scope.row.path != '0001'" link type="danger" icon="Delete"
+                    <el-button
+v-if="scope.row.path != '0001'" link type="danger" icon="Delete"
                         @click="handleDelete(scope.row)" v-permission="['sys.manage.unit.delete']">删除</el-button>
                 </template>
             </el-table-column>
@@ -66,9 +72,12 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="上级单位" prop="parentId">
-                            <el-tree-select v-model="formData.parentId" :data="unitOptions"
+                            <el-tree-select
+v-model="formData.parentId" :data="unitOptions"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
-                                placeholder="选择上级单位" check-strictly :render-after-expand="false" style="width:100%"/>
+                                placeholder="选择上级单位" check-strictly :render-after-expand="false" style="width:100%"
+                                @change="parentChange"
+                                />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -79,21 +88,26 @@
                     <el-col :span="12">
                         <el-form-item label="单位类型" prop="type">
                             <el-radio-group v-model="formData.type" @change="typeChange">
-                                <el-radio v-for="item in types" :key="item.value" :label="item.value">
-                                    {{ item.label }}
+                                <el-radio key="COMPANY" label="COMPANY" v-if="formData.parentType?.value=='GROUP'">
+                                    分公司
+                                </el-radio>
+                                <el-radio key="UNIT" label="UNIT">
+                                    部门
                                 </el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="单位别名" prop="aliasName">
-                            <el-input v-model="formData.aliasName" placeholder="单位别名" maxlength="100"
+                            <el-input
+v-model="formData.aliasName" placeholder="单位别名" maxlength="100"
                                 auto-complete="off" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="单位编码" prop="unitcode">
-                            <el-input v-model="formData.unitcode" placeholder="单位编码" maxlength="32" auto-complete="off"
+                            <el-input
+v-model="formData.unitcode" placeholder="单位编码" maxlength="32" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
@@ -104,7 +118,8 @@
                     </el-col>
                     <el-col :span="12" v-if="formData.type !== 'UNIT'">
                         <el-form-item label="固定电话" prop="telephone">
-                            <el-input v-model="formData.telephone" placeholder="单位固定电话" auto-complete="off"
+                            <el-input
+v-model="formData.telephone" placeholder="单位固定电话" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
@@ -120,13 +135,15 @@
                     </el-col>
                     <el-col :span="12" v-if="formData.type == 'UNIT'">
                         <el-form-item label="部门负责人" prop="leaderName">
-                            <el-input v-model="formData.leaderName" placeholder="负责人姓名" auto-complete="off"
+                            <el-input
+v-model="formData.leaderName" placeholder="负责人姓名" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12" v-if="formData.type == 'UNIT'">
                         <el-form-item label="负责人电话" prop="leaderMobile">
-                            <el-input v-model="formData.leaderMobile" placeholder="负责人电话" auto-complete="off"
+                            <el-input
+v-model="formData.leaderMobile" placeholder="负责人电话" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
@@ -167,13 +184,15 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="单位别名" prop="aliasName">
-                            <el-input v-model="formData.aliasName" placeholder="单位别名" maxlength="100"
+                            <el-input
+v-model="formData.aliasName" placeholder="单位别名" maxlength="100"
                                 auto-complete="off" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="单位编码" prop="unitcode">
-                            <el-input v-model="formData.unitcode" placeholder="单位编码" maxlength="32" auto-complete="off"
+                            <el-input
+v-model="formData.unitcode" placeholder="单位编码" maxlength="32" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
@@ -184,7 +203,8 @@
                     </el-col>
                     <el-col :span="12" v-if="formData.type !== 'UNIT'">
                         <el-form-item label="固定电话" prop="telephone">
-                            <el-input v-model="formData.telephone" placeholder="单位固定电话" auto-complete="off"
+                            <el-input
+v-model="formData.telephone" placeholder="单位固定电话" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
@@ -200,13 +220,15 @@
                     </el-col>
                     <el-col :span="12" v-if="formData.type == 'UNIT'">
                         <el-form-item label="部门负责人" prop="leaderName">
-                            <el-input v-model="formData.leaderName" placeholder="负责人姓名" auto-complete="off"
+                            <el-input
+v-model="formData.leaderName" placeholder="负责人姓名" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12" v-if="formData.type == 'UNIT'">
                         <el-form-item label="负责人电话" prop="leaderMobile">
-                            <el-input v-model="formData.leaderMobile" placeholder="负责人电话" auto-complete="off"
+                            <el-input
+v-model="formData.leaderMobile" placeholder="负责人电话" auto-complete="off"
                                 type="text" />
                         </el-form-item>
                     </el-col>
@@ -222,11 +244,59 @@
                                 default-first-option
                                 reserve-keyword
                                 :remote-method="(query) => searchUser(query,'leaders')"
-                                placeholder="输入姓名进行查询"
+                                placeholder="输入姓名或用户名进行查询"
                                 autocomplete="off"
                             >
                                 <el-option
                                 v-for="item in leaders"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24" v-if="formData.type== 'UNIT'">
+                        <el-form-item prop="higher" label="上级主管领导">
+                            <el-select
+                                v-model="selectHighers"
+                                style="width: 65%"
+                                class="span_n"
+                                multiple
+                                filterable
+                                remote
+                                default-first-option
+                                reserve-keyword
+                                :remote-method="(query) => searchUser(query,'highers')"
+                                placeholder="输入姓名或用户名进行查询"
+                                autocomplete="off"
+                            >
+                                <el-option
+                                v-for="item in highers"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24" v-if="formData.type== 'UNIT'">
+                        <el-form-item prop="assigner" label="上级分管领导">
+                            <el-select
+                                v-model="selectAssigners"
+                                style="width: 65%"
+                                class="span_n"
+                                multiple
+                                filterable
+                                remote
+                                default-first-option
+                                reserve-keyword
+                                :remote-method="(query) => searchUser(query,'assigners')"
+                                placeholder="输入姓名或用户名进行查询"
+                                autocomplete="off"
+                            >
+                                <el-option
+                                v-for="item in assigners"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -265,7 +335,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
-import { doCreate, doSearchUser, getInfo, getList } from '/@/api/platform/sys/unit'
+import { doCreate, doSearchUser, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/sys/unit'
 import { handleTree } from '/@/utils/common'
 import { buildValidatorData } from '/@/utils/validate'
 import modal from '/@/utils/modal'
@@ -279,6 +349,7 @@ const refreshTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 const unitOptions = ref([]);
+const unitList = ref([]);
 const showCreate = ref(false)
 const showUpdate = ref(false)
 
@@ -298,12 +369,12 @@ const data = reactive({
         leaderName: '',
         leaderMobile: '',
         note: '',
-        disabled: false
+        disabled: false,
+        parentType: '',
+        leader: '',
+        higher: '',
+        assigner: ''
     },
-    types: [
-        { value: 'COMPANY', label: '分公司' },
-        { value: 'UNIT', label: '部门' }
-    ],
     leaders: [],
     highers: [],
     assigners: [],
@@ -317,12 +388,11 @@ const data = reactive({
     formRules: {
         parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
         name: [{ required: true, message: "单位名称不能为空", trigger: "blur" }],
-        unitcode: [{ required: true, message: "单位编码不能为空", trigger: "blur" }, buildValidatorData({ name: 'code', title:'单位编码' })],
         email: [buildValidatorData({ name: 'email', title:'电子邮箱' })],
         leaderMobile: [buildValidatorData({ name: 'mobile' })]
     },
 })
-const { queryParams, formData, formRules, types,leaders,highers,assigners,selectLeaders,selectHighers,selectAssigners } = toRefs(data)
+const { queryParams, formData, formRules,leaders,highers,assigners,selectLeaders,selectHighers,selectAssigners } = toRefs(data)
 
 const columns = ref([
     { prop: 'name', label: `单位名称`, show: true, fixed: false },
@@ -334,7 +404,6 @@ const columns = ref([
 
 // 重置表单
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
-    if (!formEl) return
     formData.value = {
         id: '',
         parentId: '',
@@ -349,8 +418,15 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         leaderName: '',
         leaderMobile: '',
         note: '',
-        disabled: false
+        disabled: false,
+        parentType: '',
+        leader: '',
+        higher: '',
+        assigner: ''
     }
+    selectLeaders.value = []
+    selectHighers.value = []
+    selectAssigners.value = []
     formEl?.resetFields()
 }
 
@@ -360,6 +436,7 @@ const list = () => {
     tableLoading.value = true
     getList(queryParams.value).then((res) => {
         tableLoading.value = false
+        unitList.value = res.data
         tableData.value = handleTree(res.data) as never
         unitOptions.value = handleTree(res.data) as never
     })
@@ -407,6 +484,14 @@ const typeChange = () => {
     formData.value.leaderMobile = ''
 }
 
+// 上级单位改变
+const parentChange = (id: any) => {
+    const idx = unitList.value.findIndex((o)=>{
+        return o.id == id
+    })
+    formData.value.parentType = unitList.value[idx]?.type
+}
+
 // 查询用户
 const searchUser = (query: string,type: string) =>{
     let unitId = ''
@@ -433,21 +518,60 @@ const handleCreate = (row: any) => {
     resetForm(createRef.value)
     if(row && row.id){
         formData.value.parentId = row.id
+        formData.value.parentType = row.type
     }
     showCreate.value = true
 }
 
+// 修改按钮
 const handleUpdate = (row: any) => {
     getInfo(row.id).then((res:any)=>{
         formData.value = res.data.unit
-        formData.value.type = formData.value.type.value
-
+        formData.value.type = formData.value.type?.value
+        const unitUserList = res.data.unitUserList
+        // 回显领导
+        if (unitUserList) {
+            let tmp_leaders: any[] = []
+            let tmp_highers: any[] = []
+            let tmp_assigners: any[] = []
+            let tmp_leaders_ids: string[] = []
+            let tmp_highers_ids: string[] = []
+            let tmp_assigners_ids: string[] = []
+            unitUserList.forEach((u: any) => {
+                if(u.leaderType){
+                    if (u.leaderType.value === 'LEADER') {
+                        tmp_leaders_ids.push(u.userId)
+                        tmp_leaders.push({ value: u.userId, label: u.user.username })
+                    }
+                    if (u.leaderType.value === 'HIGHER') {
+                        tmp_highers_ids.push(u.userId)
+                        tmp_highers.push({ value: u.userId, label: u.user.username })
+                    }
+                    if (u.leaderType.value === 'ASSIGNER') {
+                        tmp_assigners_ids.push(u.userId)
+                        tmp_assigners.push({ value: u.userId, label: u.user.username })
+                    }
+                }
+            })
+            leaders.value = tmp_leaders as never
+            highers.value = tmp_highers as never
+            assigners.value = tmp_assigners as never
+            selectLeaders.value = tmp_leaders_ids as never
+            selectHighers.value = tmp_highers_ids as never
+            selectAssigners.value = tmp_assigners_ids as never
+        }
         showUpdate.value = true
     })
 }
 
+// 删除按钮
 const handleDelete = (row: any) => {
-
+    modal.confirm('此操作将删除单位、下级单位、以及与单位关联的角色，请谨慎操作！').then(()=>{
+        return doDelete(row.id)
+    }).then(()=>{
+        list()
+        modal.msgSuccess('删除成功')
+    }).catch(()=>{})
 }
 
 // 提交新增
@@ -469,7 +593,14 @@ const update = () => {
     if (!updateRef.value) return
     updateRef.value.validate((valid) => {
         if (valid) {
-            //...
+            formData.value.leader = selectLeaders.value.toString()
+            formData.value.higher = selectHighers.value.toString()
+            formData.value.assigner = selectAssigners.value.toString()
+            doUpdate(formData.value).then((res: any)=>{
+                modal.msgSuccess(res.msg)
+                showUpdate.value = false
+                resetSearch()
+            })
         }
     })
 }

@@ -35,6 +35,10 @@
   }
 }
 
+.el-button:focus-visible {
+  outline: 0;
+}
+
 .status-col {
   .cell {
     padding: 0 10px;

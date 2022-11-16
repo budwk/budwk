@@ -165,7 +165,7 @@ public class SysUnitController {
     }
 
     @At("/get/{id}")
-    @Ok("json")
+    @Ok("json:{locked:'^(password|salt|mobile|email)$'}")
     @GET
     @SaCheckPermission("sys.manage.unit")
     @ApiOperation(name = "获取单位信息")

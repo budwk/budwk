@@ -135,6 +135,8 @@ public class SysUnitController {
     )
     @ApiResponses
     public Result<?> create(@Param("..") Sys_unit unit, HttpServletRequest req) {
+        Long a = null;
+        a.byteValue();
         unit.setCreatedBy(SecurityUtil.getUserId());
         sysUnitService.save(unit);
         return Result.success();
@@ -166,7 +168,7 @@ public class SysUnitController {
     }
 
     @At("/get/{id}")
-    @Ok("json")
+    @Ok("json:{locked:'^(password|salt|mobile|email)$'}")
     @GET
     @SaCheckPermission("sys.manage.unit")
     @ApiOperation(name = "获取单位信息")

@@ -12,6 +12,7 @@ import org.nutz.el.El;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.json.JsonFormat;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.segment.CharSegment;
@@ -20,6 +21,7 @@ import org.nutz.lang.util.MethodParamNamesScaner;
 import org.nutz.mvc.Mvcs;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +67,11 @@ public class LogService {
                 slogMsg += _slog_msg;
             }
         }
-        String dbParam = null;
-        String dbResult = null;
+        String dbParam = "";
+        String dbResult = "";
         if (param && args != null) {
             try {
-                dbParam = Json.toJson(args);
+                dbParam = argsArrayToString(args);
             } catch (Exception e1) {
                 dbParam = "SLog传参:Json序列化错误";
             }
@@ -83,7 +85,7 @@ public class LogService {
         }
         String ex = null;
         if (e != null) {
-            ex = e.getMessage();
+            ex = Strings.isBlank(e.getMessage()) ? e.toString() : e.getMessage();
         }
         saveLog(type, tag, source, slogMsg, dbParam, dbResult, ex, tookTime);
     }
@@ -130,7 +132,6 @@ public class LogService {
                 sysLog.setOs(UserAgentUtil.parse(request.getHeader("User-Agent")).getOs().getName());
             }
         } catch (Exception e) {
-            ex += e.getMessage();
             log.error(e.getMessage(), e);
         }
         try {
@@ -142,11 +143,32 @@ public class LogService {
             sysLog.setCreatedBy(userId);
             sysLog.setUpdatedBy(userId);
         } catch (Exception e) {
-            ex += e.getMessage();
             log.error(e.getMessage(), e);
         }
         sysLog.setResult(Strings.isBlank(result) ? ex : result);
         sysLog.setException(ex);
         return sysLog;
+    }
+
+    // 参数拼装
+    private String argsArrayToString(Object[] paramsArray) {
+        StringBuilder params = new StringBuilder();
+        if (paramsArray != null && paramsArray.length > 0) {
+            for (Object o : paramsArray) {
+                if (Lang.isNotEmpty(o) && !isFilterObject(o)) {
+                    try {
+                        String jsonObj = Json.toJson(o, JsonFormat.compact().setLocked("^(password|oldPassword|newPassword)$"));
+                        params.append(jsonObj);
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
+        return params.toString();
+    }
+
+    // 是否需要过滤的对象
+    public boolean isFilterObject(final Object o) {
+        return o instanceof HttpServletRequest || o instanceof HttpServletResponse;
     }
 }

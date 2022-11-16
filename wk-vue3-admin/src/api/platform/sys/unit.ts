@@ -41,6 +41,14 @@ export function doCreate(data: object = {}) {
     })
 }
 
+export function doUpdate(data: object = {}) {
+    return request({
+        url: API_SYS_UNIT_UPDATE,
+        method: 'POST',
+        data: data
+    })
+}
+
 export function doDelete(id: string) {
     return request({
         url: API_SYS_UNIT_DELETE + id,

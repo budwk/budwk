@@ -164,7 +164,7 @@
                   >
                     <span>
                       {{
-                        scope.row.param ||
+                        scope.row.params ||
                           '未记录'
                       }}</span>
                   </el-form-item>
