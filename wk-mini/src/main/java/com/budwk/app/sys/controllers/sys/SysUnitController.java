@@ -61,17 +61,22 @@ public class SysUnitController {
     )
     @SaCheckPermission("sys.manage.unit")
     public Result<?> list(
-                          @Param("name") String name,
-                          @Param("leaderName") String leaderName) {
+            @Param("name") String name,
+            @Param("leaderName") String leaderName) {
         Cnd cnd = Cnd.NEW();
-        if(Strings.isNotBlank(name)){
-            cnd.and("name", "like", "%"+name+"%");
+        // 非管理员显示所属单位及下级单位
+        if (!StpUtil.hasRole(GlobalConstant.DEFAULT_SYSADMIN_ROLECODE)) {
+            Sys_unit unit = sysUnitService.fetch(SecurityUtil.getUnitId());
+            cnd.and("path", "like", unit.getPath() + "%");
         }
-        if(Strings.isNotBlank(leaderName)){
-            cnd.and("leaderName", "like", "%"+name+"%");
+        if (Strings.isNotBlank(name)) {
+            cnd.and("name", "like", "%" + name + "%");
         }
-        cnd.asc("path");
+        if (Strings.isNotBlank(leaderName)) {
+            cnd.and("leaderName", "like", "%" + name + "%");
+        }
         cnd.asc("location");
+        cnd.asc("path");
         return Result.success().addData(sysUnitService.query(cnd));
     }
 
@@ -123,7 +128,6 @@ public class SysUnitController {
     }
 
 
-
     @At("/create")
     @Ok("json")
     @POST
@@ -135,8 +139,6 @@ public class SysUnitController {
     )
     @ApiResponses
     public Result<?> create(@Param("..") Sys_unit unit, HttpServletRequest req) {
-        Long a = null;
-        a.byteValue();
         unit.setCreatedBy(SecurityUtil.getUserId());
         sysUnitService.save(unit);
         return Result.success();
@@ -213,7 +215,7 @@ public class SysUnitController {
     @Ok("json")
     @GET
     @SaCheckPermission("sys.manage.unit")
-    @ApiOperation(name = "获取待排序数据")
+    @ApiOperation(name = "Vue2获取待排序数据")
     @ApiImplicitParams
     @ApiResponses
     public Result<?> getSortTree(HttpServletRequest req) {
