@@ -29,7 +29,7 @@
                         <icon size="14" name="el-icon-Grid" />
                     </el-button>
                     <template #dropdown>
-                        <el-dropdown-menu class="dropdown-column">
+                        <el-dropdown-menu ref="rightToolbarDropdownMenuRef" class="dropdown-column">
                             <el-dropdown-item v-for="(item, idx) in columns" :key="item.prop">
                                 <el-row class="dropdown-column-item">
                                     <el-col :span="18">
@@ -68,10 +68,13 @@
 
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, nextTick } from "vue"
+import { computed, onMounted, reactive, ref, nextTick, onUnmounted } from "vue"
 import { debounce } from '/@/utils/common'
 import Sortablejs from 'sortablejs'
 import { cloneDeep } from "lodash"
+import { ElDropdownMenu } from "element-plus"
+
+const rightToolbarDropdownMenuRef = ref<InstanceType<typeof ElDropdownMenu>>()
 
 const props = defineProps({
     showSearch: {
@@ -114,8 +117,7 @@ const style = computed(() => {
 
 onMounted(()=>{
     nextTick(()=>{
-        const dropdownList = document.querySelector('.dropdown-column') as HTMLElement
-        Sortablejs.create(dropdownList, {
+        Sortablejs.create(rightToolbarDropdownMenuRef.value?.$el, {
             animation: 500,
             delay: 400,
             delayOnTouchOnly: true,

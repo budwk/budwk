@@ -4,7 +4,7 @@ import { useTagsView } from '/@/stores/tagsView'
 export default {
     // 刷新当前tab页签
     refreshPage(obj: any) {
-        const { path, query, matched } = router.currentRoute.value;
+        const { path, query, matched } = router.currentRoute.value
         if (obj === undefined) {
             return
         }
