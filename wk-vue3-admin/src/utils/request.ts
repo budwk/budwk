@@ -115,6 +115,21 @@ function createAxios(axiosConfig: AxiosRequestConfig, options: Options = {}, loa
                         }
                         return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
                     }
+                    if(response.data.code == 500200) {
+                        let note = ''
+                        for (const key in response.data.data) {
+                            let tempName = response.data.data[key].name
+                            if (!tempName) {
+                                tempName = key
+                            }
+                            note += tempName + ' : ' + response.data.data[key].msg + ' \r\n'
+                        }
+                        ElNotification({
+                            type: 'error',
+                            message: note,
+                        })
+                        return Promise.reject('参数错误')
+                    }
                     if (options.showCodeMessage) {
                         ElNotification({
                             type: 'error',

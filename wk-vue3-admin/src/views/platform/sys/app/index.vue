@@ -2,15 +2,23 @@
     <div class="app-container">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.post.create']">新增
+                <el-button type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.app.create']">新增
                 </el-button>
             </el-col>
             <right-toolbar @quickSearch="quickSearch" />
         </el-row>
         <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id">
-            <el-table-column prop="name" label="职务名称">
+            <el-table-column prop="name" label="应用名称">
             </el-table-column>
-            <el-table-column prop="code" label="职务编号">
+            <el-table-column prop="id" label="应用ID">
+            </el-table-column>
+            <el-table-column prop="path" label="默认路径">
+            </el-table-column>
+            <el-table-column prop="hidden" label="是否隐藏" align="center" width="150">
+                <template #default="scope">
+                    <span v-if="scope.row.hidden" style="color:red">隐藏</span>
+                    <span v-else style="color:green">显示</span>
+              </template>
             </el-table-column>
             <el-table-column prop="location" label="排序" align="center" width="150">
                 <template #default="scope">
@@ -24,15 +32,28 @@
                     />
               </template>
             </el-table-column>
+            <el-table-column prop="disabled" label="状态" align="center" width="150">
+                <template #default="scope">
+                    <el-switch
+                        v-model="scope.row.disabled"
+                        size="small"
+                        :active-value="false"
+                        :inactive-value="true"
+                        active-color="green"
+                        inactive-color="red"
+                        @change="disabledChange(scope.row)"
+                        />
+              </template>
+            </el-table-column>
             <el-table-column fixed="right" header-align="center" align="center" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                            v-permission="['sys.manage.post.update']"></el-button>
+                            v-permission="['sys.manage.app.update']"></el-button>
                         </el-tooltip>
                     <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
                         <el-button link type="danger" icon="Delete"
-                        @click="handleDelete(scope.row)" v-permission="['sys.manage.post.delete']"></el-button>
+                        @click="handleDelete(scope.row)" v-permission="['sys.manage.app.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -44,13 +65,36 @@
                @pagination="list"
         />
 
-        <el-dialog title="新增职务" v-model="showCreate" width="35%">
+        <el-dialog title="新增应用" v-model="showCreate" width="35%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="职务名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入职务名称"/>
+                <el-form-item label="应用名称" prop="name">
+                    <el-input v-model="formData.name" placeholder="请输入应用名称"/>
                 </el-form-item>
-                <el-form-item label="职务编号" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入职务编号"/>
+                <el-form-item label="应用ID" prop="id">
+                    <el-input v-model="formData.id" placeholder="请输入应用ID"/>
+                </el-form-item>
+                <el-form-item label="默认路径" prop="path">
+                    <el-input v-model="formData.path" placeholder="请输入默认路径"/>
+                </el-form-item>
+                <el-form-item label="是否隐藏" prop="hidden">
+                    <el-radio-group v-model="formData.hidden">
+                        <el-radio :label="false">
+                            显示
+                        </el-radio>
+                        <el-radio :label="true">
+                            隐藏
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item prop="disabled" label="应用状态">
+                    <el-switch
+                        v-model="formData.disabled"
+                        size="small"
+                        :active-value="false"
+                        :inactive-value="true"
+                        active-color="green"
+                        inactive-color="red"
+                    />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -61,13 +105,36 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改职务" v-model="showUpdate" width="35%">
+        <el-dialog title="修改应用" v-model="showUpdate" width="35%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="职务名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入职务名称"/>
+                <el-form-item label="应用名称" prop="name">
+                    <el-input v-model="formData.name" placeholder="请输入应用名称"/>
                 </el-form-item>
-                <el-form-item label="职务编号" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入职务编号"/>
+                <el-form-item label="应用ID" prop="id">
+                    <el-input v-model="formData.id" placeholder="请输入应用ID" disabled/>
+                </el-form-item>
+                <el-form-item label="默认路径" prop="path">
+                    <el-input v-model="formData.path" placeholder="请输入默认路径"/>
+                </el-form-item>
+                <el-form-item label="是否隐藏" prop="hidden">
+                    <el-radio-group v-model="formData.hidden">
+                        <el-radio :label="false">
+                            显示
+                        </el-radio>
+                        <el-radio :label="true">
+                            隐藏
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item prop="disabled" label="应用状态">
+                    <el-switch
+                        v-model="formData.disabled"
+                        size="small"
+                        :active-value="false"
+                        :inactive-value="true"
+                        active-color="green"
+                        inactive-color="red"
+                    />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -82,7 +149,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, doDelete, doLocation } from '/@/api/platform/sys/post'
+import { doCreate, doUpdate, getInfo, getList, doDelete, doLocation, doDisable } from '/@/api/platform/sys/app'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 
@@ -99,7 +166,9 @@ const data = reactive({
     formData: {
         id: '',
         name: '',
-        code: '',
+        path: '',
+        hidden: false,
+        disabled: false,
         location: 0,
     },
     queryParams: {
@@ -110,8 +179,8 @@ const data = reactive({
         pageOrderBy: ''
     },
     formRules: {
-        name: [{ required: true, message: "职务名称不能为空", trigger: ["blur","change"] }],
-        code: [{ required: true, message: "职务编号不能为空", trigger: ["blur","change"] }]
+        name: [{ required: true, message: "应用名称不能为空", trigger: ["blur","change"] }],
+        id: [{ required: true, message: "应用ID不能为空", trigger: ["blur","change"] }]
     },
 })
 
@@ -122,7 +191,9 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
         name: '',
-        code: '',
+        path: '',
+        hidden: false,
+        disabled: false,
         location: 0,
     }
     formEl?.resetFields()
@@ -212,6 +283,18 @@ const locationChange = (row: any) => {
     })
 }
 
+// 启用禁用
+const disabledChange = (row: any) => {
+    doDisable({disabled: row.disabled, id: row.id}).then((res: any) => {
+        modal.msgSuccess(res.msg)
+        list()
+    }).catch(()=>{
+        setTimeout(() => {
+            row.disabled = !row.disabled
+        }, 300)
+    })
+}
+
 onMounted(()=>{
     list()
 })
@@ -219,7 +302,7 @@ onMounted(()=>{
 <!--定义组件名用于keep-alive页面缓存-->
 <script lang="ts">
 export default{
-    name: 'platform-sys-post'
+    name: 'platform-sys-app'
 }
 </script>
 <!--定义布局-->

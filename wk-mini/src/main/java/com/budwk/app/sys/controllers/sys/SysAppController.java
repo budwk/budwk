@@ -86,6 +86,12 @@ public class SysAppController {
     @SLog("修改应用,应用名:${app.name}")
     @SaCheckPermission("sys.manage.app.update")
     public Result<?> update(@Param("..") Sys_app app, HttpServletRequest req) {
+        if (app.isDisabled() && GlobalConstant.DEFAULT_COMMON_APPID.equalsIgnoreCase(app.getId())) {
+            return Result.error("COMMON 应用不可禁用");
+        }
+        if (app.isDisabled() && GlobalConstant.DEFAULT_PLATFORM_APPID.equalsIgnoreCase(app.getId())) {
+            return Result.error("PLATFORM 应用不可禁用");
+        }
         app.setUpdatedBy(SecurityUtil.getUserId());
         sysAppService.updateIgnoreNull(app);
         sysAppService.cacheClear();
