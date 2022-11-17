@@ -51,14 +51,20 @@
                     </template>
                 </el-table-column>
             </template>
-            <el-table-column fixed="right" label="操作" class-name="small-padding fixed-width">
+            <el-table-column fixed="right" align="center" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
-                    <el-button link type="primary" icon="Plus" @click="handleCreate(scope.row)"
-                        v-permission="['sys.manage.unit.create']">新增</el-button>
-                    <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                        v-permission="['sys.manage.unit.update']">修改</el-button>
-                    <el-button v-if="scope.row.path != '0001'" link type="danger" icon="Delete"
-                        @click="handleDelete(scope.row)" v-permission="['sys.manage.unit.delete']">删除</el-button>
+                    <el-tooltip content="新增子单位" placement="top">
+                        <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
+                            v-permission="['sys.manage.unit.create']"></el-button>
+                        </el-tooltip>
+                    <el-tooltip content="修改" placement="top">
+                        <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                            v-permission="['sys.manage.unit.update']"></el-button>
+                        </el-tooltip>
+                    <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
+                        <el-button link type="danger" icon="Delete"
+                        @click="handleDelete(scope.row)" v-permission="['sys.manage.unit.delete']"></el-button>
+                    </el-tooltip>
                 </template>
             </el-table-column>
         </el-table>
