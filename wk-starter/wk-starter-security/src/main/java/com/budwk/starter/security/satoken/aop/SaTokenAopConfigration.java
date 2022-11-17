@@ -22,20 +22,20 @@ public class SaTokenAopConfigration implements AopConfigration {
     public List<InterceptorPair> getInterceptorPairList(Ioc ioc, Class<?> clazz) {
         List<InterceptorPair> list = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
-            SaCheckLogin saCheckLogin = clazz.getAnnotation(SaCheckLogin.class);
+            SaCheckLogin saCheckLogin = method.getAnnotation(SaCheckLogin.class);
             if (saCheckLogin != null) {
                 SaCheckLoginInterceptor saCheckLoginInterceptor = ioc.get(SaCheckLoginInterceptor.class);
                 saCheckLoginInterceptor.prepare(saCheckLogin);
                 list.add(new InterceptorPair(saCheckLoginInterceptor, new SaTokenMethodMatcher(method)));
             }
-            SaCheckRole saCheckRole = clazz.getAnnotation(SaCheckRole.class);
-            if (saCheckLogin != null) {
+            SaCheckRole saCheckRole = method.getAnnotation(SaCheckRole.class);
+            if (saCheckRole != null) {
                 SaCheckRoleInterceptor saCheckRoleInterceptor = ioc.get(SaCheckRoleInterceptor.class);
                 saCheckRoleInterceptor.prepare(saCheckRole);
                 list.add(new InterceptorPair(saCheckRoleInterceptor, new SaTokenMethodMatcher(method)));
             }
-            SaCheckPermission saCheckPermission = clazz.getAnnotation(SaCheckPermission.class);
-            if (saCheckLogin != null) {
+            SaCheckPermission saCheckPermission = method.getAnnotation(SaCheckPermission.class);
+            if (saCheckPermission != null) {
                 SaCheckPermissionInterceptor saCheckPermissionInterceptor = ioc.get(SaCheckPermissionInterceptor.class);
                 saCheckPermissionInterceptor.prepare(saCheckPermission);
                 list.add(new InterceptorPair(saCheckPermissionInterceptor, new SaTokenMethodMatcher(method)));
