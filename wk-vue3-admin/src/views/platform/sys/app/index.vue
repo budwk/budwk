@@ -36,7 +36,6 @@
                 <template #default="scope">
                     <el-switch
                         v-model="scope.row.disabled"
-                        size="small"
                         :active-value="false"
                         :inactive-value="true"
                         active-color="green"
@@ -89,7 +88,6 @@
                 <el-form-item prop="disabled" label="应用状态">
                     <el-switch
                         v-model="formData.disabled"
-                        size="small"
                         :active-value="false"
                         :inactive-value="true"
                         active-color="green"
@@ -129,7 +127,6 @@
                 <el-form-item prop="disabled" label="应用状态">
                     <el-switch
                         v-model="formData.disabled"
-                        size="small"
                         :active-value="false"
                         :inactive-value="true"
                         active-color="green"
