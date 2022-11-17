@@ -14,6 +14,8 @@ import 'virtual:svg-icons-register'
 import SvgIcon from '/@/components/SvgIcon/index.vue'
 // 自定义表格工具组件
 import RightToolbar from '/@/components/RightToolbar/index.vue'
+// 分页组件
+import Pagination from '/@/components/Pagination/index.vue'
 import Cookies from 'js-cookie'
 import 'default-passive-events'
 
@@ -25,8 +27,10 @@ async function start() {
     app.config.globalProperties.formatTime = formatTime
     app.config.globalProperties.formatDate = formatDate
 
-    // 注册全局组建
+    // 注册全局组件
     app.component('RightToolbar', RightToolbar)
+    // 注册分页组件
+    app.component('Pagination', Pagination)
 
     app.use(router)
     app.use(pinia)

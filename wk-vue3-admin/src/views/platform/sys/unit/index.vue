@@ -51,7 +51,7 @@
                     </template>
                 </el-table-column>
             </template>
-            <el-table-column fixed="right" align="center" label="操作" class-name="small-padding fixed-width">
+            <el-table-column fixed="right" header-align="center" align="center" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-tooltip content="新增子单位" placement="top">
                         <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
@@ -415,7 +415,11 @@ onMounted(() => {
 const quickSearch = (data: any) => {
     queryParams.value.name = data.keyword
     queryParams.value.leaderName = ''
+    refreshTable.value = false
     list()
+    nextTick(() => {
+        refreshTable.value = true
+    })
 }
 
 // 高级搜索
@@ -431,7 +435,7 @@ const resetSearch = () => {
 
 // 展开/折叠
 const toggleExpandAll = () => {
-    refreshTable.value = false;
+    refreshTable.value = false
     isExpandAll.value = !isExpandAll.value
     nextTick(() => {
         refreshTable.value = true
