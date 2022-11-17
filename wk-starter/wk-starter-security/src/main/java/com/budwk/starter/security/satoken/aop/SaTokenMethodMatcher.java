@@ -2,7 +2,6 @@ package com.budwk.starter.security.satoken.aop;
 
 import org.nutz.aop.MethodMatcher;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -10,14 +9,14 @@ import java.lang.reflect.Method;
  */
 public class SaTokenMethodMatcher implements MethodMatcher {
 
-    protected Class<? extends Annotation> klass;
+    protected Method method;
 
-    public SaTokenMethodMatcher(Class<? extends Annotation> klass) {
-        this.klass = klass;
+    public SaTokenMethodMatcher(Method method) {
+        this.method = method;
     }
 
     public boolean match(Method method) {
-        return method.getAnnotation(klass) != null;
+        return this.method.equals(method);
     }
 
 }

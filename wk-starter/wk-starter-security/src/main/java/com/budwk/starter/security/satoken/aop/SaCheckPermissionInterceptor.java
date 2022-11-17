@@ -6,17 +6,19 @@ import org.nutz.aop.InterceptorChain;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.ioc.loader.annotation.IocBean;
 
-import java.lang.reflect.Method;
-
 /**
  * @author wizzer@qq.com
  */
 @IocBean(singleton = false)
 public class SaCheckPermissionInterceptor implements MethodInterceptor {
+    private SaCheckPermission at;
+
+    public void prepare(SaCheckPermission saCheckLogin) {
+        at = saCheckLogin;
+    }
+
     @Override
     public void filter(InterceptorChain chain) throws Throwable {
-        Method method = chain.getCallingMethod();
-        SaCheckPermission at = method.getAnnotation(SaCheckPermission.class);
         SaManager.getStpLogic(at.type()).checkByAnnotation(at);
         chain.doChain();
     }

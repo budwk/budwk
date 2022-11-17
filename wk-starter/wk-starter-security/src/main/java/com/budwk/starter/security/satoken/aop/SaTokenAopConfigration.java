@@ -20,24 +20,29 @@ public class SaTokenAopConfigration implements AopConfigration {
 
     @Override
     public List<InterceptorPair> getInterceptorPairList(Ioc ioc, Class<?> clazz) {
-        List<InterceptorPair> list = new ArrayList<InterceptorPair>();
-        boolean flag = true;
+        List<InterceptorPair> list = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
-            if (method.getAnnotation(SaCheckLogin.class) != null
-                    || method.getAnnotation(SaCheckRole.class) != null
-                    || method.getAnnotation(SaCheckPermission.class) != null) {
-                flag = false;
-                break;
+            SaCheckLogin saCheckLogin = clazz.getAnnotation(SaCheckLogin.class);
+            if (saCheckLogin != null) {
+                SaCheckLoginInterceptor saCheckLoginInterceptor = ioc.get(SaCheckLoginInterceptor.class);
+                saCheckLoginInterceptor.prepare(saCheckLogin);
+                list.add(new InterceptorPair(saCheckLoginInterceptor, new SaTokenMethodMatcher(method)));
+            }
+            SaCheckRole saCheckRole = clazz.getAnnotation(SaCheckRole.class);
+            if (saCheckLogin != null) {
+                SaCheckRoleInterceptor saCheckRoleInterceptor = ioc.get(SaCheckRoleInterceptor.class);
+                saCheckRoleInterceptor.prepare(saCheckRole);
+                list.add(new InterceptorPair(saCheckRoleInterceptor, new SaTokenMethodMatcher(method)));
+            }
+            SaCheckPermission saCheckPermission = clazz.getAnnotation(SaCheckPermission.class);
+            if (saCheckLogin != null) {
+                SaCheckPermissionInterceptor saCheckPermissionInterceptor = ioc.get(SaCheckPermissionInterceptor.class);
+                saCheckPermissionInterceptor.prepare(saCheckPermission);
+                list.add(new InterceptorPair(saCheckPermissionInterceptor, new SaTokenMethodMatcher(method)));
             }
         }
-        if (flag)
-            return list;
-        list.add(new InterceptorPair(ioc.get(SaCheckLoginInterceptor.class),
-                new SaTokenMethodMatcher(SaCheckLogin.class)));
-        list.add(new InterceptorPair(ioc.get(SaCheckRoleInterceptor.class),
-                new SaTokenMethodMatcher(SaCheckRole.class)));
-        list.add(new InterceptorPair(ioc.get(SaCheckPermissionInterceptor.class),
-                new SaTokenMethodMatcher(SaCheckPermission.class)));
+        if (list.size() == 0)
+            return null;
         return list;
     }
 }

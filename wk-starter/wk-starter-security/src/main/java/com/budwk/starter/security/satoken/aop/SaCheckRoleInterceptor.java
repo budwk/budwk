@@ -1,6 +1,7 @@
 package com.budwk.starter.security.satoken.aop;
 
 import cn.dev33.satoken.SaManager;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.nutz.aop.InterceptorChain;
 import org.nutz.aop.MethodInterceptor;
@@ -13,10 +14,13 @@ import java.lang.reflect.Method;
  */
 @IocBean(singleton = false)
 public class SaCheckRoleInterceptor implements MethodInterceptor {
+    private SaCheckRole at;
+
+    public void prepare(SaCheckRole saCheckRole) {
+        at = saCheckRole;
+    }
     @Override
     public void filter(InterceptorChain chain) throws Throwable {
-        Method method = chain.getCallingMethod();
-        SaCheckRole at = method.getAnnotation(SaCheckRole.class);
         SaManager.getStpLogic(at.type()).checkByAnnotation(at);
         chain.doChain();
     }
