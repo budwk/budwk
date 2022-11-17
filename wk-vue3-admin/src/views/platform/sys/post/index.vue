@@ -12,7 +12,18 @@
             </el-table-column>
             <el-table-column prop="code" label="职务编号">
             </el-table-column>
-            <el-table-column prop="location" label="排序" align="center">
+            <el-table-column prop="location" label="排序" align="center" width="150">
+                <template #default="scope">
+                    <el-input-number
+                        v-model="scope.row.location"
+                        controls-position="right"
+                        size="mini"
+                        :min="1"
+                        :max="100"
+                        @change="locationChange(scope.row)"
+                        style="width:100px;"
+                    />
+              </template>
             </el-table-column>
             <el-table-column fixed="right" header-align="center" align="center" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
@@ -131,6 +142,7 @@ const list = () => {
 // 刷新
 const quickSearch = (data: any) => {
     refreshTable.value = false
+    queryParams.value.pageNo = 1
     list()
     nextTick(() => {
         refreshTable.value = true
@@ -157,6 +169,7 @@ const handleDelete = (row: any) => {
     modal.confirm('确定删除 '+ row.name + '？').then(() => {
         return doDelete(row.id)
     }).then(() => {
+        queryParams.value.pageNo = 1
         list()
         modal.msgSuccess('删除成功')
     }).catch(() => { })
@@ -171,6 +184,7 @@ const create = () => {
             doCreate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showCreate.value = false
+                queryParams.value.pageNo = 1
                 list()
             })
         }
@@ -191,6 +205,13 @@ const update = () => {
     })
 }
 
+// 排序
+const locationChange = (row: any) => {
+    doLocation({location: row.location, id: row.id}).then((res: any) => {
+        modal.msgSuccess(res.msg)
+        list()
+    })
+}
 
 onMounted(()=>{
     list()
