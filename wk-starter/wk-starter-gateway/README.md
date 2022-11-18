@@ -6,13 +6,19 @@
 
 ```yaml
 gateway:
+  http:
+    maxThreads:
+    maxConnections: 256
+    idleTimeout: 60000
+    timeout: 100000
+    requestBufferSize:
+    responseBufferSize:
+    # whiteList 以英文,分割  
+    whiteList:
+    # blackList 以英文,分割
+    blackList:
   route:
     load-nacos: true #是否从配置中心同步路由规则
-  blacklist:
-    enable: false
-    ip:
-      - 100.100.100.100
-      - 127.127.127.127
   # 前缀转发路由
   budwk:
     filter: nacos-prefix #前缀转发路由模式
