@@ -132,6 +132,47 @@
             </el-row>
 
             <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" >
+            <el-table-column type="selection" width="50" fixed="left"/>
+            <el-table-column type="expand" fixed="left">
+                <template #default="scope">
+                    <el-row class="expand-row">
+                        <el-col :span="5" :xs="24">
+                            职务: {{ scope.row.postId }}
+                        </el-col>
+                        <el-col :span="5" :xs="24">
+                            Email: {{ scope.row.email }}
+                        </el-col>
+                        <el-col :span="5" :xs="24">
+                            登录时间: {{ formatTime(scope.row.loginAt)  }}
+                        </el-col>
+                        <el-col :span="5" :xs="24">
+                            登录IP: {{ scope.row.loginIp }}
+                        </el-col>
+                    </el-row>
+                    <el-row class="expand-row">
+                        <el-col :span="5" :xs="24">
+                            创建人: <span v-if="scope.row.createdByUser">{{
+                          scope.row.createdByUser.loginname
+                        }}({{
+                          scope.row.createdByUser.username
+                        }})</span>
+                        </el-col>
+                        <el-col :span="5" :xs="24">
+                            创建时间: {{ formatTime(scope.row.createdAt)  }}
+                        </el-col>
+                        <el-col :span="5" :xs="24">
+                            修改人: <span v-if="scope.row.updatedByUser">{{
+                          scope.row.updatedByUser.loginname
+                        }}({{
+                          scope.row.updatedByUser.username
+                        }})</span>
+                        </el-col>
+                        <el-col :span="5" :xs="24">
+                            修改时间: {{ formatTime(scope.row.updatedAt)  }}
+                        </el-col>
+                    </el-row>
+                </template>
+            </el-table-column>    
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="false" :width="item.prop == 'createdAt'?'160':'110'">
@@ -140,6 +181,10 @@
                     </template>
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
+                    </template>
+                    <template v-if="item.prop == 'mobile'" #default="scope">
+                        <span>{{ hiddenMobile(scope.row.mobile) }}</span>
+                        <view style="width: 1rem;height:1rem;"/>
                     </template>
                     <template v-if="item.prop == 'disabled'" #default="scope">
                         <el-switch
@@ -180,7 +225,7 @@ import modal from '/@/utils/modal'
 import { getUnitList, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
-import { handleTree } from '/@/utils/common'
+import { formatTime, handleTree, hiddenMobile } from '/@/utils/common'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -234,7 +279,6 @@ const columns = ref([
     { prop: 'loginname', label: `用户名`, show: true, fixed: false },
     { prop: 'serialNo', label: `用户编号`, show: true, fixed: false },
     { prop: 'unit', label: `所属单位`, show: true, fixed: false },
-    { prop: 'postId', label: `职务`, show: true, fixed: false },
     { prop: 'mobile', label: `手机号`, show: true, fixed: false },
     { prop: 'disabled', label: `用户状态`, show: true, fixed: false },
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
@@ -322,3 +366,8 @@ export default{
     meta:
       layout: platform/index
 </route>
+<style scoped>
+.expand-row {
+    padding: 5px 0 5px 20px;
+}
+</style>

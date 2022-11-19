@@ -373,22 +373,22 @@ export const handleTree = (data: any, lazy=false, id='id', parentId='parentId', 
     for (const d of data) {
         const parentId = d[config.parentId];
         if (childrenListMap[parentId] == null) {
-            childrenListMap[parentId] = [];
+            childrenListMap[parentId] = []
         }
         if(!config.lazy){
             d.hasChildren = undefined
         }
         nodeIds[d[config.id]] = d;
-        childrenListMap[parentId].push(d);
+        childrenListMap[parentId].push(d)
     }
   
     for (const d of data) {
-        const parentId = d[config.parentId];
+        const parentId = d[config.parentId]
         if (nodeIds[parentId] == null) {
             if(!config.lazy){
                 d.hasChildren = undefined
             }
-            tree.push(d);
+            tree.push(d)
         }
     }
   
@@ -398,11 +398,11 @@ export const handleTree = (data: any, lazy=false, id='id', parentId='parentId', 
   
     function adaptToChildrenList(o: any) {
         if (childrenListMap[o[config.id]] !== null) {
-            o[config.childrenList] = childrenListMap[o[config.id]];
+            o[config.childrenList] = childrenListMap[o[config.id]]
         }
         if (o[config.childrenList]) {
             for (const c of o[config.childrenList]) {
-                adaptToChildrenList(c);
+                adaptToChildrenList(c)
             }
         }
     }
@@ -450,13 +450,36 @@ export const handleTreeWithPath = (data: any, children='children') => {
 
     function adaptToChildrenList(o: any) {
         if (childrenListMap[o['path']] !== null) {
-            o[config.childrenList] = childrenListMap[o['path']];
+            o[config.childrenList] = childrenListMap[o['path']]
         }
         if (o[config.childrenList]) {
             for (const c of o[config.childrenList]) {
-                adaptToChildrenList(c);
+                adaptToChildrenList(c)
             }
         }
     }
     return tree;
+}
+
+// 添加日期范围
+export const addDateRange = (params: any, dateRange: any, propName: string) => {
+    const search = params
+    search.params = typeof (search.params) === 'object' && search.params !== null && !Array.isArray(search.params) ? search.params : {}
+    dateRange = Array.isArray(dateRange) ? dateRange : []
+    if (typeof (propName) === 'undefined') {
+        search.params['beginTime'] = dateRange[0]
+        search.params['endTime'] = dateRange[1]
+    } else {
+        search.params['begin' + propName] = dateRange[0]
+        search.params['end' + propName] = dateRange[1]
+    }
+    return search
+}
+
+// 隐藏手机号中间数字
+export const hiddenMobile = (mobile: string) => {
+    if(mobile && mobile.length == 11) {
+        return mobile.substring(0,3) + "****" + mobile.substring(8,11)
+    }
+    return mobile
 }
