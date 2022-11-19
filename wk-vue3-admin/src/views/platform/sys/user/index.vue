@@ -67,11 +67,11 @@
                <el-form-item label="创建时间" prop="dateRange" style="font-weight:700;width: 325px;">
                   <el-date-picker
                      v-model="dateRange"
-                     value-format="YYYY-MM-DD"
                      type="daterange"
                      range-separator="-"
                      start-placeholder="开始日期"
                      end-placeholder="结束日期"
+                     value-format="x"
                   ></el-date-picker>
                </el-form-item>
                <el-form-item>
@@ -86,8 +86,8 @@
                      type="primary"
                      plain
                      icon="Plus"
-                     @click="handleAdd"
-                     v-hasPermi="['system:user:add']"
+                     @click="handleCreate"
+                     v-permission="['sys.manage.user.create']"
                   >新增</el-button>
                </el-col>
                <el-col :span="1.5">
@@ -97,7 +97,7 @@
                      icon="Edit"
                      :disabled="single"
                      @click="handleUpdate"
-                     v-hasPermi="['system:user:edit']"
+                     v-permission="['sys.manage.user.update']"
                   >修改</el-button>
                </el-col>
                <el-col :span="1.5">
@@ -107,7 +107,7 @@
                      icon="Delete"
                      :disabled="multiple"
                      @click="handleDelete"
-                     v-hasPermi="['system:user:remove']"
+                     v-permission="['sys.manage.user.delete']"
                   >删除</el-button>
                </el-col>
                <el-col :span="1.5">
@@ -116,7 +116,7 @@
                      plain
                      icon="Upload"
                      @click="handleImport"
-                     v-hasPermi="['system:user:import']"
+                     v-permission="['sys.manage.user.update']"
                   >导入</el-button>
                </el-col>
                <el-col :span="1.5">
@@ -125,7 +125,7 @@
                      plain
                      icon="Download"
                      @click="handleExport"
-                     v-hasPermi="['system:user:export']"
+                     v-permission="['sys.manage.user.export']"
                   >导出</el-button>
                </el-col>
                <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns" @quickSearch="quickSearch" />
@@ -225,7 +225,7 @@ import modal from '/@/utils/modal'
 import { getUnitList, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
-import { formatTime, handleTree, hiddenMobile } from '/@/utils/common'
+import { formatTime, handleTree, hiddenMobile, addDateRange } from '/@/utils/common'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -236,6 +236,8 @@ const showCreate = ref(false)
 const showUpdate = ref(false)
 const showSearch = ref(true)
 const showTable = ref(true)
+const single = ref(true)
+const multiple = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 const unitOptions = ref([])
@@ -244,9 +246,11 @@ const dateRange = ref([])
 const data = reactive({
     formData: {
         id: '',
-        name: '',
-        code: '',
-        location: 0,
+        username: '',
+        loginname: '',
+        password: '',
+        email: '',
+        mobile: '',
     },
     queryUnit: {
         name: ''
@@ -284,6 +288,19 @@ const columns = ref([
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
 ])
 
+// 重置表单
+const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
+    formData.value = {
+        id: '',
+        username: '',
+        loginname: '',
+        password: '',
+        email: '',
+        mobile: '',
+    }
+    formEl?.resetFields()
+}
+
 // 通过条件过滤节点
 const filterNode = (value: any, data: any) => {
     if (!value) return true
@@ -306,6 +323,7 @@ const getUnitTree = () => {
 // 查询表格
 const list = () => {
     tableLoading.value = true
+    addDateRange(queryParams.value, dateRange.value)
     getList(queryParams.value).then((res) => {
         tableLoading.value = false
         tableData.value = res.data.list as never
@@ -345,6 +363,71 @@ const disabledChange = (row: any) => {
     })
 }
 
+
+// 新增按钮
+const handleCreate = (row: any) => {
+    resetForm(createRef.value)
+    showCreate.value = true
+}
+
+// 修改按钮
+const handleUpdate = (row: any) => {
+    getInfo(row.id).then((res: any) => {
+        formData.value = res.data
+        showUpdate.value = true
+    })
+}
+
+// 删除按钮
+const handleDelete = (row: any) => {
+    modal.confirm('确定删除 '+ row.username + '？').then(() => {
+        return doDelete(row.id)
+    }).then(() => {
+        queryParams.value.pageNo = 1
+        list()
+        modal.msgSuccess('删除成功')
+    }).catch(() => { })
+}
+
+// 导入
+const handleImport = () => {
+    
+}
+
+// 导出
+const handleExport = () => {
+    
+}
+
+// 提交新增
+const create = () => {
+    if (!createRef.value) return
+    createRef.value.validate((valid) => {
+        if (valid) {
+            doCreate(formData.value).then((res: any) => {
+                modal.msgSuccess(res.msg)
+                showCreate.value = false
+                queryParams.value.pageNo = 1
+                list()
+            })
+        }
+    })
+}
+
+// 提交修改
+const update = () => {
+    if (!updateRef.value) return
+    updateRef.value.validate((valid) => {
+        if (valid) {
+            doUpdate(formData.value).then((res: any) => {
+                modal.msgSuccess(res.msg)
+                showUpdate.value = false
+                list()
+            })
+        }
+    })
+}
+
 // 筛选单位
 watch(queryUnit.value, val => {
     unitTreeRef.value?.filter(val.name)
@@ -368,6 +451,6 @@ export default{
 </route>
 <style scoped>
 .expand-row {
-    padding: 5px 0 5px 20px;
+    padding: 5px 0 8px 20px;
 }
 </style>

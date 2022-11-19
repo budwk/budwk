@@ -165,14 +165,20 @@ public class SysUserController {
     }
 
     @At("/list")
-    @Ok("json:{locked:'password|salt',ignoreNull:false}")
+    @Ok("json:{locked:'^(password|salt)$',ignoreNull:false}")
     @POST
     @ApiOperation(name = "获取用户列表")
     @ApiFormParams(
             {
                     @ApiFormParam(name = "unitPath", example = "", description = "单位PATH"),
                     @ApiFormParam(name = "postId", example = "", description = "职务ID"),
+                    @ApiFormParam(name = "username", example = "", description = "用户姓名"),
+                    @ApiFormParam(name = "loginname", example = "", description = "用户名"),
+                    @ApiFormParam(name = "mobile", example = "", description = "手机号码"),
+                    @ApiFormParam(name = "disabled", example = "", description = "用户状态",type = "boolean"),
                     @ApiFormParam(name = "query", example = "", description = "查询关键词"),
+                    @ApiFormParam(name = "beginTime", example = "", description = "开始时间"),
+                    @ApiFormParam(name = "endTime", example = "", description = "结束时间"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
@@ -183,13 +189,19 @@ public class SysUserController {
             implementation = Pagination.class
     )
     @SaCheckPermission("sys.manage.user")
-    public Result<?> list(@Param("unitPath") String unitPath, @Param("postId") String postId, @Param("query") String query, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Result<?> list(@Param("disabled") Boolean disabled,@Param("mobile") String mobile,@Param("unitPath") String unitPath, @Param("postId") String postId,@Param("username") String username,@Param("loginname") String loginname, @Param("query") String query, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         Cnd cnd = Cnd.NEW();
         if (Strings.isNotBlank(unitPath)) {
             cnd.and("unitPath", "like", unitPath + "%");
         }
         if (Strings.isNotBlank(postId)) {
             cnd.and("postId", "=", postId);
+        }
+        if (Strings.isNotBlank(username)) {
+            cnd.and("username", "like", "%"+username+"%");
+        }
+        if (Strings.isNotBlank(loginname)) {
+            cnd.and("loginname", "like", "%"+loginname+"%");
         }
         if (Strings.isNotBlank(query)) {
             cnd.and(Cnd.exps("loginname", "like", "%" + query + "%").or("username", "like", "%" + query + "%")

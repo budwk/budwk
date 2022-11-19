@@ -461,19 +461,22 @@ export const handleTreeWithPath = (data: any, children='children') => {
     return tree;
 }
 
-// 添加日期范围
-export const addDateRange = (params: any, dateRange: any, propName: string) => {
-    const search = params
-    search.params = typeof (search.params) === 'object' && search.params !== null && !Array.isArray(search.params) ? search.params : {}
+/**
+ * 添加日期范围 YYYY-MM-DD 00:00:00.000 时间戳至 YYYY-MM-DD 23:59:59.999
+ * @param {*} params 传参对象
+ * @param {*} dateRange 日期范围（时间戳，结束时间会 -1ms）
+ * @param {*} propName 字段名后缀
+ */
+export const addDateRange = (params: any, dateRange: any, propName = undefined) => {
     dateRange = Array.isArray(dateRange) ? dateRange : []
     if (typeof (propName) === 'undefined') {
-        search.params['beginTime'] = dateRange[0]
-        search.params['endTime'] = dateRange[1]
+        params['beginTime'] = dateRange[0]
+        params['endTime'] = dateRange[1] - 1
     } else {
-        search.params['begin' + propName] = dateRange[0]
-        search.params['end' + propName] = dateRange[1]
+        params['begin' + propName] = dateRange[0]
+        params['end' + propName] = dateRange[1] - 1
     }
-    return search
+    console.log(params)
 }
 
 // 隐藏手机号中间数字
