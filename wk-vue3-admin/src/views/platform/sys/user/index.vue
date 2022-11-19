@@ -256,7 +256,7 @@ const data = reactive({
         name: ''
     },
     queryParams: {
-        unitId: '',
+        unitPath: '',
         username: '',
         loginname: '',
         mobile: '',
@@ -309,7 +309,7 @@ const filterNode = (value: any, data: any) => {
 
 // 点击单位
 const handleNodeClick = (data: any) =>{
-    queryParams.value.unitId = data.id
+    queryParams.value.unitPath = data.path
     list()
 }
 

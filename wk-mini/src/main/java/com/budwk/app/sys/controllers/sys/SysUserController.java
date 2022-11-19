@@ -175,10 +175,10 @@ public class SysUserController {
                     @ApiFormParam(name = "username", example = "", description = "用户姓名"),
                     @ApiFormParam(name = "loginname", example = "", description = "用户名"),
                     @ApiFormParam(name = "mobile", example = "", description = "手机号码"),
-                    @ApiFormParam(name = "disabled", example = "", description = "用户状态",type = "boolean"),
+                    @ApiFormParam(name = "disabled", example = "", description = "用户状态", type = "boolean"),
                     @ApiFormParam(name = "query", example = "", description = "查询关键词"),
-                    @ApiFormParam(name = "beginTime", example = "", description = "开始时间"),
-                    @ApiFormParam(name = "endTime", example = "", description = "结束时间"),
+                    @ApiFormParam(name = "beginTime", example = "", description = "开始时间", type = "long"),
+                    @ApiFormParam(name = "endTime", example = "", description = "结束时间", type = "long"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
@@ -189,7 +189,7 @@ public class SysUserController {
             implementation = Pagination.class
     )
     @SaCheckPermission("sys.manage.user")
-    public Result<?> list(@Param("disabled") Boolean disabled,@Param("mobile") String mobile,@Param("unitPath") String unitPath, @Param("postId") String postId,@Param("username") String username,@Param("loginname") String loginname, @Param("query") String query, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Result<?> list(@Param("beginTime") Long beginTime, @Param("endTime") Long endTime, @Param("disabled") Boolean disabled, @Param("mobile") String mobile, @Param("unitPath") String unitPath, @Param("postId") String postId, @Param("username") String username, @Param("loginname") String loginname, @Param("query") String query, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         Cnd cnd = Cnd.NEW();
         if (Strings.isNotBlank(unitPath)) {
             cnd.and("unitPath", "like", unitPath + "%");
@@ -198,10 +198,20 @@ public class SysUserController {
             cnd.and("postId", "=", postId);
         }
         if (Strings.isNotBlank(username)) {
-            cnd.and("username", "like", "%"+username+"%");
+            cnd.and("username", "like", "%" + username + "%");
         }
         if (Strings.isNotBlank(loginname)) {
-            cnd.and("loginname", "like", "%"+loginname+"%");
+            cnd.and("loginname", "like", "%" + loginname + "%");
+        }
+        if (Strings.isNotBlank(mobile)) {
+            cnd.and("mobile", "like", "%" + mobile + "%");
+        }
+        if (beginTime != null && endTime != null) {
+            cnd.and("createdAt", ">=", beginTime);
+            cnd.and("createdAt", "<=", endTime);
+        }
+        if (disabled != null) {
+            cnd.and("disabled", "=", disabled);
         }
         if (Strings.isNotBlank(query)) {
             cnd.and(Cnd.exps("loginname", "like", "%" + query + "%").or("username", "like", "%" + query + "%")
@@ -240,7 +250,7 @@ public class SysUserController {
     @ApiResponses
     public Result<?> group(@Param("unitId") String unitId, HttpServletRequest req) {
         return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
-                sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
+                        sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
                 // 排除public角色,公共角色无需分配即可拥有
                 Cnd.where("code", "<>", "public")));
     }
@@ -310,7 +320,7 @@ public class SysUserController {
         if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
             return Result.error("邮箱已存在");
         }
-        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(Strings.trim(user.getLoginname()))) {
+        if (user.isDisabled() && GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(Strings.trim(user.getLoginname()))) {
             return Result.error("超级管理员不可禁用");
         }
         user.setUpdatedBy(SecurityUtil.getUserId());

@@ -162,10 +162,10 @@ public class SysAppController {
     )
     @ApiResponses
     public Result<?> changeDisabled(@Param("id") String id, @Param("disabled") boolean disabled, HttpServletRequest req) {
-        if (disabled && GlobalConstant.DEFAULT_COMMON_APPID.equalsIgnoreCase(id)) {
+        if (GlobalConstant.DEFAULT_COMMON_APPID.equalsIgnoreCase(id)) {
             return Result.error("COMMON 应用不可禁用");
         }
-        if (disabled && GlobalConstant.DEFAULT_PLATFORM_APPID.equalsIgnoreCase(id)) {
+        if (GlobalConstant.DEFAULT_PLATFORM_APPID.equalsIgnoreCase(id)) {
             return Result.error("PLATFORM 应用不可禁用");
         }
         int res = sysAppService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
