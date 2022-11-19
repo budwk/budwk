@@ -468,6 +468,9 @@ export const handleTreeWithPath = (data: any, children='children') => {
  * @param {*} propName 字段名后缀
  */
 export const addDateRange = (params: any, dateRange: any, propName = undefined) => {
+    if(typeof (params) === 'undefined' || typeof (params) !== 'object'){
+        return
+    }
     dateRange = Array.isArray(dateRange) ? dateRange : []
     if (typeof (propName) === 'undefined') {
         params['beginTime'] = dateRange[0]
@@ -476,13 +479,12 @@ export const addDateRange = (params: any, dateRange: any, propName = undefined) 
         params['begin' + propName] = dateRange[0]
         params['end' + propName] = dateRange[1] - 1
     }
-    console.log(params)
 }
 
 // 隐藏手机号中间数字
 export const hiddenMobile = (mobile: string) => {
     if(mobile && mobile.length == 11) {
-        return mobile.substring(0,3) + "****" + mobile.substring(8,11)
+        return mobile.substring(0,3) + "****" + mobile.substring(7,11)
     }
     return mobile
 }

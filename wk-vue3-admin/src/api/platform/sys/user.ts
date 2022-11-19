@@ -31,7 +31,7 @@ export function getList(data: object) {
     })
 }
 
-export function getPost() {
+export function getPostList() {
     return request({
         url: API_SYS_USER_POST,
         method: 'GET'

@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
       <el-row :gutter="20">
-        <el-col :span="4" :xs="24">
+        <el-col :span="4">
             <div class="head-container">
                <el-input
                   v-model="queryUnit.name"
@@ -24,7 +24,7 @@
                />
             </div>
         </el-col>
-        <el-col :span="20" :xs="24">
+        <el-col :span="20">
             <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
                 <el-form-item label="用户姓名" prop="username">
                   <el-input
@@ -135,39 +135,39 @@
             <el-table-column type="selection" width="50" fixed="left"/>
             <el-table-column type="expand" fixed="left">
                 <template #default="scope">
-                    <el-row class="expand-row">
-                        <el-col :span="5" :xs="24">
-                            职务: {{ scope.row.postId }}
+                    <el-row class="expand-row" :gutter="5">
+                        <el-col :span="5">
+                            职务: {{ findPostName(scope.row.postId) }}
                         </el-col>
-                        <el-col :span="5" :xs="24">
+                        <el-col :span="5">
                             Email: {{ scope.row.email }}
                         </el-col>
-                        <el-col :span="5" :xs="24">
+                        <el-col :span="5">
                             登录时间: {{ formatTime(scope.row.loginAt)  }}
                         </el-col>
-                        <el-col :span="5" :xs="24">
+                        <el-col :span="5">
                             登录IP: {{ scope.row.loginIp }}
                         </el-col>
                     </el-row>
-                    <el-row class="expand-row">
-                        <el-col :span="5" :xs="24">
+                    <el-row class="expand-row" :gutter="5">
+                        <el-col :span="5">
                             创建人: <span v-if="scope.row.createdByUser">{{
                           scope.row.createdByUser.loginname
                         }}({{
                           scope.row.createdByUser.username
                         }})</span>
                         </el-col>
-                        <el-col :span="5" :xs="24">
+                        <el-col :span="5">
                             创建时间: {{ formatTime(scope.row.createdAt)  }}
                         </el-col>
-                        <el-col :span="5" :xs="24">
+                        <el-col :span="5">
                             修改人: <span v-if="scope.row.updatedByUser">{{
                           scope.row.updatedByUser.loginname
                         }}({{
                           scope.row.updatedByUser.username
                         }})</span>
                         </el-col>
-                        <el-col :span="5" :xs="24">
+                        <el-col :span="6">
                             修改时间: {{ formatTime(scope.row.updatedAt)  }}
                         </el-col>
                     </el-row>
@@ -222,7 +222,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
+import { getUnitList, getPostList, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
 import { formatTime, handleTree, hiddenMobile, addDateRange } from '/@/utils/common'
@@ -320,6 +320,19 @@ const getUnitTree = () => {
     })
 }
 
+// 获取职务
+const getPost = () => {
+    getPostList().then((res)=>{
+        posts.value = res.data as never
+    })
+}
+
+// 获取职务名称
+const findPostName = (id: string) => {
+    const index = posts.value.findIndex((obj: any) => obj.id === id)
+    return index >= 0 ? posts.value[index]['name'] : ''
+}
+
 // 查询表格
 const list = () => {
     tableLoading.value = true
@@ -347,6 +360,7 @@ const handleSearch = () => {
 
 // 重置搜索
 const resetSearch = () => {
+    dateRange.value = []
     queryRef.value?.resetFields()
     list()
 }
@@ -435,6 +449,7 @@ watch(queryUnit.value, val => {
 
 onMounted(()=>{
     getUnitTree()
+    getPost()
     list()
 })
 </script>
