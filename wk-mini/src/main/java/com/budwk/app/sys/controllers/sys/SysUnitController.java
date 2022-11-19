@@ -52,7 +52,7 @@ public class SysUnitController {
     @ApiOperation(name = "Vue3树形列表查询")
     @ApiFormParams(
             {
-                    @ApiFormParam(name = "name", example = "", description = "用户名"),
+                    @ApiFormParam(name = "name", example = "", description = "单位名称"),
                     @ApiFormParam(name = "leaderName", example = "", description = "部门负责人")
             }
     )

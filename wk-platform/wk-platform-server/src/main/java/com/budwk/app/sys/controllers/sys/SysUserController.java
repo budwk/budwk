@@ -60,10 +60,39 @@ public class SysUserController {
     @Inject
     private SysGroupService sysGroupService;
 
+    @At("/unitlist")
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3树形列表查询")
+    @ApiFormParams(
+            {
+                    @ApiFormParam(name = "name", example = "", description = "用户名")
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckPermission("sys.manage.user")
+    public Result<?> getUnitList(
+            @Param("name") String name) {
+        Cnd cnd = Cnd.NEW();
+        // 非管理员显示所属单位及下级单位
+        if (!StpUtil.hasRole(GlobalConstant.DEFAULT_SYSADMIN_ROLECODE)) {
+            Sys_unit unit = sysUnitService.fetch(SecurityUtil.getUnitId());
+            cnd.and("path", "like", unit.getPath() + "%");
+        }
+        if (Strings.isNotBlank(name)) {
+            cnd.and("name", "like", "%" + name + "%");
+        }
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(sysUnitService.query(cnd));
+    }
+
     @At("/unit")
     @Ok("json")
     @GET
-    @ApiOperation(name = "获取单位树数据")
+    @ApiOperation(name = "Vue2获取单位树数据")
     @ApiImplicitParams
     @ApiResponses
     @SaCheckPermission("sys.manage.user")
@@ -198,15 +227,15 @@ public class SysUserController {
     )
     @ApiResponses
     public Result<?> group(@Param("unitId") String unitId, HttpServletRequest req) {
-        if (StpUtil.hasPermission("sys.manage.role.system")){
+        if (StpUtil.hasPermission("sys.manage.role.system")) {
             //有系统公用权限可分配公用角色
             return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
-                    sysUnitService.getMasterCompanyId(unitId)).or("unitid","=","").asc("createdAt"), "roles",
+                            sysUnitService.getMasterCompanyId(unitId)).or("unitid", "=", "").asc("createdAt"), "roles",
                     // 排除public角色,公共角色无需分配即可拥有
                     Cnd.where("code", "<>", "public")));
-        }else {
+        } else {
             return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
-                    sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
+                            sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
                     // 排除public角色,公共角色无需分配即可拥有
                     Cnd.where("code", "<>", "public")));
         }
@@ -277,6 +306,9 @@ public class SysUserController {
         if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
             return Result.error("邮箱已存在");
         }
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(Strings.trim(user.getLoginname()))) {
+            return Result.error("超级管理员不可禁用");
+        }
         user.setUpdatedBy(SecurityUtil.getUserId());
         sysUserService.update(user, roleIds);
         return Result.success();
@@ -338,6 +370,9 @@ public class SysUserController {
     )
     @ApiResponses
     public Result<?> changeDisabled(@Param("id") String id, @Param("loginname") String loginname, @Param("disabled") boolean disabled, HttpServletRequest req) {
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(loginname)) {
+            return Result.error("超级管理员不可禁用");
+        }
         int res = sysUserService.update(Chain.make("disabled", disabled), Cnd.where("id", "=", id));
         sysUserService.cacheRemove(id);
         if (res > 0) {

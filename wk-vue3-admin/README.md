@@ -2,6 +2,7 @@
 
 ## dev
 `npm install pnpm`
+
 `pnpm run dev`
 
 ## build

@@ -17,9 +17,10 @@ import RightToolbar from '/@/components/RightToolbar/index.vue'
 // 分页组件
 import Pagination from '/@/components/Pagination/index.vue'
 import Cookies from 'js-cookie'
-import 'default-passive-events'
-
-
+// 纠结 import 'default-passive-events' 
+// 加了有的组件报错 Unable to preventDefault inside passive event listener invocation.
+// 不加控制台则提示 [Violation] Added non-passive event listener to a scroll-blocking 'wheel' event. Consider marking event handler as 'passive' to make the page more responsive. 
+    
 async function start() {
     const app = createApp(App)
 
