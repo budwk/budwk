@@ -483,8 +483,13 @@ export const addDateRange = (params: any, dateRange: any, propName = undefined) 
 
 // 隐藏手机号中间数字
 export const hiddenMobile = (mobile: string) => {
-    if(mobile && mobile.length == 11) {
+    if(mobile && isMobile(mobile) ) {
         return mobile.substring(0,3) + "****" + mobile.substring(7,11)
     }
     return mobile
+}
+
+// 是否手机号
+export const isMobile = (mobile: string) => {
+    return /^(1[3-9])\d{9}$/.test(mobile)
 }

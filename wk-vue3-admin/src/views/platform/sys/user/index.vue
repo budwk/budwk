@@ -182,6 +182,10 @@
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
+                    <template v-if="item.prop == 'loginname'" #default="scope">
+                        <span>{{ hiddenMobile(scope.row.loginname) }}</span>
+                        <view style="width: 1rem;height:1rem;"/>
+                    </template>
                     <template v-if="item.prop == 'mobile'" #default="scope">
                         <span>{{ hiddenMobile(scope.row.mobile) }}</span>
                         <view style="width: 1rem;height:1rem;"/>
@@ -225,7 +229,7 @@ import modal from '/@/utils/modal'
 import { getUnitList, getPostList, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
-import { formatTime, handleTree, hiddenMobile, addDateRange } from '/@/utils/common'
+import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()

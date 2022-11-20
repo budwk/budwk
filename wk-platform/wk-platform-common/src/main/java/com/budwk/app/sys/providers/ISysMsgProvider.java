@@ -10,6 +10,14 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 public interface ISysMsgProvider {
+    /**
+     * 向指定token发送通知消息(不入库,仅通过ws通知)
+     *
+     * @param userId 用户ID
+     * @param token  token值
+     * @param msg    消息内容
+     */
+    void wsSendMsg(String userId, String token, String msg);
 
     /**
      * 发送通知消息(不入库,仅通过ws通知)

@@ -2,6 +2,7 @@ package com.budwk.app.ucenter.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.app.sys.models.Sys_user;
+import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.app.sys.providers.ISysUserProvider;
 import com.budwk.app.ucenter.services.AuthService;
 import com.budwk.app.ucenter.services.ValidateService;
@@ -37,7 +38,10 @@ public class AuthServiceImpl implements AuthService {
 
     public Sys_user loginByPassword(String loginname, String password,
                                     String key, String code) throws BaseException {
-        validateService.checkCode(key, code);
+        Sys_user_security security = sysUserProvider.getUserSecurity();
+        if (security != null && security.getCaptchaHasEnabled() != null && security.getCaptchaHasEnabled()) {
+            validateService.checkCode(key, code);
+        }
         return sysUserProvider.loginByPassword(loginname, password);
     }
 
@@ -46,44 +50,70 @@ public class AuthServiceImpl implements AuthService {
         return sysUserProvider.loginByMobile(mobile);
     }
 
-    public void checkLoginname(String loginname, String ip) throws BaseException {
-        int count = Integer.parseInt(Strings.sNull(redisService.get(RedisConstant.PRE + "checkLoginname:" + ip), "0"));
-        if (count > CHECK_COUNT - 1) {
-            long ttl = redisService.ttl(RedisConstant.PRE + "checkLoginname:" + ip);
-            long m = ttl / 60;
-            long s = ttl % 60;
-            throw new BaseException(String.format("您的IP已被锁定，请%s分钟%s秒后重试", m, s));
-        }
-        try {
+    public void checkLoginname(String loginname, String ip, boolean nameRetryLock, int nameRetryNum, int nameTimeout) throws BaseException {
+        if (nameRetryLock) {
+            int count = Integer.parseInt(Strings.sNull(redisService.get(RedisConstant.PRE + "checkLoginname:" + ip), "0"));
+            if (count > nameRetryNum - 1) {
+                long ttl = redisService.ttl(RedisConstant.PRE + "checkLoginname:" + ip);
+                long m = ttl / 60;
+                long s = ttl % 60;
+                throw new BaseException(String.format("您的IP已被锁定，请%s分钟%s秒后重试", m, s));
+            }
+            try {
+                sysUserProvider.checkLoginname(loginname);
+            } catch (BaseException baseException) {
+                if (baseException.getMessage().equals("用户名不存在")) {
+                    redisService.setex(RedisConstant.PRE + "checkLoginname:" + ip, nameTimeout, String.valueOf(++count));
+                }
+                throw baseException;
+            }
+        } else {
             sysUserProvider.checkLoginname(loginname);
-        } catch (BaseException baseException) {
-            if (baseException.getMessage().equals("用户名不存在")) {
-                redisService.setex(RedisConstant.PRE + "checkLoginname:" + ip, CHECK_WAIT_TIME, String.valueOf(++count));
-            }
-            throw baseException;
         }
     }
 
-    public void checkMobile(String mobile, String ip) throws BaseException {
-        int count = Integer.parseInt(Strings.sNull(redisService.get(RedisConstant.PRE + "checkMobile:" + ip), "0"));
-        if (count > CHECK_COUNT - 1) {
-            long ttl = redisService.ttl(RedisConstant.PRE + "checkMobile:" + ip);
-            long m = ttl / 60;
-            long s = ttl % 60;
-            throw new BaseException(String.format("您的IP已被锁定，请%s分钟%s秒后重试", m, s));
-        }
-        try {
+    public void checkMobile(String mobile, String ip, boolean nameRetryLock, int nameRetryNum, int nameTimeout) throws BaseException {
+        if (nameRetryLock) {
+            int count = Integer.parseInt(Strings.sNull(redisService.get(RedisConstant.PRE + "checkMobile:" + ip), "0"));
+            if (count > nameRetryNum - 1) {
+                long ttl = redisService.ttl(RedisConstant.PRE + "checkMobile:" + ip);
+                long m = ttl / 60;
+                long s = ttl % 60;
+                throw new BaseException(String.format("您的IP已被锁定，请%s分钟%s秒后重试", m, s));
+            }
+            try {
+                sysUserProvider.checkMobile(mobile);
+            } catch (BaseException baseException) {
+                if (baseException.getMessage().equals("手机号不存在")) {
+                    redisService.setex(RedisConstant.PRE + "checkMobile:" + ip, nameTimeout, String.valueOf(++count));
+                }
+                throw baseException;
+            }
+        } else {
             sysUserProvider.checkMobile(mobile);
-        } catch (BaseException baseException) {
-            if (baseException.getMessage().equals("手机号不存在")) {
-                redisService.setex(RedisConstant.PRE + "checkMobile:" + ip, CHECK_WAIT_TIME, String.valueOf(++count));
-            }
-            throw baseException;
         }
     }
 
-    public Sys_user getUserByLoginname(String loginname) throws BaseException {
-        return sysUserProvider.getUserByLoginname(loginname);
+    public Sys_user getUserByLoginname(String loginname, String ip, boolean nameRetryLock, int nameRetryNum, int nameTimeout) throws BaseException {
+        if (nameRetryLock) {
+            int count = Integer.parseInt(Strings.sNull(redisService.get(RedisConstant.PRE + "getUserByLoginname:" + ip), "0"));
+            if (count > nameRetryNum - 1) {
+                long ttl = redisService.ttl(RedisConstant.PRE + "getUserByLoginname:" + ip);
+                long m = ttl / 60;
+                long s = ttl % 60;
+                throw new BaseException(String.format("您的IP已被锁定，请%s分钟%s秒后重试", m, s));
+            }
+            try {
+                return sysUserProvider.getUserByLoginname(loginname);
+            } catch (BaseException baseException) {
+                if (baseException.getMessage().equals("用户不存在")) {
+                    redisService.setex(RedisConstant.PRE + "getUserByLoginname:" + ip, nameTimeout, String.valueOf(++count));
+                }
+                throw baseException;
+            }
+        } else {
+            return sysUserProvider.getUserByLoginname(loginname);
+        }
     }
 
     public Sys_user getUserById(String id) throws BaseException {

@@ -165,13 +165,6 @@ public class WkMiniLauncher {
                 conf.setConfigValue("false");
                 conf.setNote("是否演示环境");
                 dao.insert(conf);
-                conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
-                conf.setType(SysConfigType.BOOL);
-                conf.setConfigKey("AppPwdCheck");
-                conf.setConfigValue("true");
-                conf.setNote("是否启用弱密码检查");
-                dao.insert(conf);
 
                 Sys_app sysApp = new Sys_app();
                 sysApp.setName("系统公用");

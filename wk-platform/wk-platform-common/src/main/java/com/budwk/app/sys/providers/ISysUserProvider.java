@@ -3,6 +3,7 @@ package com.budwk.app.sys.providers;
 import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_menu;
 import com.budwk.app.sys.models.Sys_user;
+import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.starter.common.exception.BaseException;
 
 import java.util.List;
@@ -13,6 +14,13 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 public interface ISysUserProvider {
+
+    /**
+     * 获取账户安全配置信息
+     *
+     * @return
+     */
+    Sys_user_security getUserSecurity();
 
     /**
      * 获取用户权限列表
@@ -68,6 +76,14 @@ public interface ISysUserProvider {
      * @param mobile 手机号码
      */
     void checkMobile(String mobile) throws BaseException;
+
+    /**
+     * 检查密码是否过期
+     *
+     * @param userId     用户ID
+     * @param pwdResetAt 密码重置时间
+     */
+    void checkPwdTimeout(String userId, Long pwdResetAt) throws BaseException;
 
     /**
      * 通过用户名和密码获取用户信息

@@ -154,13 +154,6 @@ public class WkPlatformLauncher {
                 conf.setConfigValue("false");
                 conf.setNote("是否演示环境");
                 dao.insert(conf);
-                conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
-                conf.setType(SysConfigType.BOOL);
-                conf.setConfigKey("AppSessionOnlyOne");
-                conf.setConfigValue("true");
-                conf.setNote("是否启用用户单一登录(踢其他会话下线)");
-                dao.insert(conf);
 
                 Sys_app sysApp = new Sys_app();
                 sysApp.setName("系统公用");
