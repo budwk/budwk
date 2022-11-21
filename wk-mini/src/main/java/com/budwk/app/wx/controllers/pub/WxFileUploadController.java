@@ -3,8 +3,7 @@ package com.budwk.app.wx.controllers.pub;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.app.sys.providers.ISysConfigProvider;
+import com.budwk.app.sys.services.SysConfigService;
 import com.budwk.app.wx.commons.service.WxService;
 import com.budwk.app.wx.services.WxConfigService;
 import com.budwk.starter.common.openapi.annotation.*;
@@ -49,8 +48,7 @@ public class WxFileUploadController {
     @Inject
     private PropertiesProxy conf;
     @Inject
-    @Reference(check = false)
-    private ISysConfigProvider sysConfigProvider;
+    private SysConfigService sysConfigService;
 
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:imageUpload"})
     @POST
@@ -130,7 +128,7 @@ public class WxFileUploadController {
                     return Result.error(resp.errmsg());
                 }
                 String suffixName = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().lastIndexOf(".")).toLowerCase();
-                String filePath = sysConfigProvider.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
+                String filePath = sysConfigService.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 String fileName = R.UU32() + suffixName;
                 String url = filePath + fileName;
                 storageServer.upload(tf.getInputStream(), fileName, filePath);
@@ -181,7 +179,7 @@ public class WxFileUploadController {
                     return Result.error(resp.errmsg());
                 }
                 String suffixName = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().lastIndexOf(".") + 1).toLowerCase();
-                String filePath = sysConfigProvider.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
+                String filePath = sysConfigService.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 String fileName = R.UU32() + suffixName;
                 String url = filePath + fileName;
                 storageServer.upload(tf.getInputStream(), fileName, filePath);

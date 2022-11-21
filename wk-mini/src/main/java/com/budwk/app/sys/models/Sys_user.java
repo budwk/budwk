@@ -72,6 +72,12 @@ public class Sys_user extends BaseModel implements Serializable {
     private String username;
 
     @Column
+    @Comment("性别")
+    @ApiModelProperty(description = "性别")
+    @ColDefine(type = ColType.INT,width = 1)
+    private Integer sex;
+
+    @Column
     @Comment("头像")
     @ApiModelProperty(description = "头像")
     @ColDefine(type = ColType.VARCHAR, width = 255)
@@ -94,12 +100,6 @@ public class Sys_user extends BaseModel implements Serializable {
     @ApiModelProperty(description = "手机号码")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String mobile;
-
-    @Column
-    @Comment("性别")
-    @ApiModelProperty(description = "手机号码")
-    @ColDefine(type = ColType.VARCHAR, width = 32)
-    private String sex;
 
     @Column
     @Comment("登陆时间")

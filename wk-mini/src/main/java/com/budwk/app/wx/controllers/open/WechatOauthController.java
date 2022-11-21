@@ -1,7 +1,6 @@
 package com.budwk.app.wx.controllers.open;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.app.sys.providers.ISysConfigProvider;
+import com.budwk.app.sys.services.SysConfigService;
 import com.budwk.app.wx.commons.service.WxService;
 import com.budwk.app.wx.models.Wx_config;
 import com.budwk.app.wx.models.Wx_user;
@@ -45,8 +44,7 @@ public class WechatOauthController {
     @Inject
     private WxService wxService;
     @Inject
-    @Reference
-    private ISysConfigProvider sysConfigProvider;
+    private SysConfigService sysConfigService;
 
     @At("/{wxid}/oauth")
     @Ok("re")
@@ -55,7 +53,7 @@ public class WechatOauthController {
         session.setAttribute("wechat_goto_url", goto_url);
         if (!Strings.isBlank(wxid)) {
             Wx_config config = wxConfigService.fetch(wxid);
-            String back_url = sysConfigProvider.getString(SecurityUtil.getAppId(),"AppDomain") + "/wechat/open/auth/" + wxid + "/back";
+            String back_url = sysConfigService.getString(SecurityUtil.getAppId(),"AppDomain") + "/wechat/open/auth/" + wxid + "/back";
             String redirect_uri = URLEncoder.encode(back_url, "utf-8");
             log.debug("redirect_uri::" + redirect_uri);
             String state = "wechat";

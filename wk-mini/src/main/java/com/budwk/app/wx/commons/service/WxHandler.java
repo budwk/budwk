@@ -2,8 +2,7 @@ package com.budwk.app.wx.commons.service;
 
 
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.budwk.app.sys.providers.ISysConfigProvider;
+import com.budwk.app.sys.services.SysConfigService;
 import com.budwk.app.wx.models.*;
 import com.budwk.app.wx.services.*;
 import com.budwk.starter.security.utils.SecurityUtil;
@@ -66,8 +65,7 @@ public class WxHandler extends AbstractWxHandler {
     @Inject
     private WxService wxService;
     @Inject
-    @Reference(check = false)
-    private ISysConfigProvider sysConfigProvider;
+    private SysConfigService sysConfigService;
     @Inject
     private StorageServer storageServer;
     @Inject
@@ -178,7 +176,7 @@ public class WxHandler extends AbstractWxHandler {
             if ("video".equals(type) || "image".equals(type)) {
                 NutResource nutResource = wxService.getWxApi2(msg.getExtkey()).media_get(msg.getMediaId());
                 String suffixName = nutResource.getName().substring(nutResource.getName().lastIndexOf("."));
-                String filePath = sysConfigProvider.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/wechat/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
+                String filePath = sysConfigService.getString(SecurityUtil.getAppId(), "AppUploadBase") + "/wechat/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 String fileName = R.UU32() + suffixName;
                 NutMap nutMap = storageServer.upload(nutResource.getInputStream(), fileName, filePath);
                 wxMsg.setContent(nutMap.getString("url"));
