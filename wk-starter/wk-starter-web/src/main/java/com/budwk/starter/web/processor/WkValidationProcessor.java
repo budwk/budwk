@@ -109,8 +109,9 @@ public class WkValidationProcessor extends AbstractProcessor {
                 ApiFormParam[] formParams = apiFormParams.value();
                 for (ApiFormParam formParam : formParams) {
                     if (formParam.check()) {
-                        if (type == 1) {
+                        if (type == 1 && paramsMap != null) {
                             val = paramsMap.getString(formParam.name());
+
                         }
                         if (type == 2) {
                             val = req.getParameter(formParam.name());
@@ -143,7 +144,7 @@ public class WkValidationProcessor extends AbstractProcessor {
                                 if (Strings.isBlank(name)) {
                                     name = field.getName();
                                 }
-                                if (type == 1) {
+                                if (type == 1 && paramsMap != null) {
                                     valTemp = paramsMap.getString(name);
                                 }
                                 if (type == 2) {

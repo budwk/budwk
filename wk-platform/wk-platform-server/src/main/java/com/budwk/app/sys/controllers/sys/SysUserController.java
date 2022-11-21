@@ -281,7 +281,7 @@ public class SysUserController {
         if (checkNumber > 0) {
             return Result.error("用户编号已存在");
         }
-        if(Strings.isNotBlank(user.getMobile())) {
+        if (Strings.isNotBlank(user.getMobile())) {
             checkNumber = sysUserService.count(Cnd.where("mobile", "=", user.getMobile()));
             if (checkNumber > 0) {
                 return Result.error("手机号已存在");
@@ -291,7 +291,7 @@ public class SysUserController {
         if (checkNumber > 0) {
             return Result.error("用户名已存在");
         }
-        if(Strings.isNotBlank(user.getEmail())) {
+        if (Strings.isNotBlank(user.getEmail())) {
             checkNumber = sysUserService.count(Cnd.where("email", "=", Strings.trim(user.getEmail())));
             if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
                 return Result.error("邮箱已存在");
@@ -418,14 +418,21 @@ public class SysUserController {
     @SaCheckPermission("sys.manage.user.delete")
     @SLog(value = "删除用户:${loginname}")
     @ApiOperation(name = "删除用户")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "id", description = "主键ID", in = ParamIn.PATH)
+            }
+    )
     @ApiFormParams(
             {
-                    @ApiFormParam(name = "id", description = "主键ID", required = true),
-                    @ApiFormParam(name = "loginname", description = "用户名", required = true)
+                    @ApiFormParam(name = "loginname", description = "用户名", required = true, check = true)
             }
     )
     @ApiResponses
-    public Result<?> delete(@Param("id") String id, @Param("loginname") String loginname, HttpServletRequest req) {
+    public Result<?> delete(String id, @Param("loginname") String loginname, HttpServletRequest req) {
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(loginname)) {
+            return Result.error("超级管理员不可删除");
+        }
         sysUserService.deleteUser(id);
         return Result.success();
     }

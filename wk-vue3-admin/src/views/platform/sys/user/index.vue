@@ -278,12 +278,14 @@ const tableLoading = ref(false)
 const tableData = ref([])
 const unitLeftOptions = ref([])
 const unitOptions = ref([])
+const unitList = ref([])
 const dateRange = ref([])
 
 const data = reactive({
     formData: {
         id: '',
         unitId: '',
+        unitPath: '',
         postId: '',
         roleIds: '',
         username: '',
@@ -309,8 +311,8 @@ const data = reactive({
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
-        pageOrderName: '',
-        pageOrderBy: ''
+        pageOrderName: 'updatedAt',
+        pageOrderBy: 'desc'
     },
     formRules: {
         username: [{ required: true, message: "用户姓名不能为空", trigger: ["blur", "change"] }],
@@ -341,6 +343,7 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
         unitId: '',
+        unitPath: '',
         postId: '',
         roleIds: '',
         username: '',
@@ -372,6 +375,7 @@ const getUnitTree = () => {
     getUnitList(queryUnit).then((res) => {
         unitLeftOptions.value = handleTree(res.data) as never
         unitOptions.value = handleTree(JSON.parse(JSON.stringify(res.data))) as never
+        unitList.value = JSON.parse(JSON.stringify(res.data))
     })
 }
 
@@ -446,6 +450,10 @@ const userUnitChange = (val: string) => {
     getRoleGroups(val).then((res)=>{
         groups.value = res.data
     })
+    const idx = unitList.value.findIndex((obj)=>{
+        return obj['id'] == val
+    })
+    formData.value.unitPath = unitList.value[idx]['path']
 }
 
 // 新增按钮
@@ -471,7 +479,7 @@ const handleUpdate = (row: any) => {
 // 删除按钮
 const handleDelete = (row: any) => {
     modal.confirm('确定删除 ' + row.username + '？').then(() => {
-        return doDelete(row.id)
+        return doDelete(row.id, row.loginname)
     }).then(() => {
         queryParams.value.pageNo = 1
         list()

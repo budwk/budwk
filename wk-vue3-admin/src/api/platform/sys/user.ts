@@ -76,10 +76,11 @@ export function doUpdate(data: object = {}) {
     })
 }
 
-export function doDelete(id: string) {
+export function doDelete(id: string, loginname: string) {
     return request({
         url: API_SYS_USER_DELETE + id,
-        method: 'DELETE'
+        method: 'DELETE',
+        data: { loginname: loginname}
     })
 }
 

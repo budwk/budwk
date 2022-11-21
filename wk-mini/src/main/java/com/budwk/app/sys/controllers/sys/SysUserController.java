@@ -410,14 +410,21 @@ public class SysUserController {
     @SaCheckPermission("sys.manage.user.delete")
     @SLog(value = "删除用户:${loginname}")
     @ApiOperation(name = "删除用户")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "id", description = "主键ID", in = ParamIn.PATH)
+            }
+    )
     @ApiFormParams(
             {
-                    @ApiFormParam(name = "id", description = "主键ID", required = true),
-                    @ApiFormParam(name = "loginname", description = "用户名", required = true)
+                    @ApiFormParam(name = "loginname", description = "用户名", required = true, check = true)
             }
     )
     @ApiResponses
-    public Result<?> delete(@Param("id") String id, @Param("loginname") String loginname, HttpServletRequest req) {
+    public Result<?> delete(String id, @Param("loginname") String loginname, HttpServletRequest req) {
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(loginname)) {
+            return Result.error("超级管理员不可删除");
+        }
         sysUserService.deleteUser(id);
         return Result.success();
     }
