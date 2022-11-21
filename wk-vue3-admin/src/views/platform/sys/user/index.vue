@@ -126,7 +126,7 @@
                             </template>
                             <template v-if="item.prop == 'mobile'" #default="scope">
                                 <span v-if="scope.row.mobile_show">{{ scope.row.mobile }}</span>
-                                <span v-else>{{ hiddenMobile(scope.row.mobile) }}<el-button icon="View" link
+                                <span v-else-if="scope.row.mobile">{{ hiddenMobile(scope.row.mobile) }}<el-button icon="View" link
                                         @click="showMobile(scope.row, 'mobile')"></el-button></span>
                             </template>
                             <template v-if="item.prop == 'disabled'" #default="scope">
@@ -231,7 +231,7 @@
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col :span="12">
                         <el-form-item label="用户角色" prop="roleIds">
                             <el-select v-model="formData.roleIds" style="width:100%" class="span_n"
                                 multiple filterable default-first-option placeholder="分配角色" autocomplete="off">
@@ -494,9 +494,6 @@ const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
-
-    console.log(JSON.stringify(formData.value))
-    return
             doCreate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showCreate.value = false

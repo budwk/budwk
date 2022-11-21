@@ -281,17 +281,21 @@ public class SysUserController {
         if (checkNumber > 0) {
             return Result.error("用户编号已存在");
         }
-        checkNumber = sysUserService.count(Cnd.where("mobile", "=", user.getMobile()));
-        if (checkNumber > 0) {
-            return Result.error("手机号已存在");
+        if(Strings.isNotBlank(user.getMobile())) {
+            checkNumber = sysUserService.count(Cnd.where("mobile", "=", user.getMobile()));
+            if (checkNumber > 0) {
+                return Result.error("手机号已存在");
+            }
         }
         checkNumber = sysUserService.count(Cnd.where("loginname", "=", Strings.trim(user.getLoginname())));
         if (checkNumber > 0) {
             return Result.error("用户名已存在");
         }
-        checkNumber = sysUserService.count(Cnd.where("email", "=", Strings.trim(user.getEmail())));
-        if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
-            return Result.error("邮箱已存在");
+        if(Strings.isNotBlank(user.getEmail())) {
+            checkNumber = sysUserService.count(Cnd.where("email", "=", Strings.trim(user.getEmail())));
+            if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
+                return Result.error("邮箱已存在");
+            }
         }
         user.setCreatedBy(SecurityUtil.getUserId());
         sysUserService.create(user, roleIds);

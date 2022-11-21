@@ -345,6 +345,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     @Aop(TransAop.READ_COMMITTED)
     public void create(Sys_user user, String[] roleIds) {
         String password = user.getPassword();
+        this.checkPassword(user,password);
         String salt = R.UU32();
         String dbpwd = PwdUtil.getPassword(password, salt);
         user.setPassword(dbpwd);
@@ -387,7 +388,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     public String resetPwd(String userId) {
         boolean needChangePwd = false;
         String salt = R.UU32();
-        String password = RandomUtil.randomNumbers(6);
+        String password = RandomUtil.randomString(12);
         // 后台重置密码后下次登录是否强制修改密码
         Sys_user_security security = sysUserSecurityService.getWithCache();
         if (security != null && security.getHasEnabled() && security.getPwdRepeatCheck() && security.getPwdRepeatNum() > 0) {
@@ -403,6 +404,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Override
     public String resetPwd(String userId, String password, boolean needChangePwd) {
+        this.checkPassword(this.fetch(userId), password);
         String salt = R.UU32();
         String dbpwd = PwdUtil.getPassword(password, salt);
         this.update(Chain.make("password", dbpwd)
