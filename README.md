@@ -29,7 +29,7 @@ BudWk V8/V7 进行了大量重构，与之前版本结构大不相同，增加�
 
 BudWk 原名 NutzWk ，是基于国产框架 nutz 及 nutzboot 开发的开源Web基础项目，集权限体系、系统参数、数据字典、站内消息、定时任务、CMS、微信等最常用功能，不庞杂、不面面俱到，使其具有上手容易、开发便捷、扩展灵活等特性，特别适合各类大中小型定制化项目需求。
 
-前端分别采用 Vue2、Vue3 技术，Vue3 采用 Vite + Element-Plus + TypeScript 开发，Vue2 采用 Nuxt + ElementUI + JavaScript 开发。
+V8 前端采用 Vue3 + Vite + Element-Plus + TypeScript 开发，V7 前端 采用 Nuxt + ElementUI + JavaScript 开发。
 
 
 # 🎉 本版说明(BudWk v8.x)
@@ -85,7 +85,6 @@ budwk                               -- 根目录
 │  │  ├─wk-wechat-common            -- 通用类供其他模块调用
 │  │  ├─wk-wechat-server            -- 服务类提供API及RPC服务
 │  ├─wk-mini                        -- 可独立运行单应用版本
-│  ├─wk-vue-admin                   -- Vue2前端代码 JS + Nuxt + ElmentUI
 │  ├─wk-vue3-admin                  -- Vue3前端代码 TS + Vite + Elment-Plus
 ```
 * 代码生成器IDEA插件,请下载安装 [https://gitee.com/budwk/budwk-codegenerator](https://gitee.com/budwk/budwk-codegenerator)
@@ -114,14 +113,6 @@ Vite | 应用框架 | [https://vitejs.dev](https://vitejs.dev)
 Element-Plus | 基于Vue3的UI框架 | [https://element-plus.gitee.io/zh-CN](https://element-plus.gitee.io/zh-CN/)
 Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
 
-### Vue2前端技术
-技术 | 名称 | 官网
-----|------|----
-Vue2 | MVVM框架 | [https://vuejs.org](https://vuejs.org)
-Nuxt | 应用框架 | [https://nuxtjs.org](https://nuxtjs.org)
-ElementUI | 基于Vue的UI框架 | [https://element.eleme.io](https://element.eleme.io)
-Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com)
-
 ## 简易开发指南
 
 ### Java后端
@@ -139,12 +130,6 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 * `npm install pnpm`
 * `pnpm install`
 * `pnpm run dev`
-
-### Vue2前端(wk-vue-admin)
-
-* `npm install yarn`
-* `yarn install`
-* `yarn run dev`
 
 ## 详细开发指南
 

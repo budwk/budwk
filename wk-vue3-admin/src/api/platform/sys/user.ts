@@ -84,6 +84,14 @@ export function doDelete(id: string, loginname: string) {
     })
 }
 
+export function doDeleteMore(ids: string, names: string) {
+    return request({
+        url: API_SYS_USER_DELETE_MORE,
+        method: 'POST',
+        data: { ids: ids, names: names}
+    })
+}
+
 export function doDisable(data: object = {}) {
     return request({
         url: API_SYS_USER_DISABLED,

@@ -9,7 +9,13 @@
                 <div class="head-container">
                     <el-tree :data="unitLeftOptions" :props="{ label: 'name', children: 'children' }"
                         :expand-on-click-node="false" :filter-node-method="filterNode" ref="unitTreeRef"
-                        highlight-current default-expand-all @node-click="handleNodeClick" />
+                        highlight-current default-expand-all @node-click="handleNodeClick">
+                        <template #default="{ node, data }">
+                            <i v-if="data.type && data.type.value === 'GROUP'" class="fa fa-building" />
+                            <i v-if="data.type && data.type.value === 'COMPANY'" class="fa fa-home" />
+                            {{ data.name }}
+                        </template>
+                    </el-tree>
                 </div>
             </el-col>
             <el-col :span="20">
@@ -52,7 +58,7 @@
                             v-permission="['sys.manage.user.update']">修改</el-button>
                     </el-col>
                     <el-col :span="1.5">
-                        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete"
+                        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDeleteMore"
                             v-permission="['sys.manage.user.delete']">删除</el-button>
                     </el-col>
                     <el-col :span="1.5">
@@ -67,13 +73,19 @@
                         @quickSearch="quickSearch" />
                 </el-row>
 
-                <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id">
+                <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" fixed="left" />
                     <el-table-column type="expand" fixed="left">
                         <template #default="scope">
                             <el-row class="expand-row" :gutter="5">
                                 <el-col :span="5">
                                     职务: {{ findPostName(scope.row.postId) }}
+                                </el-col>
+                                <el-col :span="5">
+                                    性别:
+                                    <span v-if="scope.row.sex == 0">未知</span>
+                                    <span v-if="scope.row.sex == 1">男</span>
+                                    <span v-if="scope.row.sex == 2">女</span>
                                 </el-col>
                                 <el-col :span="5">
                                     Email: {{ scope.row.email }}
@@ -84,8 +96,6 @@
                                 <el-col :span="5">
                                     登录IP: {{ scope.row.loginIp }}
                                 </el-col>
-                            </el-row>
-                            <el-row class="expand-row" :gutter="5">
                                 <el-col :span="5">
                                     创建人: <span v-if="scope.row.createdByUser">{{
                                             scope.row.createdByUser.loginname
@@ -126,8 +136,8 @@
                             </template>
                             <template v-if="item.prop == 'mobile'" #default="scope">
                                 <span v-if="scope.row.mobile_show">{{ scope.row.mobile }}</span>
-                                <span v-else-if="scope.row.mobile">{{ hiddenMobile(scope.row.mobile) }}<el-button icon="View" link
-                                        @click="showMobile(scope.row, 'mobile')"></el-button></span>
+                                <span v-else-if="scope.row.mobile">{{ hiddenMobile(scope.row.mobile) }}<el-button
+                                        icon="View" link @click="showMobile(scope.row, 'mobile')"></el-button></span>
                             </template>
                             <template v-if="item.prop == 'disabled'" #default="scope">
                                 <el-switch v-model="scope.row.disabled" :active-value="false" :inactive-value="true"
@@ -139,8 +149,8 @@
                         class-name="small-padding fixed-width">
                         <template #default="scope">
                             <el-tooltip content="重置密码" placement="top">
-                                <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
-                                    v-permission="['sys.manage.unit.create']"></el-button>
+                                <el-button link type="primary" icon="RefreshRight" @click="handleReset(scope.row)"
+                                    v-permission="['sys.manage.unit.update']"></el-button>
                             </el-tooltip>
                             <el-tooltip content="修改" placement="top">
                                 <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
@@ -170,7 +180,8 @@
                         <el-form-item label="所属单位" prop="unitId">
                             <el-tree-select v-model="formData.unitId" :data="unitOptions"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
-                                placeholder="选择上级单位" check-strictly :render-after-expand="false" @change="userUnitChange"/>
+                                placeholder="选择上级单位" check-strictly :render-after-expand="false"
+                                @change="userUnitChange" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -233,8 +244,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="用户角色" prop="roleIds">
-                            <el-select v-model="formData.roleIds" style="width:100%" class="span_n"
-                                multiple filterable default-first-option placeholder="分配角色" autocomplete="off">
+                            <el-select v-model="formData.roleIds" style="width:100%" class="span_n" multiple filterable
+                                default-first-option placeholder="分配角色" autocomplete="off">
                                 <el-option-group v-for="group in groups" :key="group.id" :label="group.name">
                                     <el-option v-for="item in group.roles" :key="item.id" :label="item.name"
                                         :value="item.id" />
@@ -256,7 +267,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
+import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
 import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
@@ -280,6 +291,10 @@ const unitLeftOptions = ref([])
 const unitOptions = ref([])
 const unitList = ref([])
 const dateRange = ref([])
+const ids = ref([])
+const names = ref([])
+const currentUnitId = ref('')
+const currentUnitPath = ref('')
 
 const data = reactive({
     formData: {
@@ -367,6 +382,8 @@ const filterNode = (value: any, data: any) => {
 // 点击单位
 const handleNodeClick = (data: any) => {
     queryParams.value.unitPath = data.path
+    currentUnitId.value = data.id
+    currentUnitPath.value = data.path
     list()
 }
 
@@ -390,6 +407,14 @@ const getPost = () => {
 const findPostName = (id: string) => {
     const index = posts.value.findIndex((obj: any) => obj.id === id)
     return index >= 0 ? posts.value[index]['name'] : ''
+}
+
+// 列表多选
+const handleSelectionChange =(selection: any) => {
+    ids.value = selection.map(item => item.id)
+    names.value = selection.map(item => item.username)
+    single.value = selection.length != 1
+    multiple.value = !selection.length
 }
 
 // 查询表格
@@ -447,10 +472,10 @@ const showMobile = (row: any, col: string) => {
 
 // 用户所属单位
 const userUnitChange = (val: string) => {
-    getRoleGroups(val).then((res)=>{
+    getRoleGroups(val).then((res) => {
         groups.value = res.data
     })
-    const idx = unitList.value.findIndex((obj)=>{
+    const idx = unitList.value.findIndex((obj) => {
         return obj['id'] == val
     })
     formData.value.unitPath = unitList.value[idx]['path']
@@ -460,6 +485,13 @@ const userUnitChange = (val: string) => {
 const handleCreate = (row: any) => {
     resetForm(createRef.value)
     groups.value = []
+    formData.value.unitId = currentUnitId.value
+    formData.value.unitPath = currentUnitPath.value
+    if(currentUnitId.value){
+        getRoleGroups(currentUnitId.value).then((res) => {
+            groups.value = res.data
+        })
+    }
     getSerialNo().then((res) => {
         formData.value.serialNo = res.data
         showCreate.value = true
@@ -485,6 +517,22 @@ const handleDelete = (row: any) => {
         list()
         modal.msgSuccess('删除成功')
     }).catch(() => { })
+}
+
+// 批量删除
+const handleDeleteMore = () => {
+    modal.confirm('确定删除 ' + names.value.toString() + '？').then(() => {
+        return doDeleteMore(ids.value.toString(), names.value.toString())
+    }).then(() => {
+        queryParams.value.pageNo = 1
+        list()
+        modal.msgSuccess('删除成功')
+    }).catch(() => { })
+}
+
+// 重置密码
+const handleReset = (row: any) => {
+
 }
 
 // 导入

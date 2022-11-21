@@ -37,10 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wizzer@qq.com
@@ -273,7 +270,7 @@ public class SysUserController {
         if (checkNumber > 0) {
             return Result.error("用户编号已存在");
         }
-        if(Strings.isNotBlank(user.getMobile())) {
+        if (Strings.isNotBlank(user.getMobile())) {
             checkNumber = sysUserService.count(Cnd.where("mobile", "=", user.getMobile()));
             if (checkNumber > 0) {
                 return Result.error("手机号已存在");
@@ -283,7 +280,7 @@ public class SysUserController {
         if (checkNumber > 0) {
             return Result.error("用户名已存在");
         }
-        if(Strings.isNotBlank(user.getEmail())) {
+        if (Strings.isNotBlank(user.getEmail())) {
             checkNumber = sysUserService.count(Cnd.where("email", "=", Strings.trim(user.getEmail())));
             if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
                 return Result.error("邮箱已存在");
@@ -436,8 +433,8 @@ public class SysUserController {
     @ApiOperation(name = "删除用户")
     @ApiFormParams(
             value = {
-                    @ApiFormParam(name = "ids", description = "用户ID数组"),
-                    @ApiFormParam(name = "names", description = "用户名称数组")
+                    @ApiFormParam(name = "ids", description = "用户ID数组", required = true, check = true),
+                    @ApiFormParam(name = "names", description = "用户名称数组", required = true, check = true)
             }
     )
     @ApiResponses
@@ -449,10 +446,10 @@ public class SysUserController {
             superadminId = user.getId();
         }
         if (ids != null) {
+            if (Arrays.asList(ids).contains(superadminId)) {
+                return Result.error("超级管理员用户不可删除");
+            }
             for (String id : ids) {
-                if (superadminId.equals(id)) {
-                    return Result.error("超级管理员用户不可删除");
-                }
                 sysUserService.deleteUser(id);
             }
         }

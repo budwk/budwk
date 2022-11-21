@@ -444,8 +444,8 @@ public class SysUserController {
     @ApiOperation(name = "删除用户")
     @ApiFormParams(
             value = {
-                    @ApiFormParam(name = "ids", description = "用户ID数组"),
-                    @ApiFormParam(name = "names", description = "用户名称数组")
+                    @ApiFormParam(name = "ids", description = "用户ID数组", required = true, check = true),
+                    @ApiFormParam(name = "names", description = "用户名称数组", required = true, check = true)
             }
     )
     @ApiResponses
