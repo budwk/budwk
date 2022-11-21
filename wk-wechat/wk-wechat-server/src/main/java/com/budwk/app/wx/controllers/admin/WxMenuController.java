@@ -1,4 +1,4 @@
-package com.budwk.app.wx.controllers.admin;
+package com.budwk.app.wx.controllers.wx;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;

@@ -72,6 +72,15 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
+            <artifactId>nutzwx</artifactId>
+        </dependency>
+        <!-- emoji -->
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-nutz-mvc</artifactId>
         </dependency>
         <dependency>

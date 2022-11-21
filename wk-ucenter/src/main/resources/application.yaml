@@ -18,7 +18,7 @@ openapi:
     package: com.budwk.app
   info:
     title: 认证中心
-    version: 7.0.0
+    version: 8.0.0
     contact:
       name: 大鲨鱼
       email: wizzer@qq.com

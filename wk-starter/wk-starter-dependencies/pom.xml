@@ -37,6 +37,7 @@
         <hutool.version>5.7.19</hutool.version>
         <poi.version>4.1.2</poi.version>
         <oshi-core.version>5.7.3</oshi-core.version>
+        <emoji-java.veision>5.1.1</emoji-java.veision>
         <maven.plugin.version>3.8.1</maven.plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
@@ -133,6 +134,12 @@
                 <artifactId>nutzboot-starter-test-junit4</artifactId>
                 <version>${nutzboot.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <!-- emoji -->
+            <dependency>
+                <groupId>com.vdurmont</groupId>
+                <artifactId>emoji-java</artifactId>
+                <version>${emoji-java.veision}</version>
             </dependency>
             <!-- tencent sms -->
             <dependency>

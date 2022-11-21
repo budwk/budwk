@@ -96,6 +96,12 @@ public class Sys_user extends BaseModel implements Serializable {
     private String mobile;
 
     @Column
+    @Comment("性别")
+    @ApiModelProperty(description = "手机号码")
+    @ColDefine(type = ColType.VARCHAR, width = 32)
+    private String sex;
+
+    @Column
     @Comment("登陆时间")
     @ApiModelProperty(description = "登陆时间")
     private Long loginAt;
