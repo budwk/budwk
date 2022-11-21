@@ -54,7 +54,7 @@
                             v-permission="['sys.manage.user.create']">新增</el-button>
                     </el-col>
                     <el-col :span="1.5">
-                        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate"
+                        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdateMore"
                             v-permission="['sys.manage.user.update']">修改</el-button>
                     </el-col>
                     <el-col :span="1.5">
@@ -259,6 +259,96 @@
                 <div class="dialog-footer">
                     <el-button type="primary" @click="create">确 定</el-button>
                     <el-button @click="showCreate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        <el-dialog title="修改用户" v-model="showUpdate" width="50%">
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="用户姓名" prop="username">
+                            <el-input v-model="formData.username" placeholder="请输入用户姓名" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="所属单位" prop="unitId">
+                            <el-tree-select v-model="formData.unitId" :data="unitOptions"
+                                :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
+                                placeholder="选择上级单位" check-strictly :render-after-expand="false"
+                                @change="userUnitChange" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item v-if="!modifySerialNo" label="用户编号" prop="serialNo" style="font-weight:700">
+                            {{ formData.serialNo }}
+                            <el-button type="primary" icon="Edit" link @click="modifySerialNo = true">修改</el-button>
+                        </el-form-item>
+                        <el-form-item v-if="modifySerialNo" label="用户编号" prop="serialNo">
+                            <el-input-number v-model="formData.serialNo" :min="1" placeholder="员工编号"
+                                auto-complete="off" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="单位职务" prop="postId">
+                            <el-select v-model="formData.postId" clearable placeholder="选择单位职务">
+                                <el-option v-for="item in posts" :key="item.id" :label="item.name" :value="item.id" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="登录用户名" prop="loginname">
+                            <el-input v-model="formData.loginname" placeholder="请输入登录用户名" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="手机号码" prop="mobile">
+                            <el-input v-model="formData.mobile" placeholder="请输入手机号码" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="电子信箱" prop="email">
+                            <el-input v-model="formData.email" placeholder="请输入电子信箱" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="用户状态" prop="disabled">
+                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                                active-color="green" inactive-color="red" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="用户性别" prop="sex">
+                            <el-radio-group v-model="formData.sex">
+                                <el-radio :label="1">
+                                    男
+                                </el-radio>
+                                <el-radio :label="2">
+                                    女
+                                </el-radio>
+                                <el-radio :label="0">
+                                    未知
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="用户角色" prop="roleIds">
+                            <el-select v-model="formData.roleIds" style="width:100%" class="span_n" multiple filterable
+                                default-first-option placeholder="分配角色" autocomplete="off">
+                                <el-option-group v-for="group in groups" :key="group.id" :label="group.name">
+                                    <el-option v-for="item in group.roles" :key="item.id" :label="item.name"
+                                        :value="item.id" />
+                                </el-option-group>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="update">确 定</el-button>
+                    <el-button @click="showUpdate = false">取 消</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -502,7 +592,8 @@ const handleCreate = (row: any) => {
 const handleUpdate = (row: any) => {
     groups.value = []
     getInfo(row.id).then((res: any) => {
-        formData.value = res.data
+        formData.value = res.data.user
+        formData.value.roleIds = res.data.roleIds
         userUnitChange(formData.value.unitId)
         showUpdate.value = true
     })
@@ -517,6 +608,11 @@ const handleDelete = (row: any) => {
         list()
         modal.msgSuccess('删除成功')
     }).catch(() => { })
+}
+
+// 批量修改
+const handleUpdateMore = () => {
+    handleUpdate({id: ids.value.toString()})
 }
 
 // 批量删除

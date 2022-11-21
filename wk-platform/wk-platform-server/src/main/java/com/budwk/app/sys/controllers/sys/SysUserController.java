@@ -320,17 +320,23 @@ public class SysUserController {
         if (checkNumber > 0) {
             return Result.error("用户编号已存在");
         }
-        checkNumber = sysUserService.count(Cnd.where("mobile", "=", user.getMobile()).and("id", "<>", user.getId()));
-        if (checkNumber > 0) {
-            return Result.error("手机号已存在");
+        if(Strings.isNotBlank(user.getMobile())) {
+            checkNumber = sysUserService.count(Cnd.where("mobile", "=", user.getMobile()).and("id", "<>", user.getId()));
+            if (checkNumber > 0) {
+                return Result.error("手机号已存在");
+            }
         }
-        checkNumber = sysUserService.count(Cnd.where("loginname", "=", Strings.trim(user.getLoginname())).and("id", "<>", user.getId()));
-        if (checkNumber > 0) {
-            return Result.error("用户名已存在");
+        if(Strings.isNotBlank(user.getLoginname())) {
+            checkNumber = sysUserService.count(Cnd.where("loginname", "=", Strings.trim(user.getLoginname())).and("id", "<>", user.getId()));
+            if (checkNumber > 0) {
+                return Result.error("用户名已存在");
+            }
         }
-        checkNumber = sysUserService.count(Cnd.where("email", "=", Strings.trim(user.getEmail())).and("id", "<>", user.getId()));
-        if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
-            return Result.error("邮箱已存在");
+        if(Strings.isNotBlank(user.getEmail())) {
+            checkNumber = sysUserService.count(Cnd.where("email", "=", Strings.trim(user.getEmail())).and("id", "<>", user.getId()));
+            if (Strings.isNotBlank(Strings.trim(user.getEmail())) && checkNumber > 0) {
+                return Result.error("邮箱已存在");
+            }
         }
         if (user.isDisabled() && GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(Strings.trim(user.getLoginname()))) {
             return Result.error("超级管理员不可禁用");
@@ -341,7 +347,7 @@ public class SysUserController {
     }
 
     @At("/get/{id}")
-    @Ok("json")
+    @Ok("json:{locked:'^(password|salt)$',ignoreNull:false}")
     @GET
     @SaCheckPermission("sys.manage.user")
     @ApiOperation(name = "获取用户信息")
