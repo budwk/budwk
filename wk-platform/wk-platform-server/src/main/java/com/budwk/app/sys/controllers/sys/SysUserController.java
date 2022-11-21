@@ -391,12 +391,12 @@ public class SysUserController {
     @Ok("json")
     @POST
     @SaCheckPermission("sys.manage.user.update")
-    @SLog(value = "启用禁用:${loginname}-")
+    @SLog(value = "启用禁用:${loginname}")
     @ApiOperation(name = "启用禁用")
     @ApiFormParams(
             {
                     @ApiFormParam(name = "id", description = "主键ID", required = true),
-                    @ApiFormParam(name = "loginname", description = "用户名", required = true),
+                    @ApiFormParam(name = "loginname", description = "用户姓名", required = true),
                     @ApiFormParam(name = "disabled", description = "disabled=true禁用", required = true)
             }
     )
@@ -481,18 +481,41 @@ public class SysUserController {
             value = {
                     @ApiImplicitParam(name = "unitPath", example = "", description = "单位PATH"),
                     @ApiImplicitParam(name = "postId", example = "", description = "职务ID"),
+                    @ApiImplicitParam(name = "username", example = "", description = "用户姓名"),
+                    @ApiImplicitParam(name = "loginname", example = "", description = "用户名"),
+                    @ApiImplicitParam(name = "mobile", example = "", description = "手机号码"),
+                    @ApiImplicitParam(name = "disabled", example = "", description = "用户状态", type = "boolean"),
+                    @ApiImplicitParam(name = "query", example = "", description = "查询关键词"),
+                    @ApiImplicitParam(name = "beginTime", example = "", description = "开始时间", type = "long"),
+                    @ApiImplicitParam(name = "endTime", example = "", description = "结束时间", type = "long"),
                     @ApiImplicitParam(name = "query", example = "", description = "查询关键词")
             }
     )
     @ApiResponses
     @SaCheckPermission("sys.manage.user.export")
-    public void export(@Param("unitPath") String unitPath, @Param("postId") String postId, @Param("query") String query, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy, HttpServletRequest req, HttpServletResponse response) {
+    public void export(@Param("disabled") Boolean disabled, @Param("beginTime") Long beginTime, @Param("endTime") Long endTime, @Param("mobile") String mobile, @Param("loginname") String loginname, @Param("username") String username, @Param("unitPath") String unitPath, @Param("postId") String postId, @Param("query") String query, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy, HttpServletRequest req, HttpServletResponse response) {
         Cnd cnd = Cnd.NEW();
         if (Strings.isNotBlank(unitPath)) {
             cnd.and("unitPath", "like", unitPath + "%");
         }
         if (Strings.isNotBlank(postId)) {
             cnd.and("postId", "=", postId);
+        }
+        if (Strings.isNotBlank(username)) {
+            cnd.and("username", "like", "%" + username + "%");
+        }
+        if (Strings.isNotBlank(loginname)) {
+            cnd.and("loginname", "like", "%" + loginname + "%");
+        }
+        if (Strings.isNotBlank(mobile)) {
+            cnd.and("mobile", "like", "%" + mobile + "%");
+        }
+        if (beginTime != null && endTime != null) {
+            cnd.and("createdAt", ">=", beginTime);
+            cnd.and("createdAt", "<=", endTime);
+        }
+        if (disabled != null) {
+            cnd.and("disabled", "=", disabled);
         }
         if (Strings.isNotBlank(query)) {
             cnd.and(Cnd.exps("loginname", "like", "%" + query + "%").or("username", "like", "%" + query + "%")
@@ -519,7 +542,7 @@ public class SysUserController {
             writer.addHeaderAlias("loginname", "用户名");
             writer.addHeaderAlias("username", "姓名");
             writer.addHeaderAlias("mobile", "手机号");
-            writer.addHeaderAlias("email", "EMail");
+            writer.addHeaderAlias("email", "Email");
             writer.addHeaderAlias("unitname", "单位");
             writer.addHeaderAlias("postname", "职务");
             // writer.setOnlyAlias(true);

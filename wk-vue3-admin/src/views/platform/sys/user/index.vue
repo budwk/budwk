@@ -357,7 +357,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore } from '/@/api/platform/sys/user'
+import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore, doResetPwd } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
 import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
@@ -628,7 +628,11 @@ const handleDeleteMore = () => {
 
 // 重置密码
 const handleReset = (row: any) => {
-
+    modal.confirm('确定重置 ' + row.username + '('+ row.loginname+ ') 的密码'+ '？').then(() => {
+        return doResetPwd(row.id)
+    }).then((res) => {
+        modal.alert('重置成功，请牢记新密码 '+ res.data)
+    }).catch(() => { })
 }
 
 // 导入

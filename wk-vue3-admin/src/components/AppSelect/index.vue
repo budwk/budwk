@@ -1,24 +1,24 @@
 <template>
-    <div class="app-select">
-      <el-dropdown class="app-select-dropdown" trigger="click" @command="handleSetApp">
-        <span class="el-dropdown-link">
+  <div class="app-select">
+    <el-dropdown class="app-select-dropdown" trigger="click" @command="handleSetApp">
+      <span class="el-dropdown-link">
         {{ appName }}
         <el-icon class="el-icon--right">
-            <arrow-down />
+          <arrow-down />
         </el-icon>
-    </span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <template v-for="item of apps" >
+      </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <template v-for="item of apps">
             <el-dropdown-item v-if="!item.hidden" :key="item.id" :command="item.id">
               {{ item.name }}
             </el-dropdown-item>
-            </template>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </div>
-  </template>
+          </template>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
+</template>
   
 <script setup lang="ts">
 import { computed } from 'vue';
@@ -29,37 +29,40 @@ import { usePlatformInfo } from '/@/stores/platformInfo'
 import { useTagsView } from '/@/stores/tagsView'
 import modal from '/@/utils/modal'
 import router from '/@/router/index'
-  
+
 const userInfo = useUserInfo()
 const apps = computed(() => userInfo.apps);
-const appName = computed(() => getAppName(useClient().appId?useClient().appId:usePlatformInfo().AppDefault))
+const appName = computed(() => getAppName(useClient().appId ? useClient().appId : usePlatformInfo().AppDefault))
 
 function getAppName(id: string) {
+  if (apps.value && apps.value.length > 0) {
     var index = apps.value.findIndex(obj => obj.id === id)
     return apps.value[index].name
+  }
 }
 
 function handleSetApp(id: string) {
-    useClient().appId = id
-    modal.loading("正在切换应用，请稍候...");
-    useUserInfo().init().then(()=>{
-        useUserViews().generateRoutes().then(()=>{
-            useTagsView().delAllViews().then(()=>{
-                router.replace({ path: '/redirect/platform/dashboard' })
-                setTimeout(() => {
-                    modal.closeLoading()
-                }, 500);
-            })
-        })
+  useClient().appId = id
+  modal.loading("正在切换应用，请稍候...");
+  useUserInfo().init().then(() => {
+    useUserViews().generateRoutes().then(() => {
+      useTagsView().delAllViews().then(() => {
+        router.replace({ path: '/redirect/platform/dashboard' })
+        setTimeout(() => {
+          modal.closeLoading()
+        }, 500);
+      })
     })
+  })
 }
 </script>
   
 <style lang='scss' scoped>
 .app-select {
-    cursor: pointer;
-    .app-select-dropdown {
-        line-height: 50px;
-    }
+  cursor: pointer;
+
+  .app-select-dropdown {
+    line-height: 50px;
+  }
 }
 </style>

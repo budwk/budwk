@@ -37,13 +37,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wizzer@qq.com
  */
 @IocBean
-@At("/platform/sys/user")
+@At("/sys/user")
 @SLog(tag = "用户管理")
 @ApiDefinition(tag = "用户管理")
 @Slf4j
@@ -246,10 +249,18 @@ public class SysUserController {
     )
     @ApiResponses
     public Result<?> group(@Param("unitId") String unitId, HttpServletRequest req) {
-        return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
-                        sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
-                // 排除public角色,公共角色无需分配即可拥有
-                Cnd.where("code", "<>", "public")));
+        if (StpUtil.hasPermission("sys.manage.role.system")) {
+            //有系统公用权限可分配公用角色
+            return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
+                            sysUnitService.getMasterCompanyId(unitId)).or("unitid", "=", "").asc("createdAt"), "roles",
+                    // 排除public角色,公共角色无需分配即可拥有
+                    Cnd.where("code", "<>", "public")));
+        } else {
+            return Result.data(sysGroupService.query(Cnd.where("unitId", "=",
+                            sysUnitService.getMasterCompanyId(unitId)).asc("createdAt"), "roles",
+                    // 排除public角色,公共角色无需分配即可拥有
+                    Cnd.where("code", "<>", "public")));
+        }
     }
 
     @At("/create")
@@ -380,12 +391,12 @@ public class SysUserController {
     @Ok("json")
     @POST
     @SaCheckPermission("sys.manage.user.update")
-    @SLog(value = "启用禁用:${loginname}-")
+    @SLog(value = "启用禁用:${loginname}")
     @ApiOperation(name = "启用禁用")
     @ApiFormParams(
             {
                     @ApiFormParam(name = "id", description = "主键ID", required = true),
-                    @ApiFormParam(name = "loginname", description = "用户名", required = true),
+                    @ApiFormParam(name = "loginname", description = "用户姓名", required = true),
                     @ApiFormParam(name = "disabled", description = "disabled=true禁用", required = true)
             }
     )
@@ -452,10 +463,10 @@ public class SysUserController {
             superadminId = user.getId();
         }
         if (ids != null) {
-            if (Arrays.asList(ids).contains(superadminId)) {
-                return Result.error("超级管理员用户不可删除");
-            }
             for (String id : ids) {
+                if (superadminId.equals(id)) {
+                    return Result.error("超级管理员用户不可删除");
+                }
                 sysUserService.deleteUser(id);
             }
         }
@@ -470,18 +481,41 @@ public class SysUserController {
             value = {
                     @ApiImplicitParam(name = "unitPath", example = "", description = "单位PATH"),
                     @ApiImplicitParam(name = "postId", example = "", description = "职务ID"),
+                    @ApiImplicitParam(name = "username", example = "", description = "用户姓名"),
+                    @ApiImplicitParam(name = "loginname", example = "", description = "用户名"),
+                    @ApiImplicitParam(name = "mobile", example = "", description = "手机号码"),
+                    @ApiImplicitParam(name = "disabled", example = "", description = "用户状态", type = "boolean"),
+                    @ApiImplicitParam(name = "query", example = "", description = "查询关键词"),
+                    @ApiImplicitParam(name = "beginTime", example = "", description = "开始时间", type = "long"),
+                    @ApiImplicitParam(name = "endTime", example = "", description = "结束时间", type = "long"),
                     @ApiImplicitParam(name = "query", example = "", description = "查询关键词")
             }
     )
     @ApiResponses
     @SaCheckPermission("sys.manage.user.export")
-    public void export(@Param("unitPath") String unitPath, @Param("postId") String postId, @Param("query") String query, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy, HttpServletRequest req, HttpServletResponse response) {
+    public void export(@Param("disabled") Boolean disabled, @Param("beginTime") Long beginTime, @Param("endTime") Long endTime, @Param("mobile") String mobile, @Param("loginname") String loginname, @Param("username") String username, @Param("unitPath") String unitPath, @Param("postId") String postId, @Param("query") String query, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy, HttpServletRequest req, HttpServletResponse response) {
         Cnd cnd = Cnd.NEW();
         if (Strings.isNotBlank(unitPath)) {
             cnd.and("unitPath", "like", unitPath + "%");
         }
         if (Strings.isNotBlank(postId)) {
             cnd.and("postId", "=", postId);
+        }
+        if (Strings.isNotBlank(username)) {
+            cnd.and("username", "like", "%" + username + "%");
+        }
+        if (Strings.isNotBlank(loginname)) {
+            cnd.and("loginname", "like", "%" + loginname + "%");
+        }
+        if (Strings.isNotBlank(mobile)) {
+            cnd.and("mobile", "like", "%" + mobile + "%");
+        }
+        if (beginTime != null && endTime != null) {
+            cnd.and("createdAt", ">=", beginTime);
+            cnd.and("createdAt", "<=", endTime);
+        }
+        if (disabled != null) {
+            cnd.and("disabled", "=", disabled);
         }
         if (Strings.isNotBlank(query)) {
             cnd.and(Cnd.exps("loginname", "like", "%" + query + "%").or("username", "like", "%" + query + "%")
@@ -508,7 +542,7 @@ public class SysUserController {
             writer.addHeaderAlias("loginname", "用户名");
             writer.addHeaderAlias("username", "姓名");
             writer.addHeaderAlias("mobile", "手机号");
-            writer.addHeaderAlias("email", "EMail");
+            writer.addHeaderAlias("email", "Email");
             writer.addHeaderAlias("unitname", "单位");
             writer.addHeaderAlias("postname", "职务");
             // writer.setOnlyAlias(true);

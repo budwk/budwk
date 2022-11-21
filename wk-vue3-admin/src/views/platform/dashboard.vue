@@ -2,7 +2,9 @@
 <template>
     <div>
         Dashboard!
-        <el-input v-model="a"></el-input>
+        <el-row v-role="['sysadmin']">
+        
+        </el-row>
     </div>
 </template>
 <script setup lang="ts">

@@ -76,6 +76,13 @@ export function doUpdate(data: object = {}) {
     })
 }
 
+export function doResetPwd(id: string) {
+    return request({
+        url: API_SYS_USER_RESETPWD + id,
+        method: 'GET'
+    })
+}
+
 export function doDelete(id: string, loginname: string) {
     return request({
         url: API_SYS_USER_DELETE + id,
