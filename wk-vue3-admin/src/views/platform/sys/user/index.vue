@@ -260,6 +260,7 @@ import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdat
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
 import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
+import { buildValidatorData } from '/@/utils/validate'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -315,7 +316,9 @@ const data = reactive({
         username: [{ required: true, message: "用户姓名不能为空", trigger: ["blur", "change"] }],
         loginname: [{ required: true, message: "登录用户名不能为空", trigger: ["blur", "change"] }],
         unitId: [{ required: true, message: "所属单位不能为空", trigger: ["blur", "change"] }],
-        password: [{ required: true, message: "登录密码不能为空", trigger: ["blur", "change"] }]
+        password: [{ required: true, message: "登录密码不能为空", trigger: ["blur", "change"] }],
+        email: [buildValidatorData({ name: 'email', title: '电子邮箱' })],
+        mobile: [buildValidatorData({ name: 'mobile' })]
     },
     posts: [],
     groups: []

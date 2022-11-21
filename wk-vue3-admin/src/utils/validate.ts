@@ -107,14 +107,14 @@ export interface buildValidatorParams {
     // 验证项的标题，这些验证方式不支持:mobile、account、password、varName、editorRequired
     title?: string
     // 验证触发方式
-    trigger?: 'change' | 'blur'
+    trigger?: ['change','blur']
 }
 
 /**
  * 构建表单验证规则
  * @param {buildValidatorParams} paramsObj 参数对象
  */
-export function buildValidatorData({ name, message, title, trigger = 'blur' }: buildValidatorParams): FormItemRule {
+export function buildValidatorData({ name, message, title, trigger = ['change','blur'] }: buildValidatorParams): FormItemRule {
     // 必填
     if (name == 'required') {
         return {
