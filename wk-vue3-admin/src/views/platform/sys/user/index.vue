@@ -357,7 +357,8 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore, doResetPwd } from '/@/api/platform/sys/user'
+import download from '/@/utils/download'
+import { API_SYS_USER_EXPORT, getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore, doResetPwd } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
 import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
@@ -642,7 +643,8 @@ const handleImport = () => {
 
 // 导出
 const handleExport = () => {
-
+    download.download(API_SYS_USER_EXPORT, { ...queryParams.value,
+    },`user_${new Date().getTime()}.xlsx`);
 }
 
 // 提交新增

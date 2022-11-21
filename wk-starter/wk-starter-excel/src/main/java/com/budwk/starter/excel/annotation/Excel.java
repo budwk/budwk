@@ -13,9 +13,8 @@ import org.apache.poi.ss.usermodel.IndexedColors;
  * @author wizzer.cn
  * @author ruoyi
  */
-
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Excel
 {
     /**
@@ -36,7 +35,7 @@ public @interface Excel
     /**
      * 读取内容转表达式 (如: 1=男,2=女,0=未知)
      */
-    public String readConverterExp() default "";
+    public String dict() default "";
 
     /**
      * 分隔符，读取字符串组内容

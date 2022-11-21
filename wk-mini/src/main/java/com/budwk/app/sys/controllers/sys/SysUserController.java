@@ -2,9 +2,6 @@ package com.budwk.app.sys.controllers.sys;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.poi.excel.ExcelUtil;
-import cn.hutool.poi.excel.ExcelWriter;
 import com.budwk.app.sys.models.Sys_role;
 import com.budwk.app.sys.models.Sys_unit;
 import com.budwk.app.sys.models.Sys_user;
@@ -19,6 +16,7 @@ import com.budwk.starter.common.page.PageUtil;
 import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
+import com.budwk.starter.excel.utils.ExcelUtil;
 import com.budwk.starter.log.annotation.SLog;
 import com.budwk.starter.security.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +26,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
@@ -46,7 +45,7 @@ import java.util.Map;
  * @author wizzer@qq.com
  */
 @IocBean
-@At("/sys/user")
+@At("/platform/sys/user")
 @SLog(tag = "用户管理")
 @ApiDefinition(tag = "用户管理")
 @Slf4j
@@ -475,7 +474,7 @@ public class SysUserController {
 
     @At("/export")
     @Ok("void")
-    @GET
+    @POST
     @ApiOperation(name = "导出用户数据")
     @ApiImplicitParams(
             value = {
@@ -525,40 +524,9 @@ public class SysUserController {
             cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
         }
         try {
-            NutMap postMap = sysPostService.getNutMap(Sqls.create("select id,name from sys_post"));
-            List<Sys_user> userList = sysUserService.query(cnd, "^(unit)$");
-            ArrayList<Map<String, Object>> rows = new ArrayList<>();
-            for (Sys_user user : userList) {
-                Map<String, Object> map = new LinkedHashMap<>();
-                map.put("loginname", user.getLoginname());
-                map.put("username", user.getLoginname());
-                map.put("mobile", Strings.sNull(user.getMobile()));
-                map.put("email", Strings.sNull(user.getEmail()));
-                map.put("unitname", user.getUnit() != null ? user.getUnit().getName() : "");
-                map.put("postname", user.getPostId() != null ? postMap.getString(user.getPostId(), "") : "");
-                rows.add(map);
-            }
-            ExcelWriter writer = ExcelUtil.getWriter();
-            writer.addHeaderAlias("loginname", "用户名");
-            writer.addHeaderAlias("username", "姓名");
-            writer.addHeaderAlias("mobile", "手机号");
-            writer.addHeaderAlias("email", "Email");
-            writer.addHeaderAlias("unitname", "单位");
-            writer.addHeaderAlias("postname", "职务");
-            // writer.setOnlyAlias(true);
-            writer.write(rows, true);
-            response.setHeader("Content-Type", "application/shlnd.ms-excel;charset=utf-8");
-            response.setHeader("Content-Disposition", "attachment;filename=user.xls");
-            OutputStream out = null;
-            try {
-                out = response.getOutputStream();
-                writer.flush(out, true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                writer.close();
-            }
-            IoUtil.close(out);
+            List<Sys_user> list = sysUserService.query(cnd, "^(unit|post)$");
+            ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
+            util.exportExcel(response, list, "用户数据");
         } catch (Exception e) {
             log.error(e.getMessage());
         }

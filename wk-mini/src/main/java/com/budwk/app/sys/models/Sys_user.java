@@ -3,6 +3,8 @@ package com.budwk.app.sys.models;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
+import com.budwk.starter.excel.annotation.Excel;
+import com.budwk.starter.excel.annotation.Excels;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
@@ -42,12 +44,14 @@ public class Sys_user extends BaseModel implements Serializable {
     @Comment("用户编号")
     @ApiModelProperty(description = "用户编号", required = true, check = true)
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Excel(name = "用户编号", cellType = Excel.ColumnType.STRING, prompt = "用户编号")
     private String serialNo;
 
     @Column
     @Comment("登录用户名")
     @ApiModelProperty(description = "登录用户名", required = true, check = true)
     @ColDefine(type = ColType.VARCHAR, width = 120)
+    @Excel(name = "用户登录名")
     private String loginname;
 
     /**
@@ -66,15 +70,17 @@ public class Sys_user extends BaseModel implements Serializable {
     private String salt;
 
     @Column
-    @Comment("姓名昵称")
+    @Comment("用户姓名")
     @ApiModelProperty(description = "姓名昵称", required = true, check = true)
     @ColDefine(type = ColType.VARCHAR, width = 100)
+    @Excel(name = "用户姓名")
     private String username;
 
     @Column
     @Comment("性别")
     @ApiModelProperty(description = "性别")
-    @ColDefine(type = ColType.INT,width = 1)
+    @ColDefine(type = ColType.INT, width = 1)
+    @Excel(name = "性别", dict = "1=男,2=女,0=未知")
     private Integer sex;
 
     @Column
@@ -84,37 +90,42 @@ public class Sys_user extends BaseModel implements Serializable {
     private String avatar;
 
     @Column
-    @Comment("是否禁用")
-    @ApiModelProperty(description = "是否禁用")
+    @Comment("用户状态")
+    @ApiModelProperty(description = "用户状态")
     @ColDefine(type = ColType.BOOLEAN)
+    @Excel(name = "用户状态", dict = "true=禁用,false=启用")
     private boolean disabled;
 
     @Column
     @Comment("电子邮箱")
     @ApiModelProperty(description = "电子邮箱")
     @ColDefine(type = ColType.VARCHAR, width = 255)
+    @Excel(name = "电子邮箱")
     private String email;
 
     @Column
     @Comment("手机号码")
     @ApiModelProperty(description = "手机号码")
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Excel(name = "手机号码")
     private String mobile;
 
     @Column
-    @Comment("登陆时间")
-    @ApiModelProperty(description = "登陆时间")
+    @Comment("登录时间")
+    @ApiModelProperty(description = "登录时间")
+    @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Long loginAt;
 
     @Column
-    @Comment("登陆IP")
-    @ApiModelProperty(description = "登陆IP")
+    @Comment("登录IP")
+    @ApiModelProperty(description = "登录IP")
     @ColDefine(type = ColType.VARCHAR, width = 255)
+    @Excel(name = "最后登录IP")
     private String loginIp;
 
     @Column
-    @Comment("登陆次数")
-    @ApiModelProperty(description = "登陆次数")
+    @Comment("登录次数")
+    @ApiModelProperty(description = "登录次数")
     private Integer loginCount;
 
     @Column
@@ -165,13 +176,19 @@ public class Sys_user extends BaseModel implements Serializable {
     @ApiModelProperty(description = "职务ID")
     private String postId;
 
-    @One(field = "postId")
-    @ApiModelProperty(description = "职务对象")
-    private Sys_post post;
-
     @One(field = "unitId")
     @ApiModelProperty(description = "单位对象")
+    @Excels({
+            @Excel(name = "所属单位", targetAttr = "name")
+    })
     private Sys_unit unit;
+
+    @One(field = "postId")
+    @ApiModelProperty(description = "职务对象")
+    @Excels({
+            @Excel(name = "单位职务", targetAttr = "name")
+    })
+    private Sys_post post;
 
     @One(field = "createdBy")
     @ApiModelProperty(description = "用户对象")

@@ -225,7 +225,6 @@ public class ExcelUtil<T> {
                         this.subFields = FieldUtils.getFieldsListWithAnnotation(subClass, Excel.class);
                     }
                 }
-
                 // 多注解
                 if (field.isAnnotationPresent(Excels.class)) {
                     Excels attrs = field.getAnnotation(Excels.class);
@@ -364,7 +363,7 @@ public class ExcelUtil<T> {
                 // 用于读取对象中的属性
                 Object value = getTargetValue(vo, field, attr);
                 String dateFormat = attr.dateFormat();
-                String readConverterExp = attr.readConverterExp();
+                String readConverterExp = attr.dict();
                 String separator = attr.separator();
                 if (StringUtils.isNotEmpty(dateFormat) && value != null) {
                     cell.setCellValue(parseDateToStr(dateFormat, value));
@@ -473,6 +472,8 @@ public class ExcelUtil<T> {
             str = Times.format(dateFormat, toDate((LocalDateTime) val));
         } else if (val instanceof LocalDate) {
             str = Times.format(dateFormat, toDate((LocalDate) val));
+        } else if (val instanceof Long) {
+            str = Times.format(dateFormat, Times.D((Long) val));
         } else {
             str = val.toString();
         }

@@ -461,6 +461,17 @@ export const handleTreeWithPath = (data: any, children='children') => {
     return tree;
 }
 
+
+export const blobValidate = (data:any) => {
+    try {
+        const text = data.text();
+        JSON.parse(text);
+        return false;
+    } catch (error) {
+        return true;
+    }
+}
+
 /**
  * 添加日期范围 YYYY-MM-DD 00:00:00.000 时间戳至 YYYY-MM-DD 23:59:59.999
  * @param {*} params 传参对象
