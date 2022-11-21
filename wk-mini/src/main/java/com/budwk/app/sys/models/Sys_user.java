@@ -39,14 +39,14 @@ public class Sys_user extends BaseModel implements Serializable {
     private String tenantId;
 
     @Column
-    @Comment("员工编号")
-    @ApiModelProperty(description = "员工编号", required = true, check = true)
+    @Comment("用户编号")
+    @ApiModelProperty(description = "用户编号", required = true, check = true)
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String serialNo;
 
     @Column
-    @Comment("用户名")
-    @ApiModelProperty(description = "用户名", required = true, check = true)
+    @Comment("登录用户名")
+    @ApiModelProperty(description = "登录用户名", required = true, check = true)
     @ColDefine(type = ColType.VARCHAR, width = 120)
     private String loginname;
 
