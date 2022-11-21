@@ -7,7 +7,7 @@
                         style="margin-bottom: 20px" />
                 </div>
                 <div class="head-container">
-                    <el-tree :data="unitOptions" :props="{ label: 'name', children: 'children' }"
+                    <el-tree :data="unitLeftOptions" :props="{ label: 'name', children: 'children' }"
                         :expand-on-click-node="false" :filter-node-method="filterNode" ref="unitTreeRef"
                         highlight-current default-expand-all @node-click="handleNodeClick" />
                 </div>
@@ -153,23 +153,96 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination
-                    :total="queryParams.totalCount"
-                    v-model:page="queryParams.pageNo"
-                    v-model:limit="queryParams.pageSize"
-                    @pagination="list"
-                />
+                <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
+                    v-model:limit="queryParams.pageSize" @pagination="list" />
             </el-col>
         </el-row>
 
         <el-dialog title="新增用户" v-model="showCreate" width="50%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="用户名" prop="loginname">
-                    <el-input v-model="formData.loginname" placeholder="请输入登录用户名"/>
-                </el-form-item>
-                <el-form-item label="姓名" prop="username">
-                    <el-input v-model="formData.username" placeholder="请输入用户姓名"/>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="用户姓名" prop="username">
+                            <el-input v-model="formData.username" placeholder="请输入用户姓名" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="所属单位" prop="unitId">
+                            <el-tree-select v-model="formData.unitId" :data="unitOptions"
+                                :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
+                                placeholder="选择上级单位" check-strictly :render-after-expand="false" @change="userUnitChange"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item v-if="!modifySerialNo" label="用户编号" prop="serialNo" style="font-weight:700">
+                            {{ formData.serialNo }}
+                            <el-button type="primary" icon="Edit" link @click="modifySerialNo = true">修改</el-button>
+                        </el-form-item>
+                        <el-form-item v-if="modifySerialNo" label="用户编号" prop="serialNo">
+                            <el-input-number v-model="formData.serialNo" :min="1" placeholder="员工编号"
+                                auto-complete="off" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="单位职务" prop="postId">
+                            <el-select v-model="formData.postId" clearable placeholder="选择单位职务">
+                                <el-option v-for="item in posts" :key="item.id" :label="item.name" :value="item.id" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="登录用户名" prop="loginname">
+                            <el-input v-model="formData.loginname" placeholder="请输入登录用户名" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="登录密码" prop="password">
+                            <el-input v-model="formData.password" show-password type="password" placeholder="请输入登录密码" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="手机号码" prop="mobile">
+                            <el-input v-model="formData.mobile" placeholder="请输入手机号码" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="电子信箱" prop="email">
+                            <el-input v-model="formData.email" placeholder="请输入电子信箱" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="用户状态" prop="disabled">
+                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                                active-color="green" inactive-color="red" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="用户性别" prop="sex">
+                            <el-radio-group v-model="formData.sex">
+                                <el-radio :label="1">
+                                    男
+                                </el-radio>
+                                <el-radio :label="2">
+                                    女
+                                </el-radio>
+                                <el-radio :label="0">
+                                    未知
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="用户角色" prop="roleIds">
+                            <el-select v-model="formData.roleIds" style="width:100%" class="span_n"
+                                multiple filterable default-first-option placeholder="分配角色" autocomplete="off">
+                                <el-option-group v-for="group in groups" :key="group.id" :label="group.name">
+                                    <el-option v-for="item in group.roles" :key="item.id" :label="item.name"
+                                        :value="item.id" />
+                                </el-option-group>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
@@ -183,7 +256,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getPostList, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
+import { getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree } from 'element-plus'
 import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
@@ -199,19 +272,27 @@ const showSearch = ref(true)
 const showTable = ref(true)
 const single = ref(true)
 const multiple = ref(true)
+const modifySerialNo = ref(false)
 const tableLoading = ref(false)
 const tableData = ref([])
+const unitLeftOptions = ref([])
 const unitOptions = ref([])
 const dateRange = ref([])
 
 const data = reactive({
     formData: {
         id: '',
+        unitId: '',
+        postId: '',
+        roleIds: '',
         username: '',
         loginname: '',
         password: '',
         email: '',
         mobile: '',
+        serialNo: '',
+        sex: 0,
+        disabled: false,
     },
     queryUnit: {
         name: ''
@@ -231,13 +312,16 @@ const data = reactive({
         pageOrderBy: ''
     },
     formRules: {
-        name: [{ required: true, message: "职务名称不能为空", trigger: ["blur", "change"] }],
-        code: [{ required: true, message: "职务编号不能为空", trigger: ["blur", "change"] }]
+        username: [{ required: true, message: "用户姓名不能为空", trigger: ["blur", "change"] }],
+        loginname: [{ required: true, message: "登录用户名不能为空", trigger: ["blur", "change"] }],
+        unitId: [{ required: true, message: "所属单位不能为空", trigger: ["blur", "change"] }],
+        password: [{ required: true, message: "登录密码不能为空", trigger: ["blur", "change"] }]
     },
-    posts: []
+    posts: [],
+    groups: []
 })
 
-const { queryUnit, posts, queryParams, formData, formRules } = toRefs(data)
+const { queryUnit, posts, groups, queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
     { prop: 'username', label: `用户姓名`, show: true, fixed: 'left' },
@@ -253,11 +337,17 @@ const columns = ref([
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
+        unitId: '',
+        postId: '',
+        roleIds: '',
         username: '',
         loginname: '',
         password: '',
         email: '',
         mobile: '',
+        serialNo: '',
+        sex: 0,
+        disabled: false,
     }
     formEl?.resetFields()
 }
@@ -277,7 +367,8 @@ const handleNodeClick = (data: any) => {
 // 获取单位树
 const getUnitTree = () => {
     getUnitList(queryUnit).then((res) => {
-        unitOptions.value = handleTree(res.data) as never
+        unitLeftOptions.value = handleTree(res.data) as never
+        unitOptions.value = handleTree(JSON.parse(JSON.stringify(res.data))) as never
     })
 }
 
@@ -347,16 +438,29 @@ const showMobile = (row: any, col: string) => {
     }
 }
 
+// 用户所属单位
+const userUnitChange = (val: string) => {
+    getRoleGroups(val).then((res)=>{
+        groups.value = res.data
+    })
+}
+
 // 新增按钮
 const handleCreate = (row: any) => {
     resetForm(createRef.value)
-    showCreate.value = true
+    groups.value = []
+    getSerialNo().then((res) => {
+        formData.value.serialNo = res.data
+        showCreate.value = true
+    })
 }
 
 // 修改按钮
 const handleUpdate = (row: any) => {
+    groups.value = []
     getInfo(row.id).then((res: any) => {
         formData.value = res.data
+        userUnitChange(formData.value.unitId)
         showUpdate.value = true
     })
 }
@@ -387,6 +491,9 @@ const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
+
+    console.log(JSON.stringify(formData.value))
+    return
             doCreate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showCreate.value = false

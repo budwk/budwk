@@ -345,13 +345,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     @Aop(TransAop.READ_COMMITTED)
     public void create(Sys_user user, String[] roleIds) {
         String password = user.getPassword();
-        if (Strings.isBlank(password)) {
-            password = user.getMobile().substring(user.getMobile().length() - 6);
-        }
         String salt = R.UU32();
         String dbpwd = PwdUtil.getPassword(password, salt);
         user.setPassword(dbpwd);
         user.setSalt(salt);
+        user.setSex(user.getSex() == null ? 0 : user.getSex());
         user.setLoginCount(0);
         user.setNeedChangePwd(false);
         // 后台重置密码后下次登录是否强制修改密码

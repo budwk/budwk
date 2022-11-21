@@ -45,6 +45,21 @@ export function getInfo(id: string) {
     })
 }
 
+export function getSerialNo() {
+    return request({
+        url: API_SYS_USER_NUMBER,
+        method: 'GET'
+    })
+}
+
+export function getRoleGroups(id: string) {
+    return request({
+        url: API_SYS_USER_GROUP,
+        method: 'GET',
+        params: {unitId: id}
+    })
+}
+
 export function doCreate(data: object = {}) {
     return request({
         url: API_SYS_USER_CREATE,

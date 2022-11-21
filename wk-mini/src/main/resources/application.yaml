@@ -10,6 +10,7 @@ jetty:
     idleTimeout: 60000
     minThreads: 10
     maxThreads: 2000
+  staticPath: /Users/wizzer/temp/files
 
 openapi:
   enable: true
@@ -143,7 +144,7 @@ storage:
   provider: local
   local:
     #本地存储位置
-    path: ~/temp/files
+    path: /Users/wizzer/temp/files
 
 sms:
   enable: false

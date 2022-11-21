@@ -377,11 +377,11 @@
             type="text"
           />
         </el-form-item>
-        <el-form-item ref="password" prop="password" label="初始密码">
+        <el-form-item ref="password" prop="password" label="登录密码">
           <el-input
             v-model="formData.password"
             maxlength="20"
-            placeholder="不设置初始密码，则密码默认为手机号后六位"
+            placeholder="请输入登录密码"
             auto-complete="off"
             tabindex="5"
             show-password
@@ -748,6 +748,13 @@ export default {
           }
         ],
         loginname: [
+          {
+            required: true,
+            message: '用户名',
+            trigger: 'blur'
+          }
+        ],
+        password: [
           {
             required: true,
             message: '用户名',

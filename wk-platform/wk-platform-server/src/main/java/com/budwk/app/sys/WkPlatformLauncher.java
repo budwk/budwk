@@ -253,6 +253,7 @@ public class WkPlatformLauncher {
                 Sys_user user = new Sys_user();
                 user.setId("5f8cebd7022c409a94e90da1d840b8bb");
                 user.setSerialNo("0");
+                user.setSex(1);
                 user.setLoginname(GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME);
                 user.setUsername("超级管理员");
                 user.setSalt("r5tdr01s7uglfokpsdmtu15602");
