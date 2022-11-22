@@ -45,8 +45,9 @@
                 </el-row>
             </el-col>
             <el-col :span="20">
-                <el-tabs v-model="tabIndex" type="card" @tab-click="platTabClick">
+                <el-tabs v-model="tabIndex" type="card" @tab-click="platTabClick" >
                     <el-tab-pane name="USERLIST" label="用户列表">
+                        <el-row>
                         <el-table v-loading="tableLoading" :data="tableData" row-key="id">
                             <el-table-column prop="id" label="用户">
                                 <template #default="scope">
@@ -63,7 +64,7 @@
                             </el-table-column>
                             <el-table-column fixed="right" header-align="center" align="center" label="操作" width="180">
                                 <template #default="scope">
-                                    <el-button v-permission="['sys.manage.role.delete']" type="text" size="small"
+                                    <el-button v-permission="['sys.manage.role.delete']" link
                                         class="button-delete-color"
                                         :disabled="roleCode === 'sysadmin' && 'superadmin' === scope.row.loginname"
                                         @click="removeUser(scope.row)">
@@ -74,6 +75,7 @@
                         </el-table>
                         <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                             v-model:limit="queryParams.pageSize" @pagination="list" />
+                        </el-row>
                     </el-tab-pane>
                     <el-tab-pane v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
 

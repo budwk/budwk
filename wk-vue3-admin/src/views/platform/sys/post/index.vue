@@ -37,12 +37,14 @@
                 </template>
             </el-table-column>
         </el-table>
-        <pagination
+        <el-row>
+            <pagination
                :total="queryParams.totalCount"
                v-model:page="queryParams.pageNo"
                v-model:limit="queryParams.pageSize"
                @pagination="list"
-        />
+            />
+        </el-row>
 
         <el-dialog title="新增职务" v-model="showCreate" width="35%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
