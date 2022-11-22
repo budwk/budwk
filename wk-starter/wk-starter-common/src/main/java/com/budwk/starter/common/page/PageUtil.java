@@ -7,7 +7,7 @@ import org.nutz.lang.util.NutMap;
  */
 public class PageUtil {
     public static String getOrder(String key) {
-        NutMap map = NutMap.NEW().addv("ascending", "asc").addv("descending", "desc");
+        NutMap map = NutMap.NEW().addv("ascending", "asc").addv("descending", "desc").addv("asc", "asc").addv("desc", "desc");
         return map.getString(key);
     }
 }

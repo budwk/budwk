@@ -22,7 +22,7 @@
                             <div v-if="btnIndex === group.id" class="operate">
                                 <el-button link type="primary" @click="openUpdateGroup(group)"><i
                                         class="fa fa-pencil-square-o" /></el-button>
-                                <el-button link type="primary" style="margin-left:2px;" @click="openDeleteGroup(group)">
+                                <el-button link type="danger" style="margin-left:2px;" @click="openDeleteGroup(group)">
                                     <i class="fa fa-trash-o" />
                                 </el-button>
                             </div>
@@ -34,7 +34,7 @@
                                 <el-button link type="primary" @click="openUpdateRole(r)"
                                     :disabled="r.code == 'public'"><i class="fa fa-pencil-square-o" />
                                 </el-button>
-                                <el-button link type="primary" style="margin-left:2px;" @click="openDeleteRole(r)"
+                                <el-button link type="danger" style="margin-left:2px;" @click="openDeleteRole(r)"
                                     :disabled="r.code == 'public'"><i class="fa fa-trash-o" /></el-button>
                             </div>
                         </li>
@@ -45,9 +45,27 @@
                 </el-row>
             </el-col>
             <el-col :span="20">
-                <el-tabs v-model="tabIndex" type="card" @tab-click="platTabClick" >
+                <el-tabs v-model="tabIndex" type="card" @tab-click="platTabClick">
                     <el-tab-pane name="USERLIST" label="用户列表">
-                        <el-row>
+                        <el-row class="right-user-add">
+                            <el-col :span="20">
+                        <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+                            <el-form-item label="" prop="username">
+                                <el-input
+                                    v-model="queryParams.username" placeholder="请输入姓名或用户名" clearable style="width: 220px"
+                                    @keyup.enter="handleSearch" />
+                                    <el-input style="display:none"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
+                                <el-button icon="Refresh" @click="resetSearch">重置</el-button>
+                            </el-form-item>
+                        </el-form>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-button type="primary" icon="Plus" v-permission="['sys.manage.role.update']" @click="openUser">关联用户到角色</el-button>
+                        </el-col>
+                        </el-row>
                         <el-table v-loading="tableLoading" :data="tableData" row-key="id">
                             <el-table-column prop="id" label="用户">
                                 <template #default="scope">
@@ -64,7 +82,7 @@
                             </el-table-column>
                             <el-table-column fixed="right" header-align="center" align="center" label="操作" width="180">
                                 <template #default="scope">
-                                    <el-button v-permission="['sys.manage.role.delete']" link
+                                    <el-button v-permission="['sys.manage.role.delete']" link type="danger" icon="Remove"
                                         class="button-delete-color"
                                         :disabled="roleCode === 'sysadmin' && 'superadmin' === scope.row.loginname"
                                         @click="removeUser(scope.row)">
@@ -75,7 +93,6 @@
                         </el-table>
                         <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                             v-model:limit="queryParams.pageSize" @pagination="list" />
-                        </el-row>
                     </el-tab-pane>
                     <el-tab-pane v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
 
@@ -168,6 +185,7 @@ import { ElForm } from 'element-plus';
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
+const queryRef = ref<InstanceType<typeof ElForm>>()
 const posts = ref([])
 const apps = ref([])
 const appId = ref('')
@@ -201,6 +219,7 @@ const data = reactive({
     },
     queryParams: {
         roleId: '',
+        username: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -263,6 +282,22 @@ const platTabClick = () => {
     }
     appId.value = tabIndex.value
     loadDoMenuData()
+}
+
+// 高级搜索
+const handleSearch = () => {
+    list()
+}
+
+// 重置搜索
+const resetSearch = () => {
+    queryRef.value?.resetFields()
+    list()
+}
+
+// 查询用户
+const openUser = () => {
+
 }
 
 // 加载应用菜单
@@ -435,6 +470,9 @@ export default {
       layout: platform/index
 </route>
 <style scoped>
+.right-user-add {
+    
+}
 .role-create {
     padding-top: 5px;
 }

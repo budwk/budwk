@@ -505,7 +505,7 @@ const data = reactive({
         pageSize: 10,
         totalCount: 0,
         pageOrderName: 'updatedAt',
-        pageOrderBy: 'desc'
+        pageOrderBy: 'descending'
     },
     importParams: {
         cover: false
