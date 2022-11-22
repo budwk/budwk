@@ -519,7 +519,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         }
         if (failureNum > 0) {
             failureMsg.insert(0, "很抱歉， 导入成功 " + successNum + " 条，导入失败 " + failureNum + " 条，错误如下：");
-            throw new BaseException(failureMsg.toString());
+            if (successNum > 0) {
+                throw new BaseException(failureMsg.toString() + "<br/><br/>成功列表：" + successMsg.toString());
+            } else {
+                throw new BaseException(failureMsg.toString());
+            }
         } else {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
