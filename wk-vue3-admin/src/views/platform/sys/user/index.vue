@@ -798,7 +798,6 @@ watch(queryUnit.value, val => {
 })
 
 onMounted(() => {
-    console.log('user!!!')
     getUnitTree()
     getPost()
     list()

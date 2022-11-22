@@ -548,7 +548,6 @@ public class SysUserController {
     public Result<?> importData(@Param("Filedata") TempFile tf, @Param("pwd") String pwd, @Param(value = "updateSupport", df = "false") Boolean updateSupport, HttpServletRequest req, HttpServletResponse response) throws Exception {
         ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
         List<Sys_user> list = util.importExcel(tf.getInputStream());
-        log.debug(Json.toJson(list));
         return Result.success(sysUserService.importUser(list, pwd, updateSupport, SecurityUtil.getUserId()));
     }
 

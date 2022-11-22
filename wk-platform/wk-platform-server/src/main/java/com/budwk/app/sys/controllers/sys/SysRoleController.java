@@ -131,11 +131,11 @@ public class SysRoleController {
     @ApiFormParams(
             {
                     @ApiFormParam(name = "type", description = "分类", example = "role=角色/group=角色组", required = true, check = true),
-                    @ApiFormParam(name = "name", description = "角色名称/角色组名"),
+                    @ApiFormParam(name = "name", description = "角色名称/角色组名",required = true,check = true),
                     @ApiFormParam(name = "code", description = "角色代码"),
                     @ApiFormParam(name = "disabled", description = "启用状态"),
                     @ApiFormParam(name = "groupId", description = "所属角色组ID"),
-                    @ApiFormParam(name = "unitId", description = "所属单位ID")
+                    @ApiFormParam(name = "unitId", description = "所属单位ID",required = true,check = true)
             }
     )
     @ApiResponses
