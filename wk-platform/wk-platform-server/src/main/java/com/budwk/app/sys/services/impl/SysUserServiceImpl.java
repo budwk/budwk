@@ -452,6 +452,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         StringBuilder failureMsg = new StringBuilder();
         for (Sys_user user : userList) {
             try {
+                if (Strings.isNotBlank(user.getImportUnitName())) {
+                    Sys_unit dbUnit = sysUnitService.fetch(Cnd.where("name", "=", Strings.trim(user.getImportUnitName())));
+                    if (dbUnit != null) {
+                        user.setUnitId(dbUnit.getId());
+                        user.setUnitPath(dbUnit.getPath());
+                    }
+                }
                 Sys_user dbUser = fetch(Cnd.where("loginname", "=", user.getLoginname()));
                 if (dbUser == null) {
                     if (count(Cnd.where("mobile", "=", user.getMobile())) > 0) {
