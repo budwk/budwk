@@ -32,7 +32,7 @@
         <tencentcloud-sdk-java.version>4.0.11</tencentcloud-sdk-java.version>
         <netty.version>4.1.63.Final</netty.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <mysql-connector-java.version>8.0.16</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
         <hutool.version>5.7.19</hutool.version>
         <poi.version>4.1.2</poi.version>
