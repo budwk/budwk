@@ -281,7 +281,7 @@ v-for="item in group.roles" :key="item.id" :label="item.name"
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button type="primary" @click="create">确 定</el-button>
+                    <el-button type="primary" @click="create" :loading="btnLoading">确 定</el-button>
                     <el-button @click="showCreate = false">取 消</el-button>
                 </div>
             </template>
@@ -376,7 +376,7 @@ v-for="item in group.roles" :key="item.id" :label="item.name"
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button type="primary" @click="update">确 定</el-button>
+                    <el-button type="primary" @click="update" :loading="btnLoading">确 定</el-button>
                     <el-button @click="showUpdate = false">取 消</el-button>
                 </div>
             </template>
@@ -415,7 +415,7 @@ v-for="item in group.roles" :key="item.id" :label="item.name"
          </el-upload>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button type="primary" @click="importData">确 定</el-button>
+                    <el-button type="primary" @click="importData" :loading="btnLoading">确 定</el-button>
                     <el-button @click="showImport = false">取 消</el-button>
                 </div>
             </template>
@@ -449,6 +449,7 @@ const showTable = ref(true)
 const single = ref(true)
 const multiple = ref(true)
 const modifySerialNo = ref(false)
+const btnLoading = ref(false)
 const tableLoading = ref(false)
 const tableData = ref([])
 const unitLeftOptions = ref([])
@@ -749,7 +750,9 @@ const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
+            btnLoading.value = true
             doCreate(formData.value).then((res: any) => {
+                btnLoading.value = false
                 modal.msgSuccess(res.msg)
                 showCreate.value = false
                 queryParams.value.pageNo = 1
@@ -764,7 +767,9 @@ const update = () => {
     if (!updateRef.value) return
     updateRef.value.validate((valid) => {
         if (valid) {
+            btnLoading.value = true
             doUpdate(formData.value).then((res: any) => {
+                btnLoading.value = false
                 modal.msgSuccess(res.msg)
                 showUpdate.value = false
                 list()
@@ -781,6 +786,7 @@ const handleFileUploadProgress = (event: any, file: any, fileList: any) => {
 // 文件上传成功处理
 const handleFileSuccess = (response: any, file: any, fileList: any) => {
     showImport.value = false
+    btnLoading.value = false
     upload.isUploading = false
     uploadRef.value?.handleRemove(file)
     modal.alertHtml("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>"+response.msg+"</div>", '导入结果');
@@ -789,6 +795,7 @@ const handleFileSuccess = (response: any, file: any, fileList: any) => {
 
 // 导入数据
 const importData = () => {
+    btnLoading.value = true
     uploadRef.value?.submit()
 }
 

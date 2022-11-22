@@ -12,6 +12,26 @@ import { env } from 'echarts'
 import { isNavigationFailure, NavigationFailureType, RouteLocationRaw, RouteRecordRaw } from 'vue-router'
 
 /**
+ * 从数组中查找某个对象属性值
+ * @param {any} obj 数组对象
+ * @param {string} value 匹配值
+ * @param {string} attribute 返回的属性名
+ * @param {string} name 匹配的属性名(默认为id)
+ * @returns {string}
+ */
+export const findOneValue = (obj: any, value: string, attribute: string, name = 'id',) => {
+    if(obj && obj.length > 0) {
+        const index = obj.findIndex((o: any)=>{
+            return o[name] === value
+        })
+        if(index>-1){
+            return obj[index][attribute]
+        }
+    }
+    return ''
+}
+
+/**
  * 获取第一个菜单
  */
 export const getFirstRoute = (routes: RouteRecordRaw[]): any => {

@@ -46,6 +46,13 @@ export function getAppList() {
     })
 }
 
+export function getPostList() {
+    return request({
+        url: API_SYS_ROLE_POST,
+        method: 'GET'
+    })
+}
+
 export function doCreate(data: object = {}) {
     return request({
         url: API_SYS_ROLE_CREATE,

@@ -23,7 +23,8 @@
                                 <el-button link type="primary" @click="openUpdateGroup(group)"><i
                                         class="fa fa-pencil-square-o" /></el-button>
                                 <el-button link type="primary" style="margin-left:2px;" @click="openDeleteGroup(group)">
-                                    <i class="fa fa-trash-o" /></el-button>
+                                    <i class="fa fa-trash-o" />
+                                </el-button>
                             </div>
                         </li>
                         <li v-for="r in group.roles" :key="r.id" class="role-group-item" :index="r.id"
@@ -46,7 +47,33 @@
             <el-col :span="20">
                 <el-tabs v-model="tabIndex" type="card" @tab-click="platTabClick">
                     <el-tab-pane name="USERLIST" label="用户列表">
-                        USERLIST
+                        <el-table v-loading="tableLoading" :data="tableData" row-key="id">
+                            <el-table-column prop="id" label="用户">
+                                <template #default="scope">
+                                    {{ scope.row.loginname }}({{
+                                            scope.row.username
+                                    }})
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="unitname" label="单位" />
+                            <el-table-column prop="postid" label="职务">
+                                <template #default="scope">
+                                    {{ findOneValue(posts,scope.row.postid,'name') }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column fixed="right" header-align="center" align="center" label="操作" width="180">
+                                <template #default="scope">
+                                    <el-button v-permission="['sys.manage.role.delete']" type="text" size="small"
+                                        class="button-delete-color"
+                                        :disabled="roleCode === 'sysadmin' && 'superadmin' === scope.row.loginname"
+                                        @click="removeUser(scope.row)">
+                                        移除
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
+                            v-model:limit="queryParams.pageSize" @pagination="list" />
                     </el-tab-pane>
                     <el-tab-pane v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
 
@@ -133,11 +160,13 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete } from '/@/api/platform/sys/role'
+import { findOneValue } from '/@/utils/common' 
+import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList } from '/@/api/platform/sys/role'
 import { ElForm } from 'element-plus';
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
+const posts = ref([])
 const apps = ref([])
 const appId = ref('')
 const units = ref([])
@@ -152,6 +181,8 @@ const showCreate = ref(false)
 const showUpdate = ref(false)
 const updateTitle = ref('')
 const btnLoading = ref(false)
+const tableLoading = ref(false)
+const tableData = ref([])
 
 const data = reactive({
     formData: {
@@ -172,7 +203,7 @@ const data = reactive({
         pageSize: 10,
         totalCount: 0,
         pageOrderName: 'updatedAt',
-        pageOrderBy: 'desc'
+        pageOrderBy: 'descending'
     }
 })
 
@@ -249,7 +280,12 @@ const clickRole = (role: any) => {
 
 // 查询角色下用户列表
 const list = () => {
-
+    tableLoading.value = true
+    getUserList(queryParams.value).then((res) => {
+        tableLoading.value = false
+        tableData.value = res.data.list as never
+        queryParams.value.totalCount = res.data.totalCount as never
+    })
 }
 
 // 新建角色/角色组
@@ -353,7 +389,9 @@ const listGroup = (unitId: string) => {
 
 // 加载职务列表
 const listPost = () => {
-
+    getPostList().then((res) => {
+        posts.value = res.data
+    })
 }
 
 // 加载应用列表
