@@ -3,11 +3,13 @@
         <el-row :gutter="20">
             <el-col :span="4">
                 <div class="head-container">
-                    <el-input v-model="queryUnit.name" placeholder="请输入单位名称" clearable prefix-icon="Search"
+                    <el-input
+v-model="queryUnit.name" placeholder="请输入单位名称" clearable prefix-icon="Search"
                         style="margin-bottom: 20px" />
                 </div>
                 <div class="head-container">
-                    <el-tree :data="unitLeftOptions" :props="{ label: 'name', children: 'children' }"
+                    <el-tree
+:data="unitLeftOptions" :props="{ label: 'name', children: 'children' }"
                         :expand-on-click-node="false" :filter-node-method="filterNode" ref="unitTreeRef"
                         highlight-current default-expand-all @node-click="handleNodeClick">
                         <template #default="{ node, data }">
@@ -21,15 +23,18 @@
             <el-col :span="20">
                 <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
                     <el-form-item label="用户姓名" prop="username">
-                        <el-input v-model="queryParams.username" placeholder="请输入用户姓名" clearable style="width: 180px"
+                        <el-input
+v-model="queryParams.username" placeholder="请输入用户姓名" clearable style="width: 180px"
                             @keyup.enter="handleSearch" />
                     </el-form-item>
                     <el-form-item label="用户名" prop="loginname">
-                        <el-input v-model="queryParams.loginname" placeholder="请输入用户名" clearable style="width: 180px"
+                        <el-input
+v-model="queryParams.loginname" placeholder="请输入用户名" clearable style="width: 180px"
                             @keyup.enter="handleSearch" />
                     </el-form-item>
                     <el-form-item label="手机号码" prop="mobile">
-                        <el-input v-model="queryParams.mobile" placeholder="请输入手机号码" clearable style="width: 180px"
+                        <el-input
+v-model="queryParams.mobile" placeholder="请输入手机号码" clearable style="width: 180px"
                             @keyup.enter="handleSearch" />
                     </el-form-item>
                     <el-form-item label="用户状态" prop="disabled">
@@ -39,7 +44,8 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建时间" prop="dateRange" style="font-weight:700;width: 325px;">
-                        <el-date-picker v-model="dateRange" type="daterange" range-separator="-"
+                        <el-date-picker
+v-model="dateRange" type="daterange" range-separator="-"
                             start-placeholder="开始日期" end-placeholder="结束日期" value-format="x"></el-date-picker>
                     </el-form-item>
                     <el-form-item>
@@ -50,26 +56,32 @@
 
                 <el-row :gutter="10" class="mb8">
                     <el-col :span="1.5">
-                        <el-button type="primary" plain icon="Plus" @click="handleCreate"
+                        <el-button
+type="primary" plain icon="Plus" @click="handleCreate"
                             v-permission="['sys.manage.user.create']">新增</el-button>
                     </el-col>
                     <el-col :span="1.5">
-                        <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdateMore"
+                        <el-button
+type="success" plain icon="Edit" :disabled="single" @click="handleUpdateMore"
                             v-permission="['sys.manage.user.update']">修改</el-button>
                     </el-col>
                     <el-col :span="1.5">
-                        <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDeleteMore"
+                        <el-button
+type="danger" plain icon="Delete" :disabled="multiple" @click="handleDeleteMore"
                             v-permission="['sys.manage.user.delete']">删除</el-button>
                     </el-col>
                     <el-col :span="1.5">
-                        <el-button type="info" plain icon="Upload" @click="handleImport"
+                        <el-button
+type="info" plain icon="Upload" @click="handleImport"
                             v-permission="['sys.manage.user.update']">导入</el-button>
                     </el-col>
                     <el-col :span="1.5">
-                        <el-button type="warning" plain icon="Download" @click="handleExport"
+                        <el-button
+type="warning" plain icon="Download" @click="handleExport"
                             v-permission="['sys.manage.user.export']">导出</el-button>
                     </el-col>
-                    <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
+                    <right-toolbar
+v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         @quickSearch="quickSearch" />
                 </el-row>
 
@@ -120,7 +132,8 @@
                         </template>
                     </el-table-column>
                     <template v-for="(item, idx) in columns" :key="idx">
-                        <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
+                        <el-table-column
+:prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                             :show-overflow-tooltip="false" :width="item.prop == 'createdAt' ? '160' : '120'">
                             <template v-if="item.prop == 'unit'" #default="scope">
                                 <span v-if="scope.row.unit">{{ scope.row.unit.name }}</span>
@@ -140,30 +153,36 @@
                                         icon="View" link @click="showMobile(scope.row, 'mobile')"></el-button></span>
                             </template>
                             <template v-if="item.prop == 'disabled'" #default="scope">
-                                <el-switch v-model="scope.row.disabled" :active-value="false" :inactive-value="true"
+                                <el-switch
+v-model="scope.row.disabled" :active-value="false" :inactive-value="true"
                                     active-color="green" inactive-color="red" @change="disabledChange(scope.row)" />
                             </template>
                         </el-table-column>
                     </template>
-                    <el-table-column fixed="right" header-align="center" align="center" label="操作" width="120"
+                    <el-table-column
+fixed="right" header-align="center" align="center" label="操作" width="120"
                         class-name="small-padding fixed-width">
                         <template #default="scope">
                             <el-tooltip content="重置密码" placement="top">
-                                <el-button link type="primary" icon="RefreshRight" @click="handleReset(scope.row)"
+                                <el-button
+link type="primary" icon="RefreshRight" @click="handleReset(scope.row)"
                                     v-permission="['sys.manage.unit.update']"></el-button>
                             </el-tooltip>
                             <el-tooltip content="修改" placement="top">
-                                <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                                <el-button
+link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                                     v-permission="['sys.manage.unit.update']"></el-button>
                             </el-tooltip>
                             <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
-                                <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
+                                <el-button
+link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                                     v-permission="['sys.manage.unit.delete']"></el-button>
                             </el-tooltip>
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
+                <pagination
+:total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                     v-model:limit="queryParams.pageSize" @pagination="list" />
             </el-col>
         </el-row>
@@ -178,7 +197,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属单位" prop="unitId">
-                            <el-tree-select v-model="formData.unitId" :data="unitOptions"
+                            <el-tree-select
+v-model="formData.unitId" :data="unitOptions"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
                                 placeholder="选择上级单位" check-strictly :render-after-expand="false"
                                 @change="userUnitChange" />
@@ -190,7 +210,8 @@
                             <el-button type="primary" icon="Edit" link @click="modifySerialNo = true">修改</el-button>
                         </el-form-item>
                         <el-form-item v-if="modifySerialNo" label="用户编号" prop="serialNo">
-                            <el-input-number v-model="formData.serialNo" :min="1" placeholder="员工编号"
+                            <el-input-number
+v-model="formData.serialNo" :min="1" placeholder="员工编号"
                                 auto-complete="off" />
                         </el-form-item>
                     </el-col>
@@ -223,7 +244,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="用户状态" prop="disabled">
-                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                            <el-switch
+v-model="formData.disabled" :active-value="false" :inactive-value="true"
                                 active-color="green" inactive-color="red" />
                         </el-form-item>
                     </el-col>
@@ -244,10 +266,12 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="用户角色" prop="roleIds">
-                            <el-select v-model="formData.roleIds" style="width:100%" class="span_n" multiple filterable
+                            <el-select
+v-model="formData.roleIds" style="width:100%" class="span_n" multiple filterable
                                 default-first-option placeholder="分配角色" autocomplete="off">
                                 <el-option-group v-for="group in groups" :key="group.id" :label="group.name">
-                                    <el-option v-for="item in group.roles" :key="item.id" :label="item.name"
+                                    <el-option
+v-for="item in group.roles" :key="item.id" :label="item.name"
                                         :value="item.id" />
                                 </el-option-group>
                             </el-select>
@@ -273,7 +297,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属单位" prop="unitId">
-                            <el-tree-select v-model="formData.unitId" :data="unitOptions"
+                            <el-tree-select
+v-model="formData.unitId" :data="unitOptions"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
                                 placeholder="选择上级单位" check-strictly :render-after-expand="false"
                                 @change="userUnitChange" />
@@ -285,7 +310,8 @@
                             <el-button type="primary" icon="Edit" link @click="modifySerialNo = true">修改</el-button>
                         </el-form-item>
                         <el-form-item v-if="modifySerialNo" label="用户编号" prop="serialNo">
-                            <el-input-number v-model="formData.serialNo" :min="1" placeholder="员工编号"
+                            <el-input-number
+v-model="formData.serialNo" :min="1" placeholder="员工编号"
                                 auto-complete="off" />
                         </el-form-item>
                     </el-col>
@@ -313,7 +339,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="用户状态" prop="disabled">
-                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                            <el-switch
+v-model="formData.disabled" :active-value="false" :inactive-value="true"
                                 active-color="green" inactive-color="red" />
                         </el-form-item>
                     </el-col>
@@ -334,10 +361,12 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="用户角色" prop="roleIds">
-                            <el-select v-model="formData.roleIds" style="width:100%" class="span_n" multiple filterable
+                            <el-select
+v-model="formData.roleIds" style="width:100%" class="span_n" multiple filterable
                                 default-first-option placeholder="分配角色" autocomplete="off">
                                 <el-option-group v-for="group in groups" :key="group.id" :label="group.name">
-                                    <el-option v-for="item in group.roles" :key="item.id" :label="item.name"
+                                    <el-option
+v-for="item in group.roles" :key="item.id" :label="item.name"
                                         :value="item.id" />
                                 </el-option-group>
                             </el-select>
@@ -352,26 +381,70 @@
                 </div>
             </template>
         </el-dialog>
+
+        <el-dialog title="导入用户" v-model="showImport" width="30%">
+            <el-upload
+            ref="uploadRef"
+            name="Filedata"
+            :limit="1"
+            accept=".xlsx, .xls"
+            :headers="upload.headers"
+            :action="upload.url + '?updateSupport=' + upload.updateSupport+'&pwd='+upload.pwd"
+            :disabled="upload.isUploading"
+            :on-progress="handleFileUploadProgress"
+            :on-success="handleFileSuccess"
+            :auto-upload="false"
+            drag
+         >
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <template #tip>
+               <div class="el-upload__tip text-center">
+                  <div class="el-upload__tip">
+                    <el-col >
+                        新用户默认登录密码：（不填写将生成随机密码）<el-input v-model="upload.pwd" style="width:50%" placeholder="新用户默认登录密码"></el-input>
+                    </el-col>
+                    <el-col>
+                        <el-checkbox v-model="upload.updateSupport" /> 是否更新已经存在的用户数据（不更新密码）
+                    </el-col>
+                  </div>
+                  <span>仅允许导入xls、xlsx格式文件。</span>
+                  <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="importTemplate">下载模板</el-link>
+               </div>
+            </template>
+         </el-upload>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="importData">确 定</el-button>
+                    <el-button @click="showImport = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
 import download from '/@/utils/download'
-import { API_SYS_USER_EXPORT, getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore, doResetPwd } from '/@/api/platform/sys/user'
+import { API_SYS_USER_IMPORT_TEMPLATE, API_SYS_USER_IMPORT_DATA, API_SYS_USER_EXPORT, getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore, doResetPwd } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
-import { ElForm, ElTree } from 'element-plus'
+import { ElForm, ElTree, ElUpload } from 'element-plus'
 import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
+import { useUserInfo } from '/@/stores/userInfo'
 import { buildValidatorData } from '/@/utils/validate'
+
+const userInfo = useUserInfo()
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 const queryRef = ref<InstanceType<typeof ElForm>>()
 const unitTreeRef = ref<InstanceType<typeof ElTree>>()
+const uploadRef = ref<InstanceType<typeof ElUpload>>()
 
 const showCreate = ref(false)
 const showUpdate = ref(false)
 const showSearch = ref(true)
+const showImport = ref(false)
 const showTable = ref(true)
 const single = ref(true)
 const multiple = ref(true)
@@ -387,13 +460,26 @@ const names = ref([])
 const currentUnitId = ref('')
 const currentUnitPath = ref('')
 
+const upload = reactive({
+    // 是否禁用上传
+    isUploading: false,
+    // 是否更新已经存在的用户数据
+    updateSupport: 0,
+    // 新用户默认密码
+    pwd: '',
+    // 设置上传的请求头部
+    headers: { "wk-user-token": userInfo.getToken() },
+    // 上传的地址
+    url: import.meta.env.VITE_AXIOS_BASE_URL + API_SYS_USER_IMPORT_DATA
+})
+
 const data = reactive({
     formData: {
         id: '',
         unitId: '',
         unitPath: '',
         postId: '',
-        roleIds: '',
+        roleIds: [],
         username: '',
         loginname: '',
         password: '',
@@ -420,6 +506,9 @@ const data = reactive({
         pageOrderName: 'updatedAt',
         pageOrderBy: 'desc'
     },
+    importParams: {
+        cover: false
+    },
     formRules: {
         username: [{ required: true, message: "用户姓名不能为空", trigger: ["blur", "change"] }],
         loginname: [{ required: true, message: "登录用户名不能为空", trigger: ["blur", "change"] }],
@@ -432,7 +521,7 @@ const data = reactive({
     groups: []
 })
 
-const { queryUnit, posts, groups, queryParams, formData, formRules } = toRefs(data)
+const { queryUnit, posts, groups, queryParams, importParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
     { prop: 'username', label: `用户姓名`, show: true, fixed: 'left' },
@@ -451,7 +540,7 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         unitId: '',
         unitPath: '',
         postId: '',
-        roleIds: '',
+        roleIds: [],
         username: '',
         loginname: '',
         password: '',
@@ -562,14 +651,15 @@ const showMobile = (row: any, col: string) => {
 }
 
 // 用户所属单位
-const userUnitChange = (val: string) => {
-    getRoleGroups(val).then((res) => {
+const userUnitChange = (unitId: string) => {
+    getRoleGroups(unitId).then((res) => {
         groups.value = res.data
     })
     const idx = unitList.value.findIndex((obj) => {
-        return obj['id'] == val
+        return obj['id'] == unitId
     })
     formData.value.unitPath = unitList.value[idx]['path']
+    formData.value.roleIds = []
 }
 
 // 新增按钮
@@ -595,7 +685,9 @@ const handleUpdate = (row: any) => {
     getInfo(row.id).then((res: any) => {
         formData.value = res.data.user
         formData.value.roleIds = res.data.roleIds
-        userUnitChange(formData.value.unitId)
+        getRoleGroups(formData.value.unitId).then((res) => {
+            groups.value = res.data
+        })
         showUpdate.value = true
     })
 }
@@ -636,15 +728,20 @@ const handleReset = (row: any) => {
     }).catch(() => { })
 }
 
-// 导入
+// 导入数据
 const handleImport = () => {
-
+    upload.pwd = ''
+    showImport.value = true
 }
 
-// 导出
+// 导入模版
+const importTemplate = () => {
+    download.download(API_SYS_USER_IMPORT_TEMPLATE, {},`user_template_${new Date().getTime()}.xlsx`);
+}
+
+// 导出数据
 const handleExport = () => {
-    download.download(API_SYS_USER_EXPORT, { ...queryParams.value,
-    },`user_${new Date().getTime()}.xlsx`);
+    download.download(API_SYS_USER_EXPORT, { ...queryParams.value},`user_${new Date().getTime()}.xlsx`);
 }
 
 // 提交新增
@@ -674,6 +771,25 @@ const update = () => {
             })
         }
     })
+}
+
+// 文件上传中处理
+const handleFileUploadProgress = (event: any, file: any, fileList: any) => {
+    upload.isUploading = true
+}
+
+// 文件上传成功处理
+const handleFileSuccess = (response: any, file: any, fileList: any) => {
+    showImport.value = false
+    upload.isUploading = false
+    uploadRef.value?.handleRemove(file)
+    modal.alertHtml("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>"+response.msg+"</div>", '导入结果');
+    list()
+}
+
+// 导入数据
+const importData = () => {
+    uploadRef.value?.submit()
 }
 
 // 筛选单位

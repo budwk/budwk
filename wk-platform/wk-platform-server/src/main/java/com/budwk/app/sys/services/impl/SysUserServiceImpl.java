@@ -3,6 +3,7 @@ package com.budwk.app.sys.services.impl;
 import cn.hutool.core.util.RandomUtil;
 import com.budwk.app.sys.models.*;
 import com.budwk.app.sys.services.*;
+import com.budwk.starter.common.constant.GlobalConstant;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.common.utils.PwdUtil;
@@ -437,6 +438,81 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         this.dao().clear("sys_unit_user", Cnd.where("userId", "=", userId));
         this.delete(userId);
         this.cacheRemove(userId);
+    }
+
+
+    @Override
+    public String importUser(List<Sys_user> userList, String password, Boolean isUpdateSupport, String userId) {
+        if (userList == null || userList.size() == 0) {
+            throw new BaseException("导入用户数据不能为空！");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        for (Sys_user user : userList) {
+            try {
+                Sys_user dbUser = fetch(Cnd.where("loginname", "=", user.getLoginname()));
+                if (dbUser == null) {
+                    if (count(Cnd.where("mobile", "=", user.getMobile())) > 0) {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginname() + " 手机号已存在");
+                        continue;
+                    }
+                    if (count(Cnd.where("email", "=", user.getEmail())) > 0) {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginname() + " Email已存在");
+                        continue;
+                    }
+                    String salt = R.UU32();
+                    String pwd = password;
+                    if (Strings.isBlank(pwd)) {
+                        pwd = RandomUtil.randomString(12);
+                    }
+                    user.setPassword(PwdUtil.getPassword(pwd, salt));
+                    user.setSalt(salt);
+                    user.setCreatedBy(userId);
+                    this.insert(user);
+                    successNum++;
+                    successMsg.append("<br/>" + successNum + "、用户 " + user.getLoginname() + "（密码：" + pwd + "） 导入成功");
+                } else if (isUpdateSupport) {
+                    if (!GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(user.getLoginname())) {
+                        if (count(Cnd.where("mobile", "=", user.getMobile()).and("loginname", "<>", user.getLoginname())) > 0) {
+                            failureNum++;
+                            failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginname() + " 手机号已存在");
+                            continue;
+                        }
+                        if (count(Cnd.where("email", "=", user.getEmail()).and("loginname", "<>", user.getLoginname())) > 0) {
+                            failureNum++;
+                            failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginname() + " Email已存在");
+                            continue;
+                        }
+                        user.setUpdatedBy(userId);
+                        this.updateIgnoreNull(user);
+                        successNum++;
+                        successMsg.append("<br/>" + successNum + "、账号 " + user.getLoginname() + " 更新成功");
+                    } else {
+                        failureNum++;
+                        failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginname() + " 系统管理员不允许操作");
+                    }
+                } else {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getLoginname() + " 已存在");
+                }
+            } catch (Exception e) {
+                failureNum++;
+                String msg = "<br/>" + failureNum + "、账号 " + user.getLoginname() + " 导入失败：";
+                failureMsg.append(msg + e.getMessage());
+                log.error(msg, e);
+            }
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "很抱歉， 导入成功 " + successNum + " 条，导入失败 " + failureNum + " 条，错误如下：");
+            throw new BaseException(failureMsg.toString());
+        } else {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        }
+        return successMsg.toString();
     }
 
     @Override

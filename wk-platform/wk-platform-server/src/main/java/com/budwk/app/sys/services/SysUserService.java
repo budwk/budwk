@@ -208,6 +208,17 @@ public interface SysUserService extends BaseService<Sys_user> {
     void deleteUser(String userId);
 
     /**
+     * 导入用户数据
+     *
+     * @param userList        用户列表
+     * @param password        默认密码
+     * @param isUpdateSupport 是否更新已有数据
+     * @param userId          操作人ID
+     * @return
+     */
+    String importUser(List<Sys_user> userList, String password, Boolean isUpdateSupport, String userId);
+
+    /**
      * 删除用户缓存
      *
      * @param userId 用户ID

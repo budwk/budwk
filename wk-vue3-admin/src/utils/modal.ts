@@ -35,6 +35,10 @@ export default {
     alertWarning(content: string) {
         ElMessageBox.alert(content, "系统提示", { type: 'warning' })
     },
+    // 弹出提示
+    alertHtml(content: string, title: string) {
+        ElMessageBox.alert(content, title, { dangerouslyUseHTMLString: true })
+    },
     // 通知提示
     notify(content: string) {
         ElNotification.info(content)

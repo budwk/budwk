@@ -12,6 +12,8 @@ export const API_SYS_USER_DISABLED = '/platform/sys/user/disabled'
 export const API_SYS_USER_DELETE = '/platform/sys/user/delete/'
 export const API_SYS_USER_DELETE_MORE = '/platform/sys/user/delete_more'
 export const API_SYS_USER_EXPORT = '/platform/sys/user/export'
+export const API_SYS_USER_IMPORT_DATA = '/platform/sys/user/importData'
+export const API_SYS_USER_IMPORT_TEMPLATE = '/platform/sys/user/importTemplate'
 
 import request from '/@/utils/request'
 

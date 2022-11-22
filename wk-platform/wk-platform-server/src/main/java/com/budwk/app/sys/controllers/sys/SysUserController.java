@@ -1,5 +1,6 @@
 package com.budwk.app.sys.controllers.sys;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.io.IoUtil;
@@ -32,6 +33,8 @@ import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.upload.TempFile;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -531,5 +534,38 @@ public class SysUserController {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+    }
+
+
+    @At("/importData")
+    @Ok("json")
+    @POST
+    @ApiOperation(name = "导入用户数据")
+    @ApiFormParams(
+            value = {
+                    @ApiFormParam(name = "Filedata", example = "", description = "文件表单对象名"),
+                    @ApiFormParam(name = "updateSupport", example = "", description = "是否覆盖"),
+            },
+            mediaType = "multipart/form-data"
+    )
+    @ApiResponses
+    @SaCheckPermission("sys.manage.user.import")
+    @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
+    public Result<?> importData(@Param("Filedata") TempFile tf, @Param("pwd") String pwd, @Param(value = "updateSupport", df = "false") Boolean updateSupport, HttpServletRequest req, HttpServletResponse response) throws Exception {
+        ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
+        List<Sys_user> list = util.importExcel(tf.getInputStream());
+        return Result.success(sysUserService.importUser(list, pwd, updateSupport, SecurityUtil.getUserId()));
+    }
+
+    @At("/importTemplate")
+    @Ok("void")
+    @POST
+    @ApiOperation(name = "导入数据模版")
+    @ApiImplicitParams
+    @ApiResponses
+    @SaCheckLogin
+    public void importTemplate(HttpServletResponse response) {
+        ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
+        util.importTemplateExcel(response, "用户数据");
     }
 }

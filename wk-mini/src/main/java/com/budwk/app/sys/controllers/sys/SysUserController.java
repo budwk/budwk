@@ -27,7 +27,6 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
@@ -37,12 +36,8 @@ import org.nutz.mvc.upload.UploadAdaptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wizzer@qq.com
@@ -542,15 +537,17 @@ public class SysUserController {
     @ApiFormParams(
             value = {
                     @ApiFormParam(name = "Filedata", example = "", description = "文件表单对象名"),
+                    @ApiFormParam(name = "updateSupport", example = "", description = "是否覆盖"),
             },
             mediaType = "multipart/form-data"
     )
     @ApiResponses
-    //@SaCheckPermission("sys.manage.user.import")
+    @SaCheckPermission("sys.manage.user.import")
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
-    public void importData(@Param("Filedata") TempFile tf, HttpServletRequest req, HttpServletResponse response) throws Exception{
+    public Result<?> importData(@Param("Filedata") TempFile tf, @Param("pwd") String pwd, @Param(value = "updateSupport", df = "false") Boolean updateSupport, HttpServletRequest req, HttpServletResponse response) throws Exception {
         ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
         List<Sys_user> list = util.importExcel(tf.getInputStream());
+        return Result.success(sysUserService.importUser(list, pwd, updateSupport, SecurityUtil.getUserId()));
     }
 
     @At("/importTemplate")
@@ -560,8 +557,7 @@ public class SysUserController {
     @ApiImplicitParams
     @ApiResponses
     @SaCheckLogin
-    public void importTemplate(HttpServletResponse response)
-    {
+    public void importTemplate(HttpServletResponse response) {
         ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
         util.importTemplateExcel(response, "用户数据");
     }
