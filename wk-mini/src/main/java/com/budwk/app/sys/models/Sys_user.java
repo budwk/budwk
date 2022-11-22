@@ -113,14 +113,14 @@ public class Sys_user extends BaseModel implements Serializable {
     @Column
     @Comment("登录时间")
     @ApiModelProperty(description = "登录时间")
-    @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     private Long loginAt;
 
     @Column
     @Comment("登录IP")
     @ApiModelProperty(description = "登录IP")
     @ColDefine(type = ColType.VARCHAR, width = 255)
-    @Excel(name = "最后登录IP")
+    @Excel(name = "最后登录IP", type = Excel.Type.EXPORT)
     private String loginIp;
 
     @Column
@@ -176,17 +176,20 @@ public class Sys_user extends BaseModel implements Serializable {
     @ApiModelProperty(description = "职务ID")
     private String postId;
 
+    @Excel(name = "单位名称", type = Excel.Type.IMPORT)
+    private String importUnitName;
+
     @One(field = "unitId")
     @ApiModelProperty(description = "单位对象")
     @Excels({
-            @Excel(name = "所属单位", targetAttr = "name")
+            @Excel(name = "所属单位", targetAttr = "name", type = Excel.Type.EXPORT)
     })
     private Sys_unit unit;
 
     @One(field = "postId")
     @ApiModelProperty(description = "职务对象")
     @Excels({
-            @Excel(name = "单位职务", targetAttr = "name")
+            @Excel(name = "单位职务", targetAttr = "name", type = Excel.Type.EXPORT)
     })
     private Sys_post post;
 
