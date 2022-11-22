@@ -27,6 +27,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
@@ -547,6 +548,7 @@ public class SysUserController {
     public Result<?> importData(@Param("Filedata") TempFile tf, @Param("pwd") String pwd, @Param(value = "updateSupport", df = "false") Boolean updateSupport, HttpServletRequest req, HttpServletResponse response) throws Exception {
         ExcelUtil<Sys_user> util = new ExcelUtil<>(Sys_user.class);
         List<Sys_user> list = util.importExcel(tf.getInputStream());
+        log.debug(Json.toJson(list));
         return Result.success(sysUserService.importUser(list, pwd, updateSupport, SecurityUtil.getUserId()));
     }
 

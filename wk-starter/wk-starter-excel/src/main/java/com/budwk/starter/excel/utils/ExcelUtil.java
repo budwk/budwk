@@ -1003,36 +1003,38 @@ public class ExcelUtil<T> {
                     Excel attr = (Excel) entry.getValue()[1];
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
-                    if (String.class == fieldType) {
-                        String s = Strings.sNull(val);
-                        if (StringUtils.endsWith(s, ".0")) {
-                            val = StringUtils.substringBefore(s, ".0");
-                        } else {
-                            String dateFormat = field.getAnnotation(Excel.class).dateFormat();
-                            if (StringUtils.isNotEmpty(dateFormat)) {
-                                val = parseDateToStr(dateFormat, val);
+                    if(StringUtils.isEmpty(attr.dict())) {
+                        if (String.class == fieldType) {
+                            String s = Strings.sNull(val);
+                            if (StringUtils.endsWith(s, ".0")) {
+                                val = StringUtils.substringBefore(s, ".0");
                             } else {
-                                val = Strings.sNull(val);
+                                String dateFormat = field.getAnnotation(Excel.class).dateFormat();
+                                if (StringUtils.isNotEmpty(dateFormat)) {
+                                    val = parseDateToStr(dateFormat, val);
+                                } else {
+                                    val = Strings.sNull(val);
+                                }
                             }
+                        } else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && StringUtils.isNumeric(Strings.sNull(val))) {
+                            val = Integer.parseInt(Strings.sNull(val));
+                        } else if ((Long.TYPE == fieldType || Long.class == fieldType) && StringUtils.isNumeric(Strings.sNull(val))) {
+                            val = Long.parseLong(Strings.sNull(val));
+                        } else if (Double.TYPE == fieldType || Double.class == fieldType) {
+                            val = val == null ? null : Double.parseDouble(Strings.sNull(val));
+                        } else if (Float.TYPE == fieldType || Float.class == fieldType) {
+                            val = val == null ? null : Float.parseFloat(Strings.sNull(val));
+                        } else if (BigDecimal.class == fieldType) {
+                            val = val == null ? null : new BigDecimal(Strings.sNull(val));
+                        } else if (Date.class == fieldType) {
+                            if (val instanceof String) {
+                                val = Times.D(Strings.sNull(val));
+                            } else if (val instanceof Double) {
+                                val = DateUtil.getJavaDate((Double) val);
+                            }
+                        } else if (Boolean.TYPE == fieldType || Boolean.class == fieldType) {
+                            val = Boolean.parseBoolean(Strings.sNull(val, "false"));
                         }
-                    } else if ((Integer.TYPE == fieldType || Integer.class == fieldType) && StringUtils.isNumeric(Strings.sNull(val))) {
-                        val = Integer.parseInt(Strings.sNull(val));
-                    } else if ((Long.TYPE == fieldType || Long.class == fieldType) && StringUtils.isNumeric(Strings.sNull(val))) {
-                        val = Long.parseLong(Strings.sNull(val));
-                    } else if (Double.TYPE == fieldType || Double.class == fieldType) {
-                        val = val == null ? null : Double.parseDouble(Strings.sNull(val));
-                    } else if (Float.TYPE == fieldType || Float.class == fieldType) {
-                        val = val == null ? null : Float.parseFloat(Strings.sNull(val));
-                    } else if (BigDecimal.class == fieldType) {
-                        val = val == null ? null : new BigDecimal(Strings.sNull(val));
-                    } else if (Date.class == fieldType) {
-                        if (val instanceof String) {
-                            val = Times.D(Strings.sNull(val));
-                        } else if (val instanceof Double) {
-                            val = DateUtil.getJavaDate((Double) val);
-                        }
-                    } else if (Boolean.TYPE == fieldType || Boolean.class == fieldType) {
-                        val = Boolean.parseBoolean(Strings.sNull(val, "false"));
                     }
                     if (fieldType != null) {
                         String propertyName = field.getName();
@@ -1040,6 +1042,9 @@ public class ExcelUtil<T> {
                             propertyName = field.getName() + "." + attr.targetAttr();
                         } else if (StringUtils.isNotEmpty(attr.dict())) {
                             val = reverseByExp(Strings.sNull(val), attr.dict(), attr.separator());
+                            if (Boolean.TYPE == fieldType || Boolean.class == fieldType) {
+                                val = Boolean.parseBoolean(Strings.sNull(val, "false"));
+                            }
                         } else if (!attr.handler().equals(ExcelHandlerAdapter.class)) {
                             val = dataFormatHandlerAdapter(val, attr);
                         }
