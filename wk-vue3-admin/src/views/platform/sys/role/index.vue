@@ -62,7 +62,7 @@
                                 </el-form>
                             </el-col>
                             <el-col :span="5" style="text-align:right">
-                                <el-button type="primary" icon="Plus" v-permission="['sys.manage.role.update']"
+                                <el-button plain icon="Plus" type="primary" v-permission="['sys.manage.role.update']"
                                     @click="openUser" :disabled="roleCode == 'public'">{{ roleCode =='public'?'公共角色为默认角色':'关联用户到角色'}}</el-button>
                             </el-col>
                         </el-row>
@@ -96,8 +96,8 @@
                     </el-tab-pane>
                     <el-tab-pane v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
                         <el-row style="margin-bottom: 3px;">
-                            <el-button @click="menuRoleSelAll('tree_'+app.id)">全选</el-button>
-                            <el-button @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
+                            <el-button icon="Select" type="success" plain @click="menuRoleSelAll('tree_'+app.id)">全选</el-button>
+                            <el-button icon="SemiSelect" type="danger" plain @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
                             <span style="font-size:12px;padding-left:10px;">勾选联动</span>
                             <el-switch v-model="treeCheckStrictly" />
                         </el-row>
@@ -113,8 +113,8 @@
                             :props="{children: 'children',label: 'label',class: customNodeClass}"
                             style="padding-top:10px;"
                         >
-                            <template #default="scope">
-                                {{scope.data.name}}
+                            <template #default="{ node, data }">
+                                <i v-if="data.type=='menu'" :class="node.expanded?'fa fa-folder-open-o':'fa fa-folder-o'"></i>{{data.name}}
                             </template>
                         </el-tree>
                     </el-tab-pane>

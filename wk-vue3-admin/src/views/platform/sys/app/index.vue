@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.app.create']">新增
+                <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.app.create']">新增
                 </el-button>
             </el-col>
             <right-toolbar @quickSearch="quickSearch" />

@@ -15,15 +15,15 @@
         </el-form>
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.unit.create']">新增
+                <el-button type="primary" icon="Plus" plain @click="handleCreate" v-permission="['sys.manage.unit.create']">新增
                 </el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button icon="Sort" @click="handleSort" v-permission="['sys.manage.unit.update']">排序</el-button>
+                <el-button plain type="success" icon="Sort" @click="handleSort" v-permission="['sys.manage.unit.update']">排序</el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button v-if="isExpandAll" type="info" icon="FolderOpened" @click="toggleExpandAll">展开</el-button>
-                <el-button v-else type="info" icon="Folder" @click="toggleExpandAll">折叠</el-button>
+                <el-button plain v-if="isExpandAll" icon="FolderOpened" @click="toggleExpandAll">展开</el-button>
+                <el-button plain v-else icon="Folder" @click="toggleExpandAll">折叠</el-button>
             </el-col>
             <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                 @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过单位名称搜索" />
