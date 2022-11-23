@@ -446,7 +446,7 @@ const loadDoMenuData = () => {
         doMenuData.value = res.data.menuTree as never
         doMenuCheckedData.value = res.data.menuIds as never
         nextTick(() => {
-            //changeTreeClass()
+            changeTreeClass()
         })
     })
 }
@@ -459,13 +459,10 @@ const customNodeClass = (data: any, node: any) => {
 }
 
 const changeTreeClass = () => {
-    const levelName = document.getElementsByClassName('especially') 
-    for (var i = 0; i < levelName.length; i++) {
+    const levelName = document.getElementsByClassName('menu-is-data')
+    for (let i = 0; i < levelName.length; i++) {
         // cssFloat 兼容 ie6-8  styleFloat 兼容ie9及标准浏览器
-        levelName[i].parentNode.parentNode.parentNode.style.cssText = 'padding-left: 30px;'
-        levelName[i].parentNode.parentNode.style = 'background-color:#fff;float:left;padding-left:5px !important;'
-        levelName[i].parentNode.style.styleFloat = 'left'
-        levelName[i].parentNode.style.cssText = levelName[i].parentNode.style.cssText + 'padding-left: 0px;'
+        levelName[i].parentNode.style.cssText = 'padding-left: 30px;'
     }
 }
 
@@ -697,7 +694,6 @@ export default {
 
 .menu-is-data {
     float: left;
-    padding-left: 25px;
 }
 
 .menu-is-data > .el-tree-node__content {
