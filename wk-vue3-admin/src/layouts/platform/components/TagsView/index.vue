@@ -1,6 +1,6 @@
 <template>
     <div id="tags-view-container" class="tags-view-container">
-      <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
+      <div ref="tabScrollbarRef" class="tags-view-wrapper" @wheel.prevent="handleScroll">
         <router-link
           v-for="tag in visitedViews"
           :key="tag.path"
@@ -17,7 +17,7 @@
             <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
           </span>
         </router-link>
-      </scroll-pane>
+        </div>
       <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
         <li @click="refreshSelectedTag(selectedTag)">
           <refresh-right style="width: 1em; height: 1em;" /> 刷新页面
@@ -42,7 +42,6 @@
   </template>
   
 <script setup lang="ts">
-import ScrollPane from './ScrollPane.vue'
 import { getNormalPath } from '/@/utils/common'
 import { useClient } from '/@/stores/client'
 import { useTagsView } from '/@/stores/tagsView'
@@ -50,6 +49,7 @@ import { useUserSettings } from '/@/stores/userSettings'
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import { useUserViews } from '/@/stores/userViews'
+import horizontalScroll from '/@/utils/horizontalScroll'
 import tag from '/@/utils/tag'
 import variables from "/@/assets/styles/variables.module.scss"
 
@@ -58,7 +58,7 @@ const top = ref(0)
 const left = ref(0)
 const selectedTag = ref({})
 const affixTags = ref([])
-const scrollPaneRef = ref(null)
+const tabScrollbarRef = ref()
 
 const route = useRoute()
 const router = useRouter()
@@ -83,6 +83,7 @@ watch(visible, (value) => {
 onMounted(() => {
     initTags()
     addTags()
+    new horizontalScroll(tabScrollbarRef.value)
 })
 
 function isActive(r:any) {
@@ -157,7 +158,6 @@ function moveToCurrentTag() {
     nextTick(() => {
         for (const r of visitedViews.value) {
             if (r.path === route.path) {
-                scrollPaneRef.value.moveToTarget(r);
                 // when query is different then update
                 if (r.fullPath !== route.fullPath) {
                     useTagsView().updateVisitedView(route)

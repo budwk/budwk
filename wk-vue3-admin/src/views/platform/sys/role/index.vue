@@ -94,18 +94,23 @@
                         <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                             v-model:limit="queryParams.pageSize" @pagination="list" />
                     </el-tab-pane>
-                    <el-tab-pane v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
-                        <el-row style="margin-bottom: 3px;">
-                            <el-button icon="Select" type="success" plain @click="menuRoleSelAll('tree_'+app.id)">全选</el-button>
-                            <el-button icon="SemiSelect" type="danger" plain @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
-                            <span style="font-size:12px;padding-left:10px;">勾选联动</span>
-                            <el-switch v-model="treeCheckStrictly" />
+                    <el-tab-pane ref="tabPaneRef" v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
+                        <el-row :gutter="10" style="margin-bottom: 3px;" class="mb8">
+                            <el-col :span="1.5">
+                                <el-button icon="Select" type="success" plain @click="menuRoleSelAll('tree_'+app.id)">全选</el-button>
+                            </el-col>
+                            <el-col :span="1.5">
+                                <el-button icon="SemiSelect" type="danger" plain @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
+                            </el-col>
+                            <el-col :span="1.5">
+                                <el-switch v-model="treeCheckStrictly" />
+                            </el-col>
                         </el-row>
                         <el-tree
-                            :ref="'tree_'+app.id"
+                            :ref="(el)=>setTreeRef(el,'tree_'+app.id)"
                             :data="doMenuData"
                             :default-checked-keys="doMenuCheckedData"
-                            default-expand-all
+                            :default-expand-all="true"
                             :highlight-current="true"
                             :check-strictly="!treeCheckStrictly"
                             show-checkbox
@@ -246,12 +251,13 @@
 import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
 import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser, doUnLinkUser, getMenuList } from '/@/api/platform/sys/role'
-import { ElForm } from 'element-plus';
+import { ElForm, ElTabPane } from 'element-plus';
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 const queryRef = ref<InstanceType<typeof ElForm>>()
 const queryUserRef = ref<InstanceType<typeof ElForm>>()
+
 const posts = ref([])
 const apps = ref([])
 const appId = ref('')
@@ -440,8 +446,10 @@ const cancelLink = (row: any) => {
     }).catch(() => { })
 }
 
+
 // 加载应用菜单
 const loadDoMenuData = () => {
+    doMenuCheckedData.value = []
     getMenuList(roleId.value, appId.value).then((res)=>{
         doMenuData.value = res.data.menuTree as never
         doMenuCheckedData.value = res.data.menuIds as never
@@ -466,12 +474,23 @@ const changeTreeClass = () => {
     }
 }
 
-const menuRoleSelAll = (val: string) => {
+const treeRefs = {}
 
+const setTreeRef = (el: any, key: string) => {
+    if(el){
+        treeRefs[key] = el
+    }
+}
+const menuRoleSelAll = (val: string) => {
+    console.log(val)
+    console.log(treeRefs[val])
 }
 
 const menuRoleSelClear = (val: string) =>{
-
+    console.log(treeRefs[val].getCheckedNodes())
+    nextTick(()=>{
+        treeRefs[val].setCheckedNodes([])
+    })
 }
 
 // 切换角色
