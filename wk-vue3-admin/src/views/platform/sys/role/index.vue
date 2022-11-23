@@ -85,7 +85,7 @@
                                     <el-button v-permission="['sys.manage.role.delete']" link type="danger"
                                         icon="Remove" class="button-delete-color"
                                         :disabled="roleCode === 'sysadmin' && 'superadmin' === scope.row.loginname"
-                                        @click="removeUser(scope.row)">
+                                        @click="cancelLink(scope.row)">
                                         移除
                                     </el-button>
                                 </template>
@@ -224,7 +224,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser } from '/@/api/platform/sys/role'
+import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser, doUnLinkUser } from '/@/api/platform/sys/role'
 import { ElForm } from 'element-plus';
 
 const createRef = ref<InstanceType<typeof ElForm>>()
@@ -403,6 +403,17 @@ const linkUser = () => {
         list()
         showUser.value = false
     })
+}
+
+// 取消关联
+const cancelLink = (row: any) => {
+    const title = row.loginname + '(' + row.username + ')'
+    modal.confirm('确定从角色 ' + roleName.value + ' 移除 ' + title+ ' ？').then(() => {
+        return doUnLinkUser(roleId.value,roleCode.value,row.id,row.tite)
+    }).then(() => {
+        queryParams.value.pageNo = 1
+        list()
+    }).catch(() => { })
 }
 
 // 加载应用菜单

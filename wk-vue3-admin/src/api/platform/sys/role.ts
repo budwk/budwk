@@ -97,3 +97,16 @@ export function doLinkUser(roleId: string, roleCode: string, ids: string, names:
         }
     })
 }
+
+export function doUnLinkUser(roleId: string, roleCode: string, id: string, name: string) {
+    return request({
+        url: API_SYS_ROLE_UNLINK_USER,
+        method: 'POST',
+        data: {
+            roleId: roleId,
+            roleCode: roleCode,
+            id: id,
+            name: name
+        }
+    })
+}
