@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { loadLang } from '/@/lang/index'
-import { registerIcons, formatTime, formatDate } from '/@/utils/common'
+import { registerIcons, formatTime, formatDate, findOneValue } from '/@/utils/common'
 import ElementPlus from 'element-plus'
 import mitt from 'mitt'
 import pinia from '/@/stores/index'
@@ -27,6 +27,7 @@ async function start() {
     // 全局方法挂载
     app.config.globalProperties.formatTime = formatTime
     app.config.globalProperties.formatDate = formatDate
+    app.config.globalProperties.findOneValue = findOneValue
 
     // 注册全局组件
     app.component('RightToolbar', RightToolbar)

@@ -287,13 +287,13 @@ public class SysRoleController {
     }
 
     @At("/select_user")
-    @Ok("json:{locked:'password|salt',ignoreNull:false}")
+    @Ok("json:{locked:'^(password|salt)$',ignoreNull:false}")
     @POST
     @ApiOperation(name = "获取待分配用户列表(排除已分配)")
     @ApiFormParams(
             {
-                    @ApiFormParam(name = "roleId", example = "", description = "角色ID"),
-                    @ApiFormParam(name = "unitId", example = "", description = "单位ID"),
+                    @ApiFormParam(name = "roleId", example = "", description = "角色ID",required = true,check = true),
+                    @ApiFormParam(name = "unitId", example = "", description = "单位ID",required = true,check = true),
                     @ApiFormParam(name = "username", example = "", description = "参数Key"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),

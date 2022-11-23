@@ -24,6 +24,14 @@ export function getUserList(data: object) {
     })
 }
 
+export function getQueryUserList(data: object) {
+    return request({
+        url: API_SYS_ROLE_SELECT_USER,
+        method: 'POST',
+        data: data
+    })
+}
+
 export function getGroupList(unitId: string) {
     return request({
         url: API_SYS_ROLE_GROUP,
@@ -74,5 +82,18 @@ export function doDelete(type: string, id: string, name: string) {
         url: API_SYS_ROLE_DELETE,
         method: 'POST',
         data: { type: type, id: id, name: name }
+    })
+}
+
+export function doLinkUser(roleId: string, roleCode: string, ids: string, names: string) {
+    return request({
+        url: API_SYS_ROLE_LINK_USER,
+        method: 'POST',
+        data: {
+            roleId: roleId,
+            roleCode: roleCode,
+            ids: ids,
+            names: names
+        }
     })
 }

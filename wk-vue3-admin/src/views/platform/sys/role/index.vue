@@ -49,22 +49,22 @@
                     <el-tab-pane name="USERLIST" label="用户列表">
                         <el-row class="right-user-add">
                             <el-col :span="20">
-                        <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
-                            <el-form-item label="" prop="username">
-                                <el-input
-                                    v-model="queryParams.username" placeholder="请输入姓名或用户名" clearable style="width: 220px"
-                                    @keyup.enter="handleSearch" />
-                                    <el-input style="display:none"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
-                                <el-button icon="Refresh" @click="resetSearch">重置</el-button>
-                            </el-form-item>
-                        </el-form>
-                        </el-col>
-                        <el-col :span="4">
-                            <el-button type="primary" icon="Plus" v-permission="['sys.manage.role.update']" @click="openUser">关联用户到角色</el-button>
-                        </el-col>
+                                <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+                                    <el-form-item label="" prop="username">
+                                        <el-input v-model="queryParams.username" placeholder="请输入姓名或用户名" clearable
+                                            style="width: 220px" @keyup.enter="handleSearch" />
+                                        <el-input style="display:none"></el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
+                                        <el-button icon="Refresh" @click="resetSearch">重置</el-button>
+                                    </el-form-item>
+                                </el-form>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-button type="primary" icon="Plus" v-permission="['sys.manage.role.update']"
+                                    @click="openUser">关联用户到角色</el-button>
+                            </el-col>
                         </el-row>
                         <el-table v-loading="tableLoading" :data="tableData" row-key="id">
                             <el-table-column prop="id" label="用户">
@@ -77,13 +77,13 @@
                             <el-table-column prop="unitname" label="单位" />
                             <el-table-column prop="postid" label="职务">
                                 <template #default="scope">
-                                    {{ findOneValue(posts,scope.row.postid,'name') }}
+                                    {{ findOneValue(posts, scope.row.postid, 'name') }}
                                 </template>
                             </el-table-column>
                             <el-table-column fixed="right" header-align="center" align="center" label="操作" width="180">
                                 <template #default="scope">
-                                    <el-button v-permission="['sys.manage.role.delete']" link type="danger" icon="Remove"
-                                        class="button-delete-color"
+                                    <el-button v-permission="['sys.manage.role.delete']" link type="danger"
+                                        icon="Remove" class="button-delete-color"
                                         :disabled="roleCode === 'sysadmin' && 'superadmin' === scope.row.loginname"
                                         @click="removeUser(scope.row)">
                                         移除
@@ -174,18 +174,63 @@
                 </div>
             </template>
         </el-dialog>
+
+        <el-dialog title="关联用户" v-model="showUser" width="50%">
+            <el-row class="link-user-tip">
+                <el-alert type="success" :closable="false">* 仅列出所属公司/直属部门/子部门用户</el-alert>
+            </el-row>
+            <el-row>
+                <el-form :model="userQueryParams" ref="queryUserRef" :inline="true" label-width="68px">
+                    <el-form-item label="" prop="username">
+                        <el-input v-model="userQueryParams.username" placeholder="请输入姓名或用户名" clearable
+                            style="width: 220px" @keyup.enter="handleUserSearch" />
+                        <el-input style="display:none"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" icon="Search" @click="handleUserSearch">搜索</el-button>
+                        <el-button icon="Refresh" @click="resetUserSearch">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-row>
+            <el-table :data="userTableData" row-key="id" @selection-change="linkUserChange">
+                <el-table-column type="selection" width="55" />
+                <el-table-column prop="id" label="用户">
+                    <template #default="scope">
+                        {{ scope.row.loginname }}({{
+                                scope.row.username
+                        }})
+                    </template>
+                </el-table-column>
+                <el-table-column prop="unitname" label="单位" />
+                <el-table-column prop="postId" label="职务">
+                    <template #default="scope">
+                        {{ findOneValue(posts, scope.row.postid, 'name') }}
+                    </template>
+                </el-table-column>
+            </el-table>
+            <pagination :total="userQueryParams.totalCount" v-model:page="userQueryParams.pageNo"
+                v-model:limit="userQueryParams.pageSize" @pagination="listUser" />
+
+            <template #footer>
+
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="linkUser" :loading="btnLoading">确 定</el-button>
+                    <el-button @click="showUser = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
-import { findOneValue } from '/@/utils/common' 
-import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList } from '/@/api/platform/sys/role'
+import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser } from '/@/api/platform/sys/role'
 import { ElForm } from 'element-plus';
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 const queryRef = ref<InstanceType<typeof ElForm>>()
+const queryUserRef = ref<InstanceType<typeof ElForm>>()
 const posts = ref([])
 const apps = ref([])
 const appId = ref('')
@@ -199,10 +244,14 @@ const btnIndex = ref('')
 const tabIndex = ref('USERLIST')
 const showCreate = ref(false)
 const showUpdate = ref(false)
+const showUser = ref(false)
 const updateTitle = ref('')
 const btnLoading = ref(false)
 const tableLoading = ref(false)
 const tableData = ref([])
+const userTableData = ref([])
+const linkUserIds = ref([])
+const linkUserNames = ref([])
 
 const data = reactive({
     formData: {
@@ -225,10 +274,20 @@ const data = reactive({
         totalCount: 0,
         pageOrderName: 'updatedAt',
         pageOrderBy: 'descending'
+    },
+    userQueryParams: {
+        roleId: '',
+        unitId: '',
+        username: '',
+        pageNo: 1,
+        pageSize: 10,
+        totalCount: 0,
+        pageOrderName: 'updatedAt',
+        pageOrderBy: 'descending'
     }
 })
 
-const { queryParams, formData, formRules } = toRefs(data)
+const { queryParams, formData, formRules, userQueryParams } = toRefs(data)
 
 // 动态条件表单验证
 const funRules = (val: string): any => {
@@ -295,9 +354,55 @@ const resetSearch = () => {
     list()
 }
 
-// 查询用户
-const openUser = () => {
+// 搜索用户
+const handleUserSearch = () => {
+    listUser()
+}
 
+// 重置搜索
+const resetUserSearch = () => {
+    queryUserRef.value?.resetFields()
+    listUser()
+}
+
+// 打开查询用户
+const openUser = () => {
+    if (!roleId.value || roleId.value === '') {
+        modal.msgError('请先选择角色！')
+        return
+    }
+    showUser.value = true
+    listUser()
+}
+
+// 查询用户
+const listUser = () => {
+    userQueryParams.value.roleId = roleId.value
+    userQueryParams.value.unitId = unitId.value
+    getQueryUserList(userQueryParams.value).then((res) => {
+        userTableData.value = res.data.list as never
+        userQueryParams.value.totalCount = res.data.totalCount as never
+    })
+}
+
+// 用户选择
+const linkUserChange = (val: any) => {
+    linkUserIds.value = val.map(obj=>obj.id)
+    linkUserNames.value = val.map(obj=>obj.loginname + '(' + obj.username + ')')
+}
+
+// 关联用户
+const linkUser = () => {
+    if(linkUserIds.value.length==0){
+        modal.msgWarning('没有选择用户')
+        return
+    }
+    doLinkUser(roleId.value,roleCode.value,linkUserIds.value.toString(),linkUserNames.value.toString()).then((res)=>{
+        modal.msgSuccess(res.msg)
+        queryParams.value.pageNo = 1
+        list()
+        showUser.value = false
+    })
 }
 
 // 加载应用菜单
@@ -470,9 +575,10 @@ export default {
       layout: platform/index
 </route>
 <style scoped>
-.right-user-add {
-    
+.link-user-tip {
+    padding-bottom: 10px;
 }
+
 .role-create {
     padding-top: 5px;
 }
