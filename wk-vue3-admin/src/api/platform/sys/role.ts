@@ -3,7 +3,7 @@ export const API_SYS_ROLE_DELETE = '/platform/sys/role/delete'
 export const API_SYS_ROLE_CREATE = '/platform/sys/role/create'
 export const API_SYS_ROLE_UPDATE = '/platform/sys/role/update'
 export const API_SYS_ROLE_USERLIST = '/platform/sys/role/user'
-export const API_SYS_ROLE_GET_DO_MENU = '/platform/sys/role/get_do_menu/'
+export const API_SYS_ROLE_GET_DO_MENU = '/platform/sys/role/get_do_menu'
 export const API_SYS_ROLE_DO_MENU = '/platform/sys/role/do_menu'
 export const API_SYS_ROLE_UNIT = '/platform/sys/role/unit'
 export const API_SYS_ROLE_GROUP = '/platform/sys/role/group'
@@ -58,6 +58,14 @@ export function getPostList() {
     return request({
         url: API_SYS_ROLE_POST,
         method: 'GET'
+    })
+}
+
+export function getMenuList(roleId: string,appId: string) {
+    return request({
+        url: API_SYS_ROLE_GET_DO_MENU,
+        method: 'GET',
+        params: {roleId: roleId, appId: appId}
     })
 }
 
