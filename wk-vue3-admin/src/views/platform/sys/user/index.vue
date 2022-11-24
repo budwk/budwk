@@ -134,7 +134,7 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                     <template v-for="(item, idx) in columns" :key="idx">
                         <el-table-column
 :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
-                            :show-overflow-tooltip="false" :width="item.prop == 'createdAt' ? '160' : '120'">
+                            :show-overflow-tooltip="false" :align="item.align" :width="item.width">
                             <template v-if="item.prop == 'unit'" #default="scope">
                                 <span v-if="scope.row.unit">{{ scope.row.unit.name }}</span>
                             </template>
@@ -527,11 +527,11 @@ const { queryUnit, posts, groups, queryParams, importParams, formData, formRules
 const columns = ref([
     { prop: 'username', label: `用户姓名`, show: true, fixed: 'left' },
     { prop: 'loginname', label: `用户名`, show: true, fixed: false },
-    { prop: 'serialNo', label: `用户编号`, show: true, fixed: false },
+    { prop: 'serialNo', label: `用户编号`, show: true, fixed: false, align: 'center' },
     { prop: 'unit', label: `所属单位`, show: true, fixed: false },
-    { prop: 'mobile', label: `手机号`, show: true, fixed: false },
-    { prop: 'disabled', label: `用户状态`, show: true, fixed: false },
-    { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
+    { prop: 'mobile', label: `手机号`, show: true, fixed: false, width: 120 },
+    { prop: 'disabled', label: `用户状态`, show: true, fixed: false, align: 'center' },
+    { prop: 'createdAt', label: `创建时间`, show: true, fixed: false, width: 160, align: 'center' }
 ])
 
 // 重置表单
