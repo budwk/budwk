@@ -95,6 +95,7 @@
                             v-model:limit="queryParams.pageSize" @pagination="list" />
                     </el-tab-pane>
                     <el-tab-pane ref="tabPaneRef" v-for="app in apps" :key="app.id" :name="app.id" :label="app.name">
+                        <template #label><img v-if="app.icon" :src="app.icon" style="width:12px;height:12px"> {{ app.name }}</template>
                         <el-row :gutter="10" style="margin-bottom: 3px;" class="mb8">
                             <el-col :span="1.5">
                                 <el-button icon="Select" type="success" plain @click="menuRoleSelAll('tree_'+app.id)">全选</el-button>
