@@ -103,11 +103,15 @@
                             <el-col :span="1.5">
                                 <el-button icon="SemiSelect" type="danger" plain @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
                             </el-col>
-                            <el-col :span="1.5">
+                            <el-col :span="3">
                                 <el-switch v-model="treeCheckStrictly" inline-prompt
                                     active-text="勾选联动"
                                     inactive-text="勾选不联动"
                                 />
+                            </el-col>
+                            <el-col :span="16" style="text-align:right">
+                                <el-button plain icon="Suitcase" type="primary" v-permission="['sys.manage.role.update']"
+                                    @click="saveMenu" :loading="btnLoading">保存权限</el-button>
                             </el-col>
                         </el-row>
                         <el-tree
@@ -254,7 +258,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
-import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser, doUnLinkUser, getMenuList } from '/@/api/platform/sys/role'
+import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser, doUnLinkUser, getMenuList, doMenu } from '/@/api/platform/sys/role'
 import { ElForm, ElTabPane } from 'element-plus';
 import { handleTree } from '/@/utils/common';
 
@@ -466,6 +470,7 @@ const loadDoMenuData = () => {
     })
 }
 
+// 自定义节点样式
 const customNodeClass = (data: any, node: any) => {
     if (data.type == 'data') {
         return 'menu-is-data'
@@ -473,6 +478,7 @@ const customNodeClass = (data: any, node: any) => {
     return null
 }
 
+// 按钮列缩进
 const changeTreeClass = () => {
     const levelName = document.getElementsByClassName('menu-is-data')
     for (let i = 0; i < levelName.length; i++) {
@@ -482,18 +488,35 @@ const changeTreeClass = () => {
 
 const treeRefs = {}
 
+// 动态树ref
 const setTreeRef = (el: any, key: string) => {
     if(el){
         treeRefs[key] = el
     }
 }
 
+// 全选树节点
 const menuRoleSelAll = (val: string) => {
     treeRefs[val].setCheckedNodes(doMenuData.value)
 }
 
+// 清空选择
 const menuRoleSelClear = (val: string) =>{
     treeRefs[val].setCheckedNodes([])
+}
+
+// 保存权限
+const saveMenu = () => {
+    if (!roleId.value || roleId.value === '') {
+        modal.msgError('请先选择角色！')
+        return
+    }
+    let ids = treeRefs['tree_'+appId.value].getCheckedKeys()
+    btnLoading.value = true
+    doMenu({ roleId: roleId.value, roleCode: roleCode.value, appId: appId.value, menuIds: ids.toString() }).then((res)=>{
+        btnLoading.value = false
+        modal.msgSuccess('保存成功')
+    })
 }
 
 // 切换角色

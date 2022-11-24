@@ -85,6 +85,14 @@ export function doUpdate(data: object = {}) {
     })
 }
 
+export function doMenu(data: object = {}) {
+    return request({
+        url: API_SYS_ROLE_DO_MENU,
+        method: 'POST',
+        data: data
+    })
+}
+
 export function doDelete(type: string, id: string, name: string) {
     return request({
         url: API_SYS_ROLE_DELETE,
