@@ -142,6 +142,13 @@ public class WkPlatformLauncher {
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
+                conf.setType(SysConfigType.TEXT);
+                conf.setConfigKey("AppUploadSize");
+                conf.setConfigValue("1024");
+                conf.setNote("上传文件大小限制(单位kb)");
+                dao.insert(conf);
+                conf = new Sys_config();
+                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
                 conf.setType(SysConfigType.BOOL);
                 conf.setConfigKey("AppWebSocket");
                 conf.setConfigValue("true");

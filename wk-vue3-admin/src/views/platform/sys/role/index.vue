@@ -45,7 +45,7 @@
                 </el-row>
             </el-col>
             <el-col :span="20">
-                <el-tabs v-model="tabIndex" type="card" @click="platTabClick">
+                <el-tabs v-model="tabIndex" type="card" @tab-change="platTabClick">
                     <el-tab-pane name="USERLIST" label="用户列表">
                         <el-row class="right-user-add">
                             <el-col :span="19">
@@ -103,19 +103,22 @@
                                 <el-button icon="SemiSelect" type="danger" plain @click="menuRoleSelClear('tree_'+app.id)">清除</el-button>
                             </el-col>
                             <el-col :span="1.5">
-                                <el-switch v-model="treeCheckStrictly" />
+                                <el-switch v-model="treeCheckStrictly" inline-prompt
+                                    active-text="勾选联动"
+                                    inactive-text="勾选不联动"
+                                />
                             </el-col>
                         </el-row>
                         <el-tree
                             :ref="(el)=>setTreeRef(el,'tree_'+app.id)"
-                            :data="doMenuData"
+                            :data="doMenuTreeData"
                             :default-checked-keys="doMenuCheckedData"
                             :default-expand-all="true"
                             :highlight-current="true"
                             :check-strictly="!treeCheckStrictly"
                             show-checkbox
                             node-key="id"
-                            :props="{children: 'children',label: 'label',class: customNodeClass}"
+                            :props="{children: 'children',label: 'name',class: customNodeClass}"
                             style="padding-top:10px;"
                         >
                             <template #default="{ node, data }">
@@ -252,6 +255,7 @@ import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
 import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser, doUnLinkUser, getMenuList } from '/@/api/platform/sys/role'
 import { ElForm, ElTabPane } from 'element-plus';
+import { handleTree } from '/@/utils/common';
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -280,6 +284,7 @@ const userTableData = ref([])
 const linkUserIds = ref([])
 const linkUserNames = ref([])
 const doMenuData = ref([])
+const doMenuTreeData = ref([])
 const doMenuCheckedData = ref([])
 const treeCheckStrictly = ref(false)
 
@@ -451,7 +456,8 @@ const cancelLink = (row: any) => {
 const loadDoMenuData = () => {
     doMenuCheckedData.value = []
     getMenuList(roleId.value, appId.value).then((res)=>{
-        doMenuData.value = res.data.menuTree as never
+        doMenuData.value = JSON.parse(JSON.stringify(res.data.menuList)) as never
+        doMenuTreeData.value = handleTree(res.data.menuList) as never
         doMenuCheckedData.value = res.data.menuIds as never
         nextTick(() => {
             changeTreeClass()
@@ -469,7 +475,6 @@ const customNodeClass = (data: any, node: any) => {
 const changeTreeClass = () => {
     const levelName = document.getElementsByClassName('menu-is-data')
     for (let i = 0; i < levelName.length; i++) {
-        // cssFloat 兼容 ie6-8  styleFloat 兼容ie9及标准浏览器
         levelName[i].parentNode.style.cssText = 'padding-left: 30px;'
     }
 }
@@ -481,16 +486,13 @@ const setTreeRef = (el: any, key: string) => {
         treeRefs[key] = el
     }
 }
+
 const menuRoleSelAll = (val: string) => {
-    console.log(val)
-    console.log(treeRefs[val])
+    treeRefs[val].setCheckedNodes(doMenuData.value)
 }
 
 const menuRoleSelClear = (val: string) =>{
-    console.log(treeRefs[val].getCheckedNodes())
-    nextTick(()=>{
-        treeRefs[val].setCheckedNodes([])
-    })
+    treeRefs[val].setCheckedNodes([])
 }
 
 // 切换角色

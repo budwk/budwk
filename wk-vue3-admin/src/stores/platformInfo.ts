@@ -10,6 +10,7 @@ export const usePlatformInfo = defineStore('platformInfo', {
             AppDemoEnv: false,
             AppWebSocket: false,
             AppUploadBase: '',
+            AppUploadSize: '',
             AppFileDomain: '',
             AppDomain: '',
             AppName: '',

@@ -259,29 +259,6 @@ export const fullUrl = (relativeUrl: string, domain = '') => {
     return domain + relativeUrl
 }
 
-/**
- * 文件类型效验，主要用于云存储
- * 服务端并不能单纯此函数来限制文件上传
- * @param {string} fileName 文件名
- * @param {string} fileType 文件mimetype，不一定存在
- */
-export const checkFileMimetype = (fileName: string, fileType: string) => {
-    if (!fileName) return false
-    const platformInfo = usePlatformInfo()
-    const mimetype = platformInfo.upload.mimetype.toLowerCase().split(',')
-
-    const fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1)
-    if (platformInfo.upload.mimetype === '*' || mimetype.includes(fileSuffix) || mimetype.includes('.' + fileSuffix)) {
-        return true
-    }
-    if (fileType) {
-        const fileTypeTemp = fileType.toLowerCase().split('/')
-        if (mimetype.includes(fileTypeTemp[0] + '/*') || mimetype.includes(fileType)) {
-            return true
-        }
-    }
-    return false
-}
 
 export const arrayFullUrl = (relativeUrls: string | string[], domain = '') => {
     if (typeof relativeUrls === 'string') {

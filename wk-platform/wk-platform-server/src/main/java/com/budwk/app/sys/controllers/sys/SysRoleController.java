@@ -355,10 +355,46 @@ public class SysRoleController {
         return Result.success();
     }
 
+
+    @At("/get_menus")
+    @Ok("json:{locked:'^(createdBy|createdAt|updatedBy|updatedAt)$'}")
+    @GET
+    @ApiOperation(name = "Vue3获取菜单及权限")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "roleId", example = "", description = "角色ID"),
+                    @ApiImplicitParam(name = "appId", example = "", description = "应用ID")
+            }
+    )
+    @ApiResponses(
+            {
+                    @ApiResponse(name = "menuTree", description = "所有菜单及权限数组"),
+                    @ApiResponse(name = "menuIds", description = "角色已分配的权限ID数组")
+            }
+    )
+    @SaCheckPermission("sys.manage.role")
+    public Result<?> getMenuS(@Param("roleId") String roleId, @Param("appId") String appId) {
+        // 角色已拥有的权限
+        List<Sys_menu> hasList = sysRoleService.getMenusAndDatas(roleId, appId);
+        List<Sys_menu> list;
+        if (StpUtil.hasRole(GlobalConstant.DEFAULT_SYSADMIN_ROLECODE)) {
+            // 超级管理员加载所有权限
+            list = sysMenuService.query(Cnd.where("appId", "=", appId).asc("location").asc("path"));
+        } else {
+            // 非超级管理员角色加载用户自己拥有的权限
+            list = sysUserService.getMenusAndDatas(SecurityUtil.getUserId(), appId);
+        }
+        List<String> menuIds = new ArrayList<>();
+        for (Sys_menu menu : hasList) {
+            menuIds.add(menu.getId());
+        }
+        return Result.data(NutMap.NEW().addv("menuList", list).addv("menuIds", menuIds));
+    }
+
     @At("/get_do_menu")
     @Ok("json")
     @GET
-    @ApiOperation(name = "获取菜单及权限")
+    @ApiOperation(name = "Vue2获取菜单及权限")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "roleId", example = "", description = "角色ID"),

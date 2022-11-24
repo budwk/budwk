@@ -10,11 +10,14 @@
         <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id">
             <el-table-column prop="name" label="应用名称">
             </el-table-column>
+            <el-table-column prop="icon" label="应用图标">
+                <template #default="scope"><img v-if="scope.row.icon" :src="scope.row.icon" style="width:24px;height:24px;" /></template>
+            </el-table-column>
             <el-table-column prop="id" label="应用ID">
             </el-table-column>
             <el-table-column prop="path" label="默认路径">
             </el-table-column>
-            <el-table-column prop="hidden" label="是否隐藏" align="center" width="150">
+            <el-table-column prop="hidden" label="是否隐藏" align="center" width="120">
                 <template #default="scope">
                     <span v-if="scope.row.hidden" style="color:red">隐藏</span>
                     <span v-else style="color:green">显示</span>
@@ -75,6 +78,36 @@
                 <el-form-item label="默认路径" prop="path">
                     <el-input v-model="formData.path" placeholder="请输入默认路径"/>
                 </el-form-item>
+                <el-form-item
+                    prop="icon"
+                    label="应用图标"
+                    >
+                    <el-upload
+                        ref="uploadRef"
+                        :limit="1"
+                        accept=".png, .jpg, .svg"
+                        :show-file-list="false"
+                        @change="imgUpload"
+                        :auto-upload="false"
+                        list-type="picture-card"
+                    >
+                        <img
+                        v-if="formData.icon"
+                        :src="formData.icon"
+                        class="avatar"
+                        >
+                        <div v-else>
+                            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                        </div>
+                        <template #tip>
+                                <div class="el-upload__tip text-center">
+                                    <div class="el-upload__tip">
+                                        仅允许上传图片格式文件，推荐上传svg文件
+                                    </div>
+                                </div>
+                            </template>
+                    </el-upload>
+                </el-form-item>      
                 <el-form-item label="是否隐藏" prop="hidden">
                     <el-radio-group v-model="formData.hidden">
                         <el-radio :label="false">
@@ -114,6 +147,36 @@
                 <el-form-item label="默认路径" prop="path">
                     <el-input v-model="formData.path" placeholder="请输入默认路径"/>
                 </el-form-item>
+                <el-form-item
+                    prop="icon"
+                    label="应用图标"
+                    >
+                    <el-upload
+                        ref="uploadRef"
+                        :limit="1"
+                        accept=".png, .jpg, .svg"
+                        :show-file-list="false"
+                        @change="imgUpload"
+                        :auto-upload="false"
+                        list-type="picture-card"
+                    >
+                        <img
+                        v-if="formData.icon"
+                        :src="formData.icon"
+                        class="avatar"
+                        >
+                        <div v-else>
+                            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                        </div>
+                        <template #tip>
+                                <div class="el-upload__tip text-center">
+                                    <div class="el-upload__tip">
+                                        仅允许上传图片格式文件，推荐上传svg文件
+                                    </div>
+                                </div>
+                            </template>
+                    </el-upload>
+                </el-form-item>    
                 <el-form-item label="是否隐藏" prop="hidden">
                     <el-radio-group v-model="formData.hidden">
                         <el-radio :label="false">
@@ -148,10 +211,13 @@ import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, doDelete, doLocation, doDisable } from '/@/api/platform/sys/app'
 import { toRefs } from '@vueuse/core'
-import { ElForm } from 'element-plus'
+import { ElForm, ElUpload } from 'element-plus'
+import { useUserInfo } from '/@/stores/userInfo'
 
+const userInfo = useUserInfo()
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
+const uploadRef = ref<InstanceType<typeof ElUpload>>()    
 
 const showCreate = ref(false)
 const showUpdate = ref(false)
@@ -159,11 +225,25 @@ const refreshTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 
+const upload = reactive({
+    // 是否禁用上传
+    isUploading: false,
+    // 是否更新已经存在的用户数据
+    updateSupport: 0,
+    // 新用户默认密码
+    pwd: '',
+    // 设置上传的请求头部
+    headers: { "wk-user-token": userInfo.getToken() },
+    // 上传的地址
+    url: import.meta.env.VITE_AXIOS_BASE_URL
+})
+
 const data = reactive({
     formData: {
         id: '',
         name: '',
         path: '',
+        icon: '',
         hidden: false,
         disabled: false,
         location: 0,
@@ -189,11 +269,29 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         id: '',
         name: '',
         path: '',
+        icon: '',
         hidden: false,
         disabled: false,
         location: 0,
     }
     formEl?.resetFields()
+}
+
+const imgUpload = (file: any) => {
+    // let fd = new FormData()
+    // fd.append('Filedata', file.raw)
+    // fileUpload(fd,{},'image').then((res) => {
+    //     if (res.code == 0) {
+  
+    //     }
+    // })
+    let reader = new FileReader()
+    // 转base64
+    reader.onload = ((e) => {
+        formData.value.icon = e.target.result
+        uploadRef.value?.clearFiles()
+    })
+    reader.readAsDataURL(file.raw)
 }
 
 // 查询表格
@@ -307,3 +405,10 @@ export default{
     meta:
       layout: platform/index
 </route>
+<style scoped>
+.avatar {
+    width: 98%;
+    height: 98%;
+    border-radius: 6px;
+}
+</style>

@@ -29,6 +29,7 @@ export interface PlatformInfo {
     AppDemoEnv: boolean
     AppWebSocket: boolean
     AppUploadBase: string
+    AppUploadSize: string,
     AppFileDomain: string
     AppDomain: string
     AppName: string
