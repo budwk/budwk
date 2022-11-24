@@ -11,7 +11,7 @@
             <el-table-column prop="name" label="应用名称">
             </el-table-column>
             <el-table-column prop="icon" label="应用图标">
-                <template #default="scope"><img v-if="scope.row.icon" :src="scope.row.icon" style="width:24px;height:24px;" /></template>
+                <template #default="scope"><img v-if="scope.row.icon" :src="scope.row.icon" style="width:16px;height:16px;" /></template>
             </el-table-column>
             <el-table-column prop="id" label="应用ID">
             </el-table-column>

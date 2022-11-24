@@ -351,7 +351,7 @@ const data = reactive({
         leaderName: '',
     },
     formRules: {
-        parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
+        parentId: [{ required: true, message: "上级单位不能为空", trigger: "blur" }],
         name: [{ required: true, message: "单位名称不能为空", trigger: "blur" }],
         email: [buildValidatorData({ name: 'email', title: '电子邮箱' })],
         leaderMobile: [buildValidatorData({ name: 'mobile' })]

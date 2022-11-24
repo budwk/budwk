@@ -8,6 +8,7 @@ import com.budwk.app.sys.services.SysRoleService;
 import com.budwk.app.sys.services.SysUserService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
+import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -57,11 +58,40 @@ public class SysMenuController {
         return Result.data(map);
     }
 
+    @At
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3树形列表查询")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "name", example = "", description = "菜单名称"),
+                    @ApiImplicitParam(name = "href", example = "", description = "菜单路径"),
+                    @ApiImplicitParam(name = "appId", example = "", description = "所属应用", required = true, check = true)
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckPermission("sys.manage.menu")
+    public Result<?> list(@Param("name") String name,@Param("appId") String appId,@Param("href") String href) {
+        Cnd cnd = Cnd.NEW();
+        cnd.and("appId","=",appId);
+        if (Strings.isNotBlank(name)) {
+            cnd.and("name", "like", "%" + name + "%");
+        }
+        if (Strings.isNotBlank(href)) {
+            cnd.and("href", "like", "%" + href + "%");
+        }
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(sysMenuService.query(cnd));
+    }
+
     @At("/child")
     @Ok("json")
     @GET
     @SaCheckPermission("sys.manage.menu")
-    @ApiOperation(name = "获取列表树型数据")
+    @ApiOperation(name = "Vue2获取列表树型数据")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "pid", description = "父级ID"),

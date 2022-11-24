@@ -50,10 +50,10 @@ public class SysUnitController {
     @Ok("json")
     @GET
     @ApiOperation(name = "分页查询")
-    @ApiFormParams(
+    @ApiImplicitParams(
             {
-                    @ApiFormParam(name = "name", example = "", description = "用户名"),
-                    @ApiFormParam(name = "leaderName", example = "", description = "部门负责人")
+                    @ApiImplicitParam(name = "name", example = "", description = "单位名称"),
+                    @ApiImplicitParam(name = "leaderName", example = "", description = "部门负责人")
             }
     )
     @ApiResponses(

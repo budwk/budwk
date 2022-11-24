@@ -50,10 +50,10 @@ public class SysUnitController {
     @Ok("json")
     @GET
     @ApiOperation(name = "Vue3树形列表查询")
-    @ApiFormParams(
+    @ApiImplicitParams(
             {
-                    @ApiFormParam(name = "name", example = "", description = "单位名称"),
-                    @ApiFormParam(name = "leaderName", example = "", description = "部门负责人")
+                    @ApiImplicitParam(name = "name", example = "", description = "单位名称"),
+                    @ApiImplicitParam(name = "leaderName", example = "", description = "部门负责人")
             }
     )
     @ApiResponses(
