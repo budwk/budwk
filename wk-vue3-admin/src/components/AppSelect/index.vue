@@ -34,20 +34,29 @@ const userInfo = useUserInfo()
 const apps = computed(() => userInfo.apps);
 const appName = computed(() => getAppName(useClient().appId ? useClient().appId : usePlatformInfo().AppDefault))
 
-function getAppName(id: string) {
+const getAppName = (id: string) => {
   if (apps.value && apps.value.length > 0) {
     var index = apps.value.findIndex(obj => obj.id === id)
     return apps.value[index].name
   }
+  return ''
 }
 
-function handleSetApp(id: string) {
+const getAppPath = (id: string) => {
+  if (apps.value && apps.value.length > 0) {
+    var index = apps.value.findIndex(obj => obj.id === id)
+    return apps.value[index].path
+  }
+  return ''
+}
+
+const handleSetApp = (id: string) => {
   useClient().appId = id
   modal.loading("正在切换应用，请稍候...");
   useUserInfo().init().then(() => {
     useUserViews().generateRoutes().then(() => {
       useTagsView().delAllViews().then(() => {
-        router.replace({ path: '/redirect/platform/dashboard' })
+        router.replace({ path: getAppPath(id) })
         setTimeout(() => {
           modal.closeLoading()
         }, 500);
