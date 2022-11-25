@@ -360,7 +360,7 @@ public class SysMenuController {
     @Ok("json")
     @POST
     @SaCheckPermission("sys.manage.menu.update")
-    @SLog(tag = "修改菜单,菜单名称:")
+    @SLog(value = "修改菜单,菜单名称:")
     @ApiOperation(name = "修改菜单")
     @ApiFormParams(
             {
@@ -412,7 +412,7 @@ public class SysMenuController {
     @Ok("json")
     @POST
     @SaCheckPermission("sys.manage.menu.update")
-    @SLog(tag = "修改权限,权限名称:")
+    @SLog(value = "修改权限,权限名称:")
     @ApiOperation(name = "修改权限")
     @ApiFormParams(
             implementation = Sys_menu.class
