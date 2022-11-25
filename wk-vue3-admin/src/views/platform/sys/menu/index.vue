@@ -621,7 +621,7 @@ const handleUpdateData = (row: any) => {
 
 // 删除按钮
 const handleDelete = (row: any) => {
-    modal.confirm('此操作将删除菜单、下级菜单、以及与菜单关联的角色，请谨慎操作！').then(() => {
+    modal.confirm('确定删除 ' + row.name +' ?').then(() => {
         return doDelete(row.id)
     }).then(() => {
         list()
