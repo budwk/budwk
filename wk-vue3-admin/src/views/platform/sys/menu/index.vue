@@ -91,8 +91,8 @@
         </el-table>
 
         <el-dialog title="新增菜单" v-model="showCreate" width="50%">
-            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="120px">
-                <el-row>
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="80px">
+                <el-row :gutter="10">
                     <el-col :span="12">
                         <el-form-item label="上级菜单" prop="parentId">
                             <el-tree-select v-model="formData.parentId" :data="unitOptions"
@@ -210,8 +210,8 @@
         </el-dialog>
 
         <el-dialog title="修改菜单" v-model="showUpdate" width="50%">
-            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="120px">
-                <el-row>
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="80px">
+                <el-row :gutter="10">
                     <el-col :span="12">
                         <el-form-item label="菜单名称" prop="name">
                             <el-input v-model="formData.name" placeholder="请输入菜单名称" />
@@ -313,7 +313,7 @@
         </el-dialog>
 
         <el-dialog title="修改权限" v-model="showUpdateData" width="35%">
-            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="120px">
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="80px">
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="权限名称" prop="name">
