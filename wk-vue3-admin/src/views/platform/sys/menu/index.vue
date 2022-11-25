@@ -131,7 +131,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="菜单图标" prop="icon">
-                            <el-popover placement="bottom-start" :width="540" :visible="showChooseIcon" trigger="click"
+                            <el-popover placement="bottom-start" :width="540" v-model="showChooseIcon" trigger="click"
                                 @show="showSelectIcon">
                                 <template #reference>
                                     <el-input v-model="formData.icon" placeholder="点击选择图标" @click="showSelectIcon"
@@ -234,7 +234,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="菜单图标" prop="icon">
-                            <el-popover placement="bottom-start" :width="540" :visible="showChooseIcon" trigger="click"
+                            <el-popover placement="bottom-start" :width="540" v-model="showChooseIcon" trigger="click"
                                 @show="showSelectIcon">
                                 <template #reference>
                                     <el-input v-model="formData.icon" placeholder="点击选择图标" @click="showSelectIcon"
@@ -468,14 +468,15 @@ const showSelectIcon = () => {
 }
 
 const hideSelectIcon = (event: any) => {
-    let elem = event.relatedTarget || event.srcElement || event.target || event.currentTarget;
-    var className = elem.className;
+    let elem = event.relatedTarget || event.srcElement || event.target || event.currentTarget
+    var className = elem.className
     if (className !== "el-input__inner") {
         showChooseIcon.value = false;
     }
 }
 
 const selectedIcon = (val: string) => {
+    console.log(val)
     formData.value.icon = val
     showChooseIcon.value = false
 }
@@ -484,13 +485,7 @@ const selectedIcon = (val: string) => {
 const formRadioChange = (val: string) => {
     formData.value.children = val
     if (val === 'true') {
-        formData.value.buttons = [
-            {
-                name: '',
-                permission: '',
-                key: Date.now()
-            }
-        ]
+        formData.value.buttons = [{name: '',permission: '',key: Date.now()}]
     } else {
         formData.value.buttons = []
     }
@@ -506,11 +501,7 @@ const formRemoveMenu = (menu: any) => {
 
 // 动态添加一行
 const formAddMenu = () => {
-    formData.value.buttons.push({
-        name: '',
-        permission: '',
-        key: Date.now()
-    })
+    formData.value.buttons.push({name: '',permission: '',key: Date.now()})
 }
 
 const inputChange_data = () => {
