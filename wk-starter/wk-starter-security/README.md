@@ -9,7 +9,11 @@ security:
   st:
     # token参数名称,默认 wk-user-token
     tokenName: wk-user-token
-    # 超时时间(单位s,默认1天)
+    # 是否尝试从cookie里读取token
+    isReadCookie: false
+    # token临时有效期 [指定时间内无操作就视为token过期] (单位: 秒), 默认-1 代表不限制 (例如可以设置为1800代表30分钟内无操作就过期)
+    activityTimeout: 86400
+    # token的长久有效期(单位:秒) 默认30天, -1代表永久
     timeout: 86400
     # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
     isConcurrent: true
