@@ -39,19 +39,19 @@
         <el-drawer v-model="showDetail" direction="rtl" title="日志详情" size="50%">
 
             <template #default>
-                <el-form :model="formData" label-width="100px">
+                <el-form :model="formData" label-width="80px">
                     <el-row>
-                        <el-col :span="8">
+                        <el-col :span="12">
                             <el-form-item label="操作人" prop="loginname">
                                 {{ formData.username }}({{ formData.loginname }})
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="12">
                             <el-form-item label="操作时间" prop="createdAt">
                                 {{ formatTime(formData.createdAt) }}
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="12">
                             <el-form-item label="操作IP" prop="ip">
                                 {{ formData.ip }}
                             </el-form-item>
@@ -72,17 +72,17 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="24">
-                            <el-form-item label="浏览器" prop="browser">
+                            <el-form-item label="浏览器" prop="browser" class="content">
                                 {{ formData.browser }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="24">
-                            <el-form-item label="请求参数" prop="params">
+                            <el-form-item label="请求参数" prop="params" class="content">
                                 {{ formData.params }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="24">
-                            <el-form-item label="响应结果" prop="result">
+                            <el-form-item label="响应结果" prop="result" class="content">
                                 {{ formData.result }}
                             </el-form-item>
                         </el-col>
@@ -115,8 +115,8 @@ const data = reactive({
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
-        pageOrderName: '',
-        pageOrderBy: ''
+        pageOrderName: 'createdAt',
+        pageOrderBy: 'desc'
     },
 })
 
@@ -184,5 +184,9 @@ export default {
     border-radius: 2px;
     padding-left: 1px;
     height: 22px;
+}
+.content {
+    white-space:normal; 
+    word-break:break-all;
 }
 </style>

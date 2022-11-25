@@ -6,6 +6,7 @@ import com.budwk.starter.log.enums.LogType;
 import com.budwk.starter.log.model.Sys_log;
 import com.budwk.starter.log.provider.ISysLogProvider;
 import com.budwk.starter.security.utils.SecurityUtil;
+import com.budwk.starter.web.wrapper.RequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.el.El;
@@ -42,6 +43,7 @@ public class LogService {
                     Object[] args, Object re, Method method, Object obj,
                     Throwable e, long tookTime) {
         String slogMsg;
+        HttpServletRequest request = Mvcs.getReq();
         if (seg.hasKey()) {
             Context ctx = Lang.context();
             List<String> names = MethodParamNamesScaner.getParamNames(method);
@@ -54,7 +56,7 @@ public class LogService {
             ctx.set("args", args);
             ctx.set("re", re);
             ctx.set("return", re);
-            ctx.set("req", Mvcs.getReq());
+            ctx.set("req", request);
             ctx.set("resp", Mvcs.getResp());
             for (String key : seg.keys()) {
                 ctx.set(key, els.get(key).eval(ctx));
@@ -62,7 +64,7 @@ public class LogService {
             slogMsg = seg.render(ctx).toString();
         } else {
             slogMsg = seg.getOrginalString();
-            String _slog_msg = Strings.sNull(Mvcs.getReq().getAttribute("_slog_msg"));
+            String _slog_msg = Strings.sNull(request.getAttribute("_slog_msg"));
             if (Strings.isNotBlank(_slog_msg)) {
                 slogMsg += _slog_msg;
             }
@@ -71,7 +73,11 @@ public class LogService {
         String dbResult = "";
         if (param && args != null) {
             try {
-                dbParam = argsArrayToString(args);
+                if (request.getMethod().equalsIgnoreCase("POST")) {
+                    dbParam = ((RequestWrapper) request).getBodyString();
+                } else {
+                    dbParam = argsArrayToString(args);
+                }
             } catch (Exception e1) {
                 dbParam = "SLog传参:Json序列化错误";
             }
@@ -87,11 +93,11 @@ public class LogService {
         if (e != null) {
             ex = Strings.isBlank(e.getMessage()) ? e.toString() : e.getMessage();
         }
-        saveLog(type, tag, source, slogMsg, dbParam, dbResult, ex, tookTime);
+        saveLog(request, type, tag, source, slogMsg, dbParam, dbResult, ex, tookTime);
     }
 
-    public void saveLog(LogType type, String tag, String src, String msg, String param, String result, String ex, long tookTime) {
-        Sys_log sysLog = makeLog(type, tag, src, msg, param, result, ex, tookTime);
+    public void saveLog(HttpServletRequest request, LogType type, String tag, String src, String msg, String param, String result, String ex, long tookTime) {
+        Sys_log sysLog = makeLog(request, type, tag, src, msg, param, result, ex, tookTime);
         asyncSave(sysLog);
     }
 
@@ -100,7 +106,7 @@ public class LogService {
         sysLogProvider.saveLog(sysLog);
     }
 
-    public static Sys_log makeLog(LogType type, String tag, String source, String msg, String param, String result, String ex, long tookTime) {
+    public static Sys_log makeLog(HttpServletRequest request, LogType type, String tag, String source, String msg, String param, String result, String ex, long tookTime) {
         Sys_log sysLog = new Sys_log();
         if (type == null || tag == null) {
             throw new RuntimeException("type/tag can't null");
@@ -124,7 +130,6 @@ public class LogService {
         sysLog.setUpdatedAt(System.currentTimeMillis());
         sysLog.setDelFlag(false);
         try {
-            HttpServletRequest request = Mvcs.getReq();
             if (request != null) {
                 sysLog.setIp(Lang.getIP(request));
                 sysLog.setUrl(request.getRequestURI());
