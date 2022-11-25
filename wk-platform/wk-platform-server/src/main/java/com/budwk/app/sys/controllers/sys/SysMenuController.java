@@ -6,6 +6,7 @@ import com.budwk.app.sys.services.SysAppService;
 import com.budwk.app.sys.services.SysMenuService;
 import com.budwk.app.sys.services.SysRoleService;
 import com.budwk.app.sys.services.SysUserService;
+import com.budwk.starter.common.constant.GlobalConstant;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
 import com.budwk.starter.common.page.Pagination;
@@ -250,7 +251,7 @@ public class SysMenuController {
             return Result.error(ResultCode.NULL_DATA_ERROR);
         }
         req.setAttribute("_slog_msg", menu.getName());
-        if (Strings.sNull(menu.getPath()).startsWith("0001")) {
+        if (!GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(SecurityUtil.getUserLoginname()) && Strings.sNull(menu.getPath()).startsWith("0001")) {
             return Result.error("系统菜单禁止操作");
         }
         sysMenuService.deleteAndChild(menu);

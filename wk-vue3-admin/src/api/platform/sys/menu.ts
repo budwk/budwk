@@ -38,19 +38,19 @@ export function getInfo(id: string) {
     })
 }
 
-export function doCreate(data: object = {}) {
+export function doCreate(menu: string,buttons: string, appId: string) {
     return request({
         url: API_SYS_MENU_CREATE,
         method: 'POST',
-        data: data
+        data: {menu: menu, buttons: buttons, appId: appId}
     })
 }
 
-export function doUpdateMenu(data: object = {}) {
+export function doUpdate(menu: string, buttons: string ) {
     return request({
         url: API_SYS_MENU_UPDATE_MENU,
         method: 'POST',
-        data: data
+        data: { menu: menu, buttons: buttons}
     })
 }
 
