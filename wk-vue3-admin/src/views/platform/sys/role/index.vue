@@ -49,11 +49,10 @@
                     <el-tab-pane name="USERLIST" label="用户列表">
                         <el-row class="right-user-add">
                             <el-col :span="19">
-                                <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+                                <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px" @submit.prevent>
                                     <el-form-item label="" prop="username">
                                         <el-input v-model="queryParams.username" placeholder="请输入姓名或用户名" clearable
                                             style="width: 220px" @keyup.enter="handleSearch" />
-                                        <el-input style="display:none"></el-input>
                                     </el-form-item>
                                     <el-form-item>
                                         <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
@@ -214,11 +213,10 @@
                 <el-alert type="success" :closable="false">* 仅列出所属公司/直属部门/子部门用户</el-alert>
             </el-row>
             <el-row>
-                <el-form :model="userQueryParams" ref="queryUserRef" :inline="true" label-width="68px">
+                <el-form :model="userQueryParams" ref="queryUserRef" :inline="true" label-width="68px" @submit.prevent>
                     <el-form-item label="" prop="username">
                         <el-input v-model="userQueryParams.username" placeholder="请输入姓名或用户名" clearable
                             style="width: 220px" @keyup.enter="handleUserSearch" />
-                        <el-input style="display:none"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" icon="Search" @click="handleUserSearch">搜索</el-button>
