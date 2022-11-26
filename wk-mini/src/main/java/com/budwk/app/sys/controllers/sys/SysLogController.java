@@ -40,6 +40,7 @@ public class SysLogController {
                     @ApiFormParam(name = "appId", example = "PLATFORM", description = "应用ID"),
                     @ApiFormParam(name = "tag", example = "", description = "日志标签"),
                     @ApiFormParam(name = "msg", example = "", description = "消息内容"),
+                    @ApiFormParam(name = "status", example = "", description = "操作状态(success=成功,exception=失败)"),
                     @ApiFormParam(name = "loginname", example = "superadmin", description = "用户名"),
                     @ApiFormParam(name = "username", example = "", description = "姓名或昵称"),
                     @ApiFormParam(name = "searchDate", example = "", description = "Vue2时间范围"),
@@ -57,6 +58,7 @@ public class SysLogController {
     @SaCheckPermission("sys.manage.log")
     public Result<?> list(@Param("type") String type, @Param("appId") String appId,
                           @Param("tag") String tag,
+                          @Param("status") String status,
                           @Param("msg") String msg,
                           @Param("loginname") String loginname,
                           @Param("username") String username,
@@ -75,7 +77,7 @@ public class SysLogController {
         if (date != null && date.length > 1) {
             endTime = Times.D(date[1]).getTime();
         }
-        return Result.success().addData(sysLogProvider.list(logType, appId, tag, msg, loginname, username, beginTime, endTime, pageOrderName, pageOrderBy, pageNo, pageSize));
+        return Result.success().addData(sysLogProvider.list(status, logType, appId, tag, msg, loginname, username, beginTime, endTime, pageOrderName, pageOrderBy, pageNo, pageSize));
     }
 
     @At
