@@ -19,6 +19,7 @@ public interface ISysLogProvider {
     /**
      * 查询日志
      *
+     * @param status        操作状态
      * @param type          日志类型
      * @param appId         应用ID
      * @param tag           日志标签
@@ -33,5 +34,5 @@ public interface ISysLogProvider {
      * @param pageSize      分页大小
      * @return
      */
-    Pagination list(LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize);
+    Pagination list(String status, LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize);
 }

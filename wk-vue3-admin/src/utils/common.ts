@@ -482,10 +482,10 @@ export const addDateRange = (params: any, dateRange: any, propName = undefined) 
     dateRange = Array.isArray(dateRange) ? dateRange : []
     if (typeof (propName) === 'undefined') {
         params['beginTime'] = dateRange[0]
-        params['endTime'] = dateRange[1] - 1
+        params['endTime'] = dateRange[1] + (3600 * 24 * 1000 ) - 1
     } else {
         params['begin' + propName] = dateRange[0]
-        params['end' + propName] = dateRange[1] - 1
+        params['end' + propName] = dateRange[1]  + (3600 * 24 * 1000 ) - 1
     }
 }
 

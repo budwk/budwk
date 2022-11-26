@@ -429,7 +429,7 @@ import download from '/@/utils/download'
 import { API_SYS_USER_IMPORT_TEMPLATE, API_SYS_USER_IMPORT_DATA, API_SYS_USER_EXPORT, getUnitList, getPostList, getSerialNo, getRoleGroups, doCreate, doUpdate, getInfo, getList, doDelete, doDisable, doDeleteMore, doResetPwd } from '/@/api/platform/sys/user'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElTree, ElUpload } from 'element-plus'
-import { formatTime, handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
+import { handleTree, isMobile, hiddenMobile, addDateRange } from '/@/utils/common'
 import { useUserInfo } from '/@/stores/userInfo'
 import { buildValidatorData } from '/@/utils/validate'
 

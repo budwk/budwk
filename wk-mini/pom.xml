@@ -109,7 +109,7 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-mongodb</artifactId>
+            <artifactId>nutzboot-starter-mongodb-plus</artifactId>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>

@@ -73,7 +73,7 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
     }
 
     @Override
-    public Pagination list(LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
+    public Pagination list(String status, LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         try {
             String tableName = Times.format("yyyyMM", new Date());
             StringBuilder stringBuilder = new StringBuilder();
@@ -98,6 +98,12 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                 if (Strings.isNotBlank(username)) {
                     stringBuilder.append(" and username like '%" + username + "%'");
                 }
+                if("success".equalsIgnoreCase(status)){
+                    stringBuilder.append(" and exception is null");
+                }
+                if("exception".equalsIgnoreCase(status)){
+                    stringBuilder.append(" and exception is not null");
+                }
             } else {
                 int m1 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(startTime)));
                 int m2 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(endTime)));
@@ -120,6 +126,12 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                     }
                     if (Strings.isNotBlank(username)) {
                         stringBuilder.append(" and username like '%" + username + "%'");
+                    }
+                    if("success".equalsIgnoreCase(status)){
+                        stringBuilder.append(" and exception is null");
+                    }
+                    if("exception".equalsIgnoreCase(status)){
+                        stringBuilder.append(" and exception is not null");
                     }
                     stringBuilder.append(" and createdAt>=" + startTime);
                     stringBuilder.append(" and createdAt<=" + endTime);
@@ -144,6 +156,12 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                             }
                             if (Strings.isNotBlank(username)) {
                                 stringBuilder.append(" and username like '%" + username + "%'");
+                            }
+                            if("success".equalsIgnoreCase(status)){
+                                stringBuilder.append(" and exception is null");
+                            }
+                            if("exception".equalsIgnoreCase(status)){
+                                stringBuilder.append(" and exception is not null");
                             }
                             stringBuilder.append(" and createdAt>=" + startTime);
                             stringBuilder.append(" and createdAt<=" + endTime);

@@ -1,32 +1,36 @@
 package com.budwk.app.sys.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.budwk.app.sys.services.SysLogService;
+import com.budwk.starter.common.page.PageUtil;
 import com.budwk.starter.common.page.Pagination;
-import com.budwk.starter.database.ig.SnowFlakeIdGenerator;
 import com.budwk.starter.log.enums.LogType;
 import com.budwk.starter.log.model.Sys_log;
 import com.budwk.starter.log.provider.ISysLogProvider;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.IndexModel;
+import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.Sorts;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.nutz.boot.starter.mongodb.plus.ZMongoClient;
+import org.nutz.boot.starter.mongodb.plus.ZMongoDatabase;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.json.Json;
-import org.nutz.json.JsonFormat;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
-import org.nutz.mongo.ZMoCo;
-import org.nutz.mongo.ZMoDB;
-import org.nutz.mongo.ZMoDoc;
+import org.nutz.lang.random.R;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author wizzer@qq.com
  */
-@Service(interfaceClass = ISysLogProvider.class)
 @IocBean(create = "init")
 public class SysLogProvider implements ISysLogProvider {
     @Inject
@@ -35,86 +39,102 @@ public class SysLogProvider implements ISysLogProvider {
     @Inject
     private PropertiesProxy conf;
 
-    @Inject
-    private SnowFlakeIdGenerator snowFlakeIdGenerator;
-
     @Inject("refer:$ioc")
     private Ioc ioc;
 
-    private ZMoDB zMoDB;
-
-    private ZMoCo zMoCo;
+    private ZMongoClient zMongoClient;
 
     public void init() {
         if ("database".equalsIgnoreCase(conf.get("log.save"))) {
             // 初始化表结构
             sysLogService.logDao();
         } else if ("mongodb".equalsIgnoreCase(conf.get("log.save"))) {
-            this.zMoDB = ioc.get(ZMoDB.class, "zmodb");
-            this.zMoCo = zMoDB.cc(Sys_log.class.getSimpleName(), false);
+            this.zMongoClient = ioc.get(ZMongoClient.class);
         }
     }
 
     @Override
     public void saveLog(Sys_log sysLog) {
         // 因为el表达式只对dao有效,所以这里手动设置雪花ID
-        sysLog.setId(snowFlakeIdGenerator.next());
+        sysLog.setId(R.UU32());
         if ("database".equalsIgnoreCase(conf.get("log.save"))) {
             sysLogService.save(sysLog);
         } else if ("mongodb".equalsIgnoreCase(conf.get("log.save"))) {
-            zMoCo.insert(ZMoDoc.NEW(Json.toJson(sysLog, JsonFormat.tidy())).putv("_id", sysLog.getId()));
+            getCollection(Sys_log.class.getSimpleName()).insertOne(new Document(Lang.obj2map(sysLog)));
         }
     }
 
     @Override
-    public Pagination list(LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
+    public Pagination list(String status, LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         if ("database".equalsIgnoreCase(conf.get("log.save"))) {
-            return sysLogService.list(type, appId, tag, msg, loginname, username, startTime, endTime, pageOrderName, pageOrderBy, pageNumber, pageSize);
+            return sysLogService.list(status, type, appId, tag, msg, loginname, username, startTime, endTime, pageOrderName, pageOrderBy, pageNumber, pageSize);
         } else if ("mongodb".equalsIgnoreCase(conf.get("log.save"))) {
-            ZMoDoc queryDoc = ZMoDoc.NEW();
-            ZMoDoc timeRange = ZMoDoc.NEW();
+            MongoCollection<Document> mongoCollection = getCollection(Sys_log.class.getSimpleName());
+
             Pagination pagination = new Pagination(pageNumber, pageSize, 0);
-            if (startTime > 0) {
-                timeRange.put("$gt", startTime);
-            }
-            if (endTime > 0) {
-                timeRange.put("$lte", endTime);
-            }
-            if (!timeRange.isEmpty()) {
-                queryDoc.put("createdAt", timeRange);
-            }
+            List<Bson> filters = new LinkedList<>();
             if (type != null) {
-                queryDoc.put("type", ZMoDoc.NEW("$regex", type.getValue()));
+                filters.add(Filters.eq("type", type.getValue()));
             }
             if (Strings.isNotBlank(appId)) {
-                queryDoc.put("appId", ZMoDoc.NEW("$regex", appId));
+                filters.add(Filters.eq("appId", appId));
+            }
+            if (startTime > 0) {
+                filters.add(Filters.gte("createdAt", startTime));
+            }
+            if (endTime > 0) {
+                filters.add(Filters.lte("createdAt", startTime));
             }
             if (Strings.isNotBlank(tag)) {
-                queryDoc.put("tag", ZMoDoc.NEW("$regex", tag));
+                filters.add(Filters.regex("tag", "/" + tag + "/"));
             }
             if (Strings.isNotBlank(msg)) {
-                queryDoc.put("msg", ZMoDoc.NEW("$regex", msg));
+                filters.add(Filters.regex("msg", "/" + msg + "/"));
             }
             if (Strings.isNotBlank(loginname)) {
-                queryDoc.put("loginname", ZMoDoc.NEW("$regex", loginname));
+                filters.add(Filters.regex("loginname", "/" + loginname + "/"));
             }
-            long count = zMoCo.count(queryDoc);
+            long count = mongoCollection.countDocuments(Filters.and(filters));
             pagination.setTotalCount((int) count);
-            DBCursor cur = zMoCo.find(queryDoc);
-            cur.skip((pageNumber - 1) * pageSize);
-            cur.limit(pageSize);
+            FindIterable<Document> findIterable = mongoCollection.find(Filters.and(filters));
+            findIterable.limit(pageSize);
+            findIterable.skip((pageNumber - 1) * pageSize);
             if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
-                ZMoDoc sortDoc = ZMoDoc.NEW("createdAt", "asc".equals(pageOrderBy) ? 1 : -1);
-                cur.sort(sortDoc);
+                if ("desc".equalsIgnoreCase(PageUtil.getOrder(pageOrderBy))) {
+                    findIterable.sort(Sorts.descending(pageOrderName));
+                }
+                if ("asc".equalsIgnoreCase(PageUtil.getOrder(pageOrderBy))) {
+                    findIterable.sort(Sorts.ascending(pageOrderName));
+                }
+            } else {
+                findIterable.sort(Sorts.descending("createdAt"));
             }
-            List<DBObject> objects = new ArrayList<>();
-            while (cur.hasNext()) {
-                DBObject obj = cur.next();
-                objects.add(obj);
+            MongoCursor<Document> cursor = findIterable.cursor();
+            List<Sys_log> data = new LinkedList<>();
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                data.add(Lang.map2Object(doc, Sys_log.class));
             }
-            pagination.setList(objects);
+            pagination.setList(data);
             return pagination;
         }
         return new Pagination();
+    }
+
+    private MongoCollection<Document> getCollection(String collection_name) {
+        ZMongoDatabase db = zMongoClient.db();
+        MongoCollection<Document> collection;
+        if (db.collectionExists(collection_name)) {
+            collection = db.getNativeDB().getCollection(collection_name);
+        } else {
+
+            db.getNativeDB().createCollection(collection_name);
+            collection = db.getNativeDB().getCollection(collection_name);
+            collection.createIndexes(List.of(
+                    new IndexModel(Indexes.descending("createdAt")),
+                    new IndexModel(Indexes.hashed("createdBy"))
+            ));
+        }
+        return collection;
     }
 }

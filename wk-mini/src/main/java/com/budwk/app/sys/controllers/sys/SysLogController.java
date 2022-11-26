@@ -42,7 +42,9 @@ public class SysLogController {
                     @ApiFormParam(name = "msg", example = "", description = "消息内容"),
                     @ApiFormParam(name = "loginname", example = "superadmin", description = "用户名"),
                     @ApiFormParam(name = "username", example = "", description = "姓名或昵称"),
-                    @ApiFormParam(name = "searchDate", example = "", description = "时间范围"),
+                    @ApiFormParam(name = "searchDate", example = "", description = "Vue2时间范围"),
+                    @ApiFormParam(name = "beginTime", example = "", description = "Vue3时间范围beginTime"),
+                    @ApiFormParam(name = "endTime", example = "", description = "Vue3时间范围endTime"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
@@ -59,20 +61,21 @@ public class SysLogController {
                           @Param("loginname") String loginname,
                           @Param("username") String username,
                           @Param("searchDate") String searchDate,
+                          @Param(value = "beginTime",df = "0") Long beginTime,
+                          @Param(value = "endTime",df = "0") Long endTime,
                           @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         LogType logType = null;
         if (Strings.isNotBlank(type)) {
             logType = LogType.from(type);
         }
         String[] date = Strings.splitIgnoreBlank(searchDate, ",");
-        long startTime = 0, endTime = 0;
         if (date != null && date.length > 0) {
-            startTime = Times.D(date[0]).getTime();
+            beginTime = Times.D(date[0]).getTime();
         }
         if (date != null && date.length > 1) {
             endTime = Times.D(date[1]).getTime();
         }
-        return Result.success().addData(sysLogProvider.list(logType, appId, tag, msg, loginname, username, startTime, endTime, pageOrderName, pageOrderBy, pageNo, pageSize));
+        return Result.success().addData(sysLogProvider.list(logType, appId, tag, msg, loginname, username, beginTime, endTime, pageOrderName, pageOrderBy, pageNo, pageSize));
     }
 
     @At

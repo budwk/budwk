@@ -84,6 +84,10 @@ log:
   save: database
   color: true
   level: debug
+
+mongodb:
+  url: mongodb://10.10.10.10:27017/budwk_v8
+
 database:
   enable: true
   ig:

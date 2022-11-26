@@ -94,7 +94,7 @@ public class AuthController {
     @At
     @Ok("json")
     @POST
-    @SLog(type = LogType.LOGIN, value = "登录方式: ${type=='password'?'登录密码':'短信验证码'}")
+    @SLog(type = LogType.LOGIN, value = "登录方式: ${type=='password'?'账号密码':'短信验证码'}")
     @ApiOperation(name = "用户登录", description = "密码登录或短信验证码登录")
     @ApiFormParams(
             {

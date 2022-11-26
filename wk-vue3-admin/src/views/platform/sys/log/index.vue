@@ -1,7 +1,60 @@
 <template>
     <div class="app-container">
+        <el-row>
+            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+                    <el-form-item label="用户姓名" prop="username">
+                        <el-input
+v-model="queryParams.username" placeholder="请输入用户姓名" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item label="用户名" prop="loginname">
+                        <el-input
+v-model="queryParams.loginname" placeholder="请输入用户名" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item label="功能模块" prop="tag">
+                        <el-input
+v-model="queryParams.tag" placeholder="请输入功能模块" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item label="日志内容" prop="msg">
+                        <el-input
+v-model="queryParams.msg" placeholder="请输入日志内容" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item label="操作状态" prop="status">
+                        <el-radio-group v-model="queryParams.status" placeholder="操作状态" @change="statusChange">
+                            <el-radio :label="''">全部</el-radio>
+                            <el-radio :label="'success'">成功</el-radio>
+                            <el-radio :label="'exception'">失败</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="操作时间" prop="dateRange" style="font-weight:700;width: 325px;">
+                        <el-date-picker
+v-model="dateRange" type="daterange" range-separator="-"
+                            start-placeholder="开始日期" end-placeholder="结束日期" value-format="x"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
+                        <el-button icon="Refresh" @click="resetSearch">重置</el-button>
+                    </el-form-item>
+                </el-form>
+        </el-row>
         <el-row :gutter="10" class="mb8">
-            <right-toolbar @quickSearch="quickSearch" />
+            <el-col :span="1.5">
+                <el-radio-group v-model="queryParams.type" placeholder="日志类型" @change="typeChange">
+                            <el-radio-button :label="''">全部日志</el-radio-button>
+                            <el-radio-button :label="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}</el-radio-button>
+                </el-radio-group>
+            </el-col>
+            <el-col :span="1.5">
+                <el-select v-model="appId" class="m-2" placeholder="选择应用" @change="appChange" clearable>
+                    <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
+                </el-select>
+            </el-col>
+                <right-toolbar
+v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
+                        @quickSearch="quickSearch" />
         </el-row>
         <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe>
             <template v-for="(item, idx) in columns" :key="idx">
@@ -98,20 +151,36 @@ import modal from '/@/utils/modal'
 import { getList, getData } from '/@/api/platform/sys/log'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
+import { addDateRange } from '/@/utils/common'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
+const queryRef = ref<InstanceType<typeof ElForm>>()
 
+const showSearch = ref(true)    
 const showCreate = ref(false)
 const showUpdate = ref(false)
 const showTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
+const apps = ref([])
+const types = ref([])
 const showDetail = ref(false)
+const appId = ref('')
+const dateRange =ref([])
 
 const data = reactive({
     formData: {},
     queryParams: {
+        appId: '',
+        type: '',
+        status: '',
+        loginname: '',
+        username: '',
+        tag: '',
+        msg: '',
+        beginTime: '',
+        endTime: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -141,6 +210,7 @@ const handleView = (row: any) => {
 // 查询表格
 const list = () => {
     tableLoading.value = true
+    addDateRange(queryParams.value, dateRange.value)
     getList(queryParams.value).then((res) => {
         tableLoading.value = false
         tableData.value = res.data.list as never
@@ -148,19 +218,45 @@ const list = () => {
     })
 }
 
+const statusChange = () => {
+    handleSearch()
+}
+
+const typeChange = () => {
+    handleSearch()
+}
+
 // 刷新
-const quickSearch = (data: any) => {
+const handleSearch = () => {
     showTable.value = false
     queryParams.value.pageNo = 1
+    queryParams.value.appId = appId.value
     list()
     nextTick(() => {
         showTable.value = true
     })
 }
 
+// 重置搜索
+const resetSearch = () => {
+    queryRef.value?.resetFields()
+    list()
+}
+
+const getInitData = () => {
+    getData().then((res)=>{
+        apps.value = res.data.apps
+        types.value = res.data.types
+    })
+}
+
+const appChange = (val: string) => {
+    handleSearch()
+}
 
 onMounted(() => {
     list()
+    getInitData()
 })
 </script>
 <!--定义组件名用于keep-alive页面缓存-->
