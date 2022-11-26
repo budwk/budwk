@@ -54,7 +54,7 @@ v-model="dateRange" type="daterange" range-separator="-"
             </el-col>
                 <right-toolbar
 v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
-                        @quickSearch="quickSearch" />
+                        @quickSearch="handleSearch" />
         </el-row>
         <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe>
             <template v-for="(item, idx) in columns" :key="idx">
