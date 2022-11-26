@@ -56,10 +56,10 @@ v-model="dateRange" type="daterange" range-separator="-"
 v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
                         @quickSearch="handleSearch" />
         </el-row>
-        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe>
+        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe :default-sort="{ prop: 'createdAt', order: 'descending' }">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
-                    :show-overflow-tooltip="true" :align="item.align" :width="item.width">
+                    :show-overflow-tooltip="true" :align="item.align" :width="item.width" :sortable="item.sortable">
                     <template v-if="item.prop == 'exception'" #default="scope">
                         <el-tag v-if="scope.row.exception" :disable-transitions="true" type="danger">失败</el-tag>
                         <el-tag v-else :disable-transitions="true" type="success">成功</el-tag>
@@ -197,7 +197,7 @@ const columns = ref([
     { prop: 'msg', label: `日志内容`, show: true, fixed: false },
     { prop: 'exception', label: `操作状态`, show: true, fixed: false, align: 'center', width: 80 },
     { prop: 'loginname', label: `操作人`, show: true, fixed: false },
-    { prop: 'createdAt', label: `操作时间`, show: true, fixed: false, width: 160 },
+    { prop: 'createdAt', label: `操作时间`, show: true, fixed: false, width: 160, sortable: true },
     { prop: 'ip', label: `IP`, show: true, fixed: false, width: 100 },
     { prop: 'executeTime', label: `执行耗时`, show: true, fixed: false, align: 'center', width: 80 }
 ])
