@@ -53,7 +53,7 @@ v-model="dateRange" type="daterange" range-separator="-"
                 </el-select>
             </el-col>
                 <right-toolbar
-v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
+v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         @quickSearch="handleSearch" />
         </el-row>
         <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe :default-sort="{ prop: 'createdAt', order: 'descending' }">

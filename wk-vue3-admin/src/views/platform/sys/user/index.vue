@@ -73,7 +73,7 @@ type="danger" plain icon="Delete" :disabled="multiple" @click="handleDeleteMore"
                     <el-col :span="1.5">
                         <el-button
 type="info" plain icon="Upload" @click="handleImport"
-                            v-permission="['sys.manage.user.update']">导入</el-button>
+                            v-permission="['sys.manage.user.import']">导入</el-button>
                     </el-col>
                     <el-col :span="1.5">
                         <el-button

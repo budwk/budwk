@@ -15,12 +15,12 @@
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-button type="primary" icon="Plus" plain @click="handleCreate"
-                    v-permission="['sys.manage.unit.create']">新增
+                    v-permission="['sys.manage.menu.create']">新增
                 </el-button>
             </el-col>
             <el-col :span="1.5">
                 <el-button plain type="success" icon="Sort" @click="handleSort"
-                    v-permission="['sys.manage.unit.update']">排序</el-button>
+                    v-permission="['sys.manage.menu.update']">排序</el-button>
             </el-col>
             <el-col :span="1.5">
                 <el-button plain v-if="isExpandAll" icon="FolderOpened" @click="toggleExpandAll">展开</el-button>
@@ -71,19 +71,19 @@
                     <div style="padding-right:30px;">
                         <el-tooltip content="新增子菜单" placement="top" v-if="scope.row.type == 'menu'">
                             <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
-                                v-permission="['sys.manage.unit.create']"></el-button>
+                                v-permission="['sys.manage.menu.create']"></el-button>
                         </el-tooltip>
                         <el-tooltip v-if="scope.row.type == 'menu'" content="修改菜单" placement="top">
                             <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                                v-permission="['sys.manage.unit.update']"></el-button>
+                                v-permission="['sys.manage.menu.update']"></el-button>
                         </el-tooltip>
                         <el-tooltip v-if="scope.row.type == 'data'" content="修改权限" placement="top">
                             <el-button link type="primary" icon="Edit" @click="handleUpdateData(scope.row)"
-                                v-permission="['sys.manage.unit.update']"></el-button>
+                                v-permission="['sys.manage.menu.update']"></el-button>
                         </el-tooltip>
                         <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
                             <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-                                v-permission="['sys.manage.unit.delete']"></el-button>
+                                v-permission="['sys.manage.menu.delete']"></el-button>
                         </el-tooltip>
                     </div>
                 </template>
