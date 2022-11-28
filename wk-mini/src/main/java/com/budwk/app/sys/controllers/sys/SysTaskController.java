@@ -5,6 +5,7 @@ import com.budwk.app.sys.commons.task.TaskServer;
 import com.budwk.app.sys.models.Sys_task;
 import com.budwk.app.sys.services.SysTaskHistoryService;
 import com.budwk.app.sys.services.SysTaskService;
+import com.budwk.starter.common.enums.Validation;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
 import com.budwk.starter.common.page.PageUtil;
@@ -210,7 +211,7 @@ public class SysTaskController {
     @ApiFormParams(
             {
                     @ApiFormParam(name = "taskId", example = "", description = "任务ID", type = "string"),
-                    @ApiFormParam(name = "month", example = "", description = "月份", type = "string", required = true, check = true),
+                    @ApiFormParam(name = "month", example = "202211", description = "年月", required = true, check = true, validation = Validation.MONTH),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
