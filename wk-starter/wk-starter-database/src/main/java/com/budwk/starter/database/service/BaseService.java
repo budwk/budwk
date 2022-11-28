@@ -848,7 +848,7 @@ public interface BaseService<T> {
     Pagination listPageLinks(Integer pageNumber, int pageSize, Condition cnd, String linkName, Condition subCnd);
 
     /**
-     * 分页查询(tabelName)
+     * 分页查询(通过表名查询,字段名会变小写)
      *
      * @param pageNumber 页码
      * @param pageSize   页大小
@@ -857,6 +857,17 @@ public interface BaseService<T> {
      * @return
      */
     Pagination listPage(Integer pageNumber, int pageSize, String tableName, Condition cnd);
+
+    /**
+     * 分页查询(分表查询)
+     *
+     * @param dao        分表dao
+     * @param pageNumber 页码
+     * @param pageSize   页大小
+     * @param cnd        查询条件
+     * @return
+     */
+    Pagination listPage(Dao dao, Integer pageNumber, int pageSize, Condition cnd);
 
     /**
      * 分页查询并返回包含实体类内容的NutMap对象

@@ -1277,7 +1277,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
     }
 
     /**
-     * 分页查询(tabelName)
+     * 分页查询(通过表名查询,字段名会变小写)
      *
      * @param pageNumber 页码
      * @param pageSize   页大小
@@ -1285,13 +1285,31 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param cnd        查询条件
      * @return
      */
-    @Override
     public Pagination listPage(Integer pageNumber, int pageSize, String tableName, Condition cnd) {
         pageNumber = getPageNumber(pageNumber);
         pageSize = getPageSize(pageSize);
         Pager pager = this.dao().createPager(pageNumber, pageSize);
         List<Record> list = this.dao().query(tableName, cnd, pager);
         pager.setRecordCount(this.dao().count(tableName, cnd));
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
+    }
+
+    /**
+     * 分页查询(分表查询)
+     *
+     * @param dao        分表dao
+     * @param pageNumber 页码
+     * @param pageSize   页大小
+     * @param cnd        查询条件
+     * @return
+     */
+    @Override
+    public Pagination listPage(Dao dao, Integer pageNumber, int pageSize, Condition cnd) {
+        pageNumber = getPageNumber(pageNumber);
+        pageSize = getPageSize(pageSize);
+        Pager pager = dao.createPager(pageNumber, pageSize);
+        List<T> list = dao.query(this.getEntityClass(), cnd, pager);
+        pager.setRecordCount(dao.count(this.getEntityClass(), cnd));
         return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
     }
 

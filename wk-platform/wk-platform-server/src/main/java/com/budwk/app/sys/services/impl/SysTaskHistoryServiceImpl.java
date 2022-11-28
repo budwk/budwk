@@ -70,7 +70,6 @@ public class SysTaskHistoryServiceImpl extends BaseServiceImpl<Sys_task_history>
     @Override
     public Pagination getList(String month, int pageNo, int pageSize, Condition cnd) {
         String tableName = Strings.isBlank(month) ? Times.format("yyyyMM", new Date()) : month;
-        logDao(tableName);// 建表
-        return this.listPage(pageNo, pageSize, "sys_task_history_" + tableName, cnd);
+        return this.listPage(logDao(tableName), pageNo, pageSize, cnd);
     }
 }
