@@ -45,6 +45,7 @@ public class SysTaskController {
     @ApiOperation(name = "分页查询")
     @ApiFormParams(
             {
+                    @ApiFormParam(name = "name", example = "", description = "任务名称"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
@@ -55,8 +56,11 @@ public class SysTaskController {
             implementation = Pagination.class
     )
     @SaCheckPermission("sys.manage.task")
-    public Result<?> list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Result<?> list(@Param("name") String name, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         Cnd cnd = Cnd.NEW();
+        if (Strings.isNotBlank(name)) {
+            cnd.and("name", "like", "%" + name + "%");
+        }
         if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
             cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
         }

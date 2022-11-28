@@ -5,12 +5,12 @@
                 <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.task.create']">新增
                 </el-button>
             </el-col>
-            <right-toolbar @quickSearch="quickSearch" />
+            <right-toolbar @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过任务名称搜索" />
         </el-row>
-        <el-table v-loading="tableLoading" :data="tableData" row-key="id">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id" @sort-change="sortChange" :default-sort="defaultSort">
             <template v-for="(item, idx) in columns" :key="idx">
             <el-table-column
-:prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show" :default-sort="{ prop: 'createdAt', order: 'descending' }"
+:prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                             :show-overflow-tooltip="item.overflow" :align="item.align" :width="item.width" :sortable="item.sortable" >
                             <template v-if="item.prop == 'createdAt'" #default="scope">
                                 <span>{{ formatTime(scope.row.createdAt) }}</span>
@@ -49,31 +49,44 @@
             />
         </el-row>
 
-        <el-dialog title="新增任务" v-model="showCreate" width="45%">
+        <el-dialog title="新增任务" v-model="showCreate" width="35%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row :gutter="10" style="padding-right:20px;">
-                    <el-col :span="12">
+                    <el-col :span="24">
                         <el-form-item label="任务名称" prop="name">
                             <el-input v-model="formData.name" placeholder="请输入任务名称" />
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="24">
                         <el-form-item label="Ioc对象名" prop="iocName">
                             <el-input v-model="formData.iocName" placeholder="请输入Ioc对象名" />
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="24">
                         <el-form-item label="方法名" prop="jobName">
                             <el-input v-model="formData.jobName" placeholder="请输入执行方法名" />
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="24">
                         <el-form-item label="Cron表达式" prop="cron">
-                            <el-input v-model="formData.cron" placeholder="请输入任务名称" />
+                            <el-row>
+                                <el-col :span="24">
+                                <cron-input v-model="formData.cron" v-if="showCron"/> 
+                                <el-input v-model="formData.cron" placeholder="Cron表达式" v-else/>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-checkbox v-model="showCron" label="使用生成器"/>
+                            </el-col>
+                            </el-row>                            
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="启用状态" prop="cron">
+                    <el-col :span="24">
+                        <el-form-item label="传参" prop="params">
+                            <el-input v-model="formData.params" placeholder="根据代码实现可为Json格式数据" type="textarea"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="启用状态" prop="disabled">
                             <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
                                 active-color="green" inactive-color="red" />
                         </el-form-item>
@@ -90,12 +103,47 @@
 
         <el-dialog title="修改任务" v-model="showUpdate" width="35%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="任务名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入任务名称"/>
-                </el-form-item>
-                <el-form-item label="任务编号" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入任务编号"/>
-                </el-form-item>
+                <el-row :gutter="10" style="padding-right:20px;">
+                    <el-col :span="24">
+                        <el-form-item label="任务名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入任务名称" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="Ioc对象名" prop="iocName">
+                            <el-input v-model="formData.iocName" placeholder="请输入Ioc对象名" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="方法名" prop="jobName">
+                            <el-input v-model="formData.jobName" placeholder="请输入执行方法名" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="Cron表达式" prop="cron">
+                            <el-row>
+                                <el-col :span="24">
+                                <cron-input v-model="formData.cron" v-if="showCron"/> 
+                                <el-input v-model="formData.cron" placeholder="Cron表达式" v-else/>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-checkbox v-model="showCron" label="使用生成器"/>
+                            </el-col>
+                            </el-row>                            
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="传参" prop="params">
+                            <el-input v-model="formData.params" placeholder="根据代码实现可为Json格式数据" type="textarea"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="启用状态" prop="disabled">
+                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                                active-color="green" inactive-color="red" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
@@ -112,6 +160,7 @@ import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, getHistoryList, doDelete, doDisable, doNow } from '/@/api/platform/sys/task'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
+import CronInput from './CronInput.vue'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -120,6 +169,9 @@ const showCreate = ref(false)
 const showUpdate = ref(false)
 const tableLoading = ref(false)
 const tableData = ref([])
+const showCron = ref(true)
+
+const defaultSort = ref({ prop: "createdAt", order: "descending" });
 
 const data = reactive({
     formData: {
@@ -132,6 +184,7 @@ const data = reactive({
         disabled: false,
     },
     queryParams: {
+        name: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -182,8 +235,22 @@ const list = () => {
     })
 }
 
+// 远程排序
+const sortChange = (column: any) => {
+    queryParams.value.pageOrderName = column.prop
+    queryParams.value.pageOrderBy = column.order
+    handleSearch()
+}
+
+// 搜索
+const handleSearch = () => {
+    queryParams.value.pageNo = 1
+    list()
+}
+
 // 刷新
 const quickSearch = (data: any) => {
+    queryParams.value.name = data.keyword
     queryParams.value.pageNo = 1
     list()
 }

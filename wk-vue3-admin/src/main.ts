@@ -33,7 +33,7 @@ async function start() {
     app.component('RightToolbar', RightToolbar)
     // 注册分页组件
     app.component('Pagination', Pagination)
-
+    
     app.use(router)
     app.use(pinia)
 
