@@ -30,6 +30,10 @@
                         <el-button link type="primary" icon="Tickets" @click="handleView(scope.row)"
                             v-permission="['sys.manage.task']"></el-button>
                     </el-tooltip>
+                    <el-tooltip content="立即执行" placement="top">
+                        <el-button link type="primary" icon="VideoPlay" @click="handleRun(scope.row)"
+                            v-permission="['sys.manage.task.update']"></el-button>
+                    </el-tooltip>
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                             v-permission="['sys.manage.task.update']"></el-button>
@@ -343,6 +347,15 @@ const handleDelete = (row: any) => {
         queryParams.value.pageNo = 1
         list()
         modal.msgSuccess('删除成功')
+    }).catch(() => { })
+}
+
+// 立即执行
+const handleRun = (row: any) => {
+    modal.confirm('确定立即执行 ' + row.name + ' 一次？').then(() => {
+        return doNow(row.id)
+    }).then(() => {
+        modal.msgSuccess('执行成功')
     }).catch(() => { })
 }
 
