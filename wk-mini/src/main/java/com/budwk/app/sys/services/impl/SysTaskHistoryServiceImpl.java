@@ -2,6 +2,7 @@ package com.budwk.app.sys.services.impl;
 
 import com.budwk.app.sys.models.Sys_task_history;
 import com.budwk.app.sys.services.SysTaskHistoryService;
+import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.database.service.BaseServiceImpl;
 import org.nutz.dao.Condition;
@@ -70,6 +71,9 @@ public class SysTaskHistoryServiceImpl extends BaseServiceImpl<Sys_task_history>
     @Override
     public Pagination getList(String month, int pageNo, int pageSize, Condition cnd) {
         String tableName = Strings.isBlank(month) ? Times.format("yyyyMM", new Date()) : month;
+        if (!this.dao().exists("sys_task_history_" + tableName)) {
+            throw new BaseException(tableName + " 表不存在");
+        }
         return this.listPage(logDao(tableName), pageNo, pageSize, cnd);
     }
 }

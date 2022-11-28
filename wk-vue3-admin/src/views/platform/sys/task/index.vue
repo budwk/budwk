@@ -150,12 +150,27 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="任务执行历史" v-model="showView" width="60%">
+        <el-dialog title="任务执行历史" v-model="showView" width="80%">
+            <el-form :model="queryHistoryParams" ref="queryHistoryRef" :inline="true" label-width="68px">
+                    <el-form-item label="执行月份" prop="username">
+                        <el-date-picker
+                            v-model="queryHistoryParams.month"
+                            type="month"
+                            placeholder="选择年月"
+                            value-format="YYYYMM"
+                            @change="handleSearchHistory"
+                            />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" icon="Search" @click="handleSearchHistory">搜索</el-button>
+                        <el-button icon="Refresh" @click="resetSearchHistory">重置</el-button>
+                    </el-form-item>
+            </el-form>
             <el-table v-loading="tableLoading" :data="tableHistoryData" row-key="id" :default-sort="defaultSort">
                 <el-table-column prop="instanceId" label="实例ID" header-align="center" width="210px" />
                 <el-table-column prop="jobId" :show-overflow-tooltip="true" label="作业ID" header-align="center"
                     width="210px" />
-                <el-table-column prop="success" label="是否成功" header-align="center">
+                <el-table-column prop="success" label="是否成功" header-align="center" align="center">
                     <template #default="scope">
                         <span v-if="scope.row.success">
                             成功
@@ -165,8 +180,12 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="message" label="错误信息" header-align="center" />
-                <el-table-column prop="tookTime" label="耗时(单位:ms)" header-align="center" />
+                <el-table-column prop="message" label="错误信息" header-align="center" align="center"/>
+                <el-table-column prop="tookTime" label="耗时" header-align="center" align="center">
+                    <template #default="scope">
+                        {{ scope.row.tookTime }} ms
+                    </template>
+                </el-table-column>
                 <el-table-column prop="endTime" label="结束时间" header-align="center">
                     <template #default="scope">
                         <span v-if="scope.row.endTime">{{
@@ -198,6 +217,7 @@ import CronInput from './CronInput.vue'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
+const queryHistoryRef =  ref<InstanceType<typeof ElForm>>()
 
 const showCreate = ref(false)
 const showUpdate = ref(false)
@@ -374,6 +394,8 @@ const listHistory = () => {
         tableLoading.value = false
         tableHistoryData.value = res.data.list as never
         queryHistoryParams.value.totalCount = res.data.totalCount as never
+    }).catch(()=>{
+        tableLoading.value = false
     })
 }
 
@@ -381,6 +403,17 @@ const listHistory = () => {
 const handleView = (row: any) => {
     showView.value = true
     queryHistoryParams.value.taskId = row.id
+    listHistory()
+}
+
+const handleSearchHistory = () =>{
+    queryHistoryParams.value.pageNo = 1
+    listHistory()
+}
+
+const resetSearchHistory = () => {
+    queryHistoryRef.value?.resetFields()
+    queryHistoryParams.value.pageNo = 1
     listHistory()
 }
 
