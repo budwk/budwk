@@ -7,7 +7,7 @@
             </el-col>
             <right-toolbar @quickSearch="quickSearch" />
         </el-row>
-        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id">
             <el-table-column prop="name" label="职务名称">
             </el-table-column>
             <el-table-column prop="code" label="职务编号">
@@ -93,7 +93,6 @@ const updateRef = ref<InstanceType<typeof ElForm>>()
 
 const showCreate = ref(false)
 const showUpdate = ref(false)
-const showTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 
@@ -142,12 +141,8 @@ const list = () => {
 
 // 刷新
 const quickSearch = (data: any) => {
-    showTable.value = false
     queryParams.value.pageNo = 1
     list()
-    nextTick(() => {
-        showTable.value = true
-    })
 }
 
 

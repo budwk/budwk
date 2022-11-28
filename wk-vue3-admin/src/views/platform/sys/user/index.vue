@@ -85,7 +85,7 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         @quickSearch="quickSearch" />
                 </el-row>
 
-                <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" @selection-change="handleSelectionChange">
+                <el-table v-loading="tableLoading" :data="tableData" row-key="id" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" fixed="left" />
                     <el-table-column type="expand" fixed="left">
                         <template #default="scope">
@@ -445,7 +445,6 @@ const showCreate = ref(false)
 const showUpdate = ref(false)
 const showSearch = ref(true)
 const showImport = ref(false)
-const showTable = ref(true)
 const single = ref(true)
 const multiple = ref(true)
 const modifySerialNo = ref(false)
@@ -611,11 +610,7 @@ const list = () => {
 
 // 快速搜索&刷新
 const quickSearch = () => {
-    showTable.value = false
     list()
-    nextTick(() => {
-        showTable.value = true
-    })
 }
 
 // 高级搜索

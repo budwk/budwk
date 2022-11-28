@@ -7,11 +7,11 @@
             </el-col>
             <right-toolbar @quickSearch="quickSearch" />
         </el-row>
-        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id">
             <template v-for="(item, idx) in columns" :key="idx">
             <el-table-column
-:prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show" :sortable="item.sortable" :default-sort="{ prop: 'createdAt', order: 'descending' }"
-                            :show-overflow-tooltip="item.overflow" :align="item.align" :width="item.width">
+:prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show" :default-sort="{ prop: 'createdAt', order: 'descending' }"
+                            :show-overflow-tooltip="item.overflow" :align="item.align" :width="item.width" :sortable="item.sortable" >
                             <template v-if="item.prop == 'createdAt'" #default="scope">
                                 <span>{{ formatTime(scope.row.createdAt) }}</span>
                             </template>
@@ -109,7 +109,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, getHistoryList, doDelete, doNow } from '/@/api/platform/sys/task'
+import { doCreate, doUpdate, getInfo, getList, getHistoryList, doDelete, doDisable, doNow } from '/@/api/platform/sys/task'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 
@@ -118,7 +118,6 @@ const updateRef = ref<InstanceType<typeof ElForm>>()
 
 const showCreate = ref(false)
 const showUpdate = ref(false)
-const showTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 
@@ -136,8 +135,8 @@ const data = reactive({
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
-        pageOrderName: '',
-        pageOrderBy: ''
+        pageOrderName: 'createdAt',
+        pageOrderBy: 'descending'
     },
     formRules: {
         name: [{ required: true, message: "任务名称不能为空", trigger: ["blur","change"] }],
@@ -156,7 +155,7 @@ const columns = ref([
     { prop: 'cron', label: `Cron`, show: true, fixed: false, align: 'center',},
     { prop: 'params', label: `传参`, show: true, fixed: false,overflow: true },
     { prop: 'createdAt', label: `创建时间`, show: true, fixed: false, width: 160, sortable: true },
-    { prop: 'disbaled', label: `启用状态`, show: true, fixed: false, width: 80, sortable: true }
+    { prop: 'disabled', label: `启用状态`, show: true, fixed: false, width: 100, sortable: true }
 ])
 
 // 重置表单
@@ -185,12 +184,8 @@ const list = () => {
 
 // 刷新
 const quickSearch = (data: any) => {
-    showTable.value = false
     queryParams.value.pageNo = 1
     list()
-    nextTick(() => {
-        showTable.value = true
-    })
 }
 
 
@@ -249,11 +244,15 @@ const update = () => {
     })
 }
 
-// 排序
-const locationChange = (row: any) => {
-    doLocation({location: row.location, id: row.id}).then((res: any) => {
+// 启用禁用
+const disabledChange = (row: any) => {
+    doDisable({ disabled: row.disabled, id: row.id, path: row.path }).then((res: any) => {
         modal.msgSuccess(res.msg)
         list()
+    }).catch(() => {
+        setTimeout(() => {
+            row.disabled = !row.disabled
+        }, 300)
     })
 }
 

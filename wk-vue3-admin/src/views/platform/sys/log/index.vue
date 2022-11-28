@@ -56,7 +56,7 @@ v-model="dateRange" type="daterange" range-separator="-"
 v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         @quickSearch="handleSearch" />
         </el-row>
-        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe :default-sort="{ prop: 'createdAt', order: 'descending' }">
+        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="defaultSort">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="true" :align="item.align" :width="item.width" :sortable="item.sortable">
@@ -169,6 +169,8 @@ const showDetail = ref(false)
 const appId = ref('')
 const dateRange =ref([])
 
+const defaultSort = ref({ prop: "createdAt", order: "descending" });
+
 const data = reactive({
     formData: {},
     queryParams: {
@@ -185,7 +187,7 @@ const data = reactive({
         pageSize: 10,
         totalCount: 0,
         pageOrderName: 'createdAt',
-        pageOrderBy: 'desc'
+        pageOrderBy: 'descending'
     },
 })
 
@@ -226,14 +228,20 @@ const typeChange = () => {
     handleSearch()
 }
 
+const sortChange = (column: any) => {
+    queryParams.value.pageOrderName = column.prop
+    queryParams.value.pageOrderBy = column.order
+    handleSearch()
+}
+
 // 刷新
 const handleSearch = () => {
-    showTable.value = false
+    //showTable.value = false
     queryParams.value.pageNo = 1
     queryParams.value.appId = appId.value
     list()
     nextTick(() => {
-        showTable.value = true
+        //showTable.value = true
     })
 }
 

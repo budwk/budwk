@@ -29,7 +29,7 @@
                 @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过单位名称搜索" />
         </el-row>
 
-        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id"
+        <el-table v-if="showTreeTable" v-loading="tableLoading" :data="tableData" row-key="id"
             :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
@@ -308,7 +308,7 @@ const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 const isExpandAll = ref(true)
 const showSearch = ref(false)
-const showTable = ref(true)
+const showTreeTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 const sortData = ref([])
@@ -415,10 +415,10 @@ onMounted(() => {
 const quickSearch = (data: any) => {
     queryParams.value.name = data.keyword
     queryParams.value.leaderName = ''
-    showTable.value = false
+    showTreeTable.value = false
     list()
     nextTick(() => {
-        showTable.value = true
+        showTreeTable.value = true
     })
 }
 
@@ -435,10 +435,10 @@ const resetSearch = () => {
 
 // 展开/折叠
 const toggleExpandAll = () => {
-    showTable.value = false
+    showTreeTable.value = false
     isExpandAll.value = !isExpandAll.value
     nextTick(() => {
-        showTable.value = true
+        showTreeTable.value = true
     })
 }
 
