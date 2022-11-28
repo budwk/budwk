@@ -51,7 +51,7 @@ public class TaskHistory implements PubSub {
         try {
             RLock rLock = redissonClient.getLock(RedisConstant.JOB_HISTORY + jobInfo.getTaskId());
             if (rLock.tryLock(3, TimeUnit.SECONDS)) {
-                sysTaskHistoryService.insert(history);
+                sysTaskHistoryService.save(history);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

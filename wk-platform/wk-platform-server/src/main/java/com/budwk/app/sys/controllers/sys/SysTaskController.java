@@ -210,6 +210,7 @@ public class SysTaskController {
     @ApiFormParams(
             {
                     @ApiFormParam(name = "taskId", example = "", description = "任务ID", type = "string"),
+                    @ApiFormParam(name = "month", example = "", description = "月份", type = "string", required = true, check = true),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
@@ -220,13 +221,13 @@ public class SysTaskController {
             implementation = Pagination.class
     )
     @SaCheckPermission("sys.manage.task")
-    public Result<?> history(@Param("taskId") String taskId, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Result<?> history(@Param("taskId") String taskId, @Param("month") String month, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         Cnd cnd = Cnd.NEW();
         cnd.and("taskId", "=", taskId);
         if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
             cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
         }
-        return Result.success().addData(sysTaskHistoryService.listPage(pageNo, pageSize, cnd));
+        return Result.success().addData(sysTaskHistoryService.getList(month, pageNo, pageSize, cnd));
     }
 
     @At("/donow/{id}")

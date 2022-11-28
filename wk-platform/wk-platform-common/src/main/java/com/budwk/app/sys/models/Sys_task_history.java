@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table("sys_task_history")
+@Table("sys_task_history_${month}")
 @TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "定时任务历史记录表")
 @TableIndexes({@Index(name = "INDEX_SYS_TASK_HISTORY", fields = {"instanceId", "jobId"}, unique = true)})
