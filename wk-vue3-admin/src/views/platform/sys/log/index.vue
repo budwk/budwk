@@ -56,7 +56,7 @@ v-model="dateRange" type="daterange" range-separator="-"
 v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         @quickSearch="handleSearch" />
         </el-row>
-        <el-table v-if="showTable" v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="defaultSort">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="defaultSort">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="true" :align="item.align" :width="item.width" :sortable="item.sortable">
@@ -160,7 +160,6 @@ const queryRef = ref<InstanceType<typeof ElForm>>()
 const showSearch = ref(true)    
 const showCreate = ref(false)
 const showUpdate = ref(false)
-const showTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 const apps = ref([])
@@ -236,13 +235,9 @@ const sortChange = (column: any) => {
 
 // 刷新
 const handleSearch = () => {
-    //showTable.value = false
     queryParams.value.pageNo = 1
     queryParams.value.appId = appId.value
     list()
-    nextTick(() => {
-        //showTable.value = true
-    })
 }
 
 // 重置搜索
