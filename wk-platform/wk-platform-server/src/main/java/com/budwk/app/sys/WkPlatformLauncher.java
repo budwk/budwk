@@ -237,7 +237,7 @@ public class WkPlatformLauncher {
                 publicRole.setCode("public");
                 publicRole.setNote("所有用户默认分配");
                 publicRole.setDisabled(false);
-                publicRole.setUnitId("");
+                publicRole.setUnitId(headUnit.getId());
                 publicRole.setGroupId("PUBLIC");
                 dao.insert(publicRole);
                 Sys_role role = new Sys_role();

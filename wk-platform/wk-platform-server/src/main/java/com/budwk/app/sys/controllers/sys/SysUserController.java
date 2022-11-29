@@ -69,7 +69,7 @@ public class SysUserController {
     @ApiOperation(name = "Vue3树形列表查询")
     @ApiFormParams(
             {
-                    @ApiFormParam(name = "name", example = "", description = "用户名")
+                    @ApiFormParam(name = "name", example = "", description = "单位名称")
             }
     )
     @ApiResponses(

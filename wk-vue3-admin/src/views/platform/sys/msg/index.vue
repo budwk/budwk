@@ -2,10 +2,15 @@
     <div class="app-container">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-radio-group v-model="queryParams.type" placeholder="日志类型" @change="typeChange">
-                            <el-radio-button :label="''">全部日志</el-radio-button>
+                <el-radio-group v-model="queryParams.type" placeholder="消息类型" @change="typeChange">
+                            <el-radio-button :label="''">全部消息</el-radio-button>
                             <el-radio-button :label="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}</el-radio-button>
                 </el-radio-group>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button plain type="primary" icon="Plus" @click="handleCreate"
+                    v-permission="['sys.manage.msg.create']">发送消息
+                </el-button>
             </el-col>
                 <right-toolbar
 v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
@@ -18,7 +23,7 @@ v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
                     <template v-if="item.prop == 'loginname'" #default="scope">
                         {{ scope.row.username }}({{ scope.row.loginname }})
                     </template>
-                    <template v-if="item.prop == 'createdAt'" #default="scope">
+                    <template v-if="item.prop == 'sendAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
                 </el-table-column>
@@ -36,6 +41,101 @@ v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
             <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                 v-model:limit="queryParams.pageSize" @pagination="list" />
         </el-row>
+
+        <el-dialog title="发送消息" v-model="showCreate" width="50%">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
+                <el-row :gutter="10" style="padding-right:20px;">
+                    <el-col :span="24">
+                        <el-form-item label="消息标题" prop="title">
+                            <el-input v-model="formData.title" placeholder="请输入消息标题" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="URL路径" prop="url">
+                            <el-input v-model="formData.url" placeholder="跳转路径" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="消息类型" prop="type">
+                            <el-radio-group v-model="formData.type">
+                                <el-radio v-for="obj in types" :key="obj.value" :label="obj.value">{{ obj.text }}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="发送范围" prop="scope">
+                            <el-radio-group
+                                v-model="formData.scope"
+                            >
+                                <el-radio-button
+                                v-for="obj in scopes"
+                                :key="obj.value"
+                                :label="obj.value"
+                                >{{ obj.text }}</el-radio-button>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24" v-if="'SCOPE' == formData.scope" label="指定用户">
+                        <el-row>
+                            <el-button
+                            plain
+                            icon="Search"
+                            @click="openSelect"
+                            >选择用户</el-button>
+                            <el-button
+                            plain
+                            icon="Delete"
+                            type="danger"
+                            @click="clearSelect"
+                            >清除选择</el-button>
+                        </el-row>
+                    <el-table
+                        :data="userTableData"
+                        style="width: 100%;margin-top:5px;margin-bottom: 20px;"
+                        size="small"
+                        height="200"
+                    >
+                        <el-table-column
+                        fixed
+                        prop="loginname"
+                        label="用户名"
+                        >
+                        <template slot-scope="scope">
+                            {{ scope.row.loginname }} ({{ scope.row.username }})
+                        </template>
+                        </el-table-column>
+                        <el-table-column
+                        prop="email"
+                        label="EMail"
+                        :show-overflow-tooltip="true"
+                        />
+                        <el-table-column
+                        prop="mobile"
+                        label="手机号"
+                        />
+                        <el-table-column prop="unit" label="所属单位">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.unit != null">
+                            {{ scope.row.unit.name }}
+                            </span>
+                        </template>
+                        </el-table-column>
+                    </el-table>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="消息内容" prop="note">
+                            <el-input v-model="formData.note" placeholder="消息内容"  type="textarea" :rows="5" maxlength="30"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="create">确 定</el-button>
+                    <el-button @click="showCreate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
 
         <el-drawer v-model="showDetail" direction="rtl" title="日志详情" size="50%">
 
@@ -96,7 +196,7 @@ v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { getList, getType, doCreate, doDelete, getData } from '/@/api/platform/sys/msg'
+import { getList, getInfo, doCreate, doDelete, getData } from '/@/api/platform/sys/msg'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 import { addDateRange } from '/@/utils/common'
@@ -117,32 +217,55 @@ const showDetail = ref(false)
 const appId = ref('')
 const dateRange =ref([])
 
-const defaultSort = ref({ prop: "createdAt", order: "descending" });
+const defaultSort = ref({ prop: "sendAt", order: "descending" });
 
 const data = reactive({
-    formData: {},
+    formData: {
+        id: '',
+        title: '',
+        url: '',
+        type: 'USER',
+        scope: 'SCOPE',
+        note: ''
+    },
     queryParams: {
         title: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
-        pageOrderName: 'createdAt',
+        pageOrderName: 'sendAt',
         pageOrderBy: 'descending'
     },
+    formRules: {
+        title: [{ required: true, message: "消息标题不能为空", trigger: ["blur", "change"] }],
+        type: [{ required: true, message: "消息类型不能为空", trigger: ["blur", "change"] }],
+        scope: [{ required: true, message: "发送范围不能为空", trigger: ["blur", "change"] }],
+    }
 })
 
-const { formData, queryParams } = toRefs(data)
+const { formData, formRules, queryParams } = toRefs(data)
 
 const columns = ref([
-    { prop: 'url', label: `请求路径`, show: true, fixed: 'left', width: 200 },
-    { prop: 'tag', label: `功能模块`, show: true, fixed: 'left', width: 100 },
-    { prop: 'msg', label: `日志内容`, show: true, fixed: false },
-    { prop: 'exception', label: `操作状态`, show: true, fixed: false, align: 'center', width: 80 },
-    { prop: 'loginname', label: `操作人`, show: true, fixed: false },
-    { prop: 'createdAt', label: `操作时间`, show: true, fixed: false, width: 160, sortable: true },
-    { prop: 'ip', label: `IP`, show: true, fixed: false, width: 100 },
-    { prop: 'executeTime', label: `执行耗时`, show: true, fixed: false, align: 'center', width: 80 }
+    { prop: 'title', label: `标题`, show: true, fixed: 'left' },
+    { prop: 'type', label: `消息类型`, show: true, fixed: 'left', width: 100 },
+    { prop: 'all_num', label: `全部用户数`, show: true, fixed: false },
+    { prop: 'unread_num', label: `未读用户数`, show: true, fixed: false, align: 'center' },
+    { prop: 'sendAt', label: `发送时间`, show: true, fixed: false, width: 160, sortable: true },
+    { prop: 'delFlag', label: `消息状态`, show: true, fixed: false, width: 100 }
 ])
+
+// 重置表单
+const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
+    formData.value = {
+        id: '',
+        title: '',
+        url: '',
+        type: 'USER',
+        scope: 'SCOPE',
+        note: ''
+    }
+    formEl?.resetFields()
+}
 
 const handleView = (row: any) => {
     formData.value = row
@@ -201,8 +324,45 @@ const getInitData = () => {
     })
 }
 
-const appChange = (val: string) => {
-    handleSearch()
+// 新增按钮
+const handleCreate = (row: any) => {
+    resetForm(createRef.value)
+    showCreate.value = true
+}
+
+// 修改按钮
+const handleUpdate = (row: any) => {
+    getInfo(row.id).then((res: any) => {
+        formData.value = res.data
+        showUpdate.value = true
+    })
+}
+
+// 删除按钮
+const handleDelete = (row: any) => {
+    modal.confirm('确定删除 ' + row.name + '？').then(() => {
+        return doDelete(row.id)
+    }).then(() => {
+        queryParams.value.pageNo = 1
+        list()
+        modal.msgSuccess('删除成功')
+    }).catch(() => { })
+}
+
+
+// 提交新增
+const create = () => {
+    if (!createRef.value) return
+    createRef.value.validate((valid) => {
+        if (valid) {
+            doCreate(formData.value).then((res: any) => {
+                modal.msgSuccess(res.msg)
+                showCreate.value = false
+                queryParams.value.pageNo = 1
+                list()
+            })
+        }
+    })
 }
 
 onMounted(() => {
