@@ -29,7 +29,9 @@
                         </li>
                         <li v-for="r in group.roles" :key="r.id" class="role-group-item" :index="r.id"
                             @click="clickRole(r)" @mouseover="enter(r.id)">
-                            <div :class="roleId === r.id ? 'active role' : 'role'">{{ r.name }}</div>
+                            <div :class="roleId === r.id ? 'active role' : 'role'">
+                                <el-tooltip :content="r.note?r.note:r.name" placement="left">{{ r.name }}</el-tooltip>
+                            </div>
                             <div v-if="btnIndex === r.id" class="operate">
                                 <el-button link type="primary" @click="openUpdateRole(r)"
                                     :disabled="r.code == 'public'"><i class="fa fa-pencil-square-o" />
@@ -161,6 +163,9 @@
                     <el-input v-model="formData.code" maxlength="100" placeholder="角色代码" auto-complete="off"
                         tabindex="3" type="text" />
                 </el-form-item>
+                <el-form-item prop="note" label="角色说明">
+                    <el-input v-model="formData.note" maxlength="100" placeholder="角色说明" type="text" />
+                </el-form-item>
                 <el-form-item v-if="formData.type === 'role'" prop="disabled" label="启用状态">
                     <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
                         active-color="green" inactive-color="red" />
@@ -194,6 +199,9 @@
                 <el-form-item v-if="formData.type === 'role'" prop="code" label="角色代码" :rules="funRules('code')">
                     <el-input v-model="formData.code" maxlength="100" placeholder="角色代码" auto-complete="off"
                         tabindex="3" type="text" />
+                </el-form-item>
+                <el-form-item prop="note" label="角色说明">
+                    <el-input v-model="formData.note" maxlength="100" placeholder="角色说明" type="text" />
                 </el-form-item>
                 <el-form-item v-if="formData.type === 'role'" prop="disabled" label="启用状态">
                     <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
@@ -298,6 +306,7 @@ const data = reactive({
         type: 'role',
         groupId: '',
         name: '',
+        note: '',
         code: '',
         disabled: false
     },
@@ -354,6 +363,7 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         type: 'role',
         groupId: '',
         name: '',
+        note: '',
         code: '',
         disabled: false
     }
