@@ -21,6 +21,7 @@ import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 /**
  * @author wizzer.cn
@@ -85,6 +86,7 @@ public class PusUserSelectController {
             {
                     @ApiFormParam(name = "unitPath", example = "", description = "单位PATH"),
                     @ApiFormParam(name = "postId", example = "", description = "职务ID"),
+                    @ApiFormParam(name = "users", example = "", description = "已选用户名(英文,分隔)"),
                     @ApiFormParam(name = "keyword", example = "", description = "用户姓名/用户名"),
                     @ApiFormParam(name = "mobile", example = "", description = "手机号码"),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
@@ -97,7 +99,7 @@ public class PusUserSelectController {
             implementation = Pagination.class
     )
     @SaCheckLogin
-    public Result<?> list(@Param("mobile") String mobile, @Param("unitPath") String unitPath, @Param("postId") String postId, @Param("keyword") String keyword, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+    public Result<?> list(@Param("users") String users, @Param("mobile") String mobile, @Param("unitPath") String unitPath, @Param("postId") String postId, @Param("keyword") String keyword, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
         Cnd cnd = Cnd.NEW();
         if (Strings.isNotBlank(unitPath)) {
             cnd.and("unitPath", "like", unitPath + "%");
@@ -109,6 +111,10 @@ public class PusUserSelectController {
         }
         if (Strings.isNotBlank(postId)) {
             cnd.and("postId", "=", postId);
+        }
+        if (Strings.isNotBlank(users)) {
+            String[] users_ = Strings.splitIgnoreBlank(users, ",");
+            cnd.and("loginname", "not in ", Arrays.asList(users_));
         }
         if (Strings.isNotBlank(keyword)) {
             cnd.and(Cnd.exps("loginname", "like", "%" + keyword + "%").or("username", "like", "%" + keyword + "%"));

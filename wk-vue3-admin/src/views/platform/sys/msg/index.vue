@@ -111,15 +111,7 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="选择用户" v-model="showSelect" width="60%">
-            <user-select multiple></user-select>
-            <template #footer>
-                <div class="dialog-footer">
-                    <el-button type="primary" @click="create">确 定</el-button>
-                    <el-button @click="showSelect = false">取 消</el-button>
-                </div>
-            </template>
-        </el-dialog>
+        <user-select multiple v-if="showSelect" :show="showSelect"></user-select>
 
         <el-drawer v-model="showDetail" direction="rtl" title="日志详情" size="50%">
 

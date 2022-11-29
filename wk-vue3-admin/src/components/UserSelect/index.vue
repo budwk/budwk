@@ -1,75 +1,111 @@
 <template>
     <div class="app-container">
-        <el-row :gutter="20">
-            <el-col :span="4">
-                <div class="head-container">
-                    <el-input
-v-model="queryUnit.name" placeholder="请输入单位名称" clearable prefix-icon="Search"
-                        style="margin-bottom: 20px" />
-                </div>
-                <div class="head-container">
-                    <el-tree
-:data="unitLeftOptions" :props="{ label: 'name', children: 'children' }"
-                        :expand-on-click-node="false" :filter-node-method="filterNode" ref="unitTreeRef"
-                        highlight-current default-expand-all @node-click="handleNodeClick">
-                        <template #default="{ node, data }">
-                            <i v-if="data.type && data.type.value === 'GROUP'" class="fa fa-building" />
-                            <i v-if="data.type && data.type.value === 'COMPANY'" class="fa fa-home" />
-                            {{ data.name }}
+        <el-dialog title="选择用户" v-model="showSelect" width="75%">
+            <el-row :gutter="10">
+                <el-col :span="11">
+                    <el-input v-model="queryParams.keyword" placeholder="请输入用户名或姓名" class="input-with-select">
+                        <template #prepend>
+                            <el-tree-select v-model="queryParams.unitPath" :data="unitLeftOptions" filterable
+                                check-strictly :props="{ value: 'path', label: 'name', children: 'children' }"
+                                :filter-node-method="filterNodeMethod" placeholder="选择单位" @change="handleSearch">
+                                <template #default="{ data }">
+                                    <i v-if="data.type && data.type.value === 'GROUP'" class="fa fa-building" />
+                                    <i v-if="data.type && data.type.value === 'COMPANY'" class="fa fa-home" />
+                                    {{ data.name }}
+                                </template>
+                            </el-tree-select>
                         </template>
-                    </el-tree>
+                        <template #append>
+                            <el-button icon="Search" @click="handleSearch" />
+                        </template>
+                    </el-input>
+
+                    <el-table class="user-select-left-table" v-loading="tableLoading" :data="tableData" row-key="id"
+                        @selection-change="handleLeftSelectChange">
+                        <el-table-column type="selection" width="50" fixed="left" />
+                        <el-table-column prop="username" label="姓名|用户名">
+                            <template #default="scope">
+                                {{ scope.row.username }} ({{ scope.row.loginname }})
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="unit" label="所属单位">
+                            <template #default="scope">
+                                <span v-if="scope.row.unit">{{ scope.row.unit.name }}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
+                        v-model:limit="queryParams.pageSize" @pagination="list" class="user-select-page" />
+                </el-col>
+                <el-col :span="2" style="margin-top:100px;">
+                    <el-row justify="center">
+                        <el-button icon="DArrowRight" @click="selectUsers" :disabled="leftSelectData.length <= 0">
+                        </el-button>
+                    </el-row>
+                    <el-row justify="center" style="margin-top:20px;">
+                        <el-button icon="DArrowLeft" @click="removeUsers" :disabled="rightSelectData.length <= 0">
+                        </el-button>
+                    </el-row>
+                </el-col>
+
+                <el-col :span="11">
+                    <el-row>
+                        <span class="user-select-right-title">已选中用户列表</span>
+                    </el-row>
+                    <el-table v-loading="tableLoading" :data="tableSelectData" row-key="id"
+                        @selection-change="handleRightSelectChange">
+                        <el-table-column type="selection" width="50" fixed="left" />
+                        <el-table-column prop="username" label="姓名|用户名">
+                            <template #default="scope">
+                                {{ scope.row.username }} ({{ scope.row.loginname }})
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="unit" label="所属单位">
+                            <template #default="scope">
+                                <span v-if="scope.row.unit">{{ scope.row.unit.name }}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-col>
+            </el-row>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary">确 定</el-button>
+                    <el-button @click="close">取 消</el-button>
                 </div>
-            </el-col>
-            <el-col :span="20">
-                <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
-                    <el-form-item label="用户名或姓名" prop="keyword">
-                        <el-input
-v-model="queryParams.keyword" placeholder="请输入用户名或姓名" clearable style="width: 180px"
-                            @keyup.enter="handleSearch" />
-                    </el-form-item>
-                    <el-form-item label="手机号码" prop="mobile">
-                        <el-input
-v-model="queryParams.mobile" placeholder="请输入手机号码" clearable style="width: 180px"
-                            @keyup.enter="handleSearch" />
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
-                        <el-button icon="Refresh" @click="resetSearch">重置</el-button>
-                    </el-form-item>
-                </el-form>
-                <el-table v-loading="tableLoading" :data="tableData" row-key="id" @selection-change="handleSelectionChange">
-                    <el-table-column type="selection" width="50" fixed="left" />
-                </el-table>
-                <pagination
-:total="queryParams.totalCount" v-model:page="queryParams.pageNo"
-                    v-model:limit="queryParams.pageSize" @pagination="list" />
-            </el-col>
-        </el-row>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
-import { ElForm, ElTree } from "element-plus"
+import { ElForm } from "element-plus"
 import { onMounted, reactive, ref, toRefs, watch } from "vue"
-import { getUnitList, getPostList, getList } from '/@/api/platform/pub/user'
+import { getUnitList, getList } from '/@/api/platform/pub/user'
 import { handleTree } from '/@/utils/common'
+
+const showSelect = ref(props.show)
 
 const props = defineProps({
     multiple: {
         type: Boolean,
         default: true,
     },
+    show: {
+        type: Boolean,
+        default: false,
+    }
 })
 
-const emits = defineEmits(['select'])
+const emits = defineEmits(['update:show','select'])
 
-const unitTreeRef = ref<InstanceType<typeof ElTree>>()
 const queryRef = ref<InstanceType<typeof ElForm>>()
-    
+
 const unitLeftOptions = ref([])
-const currentUnitId = ref('')
-const currentUnitPath = ref('')
 const tableLoading = ref(false)
 const tableData = ref([])
+const tableSelectData = ref([])
+const leftSelectData = ref([])
+const rightSelectData = ref([])
 
 const data = reactive({
     queryUnit: {
@@ -78,33 +114,25 @@ const data = reactive({
     queryParams: {
         unitPath: '',
         keyword: '',
-        loginname: '',
         mobile: '',
+        users: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
         pageOrderName: 'updatedAt',
         pageOrderBy: 'descending'
-    },
-    posts: []
+    }
 })
 
-const { queryUnit, posts, queryParams } = toRefs(data)
+const { queryUnit, queryParams } = toRefs(data)
 
+const close = () => {
+    showSelect.value = false
+    emits('update:show',false)
+}
 
 // 通过条件过滤节点
-const filterNode = (value: any, data: any) => {
-    if (!value) return true
-    return data.name.indexOf(value) !== -1
-}
-
-// 点击单位
-const handleNodeClick = (data: any) => {
-    queryParams.value.unitPath = data.path
-    currentUnitId.value = data.id
-    currentUnitPath.value = data.path
-    list()
-}
+const filterNodeMethod = (value: string, data: any) => data.name.includes(value)
 
 // 查询表格
 const list = () => {
@@ -118,19 +146,30 @@ const list = () => {
 
 const handleSearch = () => {
     queryParams.value.pageNo = 1
-    queryParams.value.unitPath = currentUnitPath.value
     list()
 }
 
-// 重置搜索
-const resetSearch = () => {
-    queryRef.value?.resetFields()
+const handleLeftSelectChange = (row: any) => {
+    leftSelectData.value = row
+}
+
+const handleRightSelectChange = (row: any) => {
+    rightSelectData.value = row
+}
+
+const selectUsers = () => {
+    tableSelectData.value = tableSelectData.value.concat(JSON.parse(JSON.stringify(leftSelectData.value)) as never)
+    const users = tableSelectData.value.map(item => item.loginname)
+    queryParams.value.users = users.toString()
     list()
 }
 
-// 列表多选
-const handleSelectionChange =(selection: any) => {
-    
+const removeUsers = () => {
+    const ids = rightSelectData.value.map(item => item.id)
+    tableSelectData.value = tableSelectData.value.filter(item => ids.indexOf(item.id) < 0)
+    const users = tableSelectData.value.map(item => item.loginname)
+    queryParams.value.users = users.toString()
+    list()
 }
 
 // 获取单位树
@@ -140,27 +179,23 @@ const getUnitTree = () => {
     })
 }
 
-// 获取职务
-const getPost = () => {
-    getPostList().then((res) => {
-        posts.value = res.data as never
-    })
-}
-
-// 获取职务名称
-const findPostName = (id: string) => {
-    const index = posts.value.findIndex((obj: any) => obj.id === id)
-    return index >= 0 ? posts.value[index]['name'] : ''
-}
-
-// 筛选单位
-watch(queryUnit.value, val => {
-    unitTreeRef.value?.filter(val.name)
-})
-
-onMounted(()=>{
+onMounted(() => {
     getUnitTree()
-    getPost()
     list()
 })
 </script>
+<style>
+.user-select-page .el-pagination {
+    position: relative;
+}
+
+.user-select-left-table {
+    margin-top: 20px;
+}
+
+.user-select-right-title {
+    font-size: 16px;
+    line-height: 50px;
+    font-weight: 700;
+}
+</style>
