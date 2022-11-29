@@ -163,7 +163,7 @@
                     <el-input v-model="formData.code" maxlength="100" placeholder="角色代码" auto-complete="off"
                         tabindex="3" type="text" />
                 </el-form-item>
-                <el-form-item prop="note" label="角色说明">
+                <el-form-item v-if="formData.type === 'role'" prop="note" label="角色说明">
                     <el-input v-model="formData.note" maxlength="100" placeholder="角色说明" type="text" />
                 </el-form-item>
                 <el-form-item v-if="formData.type === 'role'" prop="disabled" label="启用状态">
@@ -200,7 +200,7 @@
                     <el-input v-model="formData.code" maxlength="100" placeholder="角色代码" auto-complete="off"
                         tabindex="3" type="text" />
                 </el-form-item>
-                <el-form-item prop="note" label="角色说明">
+                <el-form-item v-if="formData.type === 'role'" prop="note" label="角色说明">
                     <el-input v-model="formData.note" maxlength="100" placeholder="角色说明" type="text" />
                 </el-form-item>
                 <el-form-item v-if="formData.type === 'role'" prop="disabled" label="启用状态">
