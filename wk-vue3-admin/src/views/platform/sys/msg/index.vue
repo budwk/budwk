@@ -3,8 +3,9 @@
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-radio-group v-model="queryParams.type" placeholder="消息类型" @change="typeChange">
-                            <el-radio-button :label="''">全部消息</el-radio-button>
-                            <el-radio-button :label="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}</el-radio-button>
+                    <el-radio-button :label="''">全部消息</el-radio-button>
+                    <el-radio-button :label="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}
+                    </el-radio-button>
                 </el-radio-group>
             </el-col>
             <el-col :span="1.5">
@@ -12,11 +13,11 @@
                     v-permission="['sys.manage.msg.create']">发送消息
                 </el-button>
             </el-col>
-                <right-toolbar
-v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
-                        @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过标题搜索" />
+            <right-toolbar v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
+                @quickSearch="quickSearch" :quickSearchShow="true" quickSearchPlaceholder="通过标题搜索" />
         </el-row>
-        <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="defaultSort">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe @sort-change="sortChange"
+            :default-sort="defaultSort">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="true" :align="item.align" :width="item.width" :sortable="item.sortable">
@@ -58,73 +59,46 @@ v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
                     <el-col :span="24">
                         <el-form-item label="消息类型" prop="type">
                             <el-radio-group v-model="formData.type">
-                                <el-radio v-for="obj in types" :key="obj.value" :label="obj.value">{{ obj.text }}</el-radio>
+                                <el-radio v-for="obj in types" :key="obj.value" :label="obj.value">{{ obj.text }}
+                                </el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="发送范围" prop="scope">
-                            <el-radio-group
-                                v-model="formData.scope"
-                            >
-                                <el-radio-button
-                                v-for="obj in scopes"
-                                :key="obj.value"
-                                :label="obj.value"
-                                >{{ obj.text }}</el-radio-button>
+                            <el-radio-group v-model="formData.scope">
+                                <el-radio-button v-for="obj in scopes" :key="obj.value" :label="obj.value">{{ obj.text
+                                }}</el-radio-button>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24" v-if="'SCOPE' == formData.scope" label="指定用户">
                         <el-row>
-                            <el-button
-                            plain
-                            icon="Search"
-                            @click="openSelect"
-                            >选择用户</el-button>
-                            <el-button
-                            plain
-                            icon="Delete"
-                            type="danger"
-                            @click="clearSelect"
-                            >清除选择</el-button>
+                            <el-button plain icon="Search" @click="openSelect">选择用户</el-button>
+                            <el-button plain icon="Delete" type="danger" @click="clearSelect">清除选择</el-button>
                         </el-row>
-                    <el-table
-                        :data="userTableData"
-                        style="width: 100%;margin-top:5px;margin-bottom: 20px;"
-                        size="small"
-                        height="200"
-                    >
-                        <el-table-column
-                        fixed
-                        prop="loginname"
-                        label="用户名"
-                        >
-                        <template slot-scope="scope">
-                            {{ scope.row.loginname }} ({{ scope.row.username }})
-                        </template>
-                        </el-table-column>
-                        <el-table-column
-                        prop="email"
-                        label="EMail"
-                        :show-overflow-tooltip="true"
-                        />
-                        <el-table-column
-                        prop="mobile"
-                        label="手机号"
-                        />
-                        <el-table-column prop="unit" label="所属单位">
-                        <template slot-scope="scope">
-                            <span v-if="scope.row.unit != null">
-                            {{ scope.row.unit.name }}
-                            </span>
-                        </template>
-                        </el-table-column>
-                    </el-table>
+                        <el-table :data="userTableData" style="width: 100%;margin-top:5px;margin-bottom: 20px;"
+                            size="small" height="200">
+                            <el-table-column fixed prop="loginname" label="用户名">
+                                <template #default="scope">
+                                    {{ scope.row.loginname }} ({{ scope.row.username }})
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="email" label="EMail" :show-overflow-tooltip="true" />
+                            <el-table-column prop="mobile" label="手机号" />
+                            <el-table-column prop="unit" label="所属单位">
+                                <template #default="scope">
+                                    <span v-if="scope.row.unit != null">
+                                        {{ scope.row.unit.name }}
+                                    </span>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="消息内容" prop="note">
-                            <el-input v-model="formData.note" placeholder="消息内容"  type="textarea" :rows="5" maxlength="30"/>
+                            <el-input v-model="formData.note" placeholder="消息内容" type="textarea" :rows="5"
+                                maxlength="30" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -133,6 +107,16 @@ v-model:showSearch="showSearch" :extendSearch="false" :columns="columns"
                 <div class="dialog-footer">
                     <el-button type="primary" @click="create">确 定</el-button>
                     <el-button @click="showCreate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        <el-dialog title="选择用户" v-model="showSelect" width="60%">
+            <user-select multiple></user-select>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="create">确 定</el-button>
+                    <el-button @click="showSelect = false">取 消</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -200,12 +184,13 @@ import { getList, getInfo, doCreate, doDelete, getData } from '/@/api/platform/s
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 import { addDateRange } from '/@/utils/common'
+import UserSelect from '/@/components/UserSelect/index.vue'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 const queryRef = ref<InstanceType<typeof ElForm>>()
 
-const showSearch = ref(true)    
+const showSearch = ref(true)
 const showCreate = ref(false)
 const showUpdate = ref(false)
 const tableLoading = ref(false)
@@ -214,8 +199,8 @@ const apps = ref([])
 const types = ref([])
 const scopes = ref([])
 const showDetail = ref(false)
-const appId = ref('')
-const dateRange =ref([])
+const userTableData = ref([])
+const showSelect = ref(false)
 
 const defaultSort = ref({ prop: "sendAt", order: "descending" });
 
@@ -275,16 +260,11 @@ const handleView = (row: any) => {
 // 查询表格
 const list = () => {
     tableLoading.value = true
-    addDateRange(queryParams.value, dateRange.value)
     getList(queryParams.value).then((res) => {
         tableLoading.value = false
         tableData.value = res.data.list as never
         queryParams.value.totalCount = res.data.totalCount as never
     })
-}
-
-const statusChange = () => {
-    handleSearch()
 }
 
 const typeChange = () => {
@@ -317,11 +297,19 @@ const quickSearch = (data: any) => {
 }
 
 const getInitData = () => {
-    getData().then((res)=>{
+    getData().then((res) => {
         apps.value = res.data.apps
         types.value = res.data.types
         scopes.value = res.data.scopes
     })
+}
+
+const openSelect = () => {
+    showSelect.value = true
+}
+
+const clearSelect = () => {
+    
 }
 
 // 新增按钮
@@ -383,7 +371,7 @@ export default {
 </route>
 <style scoped>
 .content {
-    white-space:normal; 
-    word-break:break-all;
+    white-space: normal;
+    word-break: break-all;
 }
 </style>
