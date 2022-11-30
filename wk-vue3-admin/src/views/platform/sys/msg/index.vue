@@ -218,6 +218,7 @@ const data = reactive({
         title: [{ required: true, message: "消息标题不能为空", trigger: ["blur", "change"] }],
         type: [{ required: true, message: "消息类型不能为空", trigger: ["blur", "change"] }],
         scope: [{ required: true, message: "发送范围不能为空", trigger: ["blur", "change"] }],
+        note: [{ required: true, message: "消息内容不能为空", trigger: ["blur", "change"] }],
     }
 })
 

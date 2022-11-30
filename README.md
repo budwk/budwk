@@ -12,7 +12,7 @@
 
 **[官网](https://budwk.com)** |
 **[V7演示地址](https://demo.budwk.com)** |
-**[V7开发指南](https://budwk.com/docs)** |
+**[V8开发指南](https://budwk.com)** |
 **[V5演示地址](https://nutzwk.wizzer.cn)** |
 **[捐赠清单](https://budwk.com/donation)** |
 
@@ -31,32 +31,29 @@ V8 在 V7具备的API网关、组件库、认证中心、控制中心等功能�
 
 框架同时提供`微服务单应用`及`微服务分布式`版本供选择，后台集权限体系、系统参数、数据字典、站内消息、定时任务、CMS、微信等最常用功能，使其具有上手容易、开发便捷、扩展灵活等特性，特别适合各类大中小型定制化项目需求。
 
-V8 前端采用 Vue3 + Vite + Element-Plus + TypeScript 开发，V7 前端 采用 Nuxt + ElementUI + JavaScript 开发。
-
-
 # 🎉 本版说明(BudWk v8.x)
 
 ## 功能特点
 
 * 使用一套注解实现 OpenAPI3 在线文档的自动生成，同时实现表单参数验证功能，一举多得，减少开发量
-* Excel 文件快速导入导出，只需在 Pojo 类上定义注解即可，支持键值对解析、子类属性解析、自定义日期格式等
 * 统一异常拦截处理，业务逻辑判断抛出异常即可被捕获友好输出错误，无需一堆 if else 判断
 * 一套控制类日志注解，轻松记录操作人、操作时间、IP、请求参数、响应结果，支持扩展不同数据存储方式
+* Excel 文件快速导入导出，只需在 Pojo 类上定义注解即可，支持键值对解析、子类属性解析、自定义日期格式等
 * Vue3前端表格支持动态列勾选显示、排序、固定等操作，分页组件进行了封装比Vue2版本减轻 80% 代码量
 * 具备丰富的 wk-starter 组件库，使开发微服务应用像搭积木一样简单，组件开发也非常容易
 
 ## 运行环境
 
 *   JDK 11 + 或 OpenJDK 11 +
-*   Redis 4.0.8 +
+*   Redis 6.x +
 *   MariaDB 10.x + 或 MySql 5.7、Oracle、SqlServer、达梦、人大金仓等
 *   Nacos 2.0.3 +
 
 ## 开发工具
 *   IntelliJ IDEA
 *   Visual Studio Code
-*   Node 12.13.0 +
-*   Maven 3.6.3 +
+*   Node v19/v18 +
+*   Maven 3.6.x +
 *   Git
 
 ## 简易架构图(分布式版本)
