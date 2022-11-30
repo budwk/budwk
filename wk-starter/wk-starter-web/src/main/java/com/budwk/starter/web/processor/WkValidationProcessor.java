@@ -95,16 +95,20 @@ public class WkValidationProcessor extends AbstractProcessor {
         if (apiFormParams != null) {
             NutMap paramsMap = NutMap.NEW();
             int type = 0;
-            if (req.getContentType().toLowerCase().contains("application/json")) {
-                type = 1;
-                // 从包装器里取数据,因为 request.getInputStream() 不能被取两次,从包装器取不影响下一个filter执行
-                String json = new RequestWrapper(req).getBodyString();
-                paramsMap = Json.fromJson(NutMap.class, json);
-            }
-            if (req.getContentType().toLowerCase().contains("application/x-www-form-urlencoded")
-                    || req.getContentType().toLowerCase().contains("multipart/form-data")
-            ) {
-                type = 2;
+            if (Strings.isBlank(req.getContentType())) {
+                log.warn("错误的接口定义！GET/DELETE 请求不应该使用 ApiFormParams");
+            } else {
+                if (req.getContentType().toLowerCase().contains("application/json")) {
+                    type = 1;
+                    // 从包装器里取数据,因为 request.getInputStream() 不能被取两次,从包装器取不影响下一个filter执行
+                    String json = new RequestWrapper(req).getBodyString();
+                    paramsMap = Json.fromJson(NutMap.class, json);
+                }
+                if (req.getContentType().toLowerCase().contains("application/x-www-form-urlencoded")
+                        || req.getContentType().toLowerCase().contains("multipart/form-data")
+                ) {
+                    type = 2;
+                }
             }
             if (type > 0) {
                 String val = "";

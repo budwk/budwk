@@ -16,6 +16,14 @@ export function getList(data: object) {
     })
 }
 
+export function getViewUserList(data: object) {
+    return request({
+        url: API_SYS_MSG_GET_USER_VIEW_LIST,
+        method: 'POST',
+        data: data
+    })
+}
+
 export function getData() {
     return request({
         url: API_SYS_MSG_DATA,

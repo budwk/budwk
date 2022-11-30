@@ -712,7 +712,9 @@ const handleDeleteMore = () => {
         queryParams.value.pageNo = 1
         list()
         modal.msgSuccess('删除成功')
-    }).catch(() => { })
+    }).catch(() => {
+        list()
+    })
 }
 
 // 重置密码

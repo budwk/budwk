@@ -113,8 +113,8 @@ public class SysMsgController {
     @ApiOperation(name = "获取发送用户列表")
     @ApiFormParams(
             {
-                    @ApiFormParam(name = "type", example = "all-全部消息/unread-未读消息", description = "消息类型"),
-                    @ApiFormParam(name = "id", example = "", description = "消息标题"),
+                    @ApiFormParam(name = "type", example = "all-全部消息/unread-未读消息", description = "消息类型", required = true, check = true),
+                    @ApiFormParam(name = "id", example = "", description = "消息ID", required = true, check = true),
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
                     @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
                     @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),

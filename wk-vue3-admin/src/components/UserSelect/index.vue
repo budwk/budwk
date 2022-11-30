@@ -215,7 +215,7 @@ const removeUsers = () => {
 
 // 获取单位树
 const getUnitTree = () => {
-    getUnitList(queryUnit).then((res) => {
+    getUnitList(queryUnit.value).then((res) => {
         unitLeftOptions.value = handleTree(res.data) as never
     })
 }

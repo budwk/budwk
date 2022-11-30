@@ -43,9 +43,9 @@ public class PusUserSelectController {
     @Ok("json")
     @GET
     @ApiOperation(name = "获取单位列表")
-    @ApiFormParams(
+    @ApiImplicitParams(
             {
-                    @ApiFormParam(name = "name", example = "", description = "用户名")
+                    @ApiImplicitParam(name = "name", example = "", description = "用户名")
             }
     )
     @ApiResponses(

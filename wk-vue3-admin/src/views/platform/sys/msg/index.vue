@@ -21,8 +21,23 @@
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="true" :align="item.align" :width="item.width" :sortable="item.sortable">
-                    <template v-if="item.prop == 'loginname'" #default="scope">
-                        {{ scope.row.username }}({{ scope.row.loginname }})
+                    <template v-if="item.prop == 'delFlag'" #default="scope">
+                        <el-tag v-if="scope.row.delFlag" type="dannger">已撤销</el-tag>
+                        <el-tag v-else type="success">已发送</el-tag>
+                    </template>
+                    <template v-if="item.prop == 'all_num'" #default="scope">
+                        <el-button link type="primary" @click="viewUserList('all', scope.row.id)">{{ scope.row.all_num
+                        }}
+                        </el-button>
+                    </template>
+                    <template v-if="item.prop == 'unread_num'" #default="scope">
+                        <el-button link type="primary" @click="viewUserList('unread', scope.row.id)">{{
+                                scope.row.all_num
+                        }}
+                        </el-button>
+                    </template>
+                    <template v-if="item.prop == 'type'" #default="scope">
+                        {{ findOneValue(types, scope.row.value, 'text') }}
                     </template>
                     <template v-if="item.prop == 'sendAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
@@ -113,6 +128,22 @@
 
         <user-select :multiple="true" v-model="showSelect" @selected="selectUsers"></user-select>
 
+        <el-drawer v-model="showViewUser" direction="rtl" :title="viewUserType == 'all' ? '全部用户' : '未读用户'" size="50%">
+            <template #default>
+                <el-table v-loading="tableLoading" :data="tableUserData" row-key="id" stripe
+                    :default-sort="defaultSort">
+                    <el-table-column fixed prop="loginname" label="用户名" width="150" />
+                    <el-table-column prop="username" label="姓名" width="120" />
+                    <el-table-column prop="mobile" label="手机号" />
+                    <el-table-column prop="email" label="EMail" />
+                    <el-table-column prop="unitname" label="所属单位" />
+                </el-table>
+                <el-row>
+                    <pagination :total="queryUserParams.totalCount" v-model:page="queryUserParams.pageNo"
+                        v-model:limit="queryUserParams.pageSize" @pagination="listUser" />
+                </el-row>
+            </template>
+        </el-drawer>
         <el-drawer v-model="showDetail" direction="rtl" title="日志详情" size="50%">
 
             <template #default>
@@ -172,10 +203,10 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
-import { getList, getInfo, doCreate, doDelete, getData } from '/@/api/platform/sys/msg'
+import { getList, getInfo, doCreate, doDelete, getData, getViewUserList } from '/@/api/platform/sys/msg'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
-import { addDateRange } from '/@/utils/common'
+import { addDateRange, findOneValue } from '/@/utils/common'
 import UserSelect from '/@/components/UserSelect/index.vue'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
@@ -193,6 +224,9 @@ const scopes = ref([])
 const showDetail = ref(false)
 const userTableData = ref([])
 const showSelect = ref(false)
+const showViewUser = ref(false)
+const viewUserType = ref('')
+const tableUserData = ref([])
 
 const defaultSort = ref({ prop: "sendAt", order: "descending" })
 
@@ -204,7 +238,8 @@ const data = reactive({
         url: '',
         type: 'USER',
         scope: 'SCOPE',
-        note: ''
+        note: '',
+        users: ''
     },
     queryParams: {
         title: '',
@@ -212,6 +247,15 @@ const data = reactive({
         pageSize: 10,
         totalCount: 0,
         pageOrderName: 'sendAt',
+        pageOrderBy: 'descending'
+    },
+    queryUserParams: {
+        type: '',
+        id: '',
+        pageNo: 1,
+        pageSize: 10,
+        totalCount: 0,
+        pageOrderName: 'createdAt',
         pageOrderBy: 'descending'
     },
     formRules: {
@@ -222,15 +266,15 @@ const data = reactive({
     }
 })
 
-const { formData, formRules, queryParams } = toRefs(data)
+const { formData, formRules, queryParams, queryUserParams } = toRefs(data)
 
 const columns = ref([
     { prop: 'title', label: `标题`, show: true, fixed: 'left' },
     { prop: 'type', label: `消息类型`, show: true, fixed: 'left', width: 100 },
-    { prop: 'all_num', label: `全部用户数`, show: true, fixed: false },
-    { prop: 'unread_num', label: `未读用户数`, show: true, fixed: false, align: 'center' },
-    { prop: 'sendAt', label: `发送时间`, show: true, fixed: false, width: 160, sortable: true },
-    { prop: 'delFlag', label: `消息状态`, show: true, fixed: false, width: 100 }
+    { prop: 'all_num', label: `全部用户`, show: true, fixed: false, align: 'center', width: 100 },
+    { prop: 'unread_num', label: `未读用户`, show: true, fixed: false, align: 'center', width: 100 },
+    { prop: 'sendAt', label: `发送时间`, show: true, fixed: false, width: 180, sortable: true },
+    { prop: 'delFlag', label: `消息状态`, show: true, fixed: false, width: 120 }
 ])
 
 // 重置表单
@@ -241,7 +285,8 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         url: '',
         type: 'USER',
         scope: 'SCOPE',
-        note: ''
+        note: '',
+        users: ''
     }
     formEl?.resetFields()
 }
@@ -251,7 +296,7 @@ const handleView = (row: any) => {
     showDetail.value = true
 }
 
-// 查询表格
+// 查询消息列表
 const list = () => {
     tableLoading.value = true
     getList(queryParams.value).then((res) => {
@@ -261,10 +306,33 @@ const list = () => {
     })
 }
 
+// 查询用户列表
+const listUser = () => {
+    tableLoading.value = true
+    getViewUserList(queryUserParams.value).then((res) => {
+        tableLoading.value = false
+        tableUserData.value = res.data.list as never
+        queryUserParams.value.totalCount = res.data.totalCount as never
+    }).catch(() => {
+        tableLoading.value = false
+    })
+}
+
+// 显示用户列表
+const viewUserList = (type: string, id: string) => {
+    viewUserType.value = type
+    showViewUser.value = true
+    queryUserParams.value.type = type
+    queryUserParams.value.id = id
+    listUser()
+}
+
+// 切换消息类型
 const typeChange = () => {
     handleSearch()
 }
 
+// 远程排序
 const sortChange = (column: any) => {
     queryParams.value.pageOrderName = column.prop
     queryParams.value.pageOrderBy = column.order
@@ -290,6 +358,7 @@ const quickSearch = (data: any) => {
     list()
 }
 
+// 初始化字典数据
 const getInitData = () => {
     getData().then((res) => {
         apps.value = res.data.apps
@@ -338,9 +407,15 @@ const handleDelete = (row: any) => {
 
 // 提交新增
 const create = () => {
+    const users = userTableData.value.map(row => row.id)
+    if (formData.value.scope === 'SCOPE' && users.length < 1) {
+        modal.msgWarning('请选择发送对象')
+        return
+    }
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
+            formData.value.users = users.toString()
             doCreate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showCreate.value = false
