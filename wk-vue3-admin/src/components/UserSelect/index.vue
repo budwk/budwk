@@ -5,7 +5,7 @@
                 <el-col :span="multiple?11:24">
                     <el-input v-model="queryParams.keyword" placeholder="请输入用户名或姓名" class="input-with-select">
                         <template #prepend>
-                            <el-tree-select v-model="queryParams.unitPath" :data="unitLeftOptions" filterable
+                            <el-tree-select v-model="queryParams.unitPath" :data="unitLeftOptions" filterable clearable
                                 check-strictly :props="{ value: 'path', label: 'name', children: 'children' }"
                                 :filter-node-method="filterNodeMethod" placeholder="选择单位" @change="handleSearch">
                                 <template #default="{ data }">
@@ -105,11 +105,14 @@ const doClose = () => {
     tableSelectData.value = []
     leftTableRef.value?.clearSelection()
     rightTableRef.value?.clearSelection()
+    queryParams.value.users = ''
+    queryParams.value.pageNo = 1
+    list()
     emits('update:modelValue', false)
 }
 
 const beforeClose = (done: any) => {
-    emits('update:modelValue', false)
+    doClose()
     done()
 }
 
@@ -124,7 +127,6 @@ const doSelect = () => {
             return 
         }
         emits('selected', JSON.parse(JSON.stringify(leftSelectData.value)))
-
         doClose()
     } else { // 多选 
         if(tableSelectData.value.length==0){

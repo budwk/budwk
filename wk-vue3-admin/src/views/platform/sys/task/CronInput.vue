@@ -17,13 +17,13 @@
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import vcrontab from '/@/components/CronTab/index.vue'
 
 const dialogCronExpVisible = ref(false)
-const cron = ref(props.modelValue)
+const cron = computed(()=>{ return props.modelValue})
 
-const emits = defineEmits()
+const emits = defineEmits(['update:modelValue'])
 
 const props = defineProps({
     // 是否禁用button
@@ -46,7 +46,6 @@ const cronExpDialog = () => {
 }
 
 const saveCron = (val: string) => {
-    cron.value = val
     emits('update:modelValue', val)
     dialogCronExpVisible.value = false
 }

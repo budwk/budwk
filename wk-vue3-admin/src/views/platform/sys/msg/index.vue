@@ -302,11 +302,11 @@ const openSelect = () => {
 }
 
 const clearSelect = () => {
-    
+    userTableData.value = []
 }
 
 const selectUsers = (row: any) => {
-    console.log(row)
+    userTableData.value = row
 }
 
 // 新增按钮
