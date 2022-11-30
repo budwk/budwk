@@ -181,9 +181,7 @@ export default {
         },
         resolveExp() {
         //反解析 表达式
-        console.log(typeof this.expression)
             if (this.expression && typeof this.expression === 'string') {
-                console.log(this.expression)
                 let arr = this.expression.split(" ");
                 if (arr.length >= 6) {
                     //6 位以上是合法表达式

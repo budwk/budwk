@@ -7,11 +7,6 @@
         </el-input>
         <el-dialog v-model="dialogCronExpVisible" :close-on-click-modal="false" width="45%">
             <vcrontab :expression="cron" @hide="dialogCronExpVisible=false" @fill="saveCron" />
-            <template #footer>
-                <div class="dialog-footer">
-                    <el-button type="primary" @click="saveCron">关 闭</el-button>
-                </div>
-            </template>
         </el-dialog>
     </div>
 </template>
