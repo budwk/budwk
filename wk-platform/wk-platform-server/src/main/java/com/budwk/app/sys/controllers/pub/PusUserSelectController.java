@@ -79,7 +79,7 @@ public class PusUserSelectController {
     }
 
     @At("/list")
-    @Ok("json:{locked:'^(password|salt|loginIp|createdAt|createdBy|updatedAt|updatedBy)$',ignoreNull:false}")
+    @Ok("json:{locked:'^(password|salt|loginIp|pwdResetAt|themeConfig|updatedByUser|needChangePwd|createdAt|createdBy|updatedAt|updatedBy)$',ignoreNull:false}")
     @POST
     @ApiOperation(name = "获取用户列表")
     @ApiFormParams(

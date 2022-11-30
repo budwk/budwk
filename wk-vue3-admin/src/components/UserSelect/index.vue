@@ -1,8 +1,8 @@
 <template>
     <div class="app-container">
-        <el-dialog title="选择用户" v-model="showSelect" width="75%">
+        <el-dialog title="选择用户" v-model="showSelectDialog" :width="multiple?'75%':'55%'" :before-close="beforeClose">
             <el-row :gutter="10">
-                <el-col :span="11">
+                <el-col :span="multiple?11:24">
                     <el-input v-model="queryParams.keyword" placeholder="请输入用户名或姓名" class="input-with-select">
                         <template #prepend>
                             <el-tree-select v-model="queryParams.unitPath" :data="unitLeftOptions" filterable
@@ -20,7 +20,7 @@
                         </template>
                     </el-input>
 
-                    <el-table class="user-select-left-table" v-loading="tableLoading" :data="tableData" row-key="id"
+                    <el-table ref="leftTableRef" :class="multiple?'user-select-left-table':''" v-loading="tableLoading" :data="tableData" row-key="id"
                         @selection-change="handleLeftSelectChange">
                         <el-table-column type="selection" width="50" fixed="left" />
                         <el-table-column prop="username" label="姓名|用户名">
@@ -37,7 +37,7 @@
                     <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                         v-model:limit="queryParams.pageSize" @pagination="list" class="user-select-page" />
                 </el-col>
-                <el-col :span="2" style="margin-top:100px;">
+                <el-col v-if="multiple" :span="2" style="margin-top:100px;">
                     <el-row justify="center">
                         <el-button icon="DArrowRight" @click="selectUsers" :disabled="leftSelectData.length <= 0">
                         </el-button>
@@ -48,11 +48,11 @@
                     </el-row>
                 </el-col>
 
-                <el-col :span="11">
+                <el-col v-if="multiple" :span="11">
                     <el-row>
                         <span class="user-select-right-title">已选中用户列表</span>
                     </el-row>
-                    <el-table v-loading="tableLoading" :data="tableSelectData" row-key="id"
+                    <el-table ref="rightTableRef" :v-loading="tableLoading" :data="tableSelectData" row-key="id"
                         @selection-change="handleRightSelectChange">
                         <el-table-column type="selection" width="50" fixed="left" />
                         <el-table-column prop="username" label="姓名|用户名">
@@ -70,35 +70,79 @@
             </el-row>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button type="primary">确 定</el-button>
-                    <el-button @click="close">取 消</el-button>
+                    <el-button type="primary" @click="doSelect">确 定</el-button>
+                    <el-button @click="doClose">取 消</el-button>
                 </div>
             </template>
         </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
-import { ElForm } from "element-plus"
-import { onMounted, reactive, ref, toRefs, watch } from "vue"
+import { ElForm, ElTable } from "element-plus"
+import { onMounted, reactive, ref, toRefs, watchEffect } from "vue"
 import { getUnitList, getList } from '/@/api/platform/pub/user'
 import { handleTree } from '/@/utils/common'
+import modal from '/@/utils/modal'
 
-const showSelect = ref(props.show)
+const showSelectDialog = ref(false)
 
 const props = defineProps({
+    modelValue: {
+        type: Boolean,
+        default: false
+    },
     multiple: {
         type: Boolean,
-        default: true,
+        default: true
     },
-    show: {
-        type: Boolean,
-        default: false,
-    }
 })
 
-const emits = defineEmits(['update:show','select'])
+const emits = defineEmits(['update:modelValue','selected'])
+
+const doClose = () => {
+    leftSelectData.value = []
+    rightSelectData.value = []
+    tableSelectData.value = []
+    leftTableRef.value?.clearSelection()
+    rightTableRef.value?.clearSelection()
+    emits('update:modelValue', false)
+}
+
+const beforeClose = (done: any) => {
+    emits('update:modelValue', false)
+    done()
+}
+
+const doSelect = () => {
+    if(!props.multiple){ //单选
+        if(leftSelectData.value.length==0){
+            modal.msgError('请选择一个用户')
+            return 
+        }
+        if(leftSelectData.value.length>1){
+            modal.msgError('仅可选择一个用户')
+            return 
+        }
+        emits('selected', JSON.parse(JSON.stringify(leftSelectData.value)))
+
+        doClose()
+    } else { // 多选 
+        if(tableSelectData.value.length==0){
+            modal.msgError('请选择用户')
+            return 
+        }
+        emits('selected', JSON.parse(JSON.stringify(tableSelectData.value)))
+        doClose()
+    }
+}
+
+watchEffect(() => {
+    showSelectDialog.value = props.modelValue
+})
 
 const queryRef = ref<InstanceType<typeof ElForm>>()
+const leftTableRef = ref<InstanceType<typeof ElTable>>()
+const rightTableRef = ref<InstanceType<typeof ElTable>>()
 
 const unitLeftOptions = ref([])
 const tableLoading = ref(false)
@@ -125,11 +169,6 @@ const data = reactive({
 })
 
 const { queryUnit, queryParams } = toRefs(data)
-
-const close = () => {
-    showSelect.value = false
-    emits('update:show',false)
-}
 
 // 通过条件过滤节点
 const filterNodeMethod = (value: string, data: any) => data.name.includes(value)

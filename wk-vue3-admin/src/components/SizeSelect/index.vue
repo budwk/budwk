@@ -21,7 +21,7 @@ import { useClient } from '/@/stores/client'
 import modal from '/@/utils/modal'
   
 const client = useClient()
-const size = computed(() => client.size);
+const size = computed(() => client.size)
 const sizeOptions = ref([
     { label: "较大", value: "large" },
     { label: "默认", value: "default" },

@@ -111,7 +111,7 @@
             </template>
         </el-dialog>
 
-        <user-select multiple v-if="showSelect" :show="showSelect"></user-select>
+        <user-select :multiple="true" v-model="showSelect" @selected="selectUsers"></user-select>
 
         <el-drawer v-model="showDetail" direction="rtl" title="日志详情" size="50%">
 
@@ -170,7 +170,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
 import { getList, getInfo, doCreate, doDelete, getData } from '/@/api/platform/sys/msg'
 import { toRefs } from '@vueuse/core'
@@ -194,7 +194,8 @@ const showDetail = ref(false)
 const userTableData = ref([])
 const showSelect = ref(false)
 
-const defaultSort = ref({ prop: "sendAt", order: "descending" });
+const defaultSort = ref({ prop: "sendAt", order: "descending" })
+
 
 const data = reactive({
     formData: {
@@ -302,6 +303,10 @@ const openSelect = () => {
 
 const clearSelect = () => {
     
+}
+
+const selectUsers = (row: any) => {
+    console.log(row)
 }
 
 // 新增按钮
