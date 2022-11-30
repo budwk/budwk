@@ -78,4 +78,7 @@ public class Sys_msg extends BaseModel implements Serializable {
     @ApiModelProperty(description = "用户列表")
     private List<Sys_msg_user> userList;
 
+    @One(field = "createdBy")
+    @ApiModelProperty(description = "创建人")
+    public Sys_user createdByUser;
 }

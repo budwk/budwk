@@ -96,7 +96,7 @@ public class SysMsgController {
             cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
         }
         List<NutMap> mapList = new ArrayList<>();
-        Pagination pagination = sysMsgService.listPage(pageNo, pageSize, cnd);
+        Pagination pagination = sysMsgService.listPageLinks(pageNo, pageSize, cnd, "^(createdByUser)$");
         for (Sys_msg msg : pagination.getList(Sys_msg.class)) {
             NutMap map = Lang.obj2nutmap(msg);
             map.put("all_num", sysMsgUserService.count(Cnd.where("msgId", "=", msg.getId())));

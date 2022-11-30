@@ -130,6 +130,7 @@
 
         <el-drawer v-model="showViewUser" direction="rtl" :title="viewUserType == 'all' ? '全部用户' : '未读用户'" size="50%">
             <template #default>
+                <el-tag style="margin-bottom:10px;" type="warning">若用户数量与列表显示不一致，可能是用户已被删除造成的</el-tag>
                 <el-table v-loading="tableLoading" :data="tableUserData" row-key="id" stripe
                     :default-sort="defaultSort">
                     <el-table-column fixed prop="loginname" label="用户名" width="150" />
@@ -144,54 +145,29 @@
                 </el-row>
             </template>
         </el-drawer>
-        <el-drawer v-model="showDetail" direction="rtl" title="日志详情" size="50%">
+        <el-drawer v-model="showDetail" direction="rtl" title="消息详情" size="50%">
 
             <template #default>
                 <el-form :model="formData" label-width="80px">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="操作人" prop="loginname">
-                                {{ formData.username }}({{ formData.loginname }})
+                            <el-form-item label="发送人" prop="createdByUser">
+                                <span v-if="formData.createdByUser">{{ formData.createdByUser.username}}({{ formData.createdByUser.loginname}})</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="操作时间" prop="createdAt">
-                                {{ formatTime(formData.createdAt) }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="操作IP" prop="ip">
-                                {{ formData.ip }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="请求路径" prop="url">
-                                {{ formData.url }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="执行方法" prop="method">
-                                {{ formData.method }}
+                            <el-form-item label="发送时间" prop="sendAt">
+                                {{ formatTime(formData.sendAt) }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="24">
-                            <el-form-item label="操作系统" prop="os">
-                                {{ formData.os }}
+                            <el-form-item label="标题" prop="title">
+                                {{ formData.title }}
                             </el-form-item>
                         </el-col>
                         <el-col :span="24">
-                            <el-form-item label="浏览器" prop="browser" class="content">
-                                {{ formData.browser }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="24">
-                            <el-form-item label="请求参数" prop="params" class="content">
-                                {{ formData.params }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="24">
-                            <el-form-item label="响应结果" prop="result" class="content">
-                                {{ formData.result }}
+                            <el-form-item label="内容" prop="note" class="content">
+                                {{ formData.note }}
                             </el-form-item>
                         </el-col>
                     </el-row>
