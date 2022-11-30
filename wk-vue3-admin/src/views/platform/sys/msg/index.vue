@@ -44,11 +44,15 @@
                     </template>
                 </el-table-column>
             </template>
-            <el-table-column fixed="right" header-align="center" align="center" width="70" label="操作"
+            <el-table-column fixed="right" header-align="center" align="center" width="80" label="操作"
                 class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-tooltip content="查看详情" placement="top">
                         <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="撤销消息" placement="top">
+                        <el-button link type="danger" icon="DocumentDelete"
+                        @click="handleDelete(scope.row)" v-permission="['sys.manage.msg.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -85,8 +89,10 @@
                                 <el-radio-button v-for="obj in scopes" :key="obj.value" :label="obj.value">{{ obj.text
                                 }}</el-radio-button>
                             </el-radio-group>
+                            <el-tag v-if="'ALL' == formData.scope" style="margin-left:20px;">不含已被禁用用户</el-tag>
+
                         </el-form-item>
-                    </el-col>
+                    </el-col>   
                     <el-col :span="24" v-if="'SCOPE' == formData.scope" label="指定用户">
                         <el-row>
                             <el-button plain icon="Search" @click="openSelect">选择用户</el-button>
@@ -371,12 +377,12 @@ const handleUpdate = (row: any) => {
 
 // 删除按钮
 const handleDelete = (row: any) => {
-    modal.confirm('确定删除 ' + row.name + '？').then(() => {
+    modal.confirm('确定撤销 ' + row.title + '？').then(() => {
         return doDelete(row.id)
     }).then(() => {
         queryParams.value.pageNo = 1
         list()
-        modal.msgSuccess('删除成功')
+        modal.msgSuccess('撤销成功')
     }).catch(() => { })
 }
 
