@@ -13,11 +13,15 @@
         </div>
         <div class="list-group">
           <li class="list-group-item" v-for="(item,idx) in notice.list" :key="'msg_'+idx">
-            <el-button link type="primary" @click="goTo(item.url?item.url:'/home/notifications?id='+item.msgId)" size="small">
-              <div class="m-body">
-                <span style="color: #00c1de">{{ item.title }}</span>
-                <span class="time small">{{ item.time }}</span>
-              </div>
+            <el-button link type="primary"
+             @click="goTo(item.url?item.url:'/home/notifications?id='+item.msgId)"
+             style="text-align:left;"
+             >
+  
+              <el-row>
+                <el-col :span="24" style="padding-bottom: 5px;">{{ item.title }}</el-col>
+                <el-col :span="24" style="color: #00c1de;">{{ item.time }}</el-col>
+              </el-row>
             </el-button>
           </li>
           <li v-if="size==0" class="list-group-item">
