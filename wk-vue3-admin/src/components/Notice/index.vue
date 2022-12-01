@@ -40,7 +40,6 @@
 </template>
 <script setup lang="ts">
 import { useWebSocket } from '@vueuse/core'
-import { format } from 'path';
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useUserInfo } from '/@/stores/userInfo'
 import modal from '/@/utils/modal'
