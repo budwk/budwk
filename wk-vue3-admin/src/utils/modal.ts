@@ -23,6 +23,10 @@ export default {
     alert(content: string) {
         ElMessageBox.alert(content, "系统提示")
     },
+    // 弹出提示
+    alertCallback(content: string, title: string, callback: any) {
+        ElMessageBox.alert(content, title, { confirmButtonText: '确定', callback: callback})
+    },
     // 错误提示
     alertError(content: string) {
         ElMessageBox.alert(content, "系统提示", { type: 'error' })

@@ -96,7 +96,7 @@ public class WkValidationProcessor extends AbstractProcessor {
             NutMap paramsMap = NutMap.NEW();
             int type = 0;
             if (Strings.isBlank(req.getContentType())) {
-                log.warn("错误的接口定义！GET/DELETE 请求不应该使用 ApiFormParams");
+                log.warnf("错误的接口定义！GET/DELETE 请求不应该使用 ApiFormParams %s", req.getRequestURI());
             } else {
                 if (req.getContentType().toLowerCase().contains("application/json")) {
                     type = 1;

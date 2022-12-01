@@ -19,9 +19,7 @@
           <el-tooltip content="布局大小" effect="dark" placement="bottom">
             <size-select id="size-select" class="right-menu-item hover-effect" />
           </el-tooltip>
-          <el-tooltip content="站内通知" effect="dark" placement="bottom">
-            <notice id="notice" class="right-menu-item hover-effect"></notice>
-          </el-tooltip>
+          <notice id="notice" class="right-menu-item hover-effect"></notice>
         </template>          
         <el-popover
             @show="onCurrentNavMenu(true, 'userInfo')"

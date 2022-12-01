@@ -22,7 +22,7 @@
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="true" :align="item.align" :width="item.width" :sortable="item.sortable">
                     <template v-if="item.prop == 'delFlag'" #default="scope">
-                        <el-tag v-if="scope.row.delFlag" type="dannger">已撤销</el-tag>
+                        <el-tag v-if="scope.row.delFlag" type="danger">已撤销</el-tag>
                         <el-tag v-else type="success">已发送</el-tag>
                     </template>
                     <template v-if="item.prop == 'all_num'" #default="scope">

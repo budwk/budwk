@@ -108,6 +108,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppName");
                 conf.setConfigValue("BudWk开发框架");
                 conf.setNote("系统名称");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -115,6 +116,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppShrotName");
                 conf.setConfigValue("BudWK");
                 conf.setNote("系统短名称");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -122,6 +124,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppVersion");
                 conf.setConfigValue("V8.0.0");
                 conf.setNote("系统版本号");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -129,6 +132,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppDefault");
                 conf.setConfigValue("PLATFORM");
                 conf.setNote("前端默认登录APP");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -136,6 +140,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppDomain");
                 conf.setConfigValue("http://127.0.0.1:8800");
                 conf.setNote("系统域名");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -143,6 +148,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppFileDomain");
                 conf.setConfigValue("http://127.0.0.1:9900");
                 conf.setNote("文件访问域名");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -150,13 +156,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppUploadBase");
                 conf.setConfigValue("/upload");
                 conf.setNote("文件访问路径");
-                dao.insert(conf);
-                conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
-                conf.setType(SysConfigType.BOOL);
-                conf.setConfigKey("AppWebSocket");
-                conf.setConfigValue("true");
-                conf.setNote("启用WebSocket");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -164,6 +164,7 @@ public class WkMiniLauncher {
                 conf.setConfigKey("AppDemoEnv");
                 conf.setConfigValue("false");
                 conf.setNote("是否演示环境");
+                conf.setOpened(true);
                 dao.insert(conf);
 
                 Sys_app sysApp = new Sys_app();

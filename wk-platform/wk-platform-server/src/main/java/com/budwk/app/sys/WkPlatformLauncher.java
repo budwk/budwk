@@ -106,18 +106,36 @@ public class WkPlatformLauncher {
                 log.info("开始初始化数据库...");
                 //初始化配置表
                 Sys_config conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_PLATFORM_APPID);
+                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
                 conf.setType(SysConfigType.TEXT);
                 conf.setConfigKey("AppName");
                 conf.setConfigValue("BudWk开发框架");
                 conf.setNote("系统名称");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_PLATFORM_APPID);
+                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
                 conf.setType(SysConfigType.TEXT);
                 conf.setConfigKey("AppShrotName");
-                conf.setConfigValue("BudWk");
+                conf.setConfigValue("BudWK");
                 conf.setNote("系统短名称");
+                conf.setOpened(true);
+                dao.insert(conf);
+                conf = new Sys_config();
+                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
+                conf.setType(SysConfigType.TEXT);
+                conf.setConfigKey("AppVersion");
+                conf.setConfigValue("V8.0.0");
+                conf.setNote("系统版本号");
+                conf.setOpened(true);
+                dao.insert(conf);
+                conf = new Sys_config();
+                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
+                conf.setType(SysConfigType.TEXT);
+                conf.setConfigKey("AppDefault");
+                conf.setConfigValue("PLATFORM");
+                conf.setNote("前端默认登录APP");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -125,6 +143,7 @@ public class WkPlatformLauncher {
                 conf.setConfigKey("AppDomain");
                 conf.setConfigValue("http://127.0.0.1:8800");
                 conf.setNote("系统域名");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -132,6 +151,7 @@ public class WkPlatformLauncher {
                 conf.setConfigKey("AppFileDomain");
                 conf.setConfigValue("http://127.0.0.1:9900");
                 conf.setNote("文件访问域名");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -139,13 +159,7 @@ public class WkPlatformLauncher {
                 conf.setConfigKey("AppUploadBase");
                 conf.setConfigValue("/upload");
                 conf.setNote("文件访问路径");
-                dao.insert(conf);
-                conf = new Sys_config();
-                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
-                conf.setType(SysConfigType.BOOL);
-                conf.setConfigKey("AppWebSocket");
-                conf.setConfigValue("true");
-                conf.setNote("启用WebSocket");
+                conf.setOpened(true);
                 dao.insert(conf);
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
@@ -153,6 +167,7 @@ public class WkPlatformLauncher {
                 conf.setConfigKey("AppDemoEnv");
                 conf.setConfigValue("false");
                 conf.setNote("是否演示环境");
+                conf.setOpened(true);
                 dao.insert(conf);
 
                 Sys_app sysApp = new Sys_app();
