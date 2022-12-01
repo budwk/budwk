@@ -89,7 +89,8 @@ const data = reactive({
         note: '',
     },
     queryParams: {
-        title: '',
+        status: 'unread',
+        type: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -100,8 +101,15 @@ const data = reactive({
 
 const { formData, queryParams } = toRefs(data)
 
-const handleSelect = () => {
+const typeChange = () => {
+    queryParams.value.pageNo = 1
+    list()
+}
 
+const handleSelect = (val: string) => {
+    queryParams.value.status = val
+    queryParams.value.pageNo = 1
+    list()
 }
 
 // 查询消息列表
