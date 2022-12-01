@@ -14,7 +14,7 @@
         <div class="list-group">
           <li class="list-group-item" v-for="(item,idx) in notice.list" :key="'msg_'+idx">
             <el-button link type="primary"
-             @click="goTo(item.url?item.url:'/home/notifications?id='+item.msgId)"
+             @click="goTo(item.url?item.url:'/platform/home/msg?id='+item.msgId)"
              style="text-align:left;"
              >
   
@@ -31,7 +31,7 @@
           </li>
         </div>
         <div class="panel-footer">
-          <el-button link type="primary" @click="goTo('/home/notifications')" size="small">查看更多</el-button>
+          <el-button link type="primary" @click="goTo('/platform/home/msg')" size="small">查看更多</el-button>
         </div>
       </div>
 
