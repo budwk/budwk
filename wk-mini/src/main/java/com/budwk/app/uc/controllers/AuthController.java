@@ -75,7 +75,7 @@ public class AuthController {
     @Ok("json")
     @GET
     @ApiOperation(name = "获取RSA密钥", description = "获取RSA密钥")
-    @ApiFormParams
+    @ApiImplicitParams
     @ApiResponses
     public Result<?> rsa() {
         RSA rsa = new RSA();

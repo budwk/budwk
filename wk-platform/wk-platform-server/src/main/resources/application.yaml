@@ -90,6 +90,7 @@ log:
   color: true
   level: debug
 
+# log存储方式为 mongodb 设置
 mongodb:
   url: mongodb://10.10.10.10:27017/budwk_v8
 
