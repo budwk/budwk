@@ -22,6 +22,10 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-gateway</artifactId>
         </dependency>
         <dependency>
