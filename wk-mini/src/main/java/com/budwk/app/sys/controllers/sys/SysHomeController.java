@@ -238,8 +238,9 @@ public class SysHomeController {
     @ApiFormParams(
             {
                     @ApiFormParam(name = "username", description = "姓名", required = true),
-                    @ApiFormParam(name = "email", description = "EMail", required = true, check = true, validation = Validation.EMAIL),
-                    @ApiFormParam(name = "mobile", description = "手机号码", required = true, check = true, validation = Validation.MOBILE)
+                    @ApiFormParam(name = "sex", description = "性别"),
+                    @ApiFormParam(name = "email", description = "EMail", check = true, validation = Validation.EMAIL),
+                    @ApiFormParam(name = "mobile", description = "手机号码", check = true, validation = Validation.MOBILE)
             }
     )
     @ApiResponses
