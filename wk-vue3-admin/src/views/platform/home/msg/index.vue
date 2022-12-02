@@ -20,8 +20,6 @@
             <el-row style="width:100%">
                 <el-col :span="24">
                     <h4 style="display: flex;align-items: center;height: 36px;font-size:16px;">
-                    <span v-if="queryParams.status==='unread'">未读消息</span>
-                    <span v-else>已读消息</span>
                     <el-button link type="primary" @click="goBack"><back style="width:1rem;height:1rem;"/> 返回</el-button>
                     </h4>
                 </el-col>
@@ -89,15 +87,17 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, toRefs, unref, watch } from 'vue'
 import { getList, getInfo, getData, doReadAll, doReadMore, doReadOne } from '/@/api/platform/home/msg'
-import { findOneValue, formatTime } from '/@/utils/common';
-import { ElTable } from 'element-plus';
-import modal from '/@/utils/modal';
+import { findOneValue, formatTime } from '/@/utils/common'
+import { ElTable } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { usePlatformInfo } from '/@/stores/platformInfo'
+import modal from '/@/utils/modal'
 
 const router = useRouter()
 const { currentRoute } = useRouter()
 const { params, query } = unref(currentRoute)
 const id = ref('')
+const platformInfo = usePlatformInfo()
 
 const tableRef = ref<InstanceType<typeof ElTable>>()
 
@@ -209,6 +209,10 @@ const getMsg = () => {
     if(id.value) {
         getInfo(id.value).then((res)=>{
             formData.value = res.data
+            // 设置消息为已读
+            if(!platformInfo.AppDemoEnv) {
+                doReadOne(id.value).then()
+            }
         })
     }
 }
