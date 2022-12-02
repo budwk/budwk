@@ -2,6 +2,7 @@ package com.budwk.app.sys.controllers.sys;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.date.DateUtil;
 import com.budwk.app.sys.enums.SysMsgScope;
 import com.budwk.app.sys.enums.SysMsgType;
 import com.budwk.app.sys.models.Sys_user;
@@ -288,7 +289,7 @@ public class SysHomeController {
 
     @At("/user/log")
     @Ok("json")
-    @ApiOperation(description = "获取用户信息")
+    @ApiOperation(description = "用户操作日志(最近2个月)")
     @ApiFormParams(
             {
                     @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
@@ -302,9 +303,10 @@ public class SysHomeController {
     )
     @SaCheckLogin
     public Result<?> getUserLog(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+
         return Result.success().addData(sysLogProvider.list(
                 null, null, null, null, null, SecurityUtil.getUserId(), null, null,
-                0, 0, pageOrderName, pageOrderBy, pageNo, pageSize
+                DateUtil.lastMonth().getTime(), 0, pageOrderName, pageOrderBy, pageNo, pageSize
         ));
     }
 }

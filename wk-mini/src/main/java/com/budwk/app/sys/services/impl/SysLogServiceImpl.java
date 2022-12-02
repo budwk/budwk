@@ -101,15 +101,25 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                 if (Strings.isNotBlank(username)) {
                     stringBuilder.append(" and username like '%" + username + "%'");
                 }
-                if("success".equalsIgnoreCase(status)){
+                if ("success".equalsIgnoreCase(status)) {
                     stringBuilder.append(" and exception is null");
                 }
-                if("exception".equalsIgnoreCase(status)){
+                if ("exception".equalsIgnoreCase(status)) {
                     stringBuilder.append(" and exception is not null");
                 }
             } else {
-                int m1 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(startTime)));
-                int m2 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(endTime)));
+                int m1 = 0;
+                int m2 = 0;
+                if (startTime == 0) {
+                    m1 = NumberUtils.toInt(Times.format("yyyyMM", new Date()));
+                } else {
+                    m1 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(startTime)));
+                }
+                if (endTime == 0) {
+                    m2 = NumberUtils.toInt(Times.format("yyyyMM", new Date()));
+                } else {
+                    m2 = NumberUtils.toInt(Times.format("yyyyMM", Times.D(endTime)));
+                }
                 if (m1 == m2) {
                     stringBuilder.append(" select * from sys_log_" + m1 + " where 1=1 ");
                     if (type != null) {
@@ -133,14 +143,18 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                     if (Strings.isNotBlank(username)) {
                         stringBuilder.append(" and username like '%" + username + "%'");
                     }
-                    if("success".equalsIgnoreCase(status)){
+                    if ("success".equalsIgnoreCase(status)) {
                         stringBuilder.append(" and exception is null");
                     }
-                    if("exception".equalsIgnoreCase(status)){
+                    if ("exception".equalsIgnoreCase(status)) {
                         stringBuilder.append(" and exception is not null");
                     }
-                    stringBuilder.append(" and createdAt>=" + startTime);
-                    stringBuilder.append(" and createdAt<=" + endTime);
+                    if(startTime>0) {
+                        stringBuilder.append(" and createdAt>=" + startTime);
+                    }
+                    if(endTime>0) {
+                        stringBuilder.append(" and createdAt<=" + endTime);
+                    }
                 } else {
                     for (int i = m1; i < m2 + 1; i++) {
                         if (this.dao().exists("sys_log_" + i)) {
@@ -166,14 +180,18 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                             if (Strings.isNotBlank(username)) {
                                 stringBuilder.append(" and username like '%" + username + "%'");
                             }
-                            if("success".equalsIgnoreCase(status)){
+                            if ("success".equalsIgnoreCase(status)) {
                                 stringBuilder.append(" and exception is null");
                             }
-                            if("exception".equalsIgnoreCase(status)){
+                            if ("exception".equalsIgnoreCase(status)) {
                                 stringBuilder.append(" and exception is not null");
                             }
-                            stringBuilder.append(" and createdAt>=" + startTime);
-                            stringBuilder.append(" and createdAt<=" + endTime);
+                            if(startTime>0) {
+                                stringBuilder.append(" and createdAt>=" + startTime);
+                            }
+                            if(endTime>0) {
+                                stringBuilder.append(" and createdAt<=" + endTime);
+                            }
                             if (i < m2) {
                                 stringBuilder.append(" UNION ALL ");
                             }

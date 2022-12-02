@@ -48,11 +48,14 @@
             <el-card>
                <template v-slot:header>
                  <div class="clearfix">
-                   <span>基本资料</span>
+                   <span>用户信息</span>
                  </div>
                </template>
                <el-tabs v-model="activeTab">
-                  <el-tab-pane label="基本资料" name="userinfo">
+                  <el-tab-pane label="最近两个月操作日志" name="userLog">
+                    <userLog />
+                  </el-tab-pane>
+                  <el-tab-pane label="修改资料" name="userinfo">
                   </el-tab-pane>
                   <el-tab-pane label="修改密码" name="resetPwd">
                      <resetPwd />
@@ -66,11 +69,12 @@
 <script setup lang="ts">
 import resetPwd from './resetPwd.vue'
 import userAvatar from './userAvatar.vue'
+import userLog from './userLog.vue'
 
 import { onMounted, ref } from 'vue'
 import { getUserInfo } from "/@/api/platform/home/user"
 import { formatTime } from '/@/utils/common'
-const activeTab = ref('')
+const activeTab = ref('userLog')
 const formData = ref({
     avatar: '',
     username: '',
