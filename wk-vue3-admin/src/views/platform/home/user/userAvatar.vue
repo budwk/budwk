@@ -147,7 +147,7 @@ const realTime = (data: any) => {
 }
 /** 关闭窗口 */
 const closeDialog = () => {
-    options.img = props.modelValue
+    options.img = platformInfo.AppFileDomain + props.modelValue
     visible.value = false
 }
 
