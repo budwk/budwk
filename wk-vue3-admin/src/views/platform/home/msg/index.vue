@@ -111,14 +111,24 @@ const selectData = ref([])
 const defaultSort = ref({ prop: "sendat", order: "descending" })
 
 const goTo = (val: string) => {
-    id.value = val
     router.push('/platform/home/msg?id=' + val)
 }
 
 const goBack = () => {
-    id.value = ''
     router.push('/platform/home/msg')
 }
+
+watch(currentRoute,(newVal)=>{
+    if('/platform/home/msg' == newVal.path) {
+        if(newVal.query.id){
+            id.value = newVal.query.id
+            getMsg()
+        } else {
+            id.value = ''
+            list()
+        }
+    }
+})
 
 const data = reactive({
     formData: {
@@ -195,13 +205,7 @@ const list = () => {
     })
 }
 
-// 初始化字典数据
-const getInitData = () => {
-    getData().then((res) => {
-        types.value = res.data.types
-        scopes.value = res.data.scopes
-    })
-    id.value = query?.id
+const getMsg = () => {
     if(id.value) {
         getInfo(id.value).then((res)=>{
             formData.value = res.data
@@ -209,9 +213,21 @@ const getInitData = () => {
     }
 }
 
+// 初始化字典数据
+const getInitData = () => {
+    getData().then((res) => {
+        types.value = res.data.types
+        scopes.value = res.data.scopes
+    })
+}
+
 onMounted(() => {
     list()
     getInitData()
+    if(query.id){
+        id.value = query.id
+    }
+    getMsg()
 })
 </script>
 <!--定义布局-->
