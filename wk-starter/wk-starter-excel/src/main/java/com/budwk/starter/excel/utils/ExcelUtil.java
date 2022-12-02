@@ -8,7 +8,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -16,8 +15,6 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 
@@ -755,7 +752,15 @@ public class ExcelUtil<T> {
             String key = String.format("data_%s_%s_%s", Strings.sNull(excel.align()), Strings.sNull(excel.color()), Strings.sNull(excel.backgroundColor()));
             if (!styles.containsKey(key)) {
                 CellStyle style = wb.createCellStyle();
-                style.setAlignment(excel.align());
+                if("CENTER".equalsIgnoreCase(excel.align())) {
+                    style.setAlignment(HorizontalAlignment.CENTER);
+                }
+                if("RIGHT".equalsIgnoreCase(excel.align())) {
+                    style.setAlignment(HorizontalAlignment.RIGHT);
+                }
+                if("LEFT".equalsIgnoreCase(excel.align())) {
+                    style.setAlignment(HorizontalAlignment.LEFT);
+                }
                 style.setVerticalAlignment(VerticalAlignment.CENTER);
                 style.setBorderRight(BorderStyle.THIN);
                 style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());

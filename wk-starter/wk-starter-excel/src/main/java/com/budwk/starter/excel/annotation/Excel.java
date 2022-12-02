@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 import java.math.BigDecimal;
 
 import com.budwk.starter.excel.poi.ExcelHandlerAdapter;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
 /**
  * @author wizzer.cn
  * @author ruoyi
@@ -128,9 +126,10 @@ public @interface Excel
     public IndexedColors color() default IndexedColors.BLACK;
 
     /**
-     * 导出字段对齐方式
+     * 导出单元格对齐方式 RIGHT/LEFT/CENTER
+     * @return
      */
-    public HorizontalAlignment align() default HorizontalAlignment.CENTER;
+    public String align() default "CENTER";
 
     /**
      * 自定义数据处理器

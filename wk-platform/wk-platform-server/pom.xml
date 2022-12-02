@@ -59,6 +59,10 @@
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-storage</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-excel</artifactId>
+        </dependency>
         <!-- nutz -->
         <dependency>
             <groupId>org.nutz</groupId>

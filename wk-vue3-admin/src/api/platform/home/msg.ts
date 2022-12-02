@@ -20,7 +20,7 @@ export function getList(data: object) {
 export function getInfo(id: string) {
     return request({
         url: API_HOME_MSG_GET + id,
-        method: 'GET'
+        method: 'POST'
     })
 }
 
@@ -28,5 +28,27 @@ export function getData() {
     return request({
         url: API_HOME_MSG_DATA,
         method: 'GET'
+    })
+}
+
+export function doReadAll() {
+    return request({
+        url: API_HOME_MSG_READ_ALL,
+        method: 'POST'
+    })
+}
+
+export function doReadMore(ids: string) {
+    return request({
+        url: API_HOME_MSG_READ_MORE,
+        method: 'POST',
+        data: {ids: ids}
+    })
+}
+
+export function doReadOne(id: string) {
+    return request({
+        url: API_HOME_MSG_READ_ONE + '/' + id,
+        method: 'POST'
     })
 }

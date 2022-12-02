@@ -126,7 +126,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="访问路径" prop="href">
-                            <el-input v-model="formData.href" placeholder="访问路径" maxlength="100" />
+                            <el-input v-model="formData.href" placeholder="后台访问路径前缀为 /platform/ " maxlength="100" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -229,7 +229,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="访问路径" prop="href">
-                            <el-input v-model="formData.href" placeholder="访问路径" maxlength="100" />
+                            <el-input v-model="formData.href" placeholder="后台访问路径前缀为 /platform/ " maxlength="100" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">

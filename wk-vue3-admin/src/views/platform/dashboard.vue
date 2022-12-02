@@ -73,7 +73,7 @@
                 <el-card class="update-log">
                     <template v-slot:header>
                         <div class="clearfix">
-                            <span>联系信息</span>
+                            <span>联系方式</span>
                         </div>
                     </template>
                     <div class="body">

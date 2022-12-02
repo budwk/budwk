@@ -69,7 +69,7 @@ const { status, data, send, ws } = useWebSocket(state.server, {
         retries: 3,
         delay: 2000,
         onFailed() {
-            alert('Failed to connect WebSocket after 3 retries')
+            console.log('Failed to connect WebSocket after 3 retries')
         }
     },
     heartbeat: {

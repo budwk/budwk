@@ -55,11 +55,6 @@
             <artifactId>wk-starter-dubbo</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.budwk.starter</groupId>
-            <artifactId>wk-starter-excel</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-core</artifactId>
         </dependency>
