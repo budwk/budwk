@@ -329,10 +329,10 @@ const handleLogin = (formEl: InstanceType<typeof ElForm> | undefined) => {
                 },300)
                 router.push({ path: redirect?.toString() || "/platform/dashboard" });
             }).catch(() => {
+                loginData.btnLoading = false
                 loginData.captchaCode = ''
                 getCaptchaCode()
                 focusInput()
-                loginData.btnLoading = false
             })
         } else {
             return false
