@@ -52,7 +52,8 @@
                  </div>
                </template>
                <el-tabs v-model="activeTab">
-                  <el-tab-pane label="最近两个月操作日志" name="userLog">
+                  <el-tab-pane label="操作日志" name="userLog">
+                    <el-tag type="info">仅显示最近两个月</el-tag>
                     <userLog />
                   </el-tab-pane>
                   <el-tab-pane label="修改资料" name="userinfo">

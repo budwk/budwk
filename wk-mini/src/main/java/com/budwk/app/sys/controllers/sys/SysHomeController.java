@@ -285,7 +285,7 @@ public class SysHomeController {
     }
 
     @At("/user/log")
-    @Ok("json")
+    @Ok("json:{locked:'^(ip|params|result|browser|)$',ignoreNull:false}")
     @ApiOperation(description = "用户操作日志(最近2个月)")
     @ApiFormParams(
             {

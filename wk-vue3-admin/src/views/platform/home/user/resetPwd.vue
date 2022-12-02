@@ -50,6 +50,7 @@ const submit = () => {
         if (valid) {
             doChangePwd(user.oldPassword, user.newPassword).then((res)=>{
                 modal.msgSuccess('修改成功')
+                pwdRef.value?.resetFields()
             })
         }
     })
