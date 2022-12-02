@@ -263,4 +263,23 @@ public class SysHomeController {
         sysUserService.cacheRemove(SecurityUtil.getUserId());
         return Result.success();
     }
+
+    @At("/user/get")
+    @Ok("json:{locked:'^(password|salt)$',ignoreNull:false}")
+    @ApiOperation(description = "获取用户信息")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "id", example = "", description = "用户ID", required = true)
+            }
+    )
+    @ApiResponses
+    @SaCheckLogin
+    public Result<?> getUserInfo() {
+        Sys_user user = sysUserService.fetch(SecurityUtil.getUserId());
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        sysUserService.fetchLinks(user, "^(unit|post|roles)$");
+        return Result.success().addData(user);
+    }
 }

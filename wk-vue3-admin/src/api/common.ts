@@ -10,8 +10,7 @@ import { i18n } from '../lang'
  */
 // Platform模块
 export const platformInfoUrl = '/ucenter/auth/conf'
-export const platformUploadFileUrl = '/platform/pub/file/upload/file'
-export const platformUploadImageUrl = '/platform/pub/file/upload/image'
+export const platformUploadUrl = '/platform/pub/file/upload/'
 
 
 // Public模块
@@ -61,7 +60,7 @@ export function fileUpload(fd: FormData, params: anyObj = {}, type = 'file', for
         const userInfo = useUserInfo()
 
         return request({
-            url: type=='image'?platformUploadImageUrl:platformUploadFileUrl,
+            url: platformUploadUrl + type,
             method: 'POST',
             data: fd,
             headers: { "wk-user-token": userInfo.getToken() },
@@ -69,7 +68,7 @@ export function fileUpload(fd: FormData, params: anyObj = {}, type = 'file', for
         }) as ApiPromise
     } else {
         return request({
-            url: type=='image'?platformUploadImageUrl:platformUploadFileUrl,
+            url: platformUploadUrl + type,
             method: 'POST',
             data: fd,
             params: params,

@@ -33,7 +33,7 @@
             <template #reference>
                 <div class="user-info" :class="currentNavMenu == 'userInfo' ? 'hover' : ''">
                     <el-avatar :size="25" fit="fill">
-                      <img v-if="userInfo.user.avatar" :src="userInfo.user.avatar" alt="" />
+                      <img v-if="userInfo.user.avatar" :src="platformInfo.AppFileDomain + userInfo.user.avatar" alt="" />
                       <img v-else src="~assets/images/avatar.png" alt="" />
                     </el-avatar>
                     <div class="user-name">{{ userInfo.user.username }}</div>
@@ -42,7 +42,7 @@
             <div>
                 <div class="user-info-base">
                     <el-avatar :size="70" fit="fill">
-                        <img v-if="userInfo.user.avatar" :src="userInfo.user.avatar" alt="" />
+                        <img v-if="userInfo.user.avatar" :src="platformInfo.AppFileDomain + userInfo.user.avatar" alt="" />
                         <img v-else src="~assets/images/avatar.png" />
                     </el-avatar>
                     <div class="user-info-other">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="user-info-footer">
-                    <el-button type="primary" plain>用户资料</el-button>
+                    <el-button type="primary" @click="goToUserHome" plain>用户资料</el-button>
                     <el-button type="danger" @click="logout" plain>注销登录</el-button>
                 </div>
             </div>
@@ -79,11 +79,14 @@ import Notice from '/@/components/Notice/index.vue'
 import { formatTime } from '/@/utils/common'
 import { useClient } from '/@/stores/client'
 import { useUserInfo } from '/@/stores/userInfo'
+import { usePlatformInfo } from "/@/stores/platformInfo"
 import { useUserSettings } from '/@/stores/userSettings'
 import { ref } from 'vue'
-  
+import router from '/@/router'  
+
 const client = useClient()
 const userInfo = useUserInfo()
+const platformInfo = usePlatformInfo()
 const settingsStore = useUserSettings()
 const currentNavMenu = ref('')
   
@@ -91,12 +94,15 @@ const onCurrentNavMenu = (status: boolean, name: string) => {
     currentNavMenu.value = status ? name : ''
 }
 
-function toggleSideBar() {
+const toggleSideBar = () => {
     client.toggleSideBar()
 }
   
+const goToUserHome = () => {
+    router.push('/platform/home/user')
+}
   
-function logout() {
+const logout = () => {
     ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -107,7 +113,7 @@ function logout() {
 }
   
 const emits = defineEmits(['setLayout'])
-function setLayout() {
+const setLayout = () => {
     emits('setLayout');
 }
 </script>

@@ -24,7 +24,7 @@ export default {
         }
     },
     // 关闭指定tab页签
-    closePage(obj: any) {
+    closePage(obj = undefined) {
         if (obj === undefined) {
             return useTagsView().delView(router.currentRoute.value).then(({ lastPath }) => {
                 return router.push(lastPath || '/platform/dashboard');
