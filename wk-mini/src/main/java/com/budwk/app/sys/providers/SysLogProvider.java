@@ -65,9 +65,9 @@ public class SysLogProvider implements ISysLogProvider {
     }
 
     @Override
-    public Pagination list(String status, LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
+    public Pagination list(String status, LogType type, String appId, String tag, String msg, String userId, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         if ("database".equalsIgnoreCase(conf.get("log.save"))) {
-            return sysLogService.list(status, type, appId, tag, msg, loginname, username, startTime, endTime, pageOrderName, pageOrderBy, pageNumber, pageSize);
+            return sysLogService.list(status, type, appId, tag, msg, userId, loginname, username, startTime, endTime, pageOrderName, pageOrderBy, pageNumber, pageSize);
         } else if ("mongodb".equalsIgnoreCase(conf.get("log.save"))) {
             MongoCollection<Document> mongoCollection = getCollection(Sys_log.class.getSimpleName());
 
@@ -78,6 +78,9 @@ public class SysLogProvider implements ISysLogProvider {
             }
             if (Strings.isNotBlank(appId)) {
                 filters.add(Filters.eq("appId", appId));
+            }
+            if (Strings.isNotBlank(userId)) {
+                filters.add(Filters.eq("createdBy", userId));
             }
             if (startTime > 0) {
                 filters.add(Filters.gte("createdAt", startTime));

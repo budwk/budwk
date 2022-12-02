@@ -18,6 +18,7 @@ import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.common.utils.PwdUtil;
 import com.budwk.starter.log.annotation.SLog;
+import com.budwk.starter.log.provider.ISysLogProvider;
 import com.budwk.starter.security.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.dao.Chain;
@@ -50,6 +51,8 @@ public class SysHomeController {
     private SysConfigService sysConfigService;
     @Inject
     private SysUserService sysUserService;
+    @Inject
+    private ISysLogProvider sysLogProvider;
 
     @At("/msg/data")
     @Ok("json")
@@ -278,5 +281,27 @@ public class SysHomeController {
         }
         sysUserService.fetchLinks(user, "^(unit|post|roles)$");
         return Result.success().addData(user);
+    }
+
+    @At("/user/log")
+    @Ok("json")
+    @ApiOperation(description = "获取用户信息")
+    @ApiFormParams(
+            {
+                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
+                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
+                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
+                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckLogin
+    public Result<?> getUserLog(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
+        return Result.success().addData(sysLogProvider.list(
+                null, null, null, null, null, SecurityUtil.getUserId(), null, null,
+                0, 0, pageOrderName, pageOrderBy, pageNo, pageSize
+        ));
     }
 }

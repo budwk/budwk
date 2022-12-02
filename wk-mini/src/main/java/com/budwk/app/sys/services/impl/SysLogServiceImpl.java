@@ -73,7 +73,7 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
     }
 
     @Override
-    public Pagination list(String status, LogType type, String appId, String tag, String msg, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
+    public Pagination list(String status, LogType type, String appId, String tag, String msg, String userId, String loginname, String username, long startTime, long endTime, String pageOrderName, String pageOrderBy, int pageNumber, int pageSize) {
         try {
             String tableName = Times.format("yyyyMM", new Date());
             StringBuilder stringBuilder = new StringBuilder();
@@ -85,6 +85,9 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                 }
                 if (Strings.isNotBlank(appId)) {
                     stringBuilder.append(" and appId = '" + appId + "'");
+                }
+                if (Strings.isNotBlank(userId)) {
+                    stringBuilder.append(" and createdBy = '" + userId + "'");
                 }
                 if (Strings.isNotBlank(loginname)) {
                     stringBuilder.append(" and loginname like '%" + loginname + "%'");
@@ -115,6 +118,9 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                     if (Strings.isNotBlank(appId)) {
                         stringBuilder.append(" and appId = '" + appId + "'");
                     }
+                    if (Strings.isNotBlank(userId)) {
+                        stringBuilder.append(" and createdBy = '" + userId + "'");
+                    }
                     if (Strings.isNotBlank(loginname)) {
                         stringBuilder.append(" and loginname like '%" + loginname + "%'");
                     }
@@ -144,6 +150,9 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
                             }
                             if (Strings.isNotBlank(appId)) {
                                 stringBuilder.append(" and appId = '" + appId + "'");
+                            }
+                            if (Strings.isNotBlank(userId)) {
+                                stringBuilder.append(" and createdBy = '" + userId + "'");
                             }
                             if (Strings.isNotBlank(loginname)) {
                                 stringBuilder.append(" and loginname like '%" + loginname + "%'");

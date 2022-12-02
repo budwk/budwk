@@ -77,7 +77,7 @@ public class SysLogController {
         if (date != null && date.length > 1) {
             endTime = Times.D(date[1]).getTime();
         }
-        return Result.success().addData(sysLogProvider.list(status, logType, appId, tag, msg, loginname, username, beginTime, endTime, pageOrderName, pageOrderBy, pageNo, pageSize));
+        return Result.success().addData(sysLogProvider.list(status, logType, appId, tag, msg, null, loginname, username, beginTime, endTime, pageOrderName, pageOrderBy, pageNo, pageSize));
     }
 
     @At
