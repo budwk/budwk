@@ -12,7 +12,7 @@
                 </el-select>
             </el-col>
             <right-toolbar :columns="columns" @quickSearch="quickSearch" :quickSearchShow="true"
-                quickSearchPlaceholder="通过参数名称搜索" />
+                quickSearchPlaceholder="通过参数Key搜索" />
         </el-row>
 
         <el-table v-loading="tableLoading" :data="tableData" row-key="id">
