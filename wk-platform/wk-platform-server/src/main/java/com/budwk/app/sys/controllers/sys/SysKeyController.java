@@ -73,7 +73,7 @@ public class SysKeyController {
         return Result.success();
     }
 
-    @At
+    @At("/disabled")
     @Ok("json")
     @POST
     @ApiOperation(name = "启用禁用")
