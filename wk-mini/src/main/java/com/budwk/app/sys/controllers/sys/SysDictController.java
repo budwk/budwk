@@ -5,6 +5,7 @@ import com.budwk.app.sys.models.Sys_dict;
 import com.budwk.app.sys.services.SysDictService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
+import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -36,11 +37,34 @@ public class SysDictController {
     @Inject
     private SysDictService sysDictService;
 
+    @At
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3树形列表查询")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "name", example = "", description = "单位名称")
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckPermission("sys.config.dict")
+    public Result<?> list(@Param("name") String name) {
+        Cnd cnd = Cnd.NEW();
+        if (Strings.isNotBlank(name)) {
+            cnd.and("name", "like", "%" + name + "%");
+        }
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(sysDictService.query(cnd));
+    }
+
     @At("/child")
     @Ok("json")
     @GET
     @SaCheckPermission("sys.config.dict")
-    @ApiOperation(name = "获取列表树型数据")
+    @ApiOperation(name = "Vue2获取列表树型数据")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "pid", description = "父级ID")
