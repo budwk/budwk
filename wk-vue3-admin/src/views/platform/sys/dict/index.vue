@@ -19,14 +19,20 @@
         <el-table v-if="showTreeTable" v-loading="tableLoading" :data="tableData" row-key="id"
             :default-expand-all="isExpandAll" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
             <template v-for="(item, idx) in columns" :key="idx">
-                <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
+                <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" :width="item.width" v-if="item.show"
                     :show-overflow-tooltip="true">
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
                     <template v-if="item.prop == 'disabled'" #default="scope">
-                        <el-tag v-if="scope.row.disabled" type="danger">禁用</el-tag>
-                        <el-tag v-else type="success">启用</el-tag>
+                        <el-switch
+                        v-model="scope.row.disabled"
+                        :active-value="false"
+                        :inactive-value="true"
+                        active-color="green"
+                        inactive-color="red"
+                        @change="disabledChange(scope.row)"
+                        />
                     </template>
                 </el-table-column>
             </template>
@@ -142,7 +148,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
-import { doCreate, doUpdate, getInfo, getList, doDelete, doSort } from '/@/api/platform/sys/dict'
+import { doCreate, doUpdate, getInfo, getList, doDelete, doSort, doDisable } from '/@/api/platform/sys/dict'
 import { handleTree } from '/@/utils/common'
 import modal from '/@/utils/modal'
 
@@ -185,7 +191,7 @@ const columns = ref([
     { prop: 'name', label: `字典名称`, show: true, fixed: false },
     { prop: 'code', label: `字典编码`, show: true, fixed: false },
     { prop: 'disabled', label: `状态`, show: true, fixed: false },
-    { prop: 'createdAt', label: `创建时间`, show: true, fixed: false }
+    { prop: 'createdAt', label: `创建时间`, show: true, fixed: false, width: 160 }
 ])
 
 // 重置表单
@@ -243,6 +249,18 @@ const toggleExpandAll = () => {
     isExpandAll.value = !isExpandAll.value
     nextTick(() => {
         showTreeTable.value = true
+    })
+}
+
+// 启用禁用
+const disabledChange = (row: any) => {
+    doDisable({disabled: row.disabled, id: row.id}).then((res: any) => {
+        modal.msgSuccess(res.msg)
+        list()
+    }).catch(()=>{
+        setTimeout(() => {
+            row.disabled = !row.disabled
+        }, 300)
     })
 }
 

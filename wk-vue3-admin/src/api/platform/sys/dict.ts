@@ -71,3 +71,11 @@ export function doSort(ids: string) {
         data: { ids: ids}
     })
 }
+
+export function doDisable(data: object = {}) {
+    return request({
+        url: API_SYS_DICT_DISABLED,
+        method: 'POST',
+        data: data
+    })
+}
