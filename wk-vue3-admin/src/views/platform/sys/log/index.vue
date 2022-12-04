@@ -65,7 +65,7 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         <el-tag v-else :disable-transitions="true" type="success">成功</el-tag>
                     </template>
                     <template v-if="item.prop == 'loginname'" #default="scope">
-                        {{ scope.row.username }}({{ scope.row.loginname }})
+                        <span v-if="scope.row.loginname">{{ scope.row.username }}({{ scope.row.loginname }})</span>
                     </template>
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
@@ -96,7 +96,7 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                     <el-row>
                         <el-col :span="12">
                             <el-form-item label="操作人" prop="loginname">
-                                {{ formData.username }}({{ formData.loginname }})
+                                <span v-if="formData.loginname">{{ formData.username }}({{ formData.loginname }})</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -137,6 +137,11 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                         <el-col :span="24">
                             <el-form-item label="响应结果" prop="result" class="content">
                                 {{ formData.result }}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="异常信息" prop="exception" class="content">
+                                {{ formData.exception }}
                             </el-form-item>
                         </el-col>
                     </el-row>
