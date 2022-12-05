@@ -10,10 +10,20 @@
       </template>
       <div class="panel panel-default no-m">
         <div class="panel-heading small"><b>站内通知</b>
+          <span class="read-all"><el-button size="small" plain>全部已读</el-button></span>
         </div>
+        <el-row class="panel-heading small">
+          <el-col>
+            <b>站内通知</b>
+          </el-col>
+          <el-col>
+            <el-button size="small" plain>全部已读</el-button>
+          </el-col>
+        </el-row>
         <div class="list-group">
           <li class="list-group-item" v-for="(item,idx) in notice.list" :key="'msg_'+idx">
-            <el-button link type="primary"
+            <el-button
+link type="primary"
              @click="goTo(item.url?item.url:'/platform/home/msg?id='+item.msgId)"
              style="text-align:left;"
              >
@@ -83,9 +93,10 @@ const { status, data, send, ws } = useWebSocket(state.server, {
 watch(data, (message) => {
     const res = JSON.parse(message)
     if (res.action === 'offline') { // 账号下线通知
-        modal.alertCallback('您的帐号在其他地方登录，您已被迫下线，如果不是您本人操作，请及时修改密码。', '下线通知', () => {
-            userInfo.logout()
-        })
+        modal.alertCallback('您的帐号在其他地方登录，您已被迫下线，如果不是您本人操作，请及时修改密码。', '下线通知', false)
+            .then(()=>{
+                userInfo.logoutNotLogin()
+            })
     } else if (res.action === 'notice') { // 消息通知
         notice.value = res
         size.value = res.size

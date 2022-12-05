@@ -286,6 +286,30 @@ public class WkPlatformLauncher {
                 user.setCompanyId(headUnit.getId());
                 dao.insert(user);
 
+                //初始化用户安全配置
+                Sys_user_security security = new Sys_user_security();
+                security.setId("MAIN");
+                security.setHasEnabled(false);
+                security.setPwdLengthMin(6);
+                security.setPwdLengthMax(20);
+                security.setPwdCharMust(0);
+                security.setPwdCharNot("");
+                security.setPwdRepeatCheck(false);
+                security.setPwdRepeatNum(0);
+                security.setPwdRetryLock(false);
+                security.setPwdRetryNum(0);
+                security.setPwdRetryAction(0);
+                security.setPwdRetryTime(0);
+                security.setPwdTimeoutDay(0);
+                security.setPwdResetChange(false);
+                security.setNameRetryLock(false);
+                security.setNameRetryNum(3);
+                security.setNameTimeout(60);
+                security.setUserSessionOnlyOne(false);
+                security.setCaptchaHasEnabled(true);
+                security.setCaptchaType(0);
+                dao.insert(security);
+
                 //不同的插入数据方式(安全)
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_COMMON_APPID).add("roleId", role.getId()));
                 dao.insert("sys_role_app", Chain.make("id", R.UU32()).add("appId", GlobalConstant.DEFAULT_PLATFORM_APPID).add("roleId", role.getId()));

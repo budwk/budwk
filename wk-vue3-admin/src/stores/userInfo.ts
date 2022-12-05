@@ -151,6 +151,12 @@ export const useUserInfo = defineStore('userInfo', {
                 }
             })
         },
+        logoutNotLogin(): void{
+            Local.remove(USER_INFO)
+            Local.remove(USER_VIEWS)
+            Local.remove(TAGS_VIEW)
+            router.go(0)
+        },
         hasToken() {
             return !!this.tokenValue
         },
