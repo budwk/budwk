@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button plain type="success" icon="Sort" @click="handleSort" v-permission="['sys.config.dict.update']">排序</el-button>
+                <el-button plain type="success" icon="Sort" @click="handleSort" v-permission="['sys.config.area.update']">排序</el-button>
             </el-col>
         </el-row>
 
@@ -30,15 +30,15 @@
                 <template #default="scope">
                     <el-tooltip content="新增子项目" placement="top">
                         <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
-                            v-permission="['sys.config.dict.create']"></el-button>
+                            v-permission="['sys.config.area.create']"></el-button>
                         </el-tooltip>
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                            v-permission="['sys.config.dict.update']"></el-button>
+                            v-permission="['sys.config.area.update']"></el-button>
                         </el-tooltip>
-                    <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
+                    <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete"
-                        @click="handleDelete(scope.row)" v-permission="['sys.config.dict.delete']"></el-button>
+                        @click="handleDelete(scope.row)" v-permission="['sys.config.area.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
