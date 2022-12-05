@@ -5,6 +5,7 @@ import com.budwk.app.sys.models.Sys_area;
 import com.budwk.app.sys.services.SysAreaService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
+import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -28,7 +29,7 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 @IocBean
-@At("/sys/area")
+@At("/platform/sys/area")
 @SLog(tag = "行政区划")
 @ApiDefinition(tag = "行政区划")
 @Slf4j
@@ -36,11 +37,27 @@ public class SysAreaController {
     @Inject
     private SysAreaService sysAreaService;
 
+    @At
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3列表数据查询")
+    @ApiImplicitParams
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckPermission("sys.config.area")
+    public Result<?> list() {
+        Cnd cnd = Cnd.NEW();
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(sysAreaService.query(cnd));
+    }
+
     @At("/child")
     @Ok("json")
     @GET
     @SaCheckPermission("sys.config.area")
-    @ApiOperation(name = "获取列表树型数据")
+    @ApiOperation(name = "Vue3 lazy获取树型数据")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "pid", description = "父级ID")

@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button  type="primary" @click="save" v-permission="['sys.config.security.save']" :loading="btnLoading">
+                <el-button plain type="primary" @click="save" v-permission="['sys.config.security.save']" :loading="btnLoading">
                     <i class="fa fa-save" style="padding-right:5px;"/>保 存
                 </el-button>
             </el-col>
