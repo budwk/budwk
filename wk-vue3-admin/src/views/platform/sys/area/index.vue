@@ -153,7 +153,6 @@ const showUpdate = ref(false)
 const showSort = ref(false)
 const btnLoading = ref(false)
 
-
 const data = reactive({
     formData: {
         id: '',
@@ -194,6 +193,14 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formEl?.resetFields()
 }
 
+const handleSearch = () => {
+    showTreeTable.value = false
+    list()
+    nextTick(() => {
+        showTreeTable.value = true
+    })
+}
+
 // 查询表格
 const list = () => {
     tableLoading.value = true
@@ -214,8 +221,6 @@ const load = (row: any, treeNode: unknown, resolve: (data: any) => void) => {
 const listTree = () => {
     getList().then((res)=>{
         sortData.value = handleTree(res.data, false) as never
-        console.log(res.data)
-        console.log(sortData.value)
     })
 }
 
@@ -258,7 +263,7 @@ const handleDelete = (row: any) => {
     modal.confirm('此操作将删除 '+row.name+' 及其下级，请谨慎操作！').then(() => {
         return doDelete(row.id)
     }).then(() => {
-        list()
+        handleSearch()
         modal.msgSuccess('删除成功')
     }).catch(() => { })
 }
@@ -284,7 +289,7 @@ const create = () => {
             doCreate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showCreate.value = false
-                list()
+                handleSearch()
             })
         }
     })
@@ -298,7 +303,7 @@ const update = () => {
             doUpdate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showUpdate.value = false
-                list()
+                handleSearch()
             })
         }
     })
@@ -323,7 +328,7 @@ const sort = () => {
         modal.msgSuccess(res.msg)
         btnLoading.value = false
         showSort.value = false
-        list()
+        handleSearch()
     })
 }
 
