@@ -80,6 +80,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-websocket</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>wk-starter-security</artifactId>
                 <version>${budwk.version}</version>
             </dependency>

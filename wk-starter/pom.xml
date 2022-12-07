@@ -24,6 +24,7 @@
         <module>wk-starter-storage</module>
         <module>wk-starter-job</module>
         <module>wk-starter-excel</module>
+        <module>wk-starter-websocket</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

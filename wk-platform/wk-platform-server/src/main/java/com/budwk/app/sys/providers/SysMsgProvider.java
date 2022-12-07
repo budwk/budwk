@@ -9,12 +9,9 @@ import com.budwk.app.sys.models.Sys_msg_user;
 import com.budwk.app.sys.services.SysMsgService;
 import com.budwk.app.sys.services.SysMsgUserService;
 import com.budwk.app.sys.services.SysUserService;
-import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.exception.BaseException;
+import com.budwk.starter.websocket.publish.MessageSendServer;
 import org.nutz.aop.interceptor.async.Async;
-import org.nutz.integration.jedis.JedisAgent;
-import org.nutz.integration.jedis.RedisService;
-import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -23,7 +20,6 @@ import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
-import redis.clients.jedis.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,65 +37,21 @@ public class SysMsgProvider implements ISysMsgProvider {
     @Inject
     private SysMsgUserService sysMsgUserService;
     @Inject
-    private JedisAgent jedisAgent;
-    @Inject
-    private RedisService redisService;
-    @Inject
-    private PubSubService pubSubService;
-
-    public List<String> getRedisKeys(String matchString) {
-        List<String> keyList = new ArrayList<>();
-        if (jedisAgent.isClusterMode()) {
-            JedisCluster jedisCluster = jedisAgent.getJedisClusterWrapper().getJedisCluster();
-            for (JedisPool pool : jedisCluster.getClusterNodes().values()) {
-                try (Jedis jedis = pool.getResource()) {
-                    ScanParams match = new ScanParams().match(matchString);
-                    ScanResult<String> scan = null;
-                    do {
-                        scan = jedis.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                        keyList.addAll(scan.getResult());
-                    } while (!scan.isCompleteIteration());
-                }
-            }
-        } else {
-            ScanParams match = new ScanParams().match(matchString);
-            ScanResult<String> scan = null;
-            do {
-                scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                keyList.addAll(scan.getResult());
-            } while (!scan.isCompleteIteration());
-        }
-        return keyList;
-    }
+    private MessageSendServer messageSendServer;
 
     @Override
     public void wsSendMsg(String userId, String token, String msg) {
-        String matchString = RedisConstant.WS_ROOM + userId + ":" + token;
-        List<String> keyList = getRedisKeys(matchString);
-        for (String key : keyList) {
-            pubSubService.fire(key, msg);
-        }
+        messageSendServer.wsSendMsg(userId, token, msg);
     }
 
     @Override
     public void wsSendMsg(String userId, String msg) {
-        String matchString = RedisConstant.WS_ROOM + userId + ":*";
-        List<String> keyList = getRedisKeys(matchString);
-        for (String key : keyList) {
-            pubSubService.fire(key, msg);
-        }
+        messageSendServer.wsSendMsg(userId, msg);
     }
 
     @Override
     public void wsSendMsg(List<String> userId, String msg) {
-        String matchString = RedisConstant.WS_ROOM + "*";
-        List<String> keyList = getRedisKeys(matchString);
-        for (String key : keyList) {
-            String[] k = Strings.splitIgnoreBlank(key, ":");
-            if (userId.contains(k[2])) {
-                pubSubService.fire(key, msg);
-            }
-        }
+        messageSendServer.wsSendMsg(userId, msg);
     }
 
     @Override

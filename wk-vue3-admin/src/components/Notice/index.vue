@@ -9,15 +9,9 @@
         </div>
       </template>
       <div class="panel panel-default no-m">
-        <div class="panel-heading small"><b>站内通知</b>
-          <span class="read-all"><el-button size="small" plain>全部已读</el-button></span>
-        </div>
         <el-row class="panel-heading small">
           <el-col>
             <b>站内通知</b>
-          </el-col>
-          <el-col>
-            <el-button size="small" plain>全部已读</el-button>
           </el-col>
         </el-row>
         <div class="list-group">
@@ -52,6 +46,7 @@ link type="primary"
 import { useWebSocket } from '@vueuse/core'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useUserInfo } from '/@/stores/userInfo'
+import { getWsMsg } from '/@/api/platform/home/msg'
 import modal from '/@/utils/modal'
 import router from "/@/router"
 
@@ -72,6 +67,7 @@ const goTo = (path: string) => {
 // 加入room
 const onConnected = () => {
     send(JSON.stringify({ userId: userInfo.user.id, action: 'join', token: userInfo.getToken() }))
+    getWsMsg()
 }
 
 const { status, data, send, ws } = useWebSocket(state.server, {

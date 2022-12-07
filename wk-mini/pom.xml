@@ -69,6 +69,10 @@
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-excel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-websocket</artifactId>
+        </dependency>
         <!-- nutzboot-starter -->
         <dependency>
             <groupId>org.nutz</groupId>

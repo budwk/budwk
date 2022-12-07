@@ -37,6 +37,12 @@ web:
   validation:
     enable: true
 
+websocket:
+  # 实现方式
+  type: redis
+  # 超时时间(默认3600秒)
+  timeout: 3600
+
 redisson:
   # 集群/分片/主从等配置见 https://github.com/nutzam/nutzmore/tree/master/nutz-integration-redisson
   mode: single

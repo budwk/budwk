@@ -57,6 +57,10 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-storage</artifactId>
         </dependency>
         <dependency>

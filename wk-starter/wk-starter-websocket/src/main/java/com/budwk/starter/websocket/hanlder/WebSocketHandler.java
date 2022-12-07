@@ -1,23 +1,18 @@
-package com.budwk.app.sys.commons.websocket;
+package com.budwk.starter.websocket.hanlder;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.budwk.app.sys.services.SysMsgService;
 import com.budwk.starter.common.constant.RedisConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.util.NutMap;
 import org.nutz.plugins.mvc.websocket.handler.SimpleWsHandler;
 
 /**
- * @author wizzer@qq.com
+ * @author wizzer.cn
  */
 @IocBean
 @Slf4j
-public class WkWsHandler extends SimpleWsHandler {
-    @Inject
-    private SysMsgService sysMsgService;
-
+public class WebSocketHandler extends SimpleWsHandler {
     @Override
     public void join(NutMap req) {
         String userId = req.getString("userId", "");
@@ -33,8 +28,6 @@ public class WkWsHandler extends SimpleWsHandler {
         log.debug("session(id={}) join room(name={})", session.getId(), room);
         this.rooms.add(room);
         this.roomProvider.join(room, session.getId());
-        // 进入时首次获取最新消息
-        sysMsgService.getMsg(userId, true);
     }
 
     @Override

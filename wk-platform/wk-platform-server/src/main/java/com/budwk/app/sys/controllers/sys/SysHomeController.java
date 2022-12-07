@@ -58,6 +58,16 @@ public class SysHomeController {
     @Inject
     private ISysLogProvider sysLogProvider;
 
+    @At("/msg/wsmsg")
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "获取websocket消息")
+    @SaCheckLogin
+    public Result<?> wsmsg() {
+        sysMsgProvider.getMsg(SecurityUtil.getUserId(), true);
+        return Result.success();
+    }
+
     @At("/msg/data")
     @Ok("json")
     @GET

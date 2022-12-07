@@ -99,4 +99,5 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
             }
         }
     }
+
 }

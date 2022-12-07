@@ -51,7 +51,7 @@ security:
     # 允许同一账号并发登录，则系统参数 AppSessionOnlyOne 有效，亦可踢人下线并多了弹框提示功能
     isConcurrent: true
     # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
-    isShare: false
+    isShare: true
     # Token 风格(默认可取值：uuid,simple-uuid,random-32,random-64,random-128,tik
     tokenStyle: random-64
 

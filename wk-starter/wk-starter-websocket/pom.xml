@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>wk-starter</artifactId>
+        <groupId>com.budwk</groupId>
+        <version>8.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.budwk.starter</groupId>
+    <artifactId>wk-starter-websocket</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wk-starter-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wk-starter-security</artifactId>
+        </dependency>
+        <!-- nutz -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-nutz-mvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-jetty</artifactId>
+        </dependency>
+        <!-- redis -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-redis</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- rabbitmq -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-rabbitmq</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

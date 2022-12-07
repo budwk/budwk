@@ -5,9 +5,16 @@ export const API_HOME_MSG_READ_ONE = '/platform/home/msg/status/read_one/'
 export const API_HOME_MSG_READ_ALL = '/platform/home/msg/status/read_all'
 export const API_HOME_MSG_READ_MORE = '/platform/home/msg/status/read_more'
 export const API_HOME_MSG_DATA = '/platform/home/msg/data'
-
+export const API_HOME_MSG_WS = '/platform/home/msg/wsmsg'
 
 import request from '/@/utils/request'
+
+export function getWsMsg() {
+    return request({
+        url: API_HOME_MSG_WS,
+        method: 'GET'
+    })
+}
 
 export function getList(data: object) {
     return request({
