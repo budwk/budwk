@@ -7,7 +7,7 @@
         style="width:300px;"
       />
       <el-row>
-        <el-col :span="24" class="mt10">
+        <el-col :span="24">
           <el-card header="Redis信息">
             <div class="el-table el-table--enable-row-hover el-table--medium">
               <table cellspacing="0" style="width: 100%">
