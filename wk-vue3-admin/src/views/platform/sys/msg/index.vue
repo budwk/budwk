@@ -32,7 +32,7 @@
                     </template>
                     <template v-if="item.prop == 'unread_num'" #default="scope">
                         <el-button link type="primary" @click="viewUserList('unread', scope.row.id)">{{
-                                scope.row.all_num
+                                scope.row.unread_num
                         }}
                         </el-button>
                     </template>
