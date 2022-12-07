@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wizzer.cn
  */
 @IocBean
-@At("/platform/pub/area")
+@At("/pub/area")
 @SLog(tag = "文件服务")
 @ApiDefinition(tag = "文件服务")
 @Slf4j

@@ -17,7 +17,7 @@ export function getNacosServices(data: Object) {
 
 export function getNacosService(data: Object) {
     return request({
-        url: API_SYS_MONITOR_NACOS_SERVICES,
+        url: API_SYS_MONITOR_NACOS_SERVICE,
         method: 'POST',
         data: data
     })

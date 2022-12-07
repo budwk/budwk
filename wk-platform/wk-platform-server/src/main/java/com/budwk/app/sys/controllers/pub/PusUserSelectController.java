@@ -27,7 +27,7 @@ import java.util.Arrays;
  * @author wizzer.cn
  */
 @IocBean
-@At("/platform/pub/user")
+@At("/pub/user")
 @SLog(tag = "用户选择")
 @ApiDefinition(tag = "用户选择")
 @Slf4j

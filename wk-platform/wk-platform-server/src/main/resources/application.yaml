@@ -162,7 +162,7 @@ storage:
   provider: local
   local:
     #本地存储位置
-    path: ~/temp/files
+    path: /Users/wizzer/temp/files
 
 monitor:
   nacos:
