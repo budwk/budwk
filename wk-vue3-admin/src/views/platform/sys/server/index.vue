@@ -250,3 +250,8 @@ export default {
     meta:
       layout: platform/index
 </route>
+<style scoped>
+.is-leaf {
+    text-align: left;
+}
+</style>
