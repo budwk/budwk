@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.budwk.app.sys.enums.SysMsgScope;
 import com.budwk.app.sys.enums.SysMsgType;
 import com.budwk.app.sys.models.Sys_msg;
+import com.budwk.app.sys.models.Sys_user;
 import com.budwk.app.sys.services.*;
 import com.budwk.starter.common.constant.GlobalConstant;
 import com.budwk.starter.common.openapi.annotation.*;

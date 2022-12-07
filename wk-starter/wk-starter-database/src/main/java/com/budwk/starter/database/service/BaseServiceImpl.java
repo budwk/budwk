@@ -1207,7 +1207,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
         Pager pager = this.dao().createPager(pageNumber, pageSize);
         List<T> list = this.dao().query(this.getEntityClass(), cnd, pager);
         pager.setRecordCount(this.dao().count(this.getEntityClass(), cnd));
-        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list, this.getEntityClass());
     }
 
     /**
@@ -1226,7 +1226,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
         Pager pager = this.dao().createPager(pageNumber, pageSize);
         List<T> list = Daos.ext(this.dao(), FieldFilter.create(this.getEntityClass(), fieldName)).query(this.getEntityClass(), cnd, pager);
         pager.setRecordCount(this.dao().count(this.getEntityClass(), cnd));
-        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list, this.getEntityClass());
     }
 
     /**
@@ -1248,7 +1248,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
         if (!Strings.isBlank(linkName)) {
             this.dao().fetchLinks(list, linkName);
         }
-        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list, this.getEntityClass());
     }
 
     /**
@@ -1273,7 +1273,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
                 this.dao().fetchLinks(list, linkName);
             }
         }
-        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list, this.getEntityClass());
     }
 
     /**
@@ -1310,7 +1310,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
         Pager pager = dao.createPager(pageNumber, pageSize);
         List<T> list = dao.query(this.getEntityClass(), cnd, pager);
         pager.setRecordCount(dao.count(this.getEntityClass(), cnd));
-        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list);
+        return new Pagination(pageNumber, pageSize, pager.getRecordCount(), list, this.getEntityClass());
     }
 
     /**
