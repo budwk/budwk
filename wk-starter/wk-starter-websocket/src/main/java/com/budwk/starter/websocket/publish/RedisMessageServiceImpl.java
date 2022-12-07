@@ -11,6 +11,7 @@ import redis.clients.jedis.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wizzer.cn
@@ -40,12 +41,8 @@ public class RedisMessageServiceImpl implements MessageService {
                 }
             }
         } else {
-            ScanParams match = new ScanParams().match(matchString);
-            ScanResult<String> scan = null;
-            do {
-                scan = redisService.scan(scan == null ? ScanParams.SCAN_POINTER_START : scan.getStringCursor(), match);
-                keyList.addAll(scan.getResult());
-            } while (!scan.isCompleteIteration());
+            Set<String> keys = redisService.keys(matchString);
+            keyList.addAll(keys);
         }
         return keyList;
     }
