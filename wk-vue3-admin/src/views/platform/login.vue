@@ -204,7 +204,7 @@ const loginData = reactive({
     captchaCode: '',
     keep: false,
     captchaKey: '',
-    captchaHasEnabled: true,
+    captchaHasEnabled: false,
     smscode: '',
     mobile: '',
     rsaKey: '',
@@ -304,7 +304,7 @@ const focusInput = () => {
         loginnameRef.value!.focus()
     } else if (loginData.password === '') {
         passwordRef.value!.focus()
-    } else if (loginData.captchaCode === '') {
+    } else if (loginData.captchaCode === '' && loginData.captchaHasEnabled) {
         captchaRef.value!.focus()
     }
 }
