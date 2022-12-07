@@ -42,7 +42,9 @@ public class RedisMessageServiceImpl implements MessageService {
             }
         } else {
             Set<String> keys = redisService.keys(matchString);
-            keyList.addAll(keys);
+            if (keys != null && keys.size() > 0) {
+                keyList.addAll(keys);
+            }
         }
         return keyList;
     }

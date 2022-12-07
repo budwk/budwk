@@ -54,10 +54,10 @@ security:
     # 超时时间(单位s,默认1天)
     timeout: 86400
     # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
-    # 允许同一账号并发登录，则系统参数 AppSessionOnlyOne 有效，亦可踢人下线并多了弹框提示功能
+    # isConcurrent=true，使用系统自带的 账户安全配置-用户单一登录，可踢人下线并弹框提示
     isConcurrent: true
     # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
-    isShare: true
+    isShare: false
     # Token 风格(默认可取值：uuid,simple-uuid,random-32,random-64,random-128,tik
     tokenStyle: random-64    
 

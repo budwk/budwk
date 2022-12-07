@@ -30,7 +30,7 @@
                 <div class="text item">
                     <el-form-item label="是否启用用户单一登录">
                         <el-switch v-model="formData.userSessionOnlyOne" />
-                        <span style="color: #bbbbbb; padding-left: 20px">注：启用后用户登录会将其他会话踢下线</span>
+                        <span style="color: #bbbbbb; padding-left: 20px">注：启用后用户登录会将其他会话踢下线,建议开启(WebSokcet Redis Key会减少一些)</span>
                     </el-form-item>
                 </div>
             </el-card>
