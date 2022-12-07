@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
+import org.nutz.json.JsonField;
 
 import java.io.Serializable;
 import java.util.List;
@@ -61,12 +62,14 @@ public class Sys_user extends BaseModel implements Serializable {
     @Comment("密码")
     @ColDefine(type = ColType.VARCHAR, width = 100)
     @ApiModelProperty(description = "密码")
+    @JsonField(ignore = true)
     private String password;
 
     @Column
     @Comment("密码盐")
     @ApiModelProperty(description = "密码盐")
     @ColDefine(type = ColType.VARCHAR, width = 50)
+    @JsonField(ignore = true)
     private String salt;
 
     @Column
