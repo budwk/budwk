@@ -2,7 +2,7 @@
     <div class="user-info-head" @click="editCropper()">
     <img v-if="props.modelValue" :src="platformInfo.AppFileDomain + props.modelValue" title="点击上传头像"
             class="img-circle img-lg" />
-    <img v-else src=""/>    
+    <img v-else src="" class="img-circle img-lg"/>    
     </div>
     <el-dialog :title="title" v-model="open" width="800px" append-to-body @opened="modalOpened" @close="closeDialog">
         <el-row>

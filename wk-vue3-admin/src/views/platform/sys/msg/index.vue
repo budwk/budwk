@@ -119,7 +119,7 @@
                     <el-col :span="24">
                         <el-form-item label="消息内容" prop="note">
                             <el-input v-model="formData.note" placeholder="消息内容" type="textarea" :rows="5"
-                                maxlength="30" />
+                                maxlength="500" />
                         </el-form-item>
                     </el-col>
                 </el-row>
