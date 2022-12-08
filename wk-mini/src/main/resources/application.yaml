@@ -10,7 +10,7 @@ jetty:
     idleTimeout: 60000
     minThreads: 10
     maxThreads: 2000
-  staticPath: /Users/wizzer/temp/files
+  staticPath: /data/files
 
 openapi:
   enable: true
@@ -18,7 +18,7 @@ openapi:
     package: com.budwk.app
   info:
     title: V8-Mini
-    version: 7.0.1
+    version: 8.0.1
     contact:
       name: 大鲨鱼
       email: wizzer@qq.com
@@ -108,7 +108,7 @@ database:
 jdbc:
   url: jdbc:mysql://127.0.0.1:3306/budwk_v8?useUnicode=true&characterEncoding=utf8&useSSL=false
   username: root
-  password: root
+  password: "root"
   validationQuery: select 1
   maxActive: 10
   testWhileIdle: true
@@ -157,7 +157,7 @@ storage:
   provider: local
   local:
     #本地存储位置
-    path: /Users/wizzer/temp/files
+    path: /data/files
 
 sms:
   enable: false

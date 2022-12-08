@@ -1,6 +1,7 @@
 import { App, nextTick } from 'vue'
 import horizontalScroll from '/@/utils/horizontalScroll'
 import { useUserInfo } from '/@/stores/userInfo'
+import { usePlatformInfo } from '/@/stores/platformInfo'
 
 export function directives(app: App) {
     // 权限验证
@@ -27,12 +28,13 @@ function permissionDirective(app: App) {
             const { value } = binding
             if (value && value instanceof Array && value.length>0) {
                 const permissions = useUserInfo().permissions
+                const isDemo = usePlatformInfo().AppDemoEnv || false
                 if(permissions && permissions instanceof Array){
                     //只需包含其中一个
                     const hasPermission = permissions.some(permission => {
                         return value.includes(permission)
                     })
-                    if (!hasPermission) {
+                    if (!hasPermission && !isDemo) {
                         el.parentNode && el.parentNode.removeChild(el)
                     }
                 }

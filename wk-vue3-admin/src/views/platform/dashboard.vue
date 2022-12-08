@@ -65,6 +65,9 @@
                         </ul>
                     </el-col>
                 </el-row>
+                <el-row style="margin-top:20px;">
+                    <el-tag type="warning">演示环境根据系统参数配置显示所有操作按钮，正式部署时则根据权限来判断是否显示。</el-tag>
+                </el-row>
             </el-col>
         </el-row>
         <el-divider />
