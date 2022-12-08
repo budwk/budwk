@@ -1,5 +1,6 @@
 package com.budwk.starter.log;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.starter.log.enums.LogType;
@@ -137,32 +138,35 @@ public class LogService {
                 sysLog.setOs(UserAgentUtil.parse(request.getHeader("User-Agent")).getOs().getName());
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            log.warn(e.getMessage(), e);
         }
-        String userId = "";
-        String appId = "PLATFORM";
-        String loginname = "";
-        String username = "";
         try {
-            userId = SecurityUtil.getUserId();
-            appId = SecurityUtil.getAppId();
-            loginname = SecurityUtil.getUserLoginname();
-            username = SecurityUtil.getUserUsername();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            if (request != null) {
-                userId = Strings.sNull(request.getAttribute("_slog_user_id"));
-                appId = Strings.sNull(request.getAttribute("_slog_appid"));
-                loginname = Strings.sNull(request.getAttribute("_slog_user_loginname"));
-                username = Strings.sNull(request.getAttribute("_slog_user_username"));
+            String userId = "";
+            String appId = "PLATFORM";
+            String loginname = "";
+            String username = "";
+            if (StpUtil.isLogin()) {
+                userId = SecurityUtil.getUserId();
+                appId = SecurityUtil.getAppId();
+                loginname = SecurityUtil.getUserLoginname();
+                username = SecurityUtil.getUserUsername();
+            } else {
+                if (request != null) {
+                    userId = Strings.sNull(request.getAttribute("_slog_user_id"));
+                    appId = Strings.sNull(request.getAttribute("_slog_appid"));
+                    loginname = Strings.sNull(request.getAttribute("_slog_user_loginname"));
+                    username = Strings.sNull(request.getAttribute("_slog_user_username"));
+                }
             }
+            sysLog.setUserId(userId);
+            sysLog.setAppId(appId);
+            sysLog.setLoginname(loginname);
+            sysLog.setUsername(username);
+            sysLog.setCreatedBy(userId);
+            sysLog.setUpdatedBy(userId);
+        } catch (Exception e) {
+            log.warn(e.getMessage(), e);
         }
-        sysLog.setUserId(userId);
-        sysLog.setAppId(appId);
-        sysLog.setLoginname(loginname);
-        sysLog.setUsername(username);
-        sysLog.setCreatedBy(userId);
-        sysLog.setUpdatedBy(userId);
         sysLog.setResult(Strings.isBlank(result) ? ex : result);
         sysLog.setException(ex);
         return sysLog;
