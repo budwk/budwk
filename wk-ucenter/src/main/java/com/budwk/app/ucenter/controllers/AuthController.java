@@ -374,8 +374,16 @@ public class AuthController {
     @ApiImplicitParams
     @ApiResponses
     @SaCheckLogin
-    public Result<?> logout() {
+    public Result<?> logout(HttpServletRequest req) {
+        String userId = SecurityUtil.getUserId();
+        String appId = SecurityUtil.getAppId();
+        String username = SecurityUtil.getUserUsername();
+        String loginname = SecurityUtil.getUserLoginname();
         StpUtil.logout();
+        req.setAttribute("_slog_appid", appId);
+        req.setAttribute("_slog_user_id", userId);
+        req.setAttribute("_slog_user_username", username);
+        req.setAttribute("_slog_user_loginname", loginname);
         return Result.success();
     }
 }

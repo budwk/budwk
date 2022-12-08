@@ -139,17 +139,30 @@ public class LogService {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+        String userId = "";
+        String appId = "PLATFORM";
+        String loginname = "";
+        String username = "";
         try {
-            String userId = SecurityUtil.getUserId();
-            sysLog.setUserId(userId);
-            sysLog.setAppId(SecurityUtil.getAppId());
-            sysLog.setLoginname(SecurityUtil.getUserLoginname());
-            sysLog.setUsername(SecurityUtil.getUserUsername());
-            sysLog.setCreatedBy(userId);
-            sysLog.setUpdatedBy(userId);
+            userId = SecurityUtil.getUserId();
+            appId = SecurityUtil.getAppId();
+            loginname = SecurityUtil.getUserLoginname();
+            username = SecurityUtil.getUserUsername();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            if (request != null) {
+                userId = Strings.sNull(request.getAttribute("_slog_user_id"));
+                appId = Strings.sNull(request.getAttribute("_slog_appid"));
+                loginname = Strings.sNull(request.getAttribute("_slog_user_loginname"));
+                username = Strings.sNull(request.getAttribute("_slog_user_username"));
+            }
         }
+        sysLog.setUserId(userId);
+        sysLog.setAppId(appId);
+        sysLog.setLoginname(loginname);
+        sysLog.setUsername(username);
+        sysLog.setCreatedBy(userId);
+        sysLog.setUpdatedBy(userId);
         sysLog.setResult(Strings.isBlank(result) ? ex : result);
         sysLog.setException(ex);
         return sysLog;

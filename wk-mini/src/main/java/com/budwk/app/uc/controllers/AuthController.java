@@ -316,7 +316,7 @@ public class AuthController {
     @SaCheckLogin
     public Result<?> info(@Param("appId") String appId) {
         SecurityUtil.setAppId(appId);
-        log.debug("StpUtil.getLoginIdAsString():::"+StpUtil.getLoginIdAsString());
+        log.debug("StpUtil.getLoginIdAsString():::" + StpUtil.getLoginIdAsString());
         Sys_user user = authService.getUserById(StpUtil.getLoginIdAsString());
         NutMap map = NutMap.NEW();
         //获取应用菜单及公共菜单
@@ -370,8 +370,16 @@ public class AuthController {
     @ApiImplicitParams
     @ApiResponses
     @SaCheckLogin
-    public Result<?> logout() {
+    public Result<?> logout(HttpServletRequest req) {
+        String userId = SecurityUtil.getUserId();
+        String appId = SecurityUtil.getAppId();
+        String username = SecurityUtil.getUserUsername();
+        String loginname = SecurityUtil.getUserLoginname();
         StpUtil.logout();
+        req.setAttribute("_slog_appid", appId);
+        req.setAttribute("_slog_user_id", userId);
+        req.setAttribute("_slog_user_username", username);
+        req.setAttribute("_slog_user_loginname", loginname);
         return Result.success();
     }
 }
