@@ -261,7 +261,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-role">
 import { nextTick, onMounted, reactive, ref, watch, toRefs } from 'vue'
 import modal from '/@/utils/modal'
 import { getUnitList, getGroupList, getUserList, getAppList, doCreate, doUpdate, doDelete, getPostList, getQueryUserList, doLinkUser, doUnLinkUser, getMenuList, doMenu } from '/@/api/platform/sys/role'
@@ -679,12 +679,6 @@ onMounted(() => {
     listUnit()
     listApp()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-role'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

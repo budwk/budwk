@@ -19,7 +19,7 @@ const loadingInstance: LoadingInstance = {
 export const isRelogin = { show: false }
 
 export const getUrl = (): string => {
-    const value: string = import.meta.env.VITE_AXIOS_BASE_URL as string
+    const value: string = '' + import.meta.env.VITE_AXIOS_BASE_URL
     return value == 'getCurrentDomain' ? window.location.protocol + '//' + window.location.host : value
 }
 

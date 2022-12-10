@@ -119,7 +119,7 @@
         </el-row>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-dashboard">
 import { onMounted, ref } from "vue"
 
 const goTarget = (url: string) => {
@@ -129,12 +129,6 @@ const goTarget = (url: string) => {
 onMounted(() => {
     //console.log('Dashboard onMounted!!!')
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-dashboard'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

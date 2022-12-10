@@ -359,7 +359,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-menu">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
 import { getAppList, doCreate, doUpdate, doUpdateData, getInfo, getList, doDelete, doSort, doDisable } from '/@/api/platform/sys/menu'
@@ -694,12 +694,6 @@ const sort = () => {
     })
 }
 
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-menu'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

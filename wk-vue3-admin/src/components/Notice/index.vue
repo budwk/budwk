@@ -55,7 +55,7 @@ const size = ref(0)
 const notice = ref({})
 
 const state = reactive({
-    server: import.meta.env.VITE_AXIOS_WS_BASE_URL,
+    server: '' + import.meta.env.VITE_AXIOS_WS_BASE_URL,
     sendValue: '',
     recordList: [] as any[],
 })

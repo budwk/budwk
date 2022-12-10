@@ -216,7 +216,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-param">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
 import { getData, doCreate, doUpdate, getInfo, getList, doDelete, } from '/@/api/platform/sys/param'
@@ -398,12 +398,6 @@ const update = () => {
 }
 
 
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-param'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

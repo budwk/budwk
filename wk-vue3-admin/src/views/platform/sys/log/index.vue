@@ -150,7 +150,7 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
         </el-drawer>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-log">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
 import { getList, getData } from '/@/api/platform/sys/log'
@@ -266,12 +266,6 @@ onMounted(() => {
     list()
     getInitData()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-log'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

@@ -214,7 +214,7 @@
         </el-form>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-security">
 import { onMounted, reactive, ref } from 'vue'
 import { getInfo, doSave } from '/@/api/platform/sys/security'
 import { toRefs } from '@vueuse/core'
@@ -287,12 +287,6 @@ const getData = () => {
 onMounted(() => {
     getData()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-security'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

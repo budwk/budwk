@@ -206,7 +206,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-app">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, doDelete, doLocation, doDisable } from '/@/api/platform/sys/app'
@@ -235,7 +235,7 @@ const upload = reactive({
     // 设置上传的请求头部
     headers: { "wk-user-token": userInfo.getToken() },
     // 上传的地址
-    url: import.meta.env.VITE_AXIOS_BASE_URL
+    url: '' + import.meta.env.VITE_AXIOS_BASE_URL
 })
 
 const data = reactive({
@@ -393,12 +393,6 @@ const disabledChange = (row: any) => {
 onMounted(()=>{
     list()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default{
-    name: 'platform-sys-app'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

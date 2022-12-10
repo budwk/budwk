@@ -182,7 +182,7 @@
         </el-drawer>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-msg">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
 import { getList, getInfo, doCreate, doDelete, getData, getViewUserList } from '/@/api/platform/sys/msg'
@@ -412,12 +412,6 @@ onMounted(() => {
     list()
     getInitData()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-msg'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

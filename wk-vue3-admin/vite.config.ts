@@ -2,10 +2,7 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import type { UserConfig, ConfigEnv, ProxyOptions } from 'vite'
 import { isProd, loadEnv } from '/@/utils/vite'
-import { svgBuilder } from './src/components/Icon/svg/index'
-import Pages from  'vite-plugin-pages'
-import Layouts from 'vite-plugin-vue-layouts'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import createVitePlugins from '/@/plugins'
 
 const pathResolve = (dir: string): any => {
     return resolve(__dirname, '.', dir)
@@ -13,7 +10,8 @@ const pathResolve = (dir: string): any => {
 
 // https://vitejs.cn/config/
 const viteConfig = ({ mode }: ConfigEnv): UserConfig => {
-    const { VITE_PORT, VITE_OPEN, VITE_BASE_PATH, VITE_OUT_DIR, VITE_PROXY_URL } = loadEnv(mode)
+    const env = loadEnv(mode)
+    const { VITE_PORT, VITE_OPEN, VITE_BASE_PATH, VITE_OUT_DIR, VITE_PROXY_URL } = env
 
     const alias: Record<string, string> = {
         '/@': pathResolve('./src/'),
@@ -35,24 +33,7 @@ const viteConfig = ({ mode }: ConfigEnv): UserConfig => {
         define: {
             "process.env": process.env
         },
-        plugins: [vue(), 
-            
-            Pages({
-                dirs:[ { dir: "src/views", baseRoute: "" }],
-                importMode: "async",
-                exclude: ['**/components/*.vue','**/views/platform/dashboard.vue','**/views/platform/login.vue']
-            }),
-            Layouts({
-                layoutsDirs: 'src/layouts',
-                defaultLayout: 'default',
-                exclude: ['**/components/*.vue']
-            }),
-            createSvgIconsPlugin({
-                iconDirs: [pathResolve('src/assets/icons/svg')],
-                symbolId: 'icon-[dir]-[name]',
-                svgoOptions: isProd(mode)
-            })
-        ],
+        plugins: [createVitePlugins(env, isProd(mode))],
         root: process.cwd(),
         resolve: { alias },
         base: VITE_BASE_PATH,
@@ -66,7 +47,7 @@ const viteConfig = ({ mode }: ConfigEnv): UserConfig => {
             sourcemap: false,
             outDir: VITE_OUT_DIR,
             emptyOutDir: true,
-            chunkSizeWarningLimit: 1500,
+            chunkSizeWarningLimit: 1500
         },
         css: {
             postcss: {

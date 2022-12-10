@@ -202,7 +202,7 @@
 
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-server">
 import { onMounted, ref } from 'vue'
 import { getRedisInfo, getServerInfo } from '/@/api/platform/sys/monitor'
 
@@ -238,12 +238,6 @@ const initData = () => {
 onMounted(() => {
     initData()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-server'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

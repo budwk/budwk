@@ -295,7 +295,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-unit">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
 import { doCreate, doSearchUser, doUpdate, getInfo, getList, doDelete, doSort } from '/@/api/platform/sys/unit'
@@ -605,12 +605,6 @@ const sort = () => {
     })
 }
 
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-unit'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

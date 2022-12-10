@@ -132,7 +132,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-area">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
 import { doCreate, doUpdate, getInfo, getChild, doDelete, doSort, doDisable, getSortTree, getList } from '/@/api/platform/sys/area'
@@ -332,12 +332,6 @@ const sort = () => {
     })
 }
 
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-area'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

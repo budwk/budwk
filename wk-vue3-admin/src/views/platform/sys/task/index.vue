@@ -210,7 +210,7 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-task">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, getHistoryList, doDelete, doDisable, doNow } from '/@/api/platform/sys/task'
@@ -433,12 +433,6 @@ const resetSearchHistory = () => {
 onMounted(() => {
     list()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-task'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

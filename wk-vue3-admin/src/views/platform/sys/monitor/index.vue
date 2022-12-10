@@ -70,7 +70,7 @@
         </el-drawer>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-monitor">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { getNacosDetail, getNacosService, getNacosServices, getRedisInfo, getServerInfo } from '/@/api/platform/sys/monitor'
 import { ElForm } from 'element-plus'
@@ -184,12 +184,6 @@ const getInfo = (data: any) => {
 onMounted(() => {
     list()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-monitor'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

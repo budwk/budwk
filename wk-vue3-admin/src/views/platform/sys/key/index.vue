@@ -60,7 +60,7 @@ link type="danger" icon="Delete"
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-key">
 import { onMounted, reactive, ref } from 'vue'
 import { doCreate, getList, doDelete, doDisable } from '/@/api/platform/sys/key'
 import { toRefs } from '@vueuse/core'
@@ -182,12 +182,6 @@ const disabledChange = (row: any) => {
 onMounted(()=>{
     list()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default{
-    name: 'platform-sys-key'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

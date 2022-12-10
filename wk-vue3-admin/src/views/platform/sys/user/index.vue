@@ -422,7 +422,7 @@ v-for="item in group.roles" :key="item.id" :label="item.name"
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-sys-user">
 import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import modal from '/@/utils/modal'
 import download from '/@/utils/download'
@@ -806,12 +806,6 @@ onMounted(() => {
     getPost()
     list()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-sys-user'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

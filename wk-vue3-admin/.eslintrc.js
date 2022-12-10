@@ -12,7 +12,7 @@ module.exports = {
         parser: '@typescript-eslint/parser',
         sourceType: 'module',
     },
-    extends: ['plugin:vue/vue3-essential', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+    extends: ['plugin:vue/vue3-essential', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'prettier', './.eslintrc-auto-import.json'],
     plugins: ['vue', '@typescript-eslint'],
     rules: {
         // http://eslint.cn/docs/rules/

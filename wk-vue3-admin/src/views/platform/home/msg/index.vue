@@ -84,7 +84,7 @@
         </el-row>
     </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name="platform-home-msg">
 import { computed, onMounted, reactive, ref, toRefs, unref, watch } from 'vue'
 import { getList, getInfo, getData, doReadAll, doReadMore, doReadOne } from '/@/api/platform/home/msg'
 import { findOneValue, formatTime } from '/@/utils/common'
@@ -233,12 +233,6 @@ onMounted(() => {
     }
     getMsg()
 })
-</script>
-<!--定义组件名用于keep-alive页面缓存-->
-<script lang="ts">
-export default {
-    name: 'platform-home-msg'
-}
 </script>
 <!--定义布局-->
 <route lang="yaml">

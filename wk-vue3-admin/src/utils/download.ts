@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver'
 import { useUserInfo } from '/@/stores/userInfo'
 import { blobValidate } from '/@/utils/common'
 
-const baseURL = import.meta.env.VITE_AXIOS_BASE_URL
+const baseURL = '' + import.meta.env.VITE_AXIOS_BASE_URL
 const userInfo = useUserInfo()
 let downloadLoadingInstance: any
   
