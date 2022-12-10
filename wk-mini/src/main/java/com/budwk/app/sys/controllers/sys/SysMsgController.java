@@ -64,7 +64,7 @@ public class SysMsgController {
     }
 
     @At("/list")
-    @Ok("json:full")
+    @Ok("json:{locked:'password|salt',ignoreNull:false}")
     @POST
     @ApiOperation(name = "获取信息列表")
     @ApiFormParams(
