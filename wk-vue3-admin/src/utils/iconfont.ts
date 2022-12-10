@@ -2,9 +2,18 @@ import { nextTick } from 'vue'
 import { loadCss, loadJs } from './common'
 import * as elIcons from '@element-plus/icons-vue'
 
+const isProduction = process.env.NODE_ENV == 'production'
+
+let faPath = '/src'
+
+if(isProduction) {
+    faPath = ''
+}
+
 const cssUrls: Array<string> = [
-    '/@/assets/styles/font-awesome.min.css',
+    faPath + '/assets/styles/font-awesome.min.css',
 ]
+
 const jsUrls: Array<string> = []
 
 export default function init() {
