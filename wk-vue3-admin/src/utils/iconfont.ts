@@ -3,7 +3,7 @@ import { loadCss, loadJs } from './common'
 import * as elIcons from '@element-plus/icons-vue'
 
 const cssUrls: Array<string> = [
-    '/assets/styles/font-awesome.min.css',
+    '/@/assets/styles/font-awesome.min.css',
 ]
 const jsUrls: Array<string> = []
 

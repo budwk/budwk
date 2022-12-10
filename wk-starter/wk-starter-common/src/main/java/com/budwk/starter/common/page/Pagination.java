@@ -80,11 +80,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
      * @return List
      */
     public <T> List<?> getList() {
-        if (aClass != null) {
-            return getList(aClass);
-        } else {
-            return list;
-        }
+        return list;
     }
 
     /**
