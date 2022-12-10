@@ -2,8 +2,10 @@ import { nextTick } from 'vue'
 import { loadCss, loadJs } from './common'
 import * as elIcons from '@element-plus/icons-vue'
 
+const isProd = process.env.ENV == 'production'
+
 const cssUrls: Array<string> = [
-    '/@/assets/styles/font-awesome.min.css',
+    '/assets/styles/font-awesome.min.css',
 ]
 
 const jsUrls: Array<string> = []
@@ -11,7 +13,11 @@ const jsUrls: Array<string> = []
 export default function init() {
     if (cssUrls.length > 0) {
         cssUrls.map((v) => {
-            loadCss(v)
+            if(!isProd){
+                loadCss('/@' + v)
+            } else {
+                loadCss(v)
+            }
         })
     }
 
