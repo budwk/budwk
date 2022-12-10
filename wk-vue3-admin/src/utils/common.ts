@@ -277,7 +277,7 @@ export const arrayFullUrl = (relativeUrls: string | string[], domain = '') => {
  */
 export const formatTime = (dateTime: string | number | null = null, fmt = 'yyyy-mm-dd hh:MM:ss') => {
     if (dateTime == 'none') return i18n.global.t('none')
-    if (!dateTime) return ''
+    if (!dateTime) return i18n.global.t('none')
     if (dateTime.toString().length === 10) {
         dateTime = +dateTime * 1000
     }
