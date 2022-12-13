@@ -12,6 +12,6 @@ export default function createAutoImport() {
             filepath: './.eslintrc-auto-import.json',
             globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
         },
-        dts: 'types/auto-import.d.ts'
+        dts: 'src/plugins/auto-import.d.ts'
     })
 }

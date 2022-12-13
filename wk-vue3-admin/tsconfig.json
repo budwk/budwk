@@ -19,6 +19,5 @@
         },
         "types": ["element-plus/global", "vite-plugin-vue-layouts/client"]
     },
-    "exclude": ["node_modules"],
-    "include": ["types/*.d.ts"]
+    "exclude": ["node_modules"]
 }

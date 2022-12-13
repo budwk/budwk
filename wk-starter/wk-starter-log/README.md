@@ -17,9 +17,11 @@ log:
   
 
 ```
-
 ## 使用说明
 
-* SLog 的日志存储是通过 dubbo 远程调用 wk-platform-server 实现的,所以需启用 dubbo + wk-platform-server
 * `tag` 属性仅需要在类上声明一次,不用在方法上添加
 * `value` 支持el表达式,如获取变量 `${task.name}`
+
+### 分布式运行
+
+* SLog 的日志存储是通过 dubbo 远程调用 wk-platform-server 实现的,所以需先启用 `wk-platform-server`

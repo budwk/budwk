@@ -128,7 +128,7 @@ const goTarget = (url: string) => {
 }
 
 onMounted(() => {
-    //console.log('Dashboard onMounted!!!')
+    console.log('Dashboard onMounted!!!')
 })
 </script>
 <!--定义布局-->

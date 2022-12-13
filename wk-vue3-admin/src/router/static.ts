@@ -91,10 +91,8 @@ const platformDashboard: RouteRecordRaw = {
         affix: true,
         layout: "platform/index"
     },
-    hidden: true
 }
 
-staticRoutes.push(platformDashboard)
 staticRoutes.push(platformBaseRoute)
 
 export { staticRoutes,platformDashboard }
