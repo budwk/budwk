@@ -27,7 +27,8 @@
                         访问Gitee</el-button>
                     <el-button type="primary" icon="Cloudy" plain @click="goTarget('https://github.com/budwk/budwk')">
                         访问Github</el-button>
-                    <el-button icon="HomeFilled" plain @click="goTarget('https://budwk.com')">访问主页</el-button>
+                        <el-button icon="HomeFilled" plain @click="goTarget('https://budwk.com')">访问主页</el-button>
+                        <el-button icon="Document" plain type="danger" @click="goTarget('https://budwk.com/guide/base/preface.html')">开发指南</el-button>
                 </p>
             </el-col>
 
@@ -66,7 +67,7 @@
                     </el-col>
                 </el-row>
                 <el-row style="margin-top:20px;">
-                    <el-tag type="warning">演示环境根据系统参数配置显示所有操作按钮，正式部署时则根据权限来判断是否显示。</el-tag>
+                    <el-tag type="info">演示环境根据系统参数配置显示所有操作按钮，正式部署时则根据权限来判断是否显示。</el-tag>
                 </el-row>
             </el-col>
         </el-row>

@@ -20,7 +20,7 @@ public @interface ApiFormParam {
     String example() default "";
 
     /**
-     * 是否必填与表单验证共用
+     * 是否必填(接口文档与表单验证共用)
      * @return
      */
     boolean required() default false;
@@ -28,26 +28,26 @@ public @interface ApiFormParam {
     String df() default "";
 
     /**
-     * starter-validation 是否启用表单验证
+     * 表单验证是否启用
      *
      * @return
      */
     boolean check() default false;
 
     /**
-     * starter-validation 正则验证枚举
+     * 表单验证正则(枚举)
      * @return
      */
     Validation validation() default Validation.NONE;
 
     /**
-     * starter-validation 表单验证正则规则
+     * 表单验证正则(自定义)
      * @return
      */
     String regex() default "";
 
     /**
-     * starter-validation 表单验证失败提示消息
+     * 表单验证失败提示消息
      * @return
      */
     String msg() default "";

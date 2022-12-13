@@ -107,3 +107,6 @@ storage:
     #本地存储位置
     path: ~/temp/files
 
+job:
+  # 定时任务所在的包名 多个包名用,分割
+  package: com.budwk.app.cms.commons.task

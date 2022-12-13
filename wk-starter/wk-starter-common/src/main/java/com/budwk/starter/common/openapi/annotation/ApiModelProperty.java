@@ -18,8 +18,7 @@ public @interface ApiModelProperty {
     String description() default "";
 
     /**
-     * 是否必填与表单验证共用
-     *
+     * 是否必填(接口文档与表单验证共用)
      * @return
      */
     boolean required() default false;
@@ -29,32 +28,30 @@ public @interface ApiModelProperty {
     String df() default "";
 
     /**
-     * 是=表单参数,否=不在表单请求里显示
-     *
+     * true=表单参数,false=不在表单请求里显示
      * @return
      */
     boolean param() default true;
 
     /**
-     * starter-validation 是否启用表单验证
-     *
+     * 表单验证是否启用
      * @return
      */
     boolean check() default false;
 
     /**
-     * starter-validation 正则验证枚举
+     * 表单验证正则(枚举)
      * @return
      */
     Validation validation() default Validation.NONE;
 
     /**
-     * starter-validation 表单验证正则规则
+     * 表单验证正则(自定义)
      */
     String regex() default "";
 
     /**
-     * starter-validation 表单验证失败提示消息
+     * 表单验证失败提示消息
      */
     String msg() default "";
 }
