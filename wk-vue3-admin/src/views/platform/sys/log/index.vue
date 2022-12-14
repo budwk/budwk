@@ -139,7 +139,7 @@ v-model:showSearch="showSearch" :extendSearch="true" :columns="columns"
                                 {{ formData.result }}
                             </el-form-item>
                         </el-col>
-                        <el-col :span="24">
+                        <el-col :span="24" v-if="formData.exception">
                             <el-form-item label="异常信息" prop="exception" class="content">
                                 {{ formData.exception }}
                             </el-form-item>
