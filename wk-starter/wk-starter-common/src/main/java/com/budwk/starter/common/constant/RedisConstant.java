@@ -76,4 +76,9 @@ public class RedisConstant {
      * websocket 房间前缀
      */
     public static final String WS_ROOM = PRE + "wsroom:";
+
+    /**
+     * websocket token前缀
+     */
+    public static final String WS_TOKEN = PRE + "wstoken:";
 }

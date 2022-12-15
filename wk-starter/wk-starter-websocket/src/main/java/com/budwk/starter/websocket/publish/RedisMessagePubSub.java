@@ -1,13 +1,14 @@
 package com.budwk.starter.websocket.publish;
 
 import com.budwk.starter.common.constant.RedisConstant;
+import com.budwk.starter.websocket.WsRoomProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.integration.jedis.pubsub.PubSub;
 import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.*;
-import org.nutz.plugins.mvc.websocket.WsRoomProvider;
 
 import javax.websocket.Session;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class RedisMessagePubSub implements PubSub {
     protected WsRoomProvider roomProvider;
 
     public void init() {
-        pubSubService.reg(RedisConstant.WS_ROOM + "*", this);
+        pubSubService.reg(RedisConstant.WS_TOKEN + "*", this);
     }
 
     public RedisMessagePubSub setRoomProvider(WsRoomProvider roomProvider) {
@@ -42,6 +43,8 @@ public class RedisMessagePubSub implements PubSub {
     public void onMessage(String room, String message) {
         log.debug("WkWebSocket GET PubSub room={} msg={}", room, message);
         Set<String> wsids = roomProvider.wsids(room);
+        log.debug(room);
+        log.debug(Json.toJson(wsids));
         if (wsids != null && !wsids.isEmpty()) {
             String[] tmp = wsids.toArray(new String[wsids.size()]);
             Lang.each(tmp, new Each<String>() {
