@@ -295,6 +295,11 @@ const getCaptchaCode = () => {
         loginData.captchaKey = res.data.key
         captchaData.captchaCodeImg = res.data.code
         loginData.captchaHasEnabled = res.data.captchaHasEnabled
+        nextTick(()=>{
+            if (loginData.captchaCode === '' && loginData.captchaHasEnabled) {
+                captchaRef.value!.focus()
+            }
+        })
     })
 }
 
