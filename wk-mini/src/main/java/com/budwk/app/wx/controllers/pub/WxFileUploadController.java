@@ -34,7 +34,7 @@ import java.util.Date;
  * @date 2020/3/6
  */
 @IocBean
-@At("/pub/file/upload")
+@At("/wx/pub/file/upload")
 @Ok("json")
 @ApiDefinition(tag = "微信文件上传")
 public class WxFileUploadController {

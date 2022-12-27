@@ -34,7 +34,7 @@ import java.net.URLEncoder;
  * @author wizzer(wizzer.cn) on 2016/8/6.
  */
 @IocBean
-@At("/open/auth")
+@At("/wx/open/auth")
 public class WechatOauthController {
     private static final Log log = Logs.get();
     @Inject
