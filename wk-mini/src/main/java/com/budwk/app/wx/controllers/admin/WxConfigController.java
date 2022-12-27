@@ -29,7 +29,7 @@ import java.util.List;
  * @date 2020/3/4
  */
 @IocBean
-@At("/wx/admin/conf/account")
+@At("/wechat/admin/conf/account")
 @Ok("json")
 @ApiDefinition(tag = "微信账号配置")
 @SLog(tag = "微信账号配置")

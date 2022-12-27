@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020/3/7
  */
 @IocBean
-@At("/wx/admin/reply/conf")
+@At("/wechat/admin/reply/conf")
 @Ok("json")
 @ApiDefinition(tag = "自动回复_事件配置")
 @SLog(tag = "自动回复_事件配置")

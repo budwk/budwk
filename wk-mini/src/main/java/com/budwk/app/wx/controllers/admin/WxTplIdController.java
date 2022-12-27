@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020/3/7
  */
 @IocBean
-@At("/wx/admin/tpl/id")
+@At("/wechat/admin/tpl/id")
 @Ok("json")
 @ApiDefinition(tag = "模板消息_模板编号")
 @SLog(tag = "模板消息_模板编号")

@@ -39,7 +39,7 @@ import java.util.Map;
  * @date 2020/3/4
  */
 @IocBean
-@At("/wx/admin/conf/menu")
+@At("/wechat/admin/conf/menu")
 @Ok("json")
 @ApiDefinition(tag = "微信菜单配置")
 @SLog(tag = "微信菜单配置")

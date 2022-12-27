@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2020/3/8
  */
 @IocBean
-@At("/wx/admin/tpl/list")
+@At("/wechat/admin/tpl/list")
 @Ok("json")
 @ApiDefinition(tag = "模板消息_模板列表")
 @SLog(tag = "模板消息_模板列表")

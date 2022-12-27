@@ -39,7 +39,7 @@ import java.util.List;
  * @date 2020/3/6
  */
 @IocBean
-@At("/wx/admin/msg/mass")
+@At("/wechat/admin/msg/mass")
 @Ok("json")
 @ApiDefinition(tag = "群发消息")
 @SLog(tag = "群发消息")

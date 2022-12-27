@@ -21,7 +21,7 @@ import org.nutz.mvc.annotation.Param;
  * @date 2020/3/8
  */
 @IocBean
-@At("/wx/admin/tpl/log")
+@At("/wechat/admin/tpl/log")
 @Ok("json")
 @ApiDefinition(tag = "模板消息_发送日志")
 @SLog(tag = "模板消息_发送日志")

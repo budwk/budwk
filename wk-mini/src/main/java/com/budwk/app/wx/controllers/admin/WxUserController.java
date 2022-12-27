@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020/3/5
  */
 @IocBean
-@At("/wx/admin/user")
+@At("/wechat/admin/user")
 @Ok("json")
 @ApiDefinition(tag = "用户管理")
 @SLog(tag = "用户管理")

@@ -28,7 +28,7 @@ import java.util.List;
  * @author wizzer@qq.com
  */
 @IocBean
-@At("/wx/admin/conf/pay")
+@At("/wechat/admin/conf/pay")
 @Ok("json")
 @ApiDefinition(tag = "微信支付配置")
 @SLog(tag = "微信支付配置")

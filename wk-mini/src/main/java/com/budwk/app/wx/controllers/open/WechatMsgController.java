@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author wizzer(wizzer.cn) on 2016/7/3.
  */
 @IocBean
-@At("/wx/open/weixin")
+@At("/wechat/open/weixin")
 public class WechatMsgController {
     private static final Log log = Logs.get();
     @Inject

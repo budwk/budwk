@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @IocBean
-@At("/wx/admin/conf/mina")
+@At("/wechat/admin/conf/mina")
 @Ok("json")
 @ApiDefinition(tag = "微信小程序配置")
 @SLog(tag = "微信小程序配置")
