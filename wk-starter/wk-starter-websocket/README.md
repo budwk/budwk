@@ -34,8 +34,8 @@ public void wsSendMsg(String userId, String msg) {
 }
 
 // 向一组用户发送消息
-public void wsSendMsg(List<String> userLits, String msg) {
-    messageSendServer.wsSendMsg(userId, msg);
+public void wsSendMsg(List<String> userIdList, String msg) {
+    messageSendServer.wsSendMsg(userIdList, msg);
 }
 
 ```

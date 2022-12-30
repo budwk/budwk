@@ -52,10 +52,10 @@ public class MessageSendServer {
     /**
      * 向所有用户发送消息
      *
-     * @param userId
+     * @param userIdList
      * @param msg
      */
-    public void wsSendMsg(List<String> userId, String msg) {
-        messageService.wsSendMsg(userId, msg);
+    public void wsSendMsg(List<String> userIdList, String msg) {
+        messageService.wsSendMsg(userIdList, msg);
     }
 }
