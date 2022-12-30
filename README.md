@@ -133,6 +133,7 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 *   正常启动前端后访问 `http://127.0.0.1:8800` 用户名 superadmin 密码 1
 *   API调试 `http://127.0.0.1:9900/platform/openapi` `http://127.0.0.1:9900/ucenter/openapi` 等 
 *   wk-mini 单应用版本API调试路径为 `http://127.0.0.1:9900/openapi`
+*   IDEA命令行参数增加 `--nutz.profiles.active=dev` 可以指定加载 `application-dev.yaml` 配置文件
 
 ### Vue3前端(wk-vue3-admin)
 
@@ -148,7 +149,8 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 ### jar 运行
 
-*   指定配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-platform-server.jar >/dev/null 2>&1 &`
+*   指定jar中配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-mini.jar >/dev/null 2>&1 &`
+*   加载文件夹中配置文件运行 `nohup java -jar -Dnutz.boot.configure.yaml.dir=/data/budwk/ -Xmx450m wk-mini.jar >/dev/null 2>&1 &`
 
 ### docker 部署示例
 

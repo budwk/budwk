@@ -1,7 +1,7 @@
 export const API_CMS_SITE_GET = '/cms/admin/site/get/'
 export const API_CMS_SITE_DELETE = '/cms/admin/site/delete/'
 export const API_CMS_SITE_LIST = '/cms/admin/site/list'
-export const API_CMS_SITE_CREATE = '/cms/admin/ite/create'
+export const API_CMS_SITE_CREATE = '/cms/admin/site/create'
 export const API_CMS_SITE_UPDATE = '/cms/admin/site/update'
 
 
