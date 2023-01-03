@@ -48,8 +48,8 @@
         </el-row>
 
         <el-dialog title="新增站点" v-model="showCreate" width="50%">
-            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-tabs v-model="activeName" type="card">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="150px">
+                <el-tabs v-model="activeName" type="card" style="margin-right:30px;">
           <el-tab-pane label="基本信息" name="base">
             <el-form-item prop="id" label="站点标识">
               <el-input
@@ -91,10 +91,11 @@
               />
             </el-form-item>
 
-            <el-form-item label="LOGO">
-              <el-upload action="#" :on-change="uploadSiteLogo" :show-file-list="false"
+            <el-form-item label="LOGO" class="label_font">
+              <el-upload action="#" :auto-upload="false" :on-change="uploadSiteLogo" :show-file-list="false"
                     :before-upload="beforeUpload">
-                    <el-button>
+                    <img v-if="formData.site_logo" :src="platformInfo.AppFileDomain + formData.site_logo" class="logo_img"/>
+                    <el-button v-else>
                         选择
                         <el-icon class="el-icon--right">
                             <Upload />
@@ -103,20 +104,17 @@
                 </el-upload>
             </el-form-item>
 
-            <el-form-item label="移动端LOGO">
-              <el-upload
-                class="avatar-uploader"
-                tabindex="6"
-                :action="uploadUrl"
-                :headers="headers"
-                name="Filedata"
-                :show-file-list="false"
-                :on-success="function(resp,file,fileList){return handleLogoSuccess(resp,file,fileList,'site_wap_logo')}"
-              >
-
-                <img v-if="formData.site_wap_logo" :src="conf.AppFileDomain+formData.site_wap_logo" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon" />
-              </el-upload>
+            <el-form-item label="移动端LOGO" class="label_font">
+                <el-upload action="#" :auto-upload="false" :on-change="uploadSiteWapLogo" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.site_wap_logo" :src="platformInfo.AppFileDomain + formData.site_wap_logo" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
             </el-form-item>
 
             <el-form-item prop="footer_content" label="底部信息">
@@ -181,20 +179,17 @@
               />
             </el-form-item>
 
-            <el-form-item label="微博二维码">
-              <el-upload
-                class="avatar-uploader"
-                tabindex="5"
-                :action="uploadUrl"
-                :headers="headers"
-                name="Filedata"
-                :show-file-list="false"
-                :on-success="function(resp,file,fileList){return handleLogoSuccess(resp,file,fileList,'weibo_qrcode')}"
-              >
-
-                <img v-if="formData.weibo_qrcode" :src="conf.AppFileDomain+formData.weibo_qrcode" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon" />
-              </el-upload>
+            <el-form-item label="微博二维码" class="label_font">
+              <el-upload action="#" :auto-upload="false" :on-change="uploadWeiboQrcode" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.weibo_qrcode" :src="platformInfo.AppFileDomain + formData.weibo_qrcode" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
             </el-form-item>
             <el-form-item prop="wechat_name" label="微信公众号名称">
               <el-input
@@ -217,20 +212,17 @@
               />
             </el-form-item>
 
-            <el-form-item label="微信公众号二维码">
-              <el-upload
-                class="avatar-uploader"
-                tabindex="5"
-                :action="uploadUrl"
-                :headers="headers"
-                name="Filedata"
-                :show-file-list="false"
-                :on-success="function(resp,file,fileList){return handleLogoSuccess(resp,file,fileList,'wechat_qrcode')}"
-              >
-
-                <img v-if="formData.wechat_qrcode" :src="conf.AppFileDomain+formData.wechat_qrcode" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon" />
-              </el-upload>
+            <el-form-item label="微信公众号二维码" class="label_font">
+                <el-upload action="#" :auto-upload="false" :on-change="uploadWechatQrcode" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.wechat_qrcode" :src="platformInfo.AppFileDomain + formData.wechat_qrcode" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="SEO信息" name="seo">
@@ -266,13 +258,206 @@
         </el-dialog>
 
         <el-dialog title="修改站点" v-model="showUpdate" width="35%">
-            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="站点名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入站点名称"/>
-                </el-form-item>
-                <el-form-item label="站点编号" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入站点编号"/>
-                </el-form-item>
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="150px">
+                <el-tabs v-model="activeName" type="card" style="margin-right:30px;">
+          <el-tab-pane label="基本信息" name="base">
+            <el-form-item prop="id" label="站点标识">
+              <el-input
+                v-model="formData.id"
+                maxlength="100"
+                placeholder="站点标识为大写字母"
+                auto-complete="off"
+                tabindex="1"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="site_name" label="站点名称">
+              <el-input
+                v-model="formData.site_name"
+                maxlength="100"
+                placeholder="站点名称"
+                auto-complete="off"
+                tabindex="2"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="site_domain" label="域名">
+              <el-input
+                v-model="formData.site_domain"
+                placeholder="http://"
+                auto-complete="off"
+                tabindex="3"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="site_icp" label="ICP备案号">
+              <el-input
+                v-model="formData.site_icp"
+                maxlength="100"
+                placeholder="ICP备案号"
+                auto-complete="off"
+                tabindex="4"
+                type="text"
+              />
+            </el-form-item>
+
+            <el-form-item label="LOGO" class="label_font">
+              <el-upload action="#" :auto-upload="false" :on-change="uploadSiteLogo" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.site_logo" :src="platformInfo.AppFileDomain + formData.site_logo" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item label="移动端LOGO" class="label_font">
+                <el-upload action="#" :auto-upload="false" :on-change="uploadSiteWapLogo" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.site_wap_logo" :src="platformInfo.AppFileDomain + formData.site_wap_logo" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item prop="footer_content" label="底部信息">
+              <el-input
+                v-model="formData.footer_content"
+                placeholder="底部信息"
+                auto-complete="off"
+                tabindex="7"
+                type="textarea"
+              />
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="联系方式" name="contact">
+            <el-form-item prop="site_qq" label="QQ">
+              <el-input
+                v-model="formData.site_qq"
+                maxlength="100"
+                placeholder="QQ"
+                auto-complete="off"
+                tabindex="1"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="site_email" label="EMail">
+              <el-input
+                v-model="formData.site_email"
+                maxlength="100"
+                placeholder="EMail"
+                auto-complete="off"
+                tabindex="2"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="site_tel" label="联系电话">
+              <el-input
+                v-model="formData.site_tel"
+                maxlength="100"
+                placeholder="联系电话"
+                auto-complete="off"
+                tabindex="3"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="weibo_name" label="微博名称">
+              <el-input
+                v-model="formData.weibo_name"
+                maxlength="100"
+                placeholder="微博名称"
+                auto-complete="off"
+                tabindex="4"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="weibo_url" label="微博网址">
+              <el-input
+                v-model="formData.weibo_url"
+                maxlength="100"
+                placeholder="微博网址"
+                auto-complete="off"
+                tabindex="5"
+                type="text"
+              />
+            </el-form-item>
+
+            <el-form-item label="微博二维码" class="label_font">
+              <el-upload action="#" :auto-upload="false" :on-change="uploadWeiboQrcode" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.weibo_qrcode" :src="platformInfo.AppFileDomain + formData.weibo_qrcode" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
+            </el-form-item>
+            <el-form-item prop="wechat_name" label="微信公众号名称">
+              <el-input
+                v-model="formData.wechat_name"
+                maxlength="100"
+                placeholder="微信公众号名称"
+                auto-complete="off"
+                tabindex="6"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="wechat_id" label="微信公众号账号">
+              <el-input
+                v-model="formData.wechat_id"
+                maxlength="100"
+                placeholder="微信公众号账号"
+                auto-complete="off"
+                tabindex="7"
+                type="text"
+              />
+            </el-form-item>
+
+            <el-form-item label="微信公众号二维码" class="label_font">
+                <el-upload action="#" :auto-upload="false" :on-change="uploadWechatQrcode" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.wechat_qrcode" :src="platformInfo.AppFileDomain + formData.wechat_qrcode" class="logo_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane label="SEO信息" name="seo">
+            <el-form-item prop="seo_keywords" label="Keywords">
+              <el-input
+                v-model="formData.seo_keywords"
+                maxlength="100"
+                placeholder="关键词"
+                auto-complete="off"
+                tabindex="1"
+                type="text"
+              />
+            </el-form-item>
+            <el-form-item prop="seo_description" label="Description">
+              <el-input
+                v-model="formData.seo_description"
+                maxlength="120"
+                placeholder="站点描述"
+                auto-complete="off"
+                tabindex="2"
+                type="textarea"
+              />
+            </el-form-item>
+          </el-tab-pane>
+        </el-tabs>
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
@@ -290,6 +475,9 @@ import { doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 import { fileUpload } from '/@/api/common'
+import { usePlatformInfo } from "/@/stores/platformInfo"
+
+const platformInfo = usePlatformInfo()
 
 
 const createRef = ref<InstanceType<typeof ElForm>>()
@@ -306,7 +494,23 @@ const data = reactive({
         id: '',
         name: '',
         code: '',
-        location: 0,
+        site_name: '',
+        site_domain: '',
+        site_icp: '',
+        site_logo: '',
+        site_wap_logo: '',
+        weibo_qrcode: '',
+        wechat_qrcode: '',
+        footer_content: '',
+        site_qq: '',
+        site_email: '',
+        site_tel: '',
+        weibo_name: '',
+        weibo_url: '',
+        wechat_name: '',
+        wechat_id: '',
+        seo_keywords: '',
+        seo_description: ''
     },
     queryParams: {
         pageNo: 1,
@@ -329,7 +533,23 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         id: '',
         name: '',
         code: '',
-        location: 0,
+        site_name: '',
+        site_domain: '',
+        site_icp: '',
+        site_logo: '',
+        site_wap_logo: '',
+        weibo_qrcode: '',
+        wechat_qrcode: '',
+        footer_content: '',
+        site_qq: '',
+        site_email: '',
+        site_tel: '',
+        weibo_name: '',
+        weibo_url: '',
+        wechat_name: '',
+        wechat_id: '',
+        seo_keywords: '',
+        seo_description: ''
     }
     formEl?.resetFields()
 }
@@ -341,11 +561,41 @@ const beforeUpload = (file: any) => {
 }
 
 const uploadSiteLogo = (file: any) => {
-    let formData = new FormData()
-    formData.append('Filedata', file.raw)
-    fileUpload(formData,{},'image').then((res) => {
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUpload(f,{},'image').then((res) => {
         if (res.code == 0) {
-            console.log(res.data)
+            formData.value.site_logo = res.data.url
+        }
+    })
+}
+
+const uploadSiteWapLogo = (file: any) => {
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUpload(f,{},'image').then((res) => {
+        if (res.code == 0) {
+            formData.value.site_wap_logo = res.data.url
+        }
+    })
+}
+
+const uploadWeiboQrcode = (file: any) => {
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUpload(f,{},'image').then((res) => {
+        if (res.code == 0) {
+            formData.value.weibo_qrcode = res.data.url
+        }
+    })
+}
+
+const uploadWechatQrcode = (file: any) => {
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUpload(f,{},'image').then((res) => {
+        if (res.code == 0) {
+            formData.value.wechat_qrcode = res.data.url
         }
     })
 }
@@ -431,3 +681,12 @@ onMounted(()=>{
     meta:
       layout: platform/index
 </route>
+<style scoped>
+.logo_img {
+    width: 50px;
+    height: 50px;   
+}
+.label_font {
+    font-weight: 700;
+}
+</style>
