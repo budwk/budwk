@@ -1,3 +1,7 @@
+# 简介
+
+`Vue3` + `Vite4` + `Element-Plus` + `TypeScript` + `Pinia`
+
 # 编译
 
 ## dev
@@ -31,11 +35,8 @@
 * 用途2: 标签页页面刷新功能
 * 用途3: 系统自动生成路由
 ```
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-    name: 'platform-sys-unit'
-})
+<script lang="ts" name="platform-sys-unit">
+// name组件名
 </script>
 ```
 
