@@ -28,11 +28,13 @@
             <el-table-column fixed="right" header-align="center" align="center" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-tooltip content="修改" placement="top">
-                        <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                        <el-button
+link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                             v-permission="['cms.sites.site.update']"></el-button>
                         </el-tooltip>
                     <el-tooltip content="删除" placement="top" >
-                        <el-button link type="danger" icon="Delete"
+                        <el-button
+link type="danger" icon="Delete"
                         @click="handleDelete(scope.row)" v-permission="['cms.sites.site.delete']"></el-button>
                     </el-tooltip>
                 </template>
@@ -92,7 +94,8 @@
             </el-form-item>
 
             <el-form-item label="LOGO" class="label_font">
-              <el-upload action="#" :auto-upload="false" :on-change="uploadSiteLogo" :show-file-list="false"
+              <el-upload
+action="#" :auto-upload="false" :on-change="uploadSiteLogo" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.site_logo" :src="platformInfo.AppFileDomain + formData.site_logo" class="logo_img"/>
                     <el-button v-else>
@@ -105,7 +108,8 @@
             </el-form-item>
 
             <el-form-item label="移动端LOGO" class="label_font">
-                <el-upload action="#" :auto-upload="false" :on-change="uploadSiteWapLogo" :show-file-list="false"
+                <el-upload
+action="#" :auto-upload="false" :on-change="uploadSiteWapLogo" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.site_wap_logo" :src="platformInfo.AppFileDomain + formData.site_wap_logo" class="logo_img"/>
                     <el-button v-else>
@@ -180,7 +184,8 @@
             </el-form-item>
 
             <el-form-item label="微博二维码" class="label_font">
-              <el-upload action="#" :auto-upload="false" :on-change="uploadWeiboQrcode" :show-file-list="false"
+              <el-upload
+action="#" :auto-upload="false" :on-change="uploadWeiboQrcode" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.weibo_qrcode" :src="platformInfo.AppFileDomain + formData.weibo_qrcode" class="logo_img"/>
                     <el-button v-else>
@@ -213,7 +218,8 @@
             </el-form-item>
 
             <el-form-item label="微信公众号二维码" class="label_font">
-                <el-upload action="#" :auto-upload="false" :on-change="uploadWechatQrcode" :show-file-list="false"
+                <el-upload
+action="#" :auto-upload="false" :on-change="uploadWechatQrcode" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.wechat_qrcode" :src="platformInfo.AppFileDomain + formData.wechat_qrcode" class="logo_img"/>
                     <el-button v-else>
@@ -257,7 +263,7 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改站点" v-model="showUpdate" width="35%">
+        <el-dialog title="修改站点" v-model="showUpdate" width="50%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="150px">
                 <el-tabs v-model="activeName" type="card" style="margin-right:30px;">
           <el-tab-pane label="基本信息" name="base">
@@ -302,7 +308,8 @@
             </el-form-item>
 
             <el-form-item label="LOGO" class="label_font">
-              <el-upload action="#" :auto-upload="false" :on-change="uploadSiteLogo" :show-file-list="false"
+              <el-upload
+action="#" :auto-upload="false" :on-change="uploadSiteLogo" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.site_logo" :src="platformInfo.AppFileDomain + formData.site_logo" class="logo_img"/>
                     <el-button v-else>
@@ -315,7 +322,8 @@
             </el-form-item>
 
             <el-form-item label="移动端LOGO" class="label_font">
-                <el-upload action="#" :auto-upload="false" :on-change="uploadSiteWapLogo" :show-file-list="false"
+                <el-upload
+action="#" :auto-upload="false" :on-change="uploadSiteWapLogo" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.site_wap_logo" :src="platformInfo.AppFileDomain + formData.site_wap_logo" class="logo_img"/>
                     <el-button v-else>
@@ -390,7 +398,8 @@
             </el-form-item>
 
             <el-form-item label="微博二维码" class="label_font">
-              <el-upload action="#" :auto-upload="false" :on-change="uploadWeiboQrcode" :show-file-list="false"
+              <el-upload
+action="#" :auto-upload="false" :on-change="uploadWeiboQrcode" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.weibo_qrcode" :src="platformInfo.AppFileDomain + formData.weibo_qrcode" class="logo_img"/>
                     <el-button v-else>
@@ -423,7 +432,8 @@
             </el-form-item>
 
             <el-form-item label="微信公众号二维码" class="label_font">
-                <el-upload action="#" :auto-upload="false" :on-change="uploadWechatQrcode" :show-file-list="false"
+                <el-upload
+action="#" :auto-upload="false" :on-change="uploadWechatQrcode" :show-file-list="false"
                     :before-upload="beforeUpload">
                     <img v-if="formData.wechat_qrcode" :src="platformInfo.AppFileDomain + formData.wechat_qrcode" class="logo_img"/>
                     <el-button v-else>
@@ -520,8 +530,18 @@ const data = reactive({
         pageOrderBy: ''
     },
     formRules: {
-        name: [{ required: true, message: "站点名称不能为空", trigger: ["blur","change"] }],
-        code: [{ required: true, message: "站点编号不能为空", trigger: ["blur","change"] }]
+        id: [
+            { required: true, message: '站点标识', trigger: 'blur' }
+        ],
+        site_name: [
+            { required: true, message: '站点名称', trigger: 'blur' }
+        ],
+        site_email: [
+            { type: 'email', message: 'EMail 不正确', trigger: 'blur' }
+        ],
+        seo_description: [
+            { max: 120, message: '站点描述120字以内', trigger: 'blur' }
+        ]
     },
 })
 
@@ -633,7 +653,7 @@ const handleUpdate = (row: any) => {
 
 // 删除按钮
 const handleDelete = (row: any) => {
-    modal.confirm('确定删除 '+ row.name + '？').then(() => {
+    modal.confirm('确定删除 '+ row.site_name + '？').then(() => {
         return doDelete(row.id)
     }).then(() => {
         queryParams.value.pageNo = 1
