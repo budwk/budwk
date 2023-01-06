@@ -9,6 +9,7 @@ import com.budwk.app.cms.services.CmsChannelService;
 import com.budwk.app.cms.services.CmsSiteService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
+import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -22,8 +23,6 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.annotation.*;
 
@@ -70,11 +69,32 @@ public class CmsChannelController {
         return Result.data(CmsChannelType.values());
     }
 
+    @At
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3树形列表查询")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "siteId", example = "", description = "所属站点", required = true, check = true)
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckLogin
+    public Result<?> list(@Param("siteId") String siteId) {
+        Cnd cnd = Cnd.NEW();
+        cnd.and("siteId", "=", siteId);
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(cmsChannelService.query(cnd));
+    }
+
     @At("/child/{siteId}")
     @GET
     @Ok("json")
     @SaCheckLogin
-    @ApiOperation(name = "获取子级栏目树表数据")
+    @ApiOperation(name = "Vue2获取子级栏目树表数据")
     @ApiFormParams(
             value = {
                     @ApiFormParam(name = "pid", example = "", description = "父级ID")
@@ -284,7 +304,7 @@ public class CmsChannelController {
     @Ok("json")
     @GET
     @SaCheckPermission("cms.content.channel")
-    @ApiOperation(name = "获取待排序栏目树")
+    @ApiOperation(name = "Vue2获取待排序栏目树")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "siteId", required = true, check = true)
