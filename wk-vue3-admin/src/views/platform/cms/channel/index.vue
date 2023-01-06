@@ -29,6 +29,18 @@
                         <svg-icon v-if="scope.row&&scope.row.icon" :icon-class="scope.row.icon" />
                         {{ scope.row.name }}
                     </template>
+                    <template v-if="item.prop == 'type'" #default="scope">
+                        <span v-if="scope.row.type === 'ARTICLE'">
+                            文章
+                        </span>
+                        <span v-if="scope.row.type === 'PHOTO'">
+                            相册
+                        </span>
+                    </template>
+                    <template v-if="item.prop == 'showit'" #default="scope">
+                        <i v-if="scope.row.showit" class="fa fa-circle" style="color:green;" />
+                        <i v-if="!scope.row.showit" class="fa fa-circle" style="color:red" />
+                    </template>
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
@@ -42,15 +54,15 @@
                 class-name="small-padding fixed-width">
                 <template #default="scope">
                     <div style="padding-right:30px;">
-                        <el-tooltip content="新增子栏目" placement="top" v-if="scope.row.type == 'menu'">
+                        <el-tooltip content="新增子栏目" placement="top">
                             <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
                                 v-permission="['cms.content.channel.create']"></el-button>
                         </el-tooltip>
-                        <el-tooltip v-if="scope.row.type == 'menu'" content="修改" placement="top">
+                        <el-tooltip content="修改" placement="top">
                             <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                                 v-permission="['cms.content.channel.update']"></el-button>
                         </el-tooltip>
-                        <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
+                        <el-tooltip content="删除" placement="top">
                             <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                                 v-permission="['cms.content.channel.delete']"></el-button>
                         </el-tooltip>
@@ -58,6 +70,138 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        <el-dialog title="新增栏目" v-model="showCreate" width="50%">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="80px">
+                <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-form-item label="上级栏目" prop="parentId">
+                            <el-tree-select v-model="formData.parentId" :data="unitOptions"
+                                :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
+                                placeholder="选择上级栏目" check-strictly :render-after-expand="false" style="width:100%"
+                                @change="parentChange" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="所属站点" prop="siteId">
+                            <el-select v-model="siteId" class="m-2" placeholder="所属站点" disabled style="width:100%">
+                                <el-option v-for="item in sites" :key="item.id" :label="item.name" :value="item.id" />
+                            </el-select>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="栏目名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入栏目名称" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="栏目标识" prop="code">
+                            <el-input v-model="formData.code" placeholder="栏目标识" maxlength="100" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="栏目类型" prop="type">
+                          <el-radio-group v-model="formData.type">
+                                <el-radio :label="'ARTICLE'">
+                                  文章
+                                </el-radio>
+                                <el-radio :label="'PHOTO'">
+                                  相册
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="外链URL" prop="href">
+                            <el-input v-model="formData.url" placeholder="外链地址" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="打开方式" prop="href">
+                          <el-radio-group v-model="formData.target">
+                                <el-radio :label="'_blank'">
+                                    新页面
+                                </el-radio>
+                                <el-radio :label="'_self'">
+                                    本页面
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否显示" prop="showit">
+                            <el-radio-group v-model="formData.showit">
+                                <el-radio :label="true">
+                                    显示
+                                </el-radio>
+                                <el-radio :label="false">
+                                    隐藏
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="栏目状态" prop="disabled">
+                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                                active-color="green" inactive-color="red" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="create">确 定</el-button>
+                    <el-button @click="showCreate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        <el-dialog title="修改栏目" v-model="showUpdate" width="50%">
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="80px">
+                <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-form-item label="栏目名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入栏目名称" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="栏目标识" prop="alias">
+                            <el-input v-model="formData.code" placeholder="栏目标识" maxlength="100" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="访问路径" prop="href">
+                            <el-input v-model="formData.href" placeholder="后台访问路径前缀为 /platform/ " maxlength="100" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否显示" prop="showit">
+                            <el-radio-group v-model="formData.showit">
+                                <el-radio :label="true">
+                                    显示
+                                </el-radio>
+                                <el-radio :label="false">
+                                    隐藏
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="栏目状态" prop="disabled">
+                            <el-switch v-model="formData.disabled" :active-value="false" :inactive-value="true"
+                                active-color="green" inactive-color="red" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="update">确 定</el-button>
+                    <el-button @click="showUpdate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
   </div>
 </template>
 <script setup lang="ts" name="platform-cms-channel">
@@ -90,15 +234,19 @@ const data = reactive({
         siteId: '',
         parentId: '',
         name: '',
+        code: '',
         disabled: false,
+        showit: true,
+        type: 'ARTICLE',
+        target: '_blank'
     },
     queryParams: {
         siteId: '',
         name: '',
     },
     formRules: {
-        permission: [{ required: true, message: "权限标识不能为空", trigger: "blur" }],
-        name: [{ required: true, message: "菜单名称不能为空", trigger: "blur" }],
+        code: [{ required: true, message: "栏目标识不能为空", trigger: "blur" }],
+        name: [{ required: true, message: "栏目名称不能为空", trigger: "blur" }],
     },
 })
 const { queryParams, formData, formRules } = toRefs(data)
@@ -119,7 +267,11 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         siteId: '',
         parentId: '',
         name: '',
+        code: '',
         disabled: false,
+        showit: true,
+        type: 'ARTICLE',
+        target: '_blank'
     }
     formEl?.resetFields()
 }
@@ -215,6 +367,7 @@ const create = () => {
     if (!createRef.value) return
     createRef.value.validate((valid) => {
         if (valid) {
+            formData.value.siteId = siteId.value
             doCreate(formData.value).then((res: any) => {
                 modal.msgSuccess(res.msg)
                 showCreate.value = false
