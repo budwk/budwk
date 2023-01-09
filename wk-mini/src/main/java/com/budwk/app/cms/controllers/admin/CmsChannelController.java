@@ -261,7 +261,7 @@ public class CmsChannelController {
     @ApiOperation(name = "删除栏目")
     @ApiImplicitParams(
             {
-                    @ApiImplicitParam(name = "id", required = true, check = true)
+                    @ApiImplicitParam(name = "id", in = ParamIn.PATH, required = true, check = true)
             }
     )
     @ApiResponses

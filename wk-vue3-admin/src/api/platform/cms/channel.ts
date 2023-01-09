@@ -5,7 +5,6 @@ export const API_CMS_CHANNEL_CREATE = '/cms/admin/channel/create'
 export const API_CMS_CHANNEL_DELETE = '/cms/admin/channel/delete/'
 export const API_CMS_CHANNEL_GET = '/cms/admin/channel/get/'
 export const API_CMS_CHANNEL_UPDATE = '/cms/admin/channel/update'
-export const API_CMS_CHANNEL_SORT_TREE = '/cms/admin/channel/get_sort_tree/'
 export const API_CMS_CHANNEL_SORT = '/cms/admin/channel/sort/'
 export const API_CMS_CHANNEL_LIST_SITE = '/cms/admin/channel/list_site'
 export const API_CMS_CHANNEL_GET_TYPE = '/cms/admin/channel/get_type'
@@ -56,5 +55,13 @@ export function doDelete(id: string) {
     return request({
         url: API_CMS_CHANNEL_DELETE + id,
         method: 'DELETE'
+    })
+}
+
+export function doSort(ids: string, siteId: string) {
+    return request({
+        url: API_CMS_CHANNEL_SORT + siteId,
+        method: 'POST',
+        data: { ids: ids}
     })
 }

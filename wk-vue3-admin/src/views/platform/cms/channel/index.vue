@@ -79,7 +79,7 @@
                             <el-tree-select v-model="formData.parentId" :data="unitOptions"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
                                 placeholder="选择上级栏目" check-strictly :render-after-expand="false" style="width:100%"
-                                @change="parentChange" />
+                                />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -160,19 +160,43 @@
         <el-dialog title="修改栏目" v-model="showUpdate" width="50%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="80px">
                 <el-row :gutter="10">
-                    <el-col :span="12">
+                  <el-col :span="12">
                         <el-form-item label="栏目名称" prop="name">
                             <el-input v-model="formData.name" placeholder="请输入栏目名称" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="栏目标识" prop="alias">
+                        <el-form-item label="栏目标识" prop="code">
                             <el-input v-model="formData.code" placeholder="栏目标识" maxlength="100" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="访问路径" prop="href">
-                            <el-input v-model="formData.href" placeholder="后台访问路径前缀为 /platform/ " maxlength="100" />
+                        <el-form-item label="栏目类型" prop="type">
+                          <el-radio-group v-model="formData.type">
+                                <el-radio :label="'ARTICLE'">
+                                  文章
+                                </el-radio>
+                                <el-radio :label="'PHOTO'">
+                                  相册
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="外链URL" prop="href">
+                            <el-input v-model="formData.url" placeholder="外链地址" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="打开方式" prop="href">
+                          <el-radio-group v-model="formData.target">
+                                <el-radio :label="'_blank'">
+                                    新页面
+                                </el-radio>
+                                <el-radio :label="'_self'">
+                                    本页面
+                                </el-radio>
+                            </el-radio-group>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -202,12 +226,24 @@
                 </div>
             </template>
         </el-dialog>
+
+        <el-dialog title="栏目排序" v-model="showSort" width="30%">
+            <el-tree ref="sortTree" :data="sortData" draggable :allow-drop="sortAllowDrop" node-key="id"
+                :props="{ label: 'name', children: 'children' }">
+            </el-tree>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="sort">保 存</el-button>
+                    <el-button @click="showSort = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
   </div>
 </template>
 <script setup lang="ts" name="platform-cms-channel">
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import modal from '/@/utils/modal'
-import { getSiteList, doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/cms/channel'
+import { getSiteList, doCreate, doUpdate, getInfo, getList, doDelete, doSort } from '/@/api/platform/cms/channel'
 import { ElForm } from 'element-plus'
 import { handleTree } from '/@/utils/common'
 
@@ -308,19 +344,6 @@ const list = () => {
         tableData.value = handleTree(res.data) as never
         unitOptions.value = handleTree(res.data) as never
         sortData.value = handleTree(JSON.parse(JSON.stringify(res.data))) as never
-    })
-}
-
-
-// 启用禁用
-const disabledChange = (row: any) => {
-    doDisable({ disabled: row.disabled, id: row.id, path: row.path }).then((res: any) => {
-        modal.msgSuccess(res.msg)
-        list()
-    }).catch(() => {
-        setTimeout(() => {
-            row.disabled = !row.disabled
-        }, 300)
     })
 }
 
