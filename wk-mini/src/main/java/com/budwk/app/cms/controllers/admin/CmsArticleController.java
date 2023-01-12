@@ -9,6 +9,7 @@ import com.budwk.app.cms.services.CmsChannelService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
 import com.budwk.starter.common.page.PageUtil;
+import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -45,11 +46,32 @@ public class CmsArticleController {
     @Inject
     private CmsArticleService cmsArticleService;
 
+    @At("/get_channel_list/{siteId}")
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3获取栏目树数据")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "siteId", example = "", in = ParamIn.PATH, description = "所属站点", required = true, check = true)
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckLogin
+    public Result<?> list(String siteId) {
+        Cnd cnd = Cnd.NEW();
+        cnd.and("siteId", "=", siteId);
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(cmsChannelService.query(cnd));
+    }
+
     @At("/get_channel_tree/{siteId}")
     @Ok("json")
     @GET
     @SaCheckLogin
-    @ApiOperation(name = "获取栏目树数据")
+    @ApiOperation(name = "Vue2获取栏目树数据")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "siteId", in = ParamIn.PATH, required = true, check = true)
@@ -90,7 +112,7 @@ public class CmsArticleController {
 
     @At("/list")
     @POST
-    @Ok("json:{locked:'password|salt',ignoreNull:false}")
+    @Ok("json:{locked:'^(password|salt)$',ignoreNull:false}")
     @SaCheckLogin
     @ApiOperation(name = "文章列表")
     @ApiFormParams(
