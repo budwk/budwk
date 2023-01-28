@@ -146,7 +146,7 @@ link type="danger" icon="Delete" @click="handleDelete(scope.row)"
             </el-col>
         </el-row>        
 
-        <el-dialog title="新增文章" v-model="showCreate" width="50%">
+        <el-dialog title="新增文章" v-model="showCreate" width="70%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="80px">
                 <el-row :gutter="10">
                     
@@ -212,7 +212,7 @@ import { handleTree } from '/@/utils/common'
 // 富文本编辑器
 const editorRef = shallowRef()
 const editorMode = ref('default')
-const toolbarConfig = {}
+const toolbarConfig = {modalAppendToBody: true}
 const editorConfig = { placeholder: '请输入内容...' }
 // 组件销毁时, 也及时销毁编辑器
 onBeforeUnmount(() => {
@@ -395,7 +395,7 @@ const handleDeleteMore = () => {
 }
 
 const create = () => {
-    
+
 }
 
 onMounted(() => {

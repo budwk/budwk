@@ -130,6 +130,9 @@ public class SysHomeController {
     )
     @ApiResponses
     public Result<?> read_more(@Param("ids") String[] ids, HttpServletRequest req) {
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(SecurityUtil.getUserLoginname()) && sysConfigService.getBoolean(SecurityUtil.getAppId(), "AppDemoEnv")) {
+            return Result.error(ResultCode.DEMO_ERROR);
+        }
         sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                 .add("updatedAt", Times.now().getTime()).add("updatedBy", SecurityUtil.getUserId()), Cnd.where("id", "in", ids).and("userId", "=", SecurityUtil.getUserId()).and("status", "=", 0));
         sysMsgService.getMsg(SecurityUtil.getUserId(), false);
@@ -145,6 +148,9 @@ public class SysHomeController {
     @ApiFormParams
     @ApiResponses
     public Result<?> readAll(HttpServletRequest req) {
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(SecurityUtil.getUserLoginname()) && sysConfigService.getBoolean(SecurityUtil.getAppId(), "AppDemoEnv")) {
+            return Result.error(ResultCode.DEMO_ERROR);
+        }
         sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                 .add("updatedAt", Times.now().getTime()).add("updatedBy", SecurityUtil.getUserId()), Cnd.where("userId", "=", SecurityUtil.getUserId()).and("status", "=", 0));
         sysMsgService.getMsg(SecurityUtil.getUserId(), false);
@@ -186,6 +192,9 @@ public class SysHomeController {
     )
     @ApiResponses
     public Result<?> read_one(String id, HttpServletRequest req) {
+        if (GlobalConstant.DEFAULT_SYSADMIN_LOGINNAME.equals(SecurityUtil.getUserLoginname()) && sysConfigService.getBoolean(SecurityUtil.getAppId(), "AppDemoEnv")) {
+            return Result.error(ResultCode.DEMO_ERROR);
+        }
         sysMsgUserService.update(org.nutz.dao.Chain.make("status", 1).add("readAt", Times.now().getTime())
                 .add("updatedAt", Times.now().getTime()).add("updatedBy", SecurityUtil.getUserId()), Cnd.where("msgid", "=", id).and("userId", "=", SecurityUtil.getUserId()).and("status", "=", 0));
         sysMsgService.getMsg(SecurityUtil.getUserId(), false);
