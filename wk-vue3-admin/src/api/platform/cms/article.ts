@@ -54,10 +54,10 @@ export function doDelete(id: string) {
     })
 }
 
-export function doDeleteMore(ids: string, names: string) {
+export function doDeleteMore(ids: string, titles: string) {
     return request({
         url: API_CMS_ARTICLE_DELETE_MORE,
         method: 'POST',
-        data: {ids: ids , names: names}
+        data: {ids: ids , titles: titles}
     })
 }

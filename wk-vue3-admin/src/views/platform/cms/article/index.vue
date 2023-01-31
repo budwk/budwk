@@ -205,20 +205,8 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="所属站点" prop="siteId">
-                            <el-select v-model="siteId" class="m-2" placeholder="所属站点" disabled style="width:100%">
-                                <el-option v-for="item in sites" :key="item.id" :label="item.name" :value="item.id" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
                         <el-form-item label="外链地址" prop="url">
                             <el-input v-model="formData.url" placeholder="外链地址，有则填写" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="所属栏目" prop="channelName" class="label_font">
-                            {{ formData.channelName }}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -346,7 +334,7 @@ import { IEditorConfig } from '@wangeditor/editor'
 import { nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, toRefs } from 'vue'
 import modal from '/@/utils/modal'
 import { fileUpload } from '/@/api/common'
-import { getChannelList, getInfo, doCreate, doUpdate, getList, doDelete } from '/@/api/platform/cms/article'
+import { getChannelList, getInfo, doCreate, doUpdate, getList, doDelete, doDeleteMore } from '/@/api/platform/cms/article'
 import { getSiteList } from '/@/api/platform/cms/channel'
 import { ElForm, ElTree } from 'element-plus'
 import { handleTree } from '/@/utils/common'
@@ -419,7 +407,7 @@ const tableData = ref([])
 const dateRange = ref([])
 const showSearch = ref(true)
 const ids = ref([])
-const names = ref([])
+const titles = ref([])
 const channelId = ref('')
 const channelName = ref('')
 const showDetail = ref(false)
@@ -502,7 +490,7 @@ const uploadPic = (file: any) => {
 // 列表多选
 const handleSelectionChange =(selection: any) => {
     ids.value = selection.map(item => item.id)
-    names.value = selection.map(item => item.username)
+    titles.value = selection.map(item => item.title)
     single.value = selection.length != 1
     multiple.value = !selection.length
 }
@@ -610,8 +598,8 @@ const handleUpdateMore = () => {
 
 // 批量删除
 const handleDeleteMore = () => {
-    modal.confirm('确定删除 ' + names.value.toString() + '？').then(() => {
-        return doDeleteMore(ids.value.toString(), names.value.toString())
+    modal.confirm('确定删除 ' + titles.value.toString() + '？').then(() => {
+        return doDeleteMore(ids.value.toString(), titles.value.toString())
     }).then(() => {
         queryParams.value.pageNo = 1
         list()
