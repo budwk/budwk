@@ -140,9 +140,9 @@ public class SysMsgController {
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
-    @SLog(value = "删除消息:")
+    @SLog(value = "撤回消息:")
     @SaCheckPermission("sys.manage.msg.delete")
-    @ApiOperation(name = "删除消息")
+    @ApiOperation(name = "撤回消息")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "id", description = "消息ID")
@@ -194,6 +194,7 @@ public class SysMsgController {
     @At("/create")
     @Ok("json")
     @SaCheckPermission("sys.manage.msg.create")
+    @SLog(value = "发送消息:")
     @ApiOperation(name = "发送消息")
     @ApiFormParams(
             value = {
@@ -205,6 +206,7 @@ public class SysMsgController {
         msg.setSendAt(System.currentTimeMillis());
         msg.setCreatedBy(SecurityUtil.getUserId());
         sysMsgService.saveMsg(msg, userId);
+        req.setAttribute("_slog_msg", msg.getTitle());
         return Result.success();
     }
 }

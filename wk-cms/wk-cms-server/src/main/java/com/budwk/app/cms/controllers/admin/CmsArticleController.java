@@ -136,8 +136,6 @@ public class CmsArticleController {
     )
     @ApiResponses
     public Result<?> create(@Param("..") Cms_article article, @Param("time_param") long[] time, HttpServletRequest req) {
-        article.setPublishAt(time[0]);
-        article.setEndAt(time[1]);
         article.setStatus(0);
         article.setCreatedBy(SecurityUtil.getUserId());
         article.setUpdatedBy(SecurityUtil.getUserId());
@@ -257,8 +255,6 @@ public class CmsArticleController {
     )
     @ApiResponses
     public Result<?> update(@Param("..") Cms_article article, @Param("time_param") long[] time, HttpServletRequest req) {
-        article.setPublishAt(time[0]);
-        article.setEndAt(time[1]);
         article.setStatus(0);
         article.setUpdatedBy(SecurityUtil.getUserId());
         cmsArticleService.updateIgnoreNull(article);

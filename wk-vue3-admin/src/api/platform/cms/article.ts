@@ -24,6 +24,13 @@ export function getChannelList(siteId: string) {
     })
 }
 
+export function getInfo(id: string) {
+    return request({
+        url: API_CMS_ARTICLE_GET + id,
+        method: 'GET'
+    })
+}
+
 export function doCreate(data: object = {}) {
     return request({
         url: API_CMS_ARTICLE_CREATE,

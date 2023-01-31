@@ -108,7 +108,7 @@ database:
 jdbc:
   url: jdbc:mysql://127.0.0.1:3306/budwk_v8?useUnicode=true&characterEncoding=utf8&useSSL=false
   username: root
-  password: "root"
+  password: "@#pass123"
   validationQuery: select 1
   maxActive: 10
   testWhileIdle: true

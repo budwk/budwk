@@ -11,6 +11,9 @@ import { i18n } from '../lang'
 // Platform模块
 export const platformInfoUrl = '/ucenter/auth/conf'
 export const platformUploadUrl = '/platform/pub/file/upload/'
+export const platformUploadImageUrl = '/platform/pub/file/upload/image'
+export const platformUploadFileUrl = '/platform/pub/file/upload/file'
+export const platformUploadVideoUrl = '/platform/pub/file/upload/video'
 
 
 // Public模块
