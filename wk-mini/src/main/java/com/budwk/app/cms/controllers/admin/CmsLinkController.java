@@ -138,7 +138,7 @@ public class CmsLinkController {
     @ApiResponses
     public Result<?> deleteMore(@Param("ids") String[] ids, @Param("names") String names, HttpServletRequest req) {
         if (ids == null) {
-            return Result.error("system.error.invalid");
+            return Result.error(ResultCode.PARAM_ERROR);
         }
         cmsLinkService.delete(ids);
         req.setAttribute("_slog_msg", names);
