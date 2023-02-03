@@ -206,6 +206,9 @@ const update = () => {
     })
 }
 
+onMounted(()=>{
+    list()
+})
 </script>
 <route lang="yaml">
     meta:

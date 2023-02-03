@@ -16,6 +16,13 @@ export function getList(data: object) {
     })
 }
 
+export function getClassList() {
+    return request({
+        url: API_CMS_LINK_LIST_CLASS,
+        method: 'GET'
+    })
+}
+
 export function getInfo(id: string) {
     return request({
         url: API_CMS_LINK_GET + id,
