@@ -24,7 +24,7 @@
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                             v-permission="['cms.links.class.update']"></el-button>
                     </el-tooltip>
-                    <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
+                    <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                             v-permission="['cms.links.class.delete']"></el-button>
                     </el-tooltip>

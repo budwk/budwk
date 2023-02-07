@@ -20,6 +20,10 @@
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
+                    <template v-if="item.prop == 'type'" #default="scope">
+                        <span v-if="scope.row.type=='txt'">文本链接</span>
+                        <span v-if="scope.row.type=='img'">图片链接</span>
+                    </template>
                 </el-table-column>
             </template>
             <el-table-column fixed="right" header-align="center" align="center" label="操作"
@@ -29,7 +33,7 @@
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                             v-permission="['cms.links.class.update']"></el-button>
                     </el-tooltip>
-                    <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
+                    <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                             v-permission="['cms.links.class.delete']"></el-button>
                     </el-tooltip>
@@ -41,17 +45,63 @@
                 v-model:limit="queryParams.pageSize" @pagination="list" />
         </el-row>
 
-        <el-dialog title="新增分类" v-model="showCreate" width="35%">
+        <el-dialog title="新增链接" v-model="showCreate" width="35%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item label="分类名称" prop="name">
-                            <el-input v-model="formData.name" placeholder="请输入分类名称" />
+                        <el-form-item label="所属分类" prop="siteId">
+                            <el-select v-model="classId" class="m-2" placeholder="所属分类" disabled style="width:100%">
+                                <el-option v-for="item in linkClass" :key="item.id" :label="item.name" :value="item.id" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="分类编码" prop="code">
-                            <el-input v-model="formData.code" placeholder="请输入分类编码（全部大写字母）" />
+                        <el-form-item label="链接名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入链接名称" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="链接地址" prop="url">
+                            <el-input v-model="formData.url" placeholder="请输入链接地址" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="打开方式" prop="target">
+                            <el-radio-group v-model="formData.target">
+                                <el-radio :label="'_self'">
+                                  本页面
+                                </el-radio>
+                                <el-radio :label="'_blank'">
+                                  新页面
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="链接类型" prop="type">
+                            <el-radio-group v-model="formData.type" @change="typeChange">
+                                <el-radio :label="'txt'">
+                                  文本链接
+                                </el-radio>
+                                <el-radio :label="'img'">
+                                  图片链接
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24" v-if="formData.type=='img'">
+                        <el-form-item label="上传图片" prop="picUrl" class="label_font">
+                            <el-upload
+action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.picUrl" :src="platformInfo.AppFileDomain + formData.picUrl" class="_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -64,17 +114,56 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改分类" v-model="showUpdate" width="35%">
+        <el-dialog title="修改链接" v-model="showUpdate" width="35%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item label="分类名称" prop="name">
-                            <el-input v-model="formData.name" placeholder="请输入分类名称" />
+                        <el-form-item label="链接名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入链接名称" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="分类编码" prop="code">
-                            <el-input v-model="formData.code" placeholder="请输入分类编码（全部大写字母）" />
+                        <el-form-item label="链接地址" prop="url">
+                            <el-input v-model="formData.url" placeholder="请输入链接地址" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="打开方式" prop="target">
+                            <el-radio-group v-model="formData.target">
+                                <el-radio :label="'_self'">
+                                  本页面
+                                </el-radio>
+                                <el-radio :label="'_blank'">
+                                  新页面
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="链接类型" prop="type">
+                            <el-radio-group v-model="formData.type" @change="typeChange">
+                                <el-radio :label="'txt'">
+                                  文本链接
+                                </el-radio>
+                                <el-radio :label="'img'">
+                                  图片链接
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24" v-if="formData.type=='img'">
+                        <el-form-item label="上传图片" prop="picUrl" class="label_font">
+                            <el-upload
+action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.picUrl" :src="platformInfo.AppFileDomain + formData.picUrl" class="_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -95,7 +184,10 @@ import modal from '/@/utils/modal'
 import { getClassList, doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/cms/link'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
+import { usePlatformInfo } from '/@/stores/platformInfo'
+import { fileUpload } from '/@/api/common'
 
+const platformInfo = usePlatformInfo()
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -111,11 +203,15 @@ const classId = ref('')
 const data = reactive({
     formData: {
         id: '',
+        classId: '',
         name: '',
-        code: '',
+        url: '',
+        target: '',
+        type: '',
+        picUrl: ''
     },
     queryParams: {
-        name: '',
+        classId: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -123,16 +219,17 @@ const data = reactive({
         pageOrderBy: 'descending'
     },
     formRules: {
-        name: [{ required: true, message: "分类名称不能为空", trigger: ["blur", "change"] }],
-        code: [{ required: true, message: "分类编码不能为空", trigger: ["blur", "change"] },],
+        name: [{ required: true, message: "链接名称不能为空", trigger: ["blur", "change"] }],
     },
 })
 
 const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
-    { prop: 'name', label: `分类名称`, show: true },
-    { prop: 'code', label: `分类编码`, show: true },
+    { prop: 'name', label: `链接名称`, show: true },
+    { prop: 'type', label: `链接类型`, show: true },
+    { prop: 'url', label: `链接地址`, show: true },
+    { prop: 'createdAt', label: `创建时间`, show: true },
 ])
 
 
@@ -140,16 +237,52 @@ const columns = ref([
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
+        classId: classId.value,
         name: '',
-        code: ''
+        url: 'javascript:void(0);',
+        target: '_blank',
+        type: 'txt',
+        picUrl: ''
     }
     formEl?.resetFields()
+}
+
+const beforeUpload = (file: any) => {
+    if (file.type.indexOf("image/") == -1) {
+        modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
+    }
+}
+
+const uploadPic = (file: any) => {
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUpload(f,{},'image').then((res) => {
+        if (res.code == 0) {
+            formData.value.picUrl = res.data.url
+        }
+    })
+}
+
+const classChange = (val: string) => {
+    queryParams.value.classId = val
+    list()
+}
+
+const typeChange = (val: string) => {
+    if('txt'==val) {
+        formData.value.picUrl = ''
+    }
 }
 
 // 查询分类
 const listClass = () => {
     getClassList().then((res) => {
         linkClass.value = res.data
+        if(linkClass.value.length>0){
+            classId.value = linkClass.value[0].id
+            queryParams.value.classId = linkClass.value[0].id
+        }
+        list()
     })
 }
 
@@ -222,10 +355,18 @@ const update = () => {
 
 onMounted(()=>{
     listClass()
-    list()
 })
 </script>
 <route lang="yaml">
     meta:
       layout: platform/index
 </route>
+<style scoped>
+._img {
+    width: 50px;
+    height: 50px;   
+}
+.label_font {
+    font-weight: 700;
+}
+</style>
