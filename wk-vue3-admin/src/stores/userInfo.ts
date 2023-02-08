@@ -135,7 +135,9 @@ export const useUserInfo = defineStore('userInfo', {
                         breadcrumb: breadcrumb
                     }
                     tree = menuItem
-                    arr.push(tree)
+                    if(item.showit){ //显示的菜单
+                        arr.push(tree)
+                    }
                 }
             })
             this.setRoutes(obj)
