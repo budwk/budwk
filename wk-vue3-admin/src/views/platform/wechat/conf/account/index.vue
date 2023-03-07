@@ -3,13 +3,8 @@
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-button plain type="primary" icon="Plus" @click="handleCreate"
-                    v-permission="['cms.links.class.create']">新增
+                    v-permission="['wx.conf.account.create']">新增
                 </el-button>
-            </el-col>
-            <el-col :span="1.5">
-                <el-select v-model="classId" class="m-2" placeholder="选择分类" @change="classChange">
-                    <el-option v-for="item in linkClass" :key="item.id" :label="item.name" :value="item.id" />
-                </el-select>
             </el-col>
         </el-row>
         <el-table v-loading="tableLoading" :data="tableData" row-key="id">
@@ -20,10 +15,6 @@
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
-                    <template v-if="item.prop == 'type'" #default="scope">
-                        <span v-if="scope.row.type=='txt'">文本链接</span>
-                        <span v-if="scope.row.type=='img'">图片链接</span>
-                    </template>
                 </el-table-column>
             </template>
             <el-table-column fixed="right" header-align="center" align="center" label="操作"
@@ -31,11 +22,11 @@
                 <template #default="scope">
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                            v-permission="['cms.links.class.update']"></el-button>
+                            v-permission="['wx.conf.account.update']"></el-button>
                     </el-tooltip>
                     <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-                            v-permission="['cms.links.class.delete']"></el-button>
+                            v-permission="['wx.conf.account.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -45,7 +36,7 @@
                 v-model:limit="queryParams.pageSize" @pagination="list" />
         </el-row>
 
-        <el-dialog title="新增链接" v-model="showCreate" width="35%">
+        <el-dialog title="新增公众号" v-model="showCreate" width="35%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
@@ -56,13 +47,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="链接名称" prop="name">
-                            <el-input v-model="formData.name" placeholder="请输入链接名称" />
+                        <el-form-item label="公众号名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入公众号名称" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="链接地址" prop="url">
-                            <el-input v-model="formData.url" placeholder="请输入链接地址" />
+                        <el-form-item label="公众号地址" prop="url">
+                            <el-input v-model="formData.url" placeholder="请输入公众号地址" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
@@ -78,13 +69,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="链接类型" prop="type">
+                        <el-form-item label="公众号类型" prop="type">
                             <el-radio-group v-model="formData.type" @change="typeChange">
                                 <el-radio :label="'txt'">
-                                  文本链接
+                                  文本公众号
                                 </el-radio>
                                 <el-radio :label="'img'">
-                                  图片链接
+                                  图片公众号
                                 </el-radio>
                             </el-radio-group>
                         </el-form-item>
@@ -114,17 +105,17 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
             </template>
         </el-dialog>
 
-        <el-dialog title="修改链接" v-model="showUpdate" width="35%">
+        <el-dialog title="修改公众号" v-model="showUpdate" width="35%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item label="链接名称" prop="name">
-                            <el-input v-model="formData.name" placeholder="请输入链接名称" />
+                        <el-form-item label="公众号名称" prop="name">
+                            <el-input v-model="formData.name" placeholder="请输入公众号名称" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="链接地址" prop="url">
-                            <el-input v-model="formData.url" placeholder="请输入链接地址" />
+                        <el-form-item label="公众号地址" prop="url">
+                            <el-input v-model="formData.url" placeholder="请输入公众号地址" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
@@ -140,13 +131,13 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="链接类型" prop="type">
+                        <el-form-item label="公众号类型" prop="type">
                             <el-radio-group v-model="formData.type" @change="typeChange">
                                 <el-radio :label="'txt'">
-                                  文本链接
+                                  文本公众号
                                 </el-radio>
                                 <el-radio :label="'img'">
-                                  图片链接
+                                  图片公众号
                                 </el-radio>
                             </el-radio-group>
                         </el-form-item>
@@ -181,7 +172,7 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
 <script setup lang="ts" name="platform-cms-links-link">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { getClassList, doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/cms/link'
+import { doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/wechat/account'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 import { usePlatformInfo } from '/@/stores/platformInfo'
@@ -219,16 +210,17 @@ const data = reactive({
         pageOrderBy: 'descending'
     },
     formRules: {
-        name: [{ required: true, message: "链接名称不能为空", trigger: ["blur", "change"] }],
+        name: [{ required: true, message: "公众号名称不能为空", trigger: ["blur", "change"] }],
     },
 })
 
 const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
-    { prop: 'name', label: `链接名称`, show: true },
-    { prop: 'type', label: `链接类型`, show: true },
-    { prop: 'url', label: `链接地址`, show: true },
+    { prop: 'appname', label: `公众号名称`, show: true },
+    { prop: 'id', label: `公众号类型`, show: true },
+    { prop: 'appid', label: `AppID`, show: true },
+    { prop: 'mchid', label: `支付商户号`, show: true },
     { prop: 'createdAt', label: `创建时间`, show: true },
 ])
 
@@ -272,18 +264,6 @@ const typeChange = (val: string) => {
     if('txt'==val) {
         formData.value.picUrl = ''
     }
-}
-
-// 查询分类
-const listClass = () => {
-    getClassList().then((res) => {
-        linkClass.value = res.data
-        if(linkClass.value.length>0){
-            classId.value = linkClass.value[0].id
-            queryParams.value.classId = linkClass.value[0].id
-        }
-        list()
-    })
 }
 
 
@@ -354,7 +334,7 @@ const update = () => {
 }
 
 onMounted(()=>{
-    listClass()
+    list()
 })
 </script>
 <route lang="yaml">
