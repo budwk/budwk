@@ -31,11 +31,11 @@
                 <template #default="scope">
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                            v-permission="['cms.links.class.update']"></el-button>
+                            v-permission="['wx.conf.account.update']"></el-button>
                     </el-tooltip>
                     <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-                            v-permission="['cms.links.class.delete']"></el-button>
+                            v-permission="['wx.conf.account.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
