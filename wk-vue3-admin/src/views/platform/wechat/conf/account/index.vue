@@ -167,7 +167,7 @@
 <script setup lang="ts" name="platform-wechat-conf-account">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/wechat/account'
+import { doCreate, doUpdate, getInfo, getList, doDelete, getPayList } from '/@/api/platform/wechat/account'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 import { usePlatformInfo } from '/@/stores/platformInfo'
@@ -247,6 +247,12 @@ const list = () => {
     })
 }
 
+const listPay = () => {
+    getPayList().then((res) => {
+        payData.value = res.data as never
+    })
+}
+
 
 // 新增按钮
 const handleCreate = (row: any) => {
@@ -305,6 +311,7 @@ const update = () => {
 
 onMounted(() => {
     list()
+    listPay()
 })
 </script>
 <route lang="yaml">

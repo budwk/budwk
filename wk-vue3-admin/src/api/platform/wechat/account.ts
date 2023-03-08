@@ -23,6 +23,13 @@ export function getAccountList() {
     })
 }
 
+export function getPayList() {
+    return request({
+        url: API_WX_CONFIG_PAY_QUERY,
+        method: 'GET'
+    })
+}
+
 export function getInfo(id: string) {
     return request({
         url: API_WX_CONFIG_GET + id,
