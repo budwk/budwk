@@ -2,8 +2,7 @@
     <div class="app-container">
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button plain type="primary" icon="Plus" @click="handleCreate"
-                    v-permission="['wx.conf.account.create']">新增
+                <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['wx.conf.pay.create']">新增
                 </el-button>
             </el-col>
         </el-row>
@@ -20,13 +19,17 @@
             <el-table-column fixed="right" header-align="center" align="center" label="操作"
                 class-name="small-padding fixed-width">
                 <template #default="scope">
+                    <el-tooltip content="查看V3证书记录" placement="top">
+                        <el-button link type="primary" icon="View" @click="handleView(scope.row)"
+                            ></el-button>
+                    </el-tooltip>
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                            v-permission="['wx.conf.account.update']"></el-button>
+                            v-permission="['wx.conf.pay.update']"></el-button>
                     </el-tooltip>
                     <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-                            v-permission="['wx.conf.account.delete']"></el-button>
+                            v-permission="['wx.conf.pay.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -36,57 +39,42 @@
                 v-model:limit="queryParams.pageSize" @pagination="list" />
         </el-row>
 
-        <el-dialog title="新增公众号" v-model="showCreate" width="50%">
+        <el-dialog title="新增支付信息" v-model="showCreate" width="45%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="130px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item prop="id" label="唯一标识">
-                            <el-input v-model="formData.id" maxlength="100" placeholder="唯一标识" auto-complete="off"
+                        <el-form-item prop="name" label="支付名称">
+                            <el-input v-model="formData.name" maxlength="100" placeholder="支付名称" auto-complete="off"
                                 tabindex="1" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="配置URL" class="label-font-weight">
-                            {{ platformInfo.AppDomain }}/wechat/open/weixin/msg/{{ formData.id }}
-                            <el-alert title="微信后台配置的URL" type="success" style="height:32px;" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="appname" label="公众号名称">
-                            <el-input v-model="formData.appname" maxlength="100" placeholder="公众号名称" auto-complete="off"
-                                tabindex="2" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="appid" label="AppId">
-                            <el-input v-model="formData.appid" maxlength="100" placeholder="AppId" auto-complete="off"
+                        <el-form-item prop="mchid" label="商户号(mchid)">
+                            <el-input v-model="formData.mchid" maxlength="100" placeholder="mchid" auto-complete="off"
                                 tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="appsecret" label="AppSecret">
-                            <el-input v-model="formData.appsecret" maxlength="100" placeholder="AppSecret"
-                                auto-complete="off" tabindex="4" type="text" />
+                        <el-form-item prop="v3key" label="V3密钥">
+                            <el-input v-model="formData.v3key" maxlength="100" placeholder="V3密钥" auto-complete="off"
+                                tabindex="3" type="text" />
+                        </el-form-item>
+
+                        <el-form-item prop="v3keyPath" label="V3密钥文件路径">
+                            <el-input v-model="formData.v3keyPath" maxlength="100" placeholder="apiclient_key.pem"
+                                auto-complete="off" tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="token" label="Token">
-                            <el-input v-model="formData.token" maxlength="100" placeholder="Token" auto-complete="off"
-                                tabindex="5" type="text" />
+                        <el-form-item prop="v3certPath" label="V3证书文件路径">
+                            <el-input v-model="formData.v3certPath" maxlength="100" placeholder="apiclient_cert.pem"
+                                auto-complete="off" tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="encodingAESKey" label="EncodingAESKey">
-                            <el-input v-model="formData.encodingAESKey" maxlength="100" placeholder="EncodingAESKey"
-                                auto-complete="off" tabindex="6" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="mchid" label="支付商户">
-                            <el-select v-model="formData.mchid" clearable placeholder="微信支付商户绑定">
-                                <el-option v-for="item in payData" :key="item.mchid" :label="item.name"
-                                    :value="item.mchid" />
-                            </el-select>
+                        <el-form-item prop="v3certP12Path" label="V3 p12文件路径">
+                            <el-input v-model="formData.v3certP12Path" maxlength="100" placeholder="apiclient_cert.p12"
+                                auto-complete="off" tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -99,57 +87,42 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改公众号" v-model="showUpdate" width="50%">
+        <el-dialog title="修改支付信息" v-model="showUpdate" width="45%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="125px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item prop="id" label="唯一标识">
-                            <el-input v-model="formData.id" maxlength="100" placeholder="唯一标识" auto-complete="off"
+                        <el-form-item prop="name" label="支付名称">
+                            <el-input v-model="formData.name" maxlength="100" placeholder="支付名称" auto-complete="off"
                                 tabindex="1" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="配置URL">
-                            {{ platformInfo.AppDomain }}/wechat/open/weixin/msg/{{ formData.id }}
-                            <el-alert title="微信后台配置的URL" type="success" style="height:32px;" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="appname" label="公众号名称">
-                            <el-input v-model="formData.appname" maxlength="100" placeholder="公众号名称" auto-complete="off"
-                                tabindex="2" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="appid" label="AppId">
-                            <el-input v-model="formData.appid" maxlength="100" placeholder="AppId" auto-complete="off"
+                        <el-form-item prop="mchid" label="商户号(mchid)">
+                            <el-input v-model="formData.mchid" maxlength="100" placeholder="mchid" auto-complete="off"
                                 tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="appsecret" label="AppSecret">
-                            <el-input v-model="formData.appsecret" maxlength="100" placeholder="AppSecret"
-                                auto-complete="off" tabindex="4" type="text" />
+                        <el-form-item prop="v3key" label="V3密钥">
+                            <el-input v-model="formData.v3key" maxlength="100" placeholder="V3密钥" auto-complete="off"
+                                tabindex="3" type="text" />
+                        </el-form-item>
+
+                        <el-form-item prop="v3keyPath" label="V3密钥文件路径">
+                            <el-input v-model="formData.v3keyPath" maxlength="100" placeholder="apiclient_key.pem"
+                                auto-complete="off" tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="token" label="Token">
-                            <el-input v-model="formData.token" maxlength="100" placeholder="Token" auto-complete="off"
-                                tabindex="5" type="text" />
+                        <el-form-item prop="v3certPath" label="V3证书文件路径">
+                            <el-input v-model="formData.v3certPath" maxlength="100" placeholder="apiclient_cert.pem"
+                                auto-complete="off" tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="encodingAESKey" label="EncodingAESKey">
-                            <el-input v-model="formData.encodingAESKey" maxlength="100" placeholder="EncodingAESKey"
-                                auto-complete="off" tabindex="6" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="mchid" label="支付商户">
-                            <el-select v-model="formData.mchid" clearable placeholder="微信支付商户绑定">
-                                <el-option v-for="item in payData" :key="item.mchid" :label="item.name"
-                                    :value="item.mchid" />
-                            </el-select>
+                        <el-form-item prop="v3certP12Path" label="V3 p12文件路径">
+                            <el-input v-model="formData.v3certP12Path" maxlength="100" placeholder="apiclient_cert.p12"
+                                auto-complete="off" tabindex="3" type="text" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -162,12 +135,50 @@
             </template>
         </el-dialog>
 
+        <el-dialog title="V3证书记录" v-model="showView" width="60%">
+            <el-table :data="tableData" row-key="id">
+                <el-table-column
+                    prop="mchid"
+                    label="商户号(mchid)"
+                />
+                <el-table-column
+                    prop="serial_no"
+                    label="序列号"
+                />
+                <el-table-column
+                    prop="effective_at"
+                    label="起始有效时间"
+                >
+                    <template #default="scope">
+                        <span>{{ formatTime(scope.row.effective_at) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="expire_at"
+                    sortable
+                    label="失效时间"
+                >
+                    <template #default="scope">
+                        <span>{{ formatTime(scope.row.expire_at) }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-row>
+                <pagination :total="queryCertParams.totalCount" v-model:page="queryCertParams.pageNo"
+                v-model:limit="queryCertParams.pageSize" @pagination="listCert" />
+            </el-row>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="showView = false">关 闭</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
-<script setup lang="ts" name="platform-wechat-conf-account">
+<script setup lang="ts" name="platform-wechat-conf-pay">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/wechat/account'
+import { doCreate, doUpdate, getInfo, getList, doDelete, getCertList } from '/@/api/platform/wechat/pay'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 import { usePlatformInfo } from '/@/stores/platformInfo'
@@ -177,25 +188,32 @@ const platformInfo = usePlatformInfo()
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 
-
 const showCreate = ref(false)
 const showUpdate = ref(false)
+const showView = ref(false)
 const tableLoading = ref(false)
 const tableData = ref([])
-const payData = ref([])
+const certData = ref([])
 
 const data = reactive({
     formData: {
         id: '',
-        appname: '',
-        appid: '',
-        appsecret: '',
-        token: '',
-        encodingAESKey: '',
-        mchid: ''
+        name: '',
+        mchid: '',
+        v3key: '',
+        v3keyPath: '',
+        v3certPath: '',
+        v3certP12Path: ''
     },
     queryParams: {
-        classId: '',
+        pageNo: 1,
+        pageSize: 10,
+        totalCount: 0,
+        pageOrderName: 'createdAt',
+        pageOrderBy: 'descending'
+    },
+    queryCertParams: {
+        mchid: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -203,21 +221,17 @@ const data = reactive({
         pageOrderBy: 'descending'
     },
     formRules: {
-        id: [{ required: true, message: "公众号标识不能为空", trigger: ["blur", "change"] }],
-        appname: [{ required: true, message: "公众号名称不能为空", trigger: ["blur", "change"] }],
-        appid: [{ required: true, message: "AppID不能为空", trigger: ["blur", "change"] }],
-        appsecret: [{ required: true, message: "AppSecret不能为空", trigger: ["blur", "change"] }],
-        token: [{ required: true, message: "Token不能为空", trigger: ["blur", "change"] }],
+        name: [{ required: true, message: "支付名称不能为空", trigger: ["blur", "change"] }],
+        mchid: [{ required: true, message: "商户号不能为空", trigger: ["blur", "change"] }],
     },
 })
 
-const { queryParams, formData, formRules } = toRefs(data)
+const { queryParams, formData, formRules, queryCertParams } = toRefs(data)
 
 const columns = ref([
-    { prop: 'id', label: `标识`, show: true },
-    { prop: 'appname', label: `公众号名称`, show: true },
-    { prop: 'appid', label: `AppID`, show: true },
+    { prop: 'name', label: `支付名称`, show: true },
     { prop: 'mchid', label: `商户号`, show: true },
+    { prop: 'v3key', label: `V3密钥`, show: true },
     { prop: 'createdAt', label: `创建时间`, show: true },
 ])
 
@@ -226,12 +240,12 @@ const columns = ref([
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
-        appname: '',
-        appid: '',
-        appsecret: '',
-        token: '',
-        encodingAESKey: '',
-        mchid: ''
+        name: '',
+        mchid: '',
+        v3key: '',
+        v3keyPath: '',
+        v3certPath: '',
+        v3certP12Path: ''
     }
     formEl?.resetFields()
 }
@@ -247,6 +261,18 @@ const list = () => {
     })
 }
 
+const listCert = () => {
+    getCertList(queryCertParams.value).then((res) => {
+        certData.value = res.data.list as never
+        queryCertParams.value.totalCount = res.data.totalCount as never
+    })
+}
+
+const handleView = (row: any) => {
+    showView.value = true
+    queryCertParams.value.mchid =  row.mchid
+    listCert()
+}
 
 // 新增按钮
 const handleCreate = (row: any) => {
@@ -264,7 +290,7 @@ const handleUpdate = (row: any) => {
 
 // 删除按钮
 const handleDelete = (row: any) => {
-    modal.confirm('确定删除 ' + row.appname + '？').then(() => {
+    modal.confirm('确定删除 ' + row.name + '？').then(() => {
         return doDelete(row.id)
     }).then(() => {
         queryParams.value.pageNo = 1
