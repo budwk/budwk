@@ -66,11 +66,10 @@ export function doLogin(data: object = {}) {
     })
 }
 
-export function getUserInfo(appId: string) {
+export function getUserInfo() {
     return request({
         url: API_AUTH_INFO,
-        method: 'GET',
-        params: { appId: appId}
+        method: 'GET'
     })
 }
 

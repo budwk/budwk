@@ -3,6 +3,7 @@ package com.budwk.starter.security.utils;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import org.nutz.lang.Strings;
+import org.nutz.mvc.Mvcs;
 
 /**
  * @author wizzer@qq.com
@@ -22,11 +23,7 @@ public class SecurityUtil {
     }
 
     public static String getAppId() {
-        return Strings.sNull(getSession().get("appId"));
-    }
-
-    public static void setAppId(String appId) {
-        getSession().set("appId", appId);
+        return Strings.sNull(Mvcs.getReq().getHeader("appId"));
     }
 
     public static String getTenantId() {

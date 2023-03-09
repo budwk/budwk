@@ -82,7 +82,7 @@ public class WebFilterStarter implements WebFilterFace {
         corsOrigin = conf.get(PROP_WEB_CORS_ORIGIN, "*");
         corsMaxAge = conf.getInt(PROP_WEB_CORS_MAXAGE, 1800);
         corsMethods = conf.get(PROP_WEB_CORS_METHODS, "GET,POST,PUT,DELETE");
-        corsHeaders = conf.get(PROP_WEB_CORS_HEADERS, "X-Requested-With,Content-Type,lang,wk-member-token,wk-user-token");
+        corsHeaders = conf.get(PROP_WEB_CORS_HEADERS, "X-Requested-With,Content-Type,lang,appId,wk-member-token,wk-user-token");
         Mvcs.X_POWERED_BY = GlobalConstant.X_POWER_BY;
     }
 

@@ -73,9 +73,10 @@ export const useUserInfo = defineStore('userInfo', {
             return new Promise<void>((resolve, reject) => {
                 let appId = useClient().appId
                 if(!appId) {
-                    appId = usePlatformInfo().AppDefault
-                }
-                getUserInfo(appId).then((res) => {
+                    appId = process.env.BASE_APP_ID || ''
+                }            
+                getUserInfo().then((res) => {
+                    console.log(res)
                     this.dataFill(res.data)
                     nextTick(()=>{
                         this.initUserSettings()

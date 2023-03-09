@@ -5,13 +5,11 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_unit;
 import com.budwk.app.sys.models.Sys_user;
 import com.budwk.app.sys.models.Sys_user_security;
-import com.budwk.app.sys.services.SysConfigService;
-import com.budwk.app.sys.services.SysMsgService;
-import com.budwk.app.sys.services.SysUnitService;
-import com.budwk.app.sys.services.SysUserService;
+import com.budwk.app.sys.services.*;
 import com.budwk.app.uc.services.AuthService;
 import com.budwk.app.uc.services.ValidateService;
 import com.budwk.starter.common.constant.GlobalConstant;
@@ -39,6 +37,7 @@ import org.nutz.mvc.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author wizzer@qq.com
@@ -70,6 +69,9 @@ public class AuthController {
 
     @Inject
     private RedisService redisService;
+
+    @Inject
+    private SysAppService sysAppService;
 
     @At
     @Ok("json")
@@ -114,6 +116,17 @@ public class AuthController {
                            @Param("smscode") String smscode,
                            @Param("appId") String appId,
                            @Param("rsaKey") String rsaKey, HttpServletRequest req) {
+        List<Sys_app> appList = sysAppService.listEnable();
+        boolean hasApp = false;
+        for(Sys_app app:appList){
+            if(Strings.sNull(appId).equals(app.getId())){
+                hasApp = true;
+                break;
+            }
+        }
+        if(!hasApp) {
+            return Result.error("应用不存在或未启用");
+        }
         Sys_user user = null;
         Sys_user_security security = sysUserService.getUserSecurity();
         if ("password".equalsIgnoreCase(type)) {
@@ -148,6 +161,7 @@ public class AuthController {
                 }
             }
         }
+
         sysUserService.setLoginInfo(user.getId(), Lang.getIP(req));
         SaSession session = StpUtil.getSession(true);
         session.set("loginname", Strings.sNull(user.getLoginname()));
@@ -299,11 +313,7 @@ public class AuthController {
     @Ok("json:{locked:'password|salt|createdBy|createdAt|updatedBy|updatedAt|delFlag',ignoreNull:false}")
     @GET
     @ApiOperation(name = "获取登录用户信息", description = "需登录成功")
-    @ApiImplicitParams(
-            {
-                    @ApiImplicitParam(name = "appId", description = "应用ID", required = true, check = true)
-            }
-    )
+    @ApiImplicitParams
     @ApiResponses(
             {
                     @ApiResponse(name = "conf", description = "系统参数", type = "object"),
@@ -314,13 +324,12 @@ public class AuthController {
             }
     )
     @SaCheckLogin
-    public Result<?> info(@Param("appId") String appId) {
-        SecurityUtil.setAppId(appId);
+    public Result<?> info() {
         log.debug("StpUtil.getLoginIdAsString():::" + StpUtil.getLoginIdAsString());
         Sys_user user = authService.getUserById(StpUtil.getLoginIdAsString());
         NutMap map = NutMap.NEW();
         //获取应用菜单及公共菜单
-        map.addv(SecurityUtil.getAppId(), sysUserService.getMenuList(SecurityUtil.getUserId(), appId));
+        map.addv(SecurityUtil.getAppId(), sysUserService.getMenuList(SecurityUtil.getUserId(), SecurityUtil.getAppId()));
         map.addv(GlobalConstant.DEFAULT_COMMON_APPID, sysUserService.getMenuList(SecurityUtil.getUserId(), GlobalConstant.DEFAULT_COMMON_APPID));
         return Result.data(NutMap.NEW()
                 .addv("conf", sysConfigService.getMapAll(SecurityUtil.getAppId()))

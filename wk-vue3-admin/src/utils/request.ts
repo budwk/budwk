@@ -3,6 +3,7 @@ import type { AxiosRequestConfig } from 'axios'
 import { ElLoading, LoadingOptions, ElNotification, ElMessageBox } from 'element-plus'
 import { useUserSettings } from '/@/stores/userSettings'
 import { useUserInfo } from '/@/stores/userInfo'
+import { useClient } from '/@/stores/client'
 import { isPlatformApp } from './common'
 import router from '/@/router/index'
 import { TAGS_VIEW, USER_INFO,USER_SETTINGS,USER_VIEWS } from '/@/stores/constant/cacheKey'
@@ -37,12 +38,18 @@ function createAxios(axiosConfig: AxiosRequestConfig, options: Options = {}, loa
     const userSettings = useUserSettings()
     const userInfo = useUserInfo()
 
+    let appId = useClient().appId
+    if(!appId) {
+        appId = process.env.BASE_APP_ID || ''
+    }
+
     const Axios = axios.create({
         baseURL: getUrl(),
         timeout: 1000 * 10,
         headers: {
             'Content-Type': 'application/json',
-            'lang': userSettings.defaultLang
+            'lang': userSettings.defaultLang,
+            'appId': appId
         },
         responseType: 'json',
     })

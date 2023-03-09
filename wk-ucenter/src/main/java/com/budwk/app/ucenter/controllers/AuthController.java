@@ -6,13 +6,11 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_unit;
 import com.budwk.app.sys.models.Sys_user;
 import com.budwk.app.sys.models.Sys_user_security;
-import com.budwk.app.sys.providers.ISysConfigProvider;
-import com.budwk.app.sys.providers.ISysMsgProvider;
-import com.budwk.app.sys.providers.ISysUnitProvider;
-import com.budwk.app.sys.providers.ISysUserProvider;
+import com.budwk.app.sys.providers.*;
 import com.budwk.app.ucenter.services.AuthService;
 import com.budwk.app.ucenter.services.ValidateService;
 import com.budwk.starter.common.constant.GlobalConstant;
@@ -76,6 +74,10 @@ public class AuthController {
     @Inject
     private RedisService redisService;
 
+    @Inject
+    @Reference(check = false)
+    private ISysAppProvider sysAppProvider;
+
     @At
     @Ok("json")
     @GET
@@ -119,6 +121,17 @@ public class AuthController {
                            @Param("smscode") String smscode,
                            @Param("appId") String appId,
                            @Param("rsaKey") String rsaKey, HttpServletRequest req) {
+        List<Sys_app> appList = sysAppProvider.listEnable();
+        boolean hasApp = false;
+        for(Sys_app app:appList){
+            if(Strings.sNull(appId).equals(app.getId())){
+                hasApp = true;
+                break;
+            }
+        }
+        if(!hasApp) {
+            return Result.error("应用不存在或未启用");
+        }
         Sys_user user = null;
         Sys_user_security security = sysUserProvider.getUserSecurity();
         if ("password".equalsIgnoreCase(type)) {
@@ -304,11 +317,7 @@ public class AuthController {
     @Ok("json:{locked:'password|salt|createdBy|createdAt|updatedBy|updatedAt|delFlag',ignoreNull:false}")
     @GET
     @ApiOperation(name = "获取登录用户信息", description = "需登录成功")
-    @ApiImplicitParams(
-            {
-                    @ApiImplicitParam(name = "appId", description = "应用ID", required = true, check = true)
-            }
-    )
+    @ApiImplicitParams
     @ApiResponses(
             {
                     @ApiResponse(name = "conf", description = "系统参数", type = "object"),
@@ -319,12 +328,11 @@ public class AuthController {
             }
     )
     @SaCheckLogin
-    public Result<?> info(@Param("appId") String appId) {
-        SecurityUtil.setAppId(appId);
+    public Result<?> info() {
         Sys_user user = authService.getUserById(StpUtil.getLoginIdAsString());
         NutMap map = NutMap.NEW();
         //获取应用菜单及公共菜单
-        map.addv(SecurityUtil.getAppId(), sysUserProvider.getMenuList(SecurityUtil.getUserId(), appId));
+        map.addv(SecurityUtil.getAppId(), sysUserProvider.getMenuList(SecurityUtil.getUserId(), SecurityUtil.getAppId()));
         map.addv(GlobalConstant.DEFAULT_COMMON_APPID, sysUserProvider.getMenuList(SecurityUtil.getUserId(), GlobalConstant.DEFAULT_COMMON_APPID));
         return Result.data(NutMap.NEW()
                 .addv("conf", sysConfigProvider.getMapAll(SecurityUtil.getAppId()))
