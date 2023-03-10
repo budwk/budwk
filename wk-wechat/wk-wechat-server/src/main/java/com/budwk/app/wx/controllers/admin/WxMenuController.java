@@ -10,6 +10,7 @@ import com.budwk.app.wx.services.WxMenuService;
 import com.budwk.app.wx.services.WxReplyService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
+import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
@@ -58,6 +59,26 @@ public class WxMenuController {
     @Inject
     private WxService wxService;
 
+    @At("/list/{wxid}")
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "Vue3列表数据查询")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "wxid", description = "wxid", in = ParamIn.PATH)
+            }
+    )
+    @ApiResponses(
+            implementation = Pagination.class
+    )
+    @SaCheckLogin
+    public Result<?> list(String wxid) {
+        Cnd cnd = Cnd.NEW();
+        cnd.and("wxid", "=", wxid);
+        cnd.asc("location").asc("path");
+        return Result.success().addData(wxMenuService.query(cnd));
+    }
+
     @At("/child/{wxid}")
     @GET
     @Ok("json")
@@ -65,7 +86,7 @@ public class WxMenuController {
     @ApiOperation(description = "表格展开下级菜单")
     @ApiImplicitParams(
             {
-                    @ApiImplicitParam(name = "pid", description = "wxid", in = ParamIn.PATH),
+                    @ApiImplicitParam(name = "wxid", description = "wxid", in = ParamIn.PATH),
                     @ApiImplicitParam(name = "pid", description = "父级ID")
             }
     )

@@ -5,6 +5,11 @@ export default function({ $axios, redirect, store, app }) {
   $axios.defaults.baseURL = process.env.API
   $axios.onRequest((config) => {
     $axios.setHeader('wk-user-token', app.$cookies.get('wk-user-token'))
+    var appId = app.$cookies.get('appId')
+    if (!appId) {
+      appId = process.env.PLATFORM_CODE
+    }
+    $axios.setHeader('appId', appId)
     // console.log('发起请求::' + config.url)
   })
 

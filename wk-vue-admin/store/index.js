@@ -135,7 +135,7 @@ export const actions = {
     // 页面权限验证是通过store.state.auth进行判断的,这里登陆后页面每次获取并设置新store.state.auth值
     if (this.$cookies.get('wk-user-token')) {
       try {
-        const { data } = await this.$axios.$get(API_AUTH_INFO, { params: { appId: this.$cookies.get('appId') }})
+        const { data } = await this.$axios.$get(API_AUTH_INFO)
         commit('setAuth', data.token.tokenValue)
         commit('setUserInfo', data)
         commit('setConf', data.conf)
