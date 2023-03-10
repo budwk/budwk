@@ -1,0 +1,398 @@
+<template>
+    <div class="app-container">
+        <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+                <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['wx.conf.menu.create']">新增
+                </el-button>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button plain type="info" icon="Promotion" @click="handleCreate"
+                    v-permission="['wx.conf.menu.update']">发布至微信
+                </el-button>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button plain type="success" icon="Sort" @click="handleCreate"
+                    v-permission="['wx.conf.menu.update']">菜单排序
+                </el-button>
+            </el-col>
+            <el-col :span="1.5">
+                <el-select v-model="wxid" class="m-2" placeholder="切换公众号" @change="accountChange">
+                    <el-option v-for="item in accounts" :key="item.id" :label="item.appname" :value="item.id" />
+                </el-select>
+            </el-col>
+        </el-row>
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id" :default-expand-all="true"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+            <template v-for="(item, idx) in columns" :key="idx">
+                <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
+                    :show-overflow-tooltip="item.overflow" :align="item.align" :width="item.width"
+                    :sortable="item.sortable">
+                    <template v-if="item.prop == 'createdAt'" #default="scope">
+                        <span>{{ formatTime(scope.row.createdAt) }}</span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column fixed="right" header-align="center" align="center" label="操作"
+                class-name="small-padding fixed-width">
+                <template #default="scope">
+                    <el-tooltip content="新建子菜单" placement="top">
+                        <el-button link type="primary" icon="CirclePlus" @click="handleCreate(scope.row)"
+                            v-permission="['wx.conf.account.create']"></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="修改" placement="top">
+                        <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
+                            v-permission="['wx.conf.account.update']"></el-button>
+                    </el-tooltip>
+                    <el-tooltip content="删除" placement="top">
+                        <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
+                            v-permission="['wx.conf.account.delete']"></el-button>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-row>
+            <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
+                v-model:limit="queryParams.pageSize" @pagination="list" />
+        </el-row>
+
+        <el-dialog title="新增公众号" v-model="showCreate" width="50%">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="130px">
+                <el-row :gutter="10" style="padding-right:20px;">
+                    <el-col :span="24">
+                        <el-form-item prop="parentId" label="父级菜单">
+                            <el-cascader v-model="formData.parentId" style="width: 100%"  value-key="id"
+                                :options="menuOptions" :props="{ value: 'id', label: 'menuName', children: 'children' }" 
+                                check-strictly="false" :render-after-expand="false"
+                                tabindex="1" placeholder="父级菜单" />
+                        </el-form-item>
+                    </el-col><el-col :span="24">
+                        <el-form-item prop="menuName" label="菜单名称">
+                            <el-input v-model="formData.menuName" maxlength="100" placeholder="菜单名称" auto-complete="off"
+                                tabindex="1" type="text" />
+                            <el-alert style="height: 30px;margin-top: 3px;" title="一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替"
+                                type="warning" />
+                            <el-alert style="height: 30px;margin-top: 3px;" title="只可设置3个一级菜单，只可设置5个二级菜单" type="warning" />
+                        </el-form-item>
+                    </el-col><el-col :span="24">
+                        <el-form-item class="is-required" prop="menuType" label="菜单类型">
+                            <el-radio-group v-model="formData.menuType" size="medium">
+                                <el-radio label="">菜单</el-radio>
+                                <el-radio label="view">链接</el-radio>
+                                <el-radio label="click">事件</el-radio>
+                                <el-radio label="miniprogram">小程序</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item v-if="formData.menuType == 'view'" class="is-required" prop="url" label="URL">
+                            <el-input v-model="formData.url" placeholder="https://" auto-complete="off" tabindex="3"
+                                type="text" />
+                            <el-checkbox v-model="checked1" @change="checkedChange1">网页Oauth2.0</el-checkbox>
+                            <el-checkbox v-model="checked2" @change="checkedChange2">应用Oauth2.0</el-checkbox>
+                        </el-form-item>
+                    </el-col><el-col :span="24">
+                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="url" label="url">
+                            <el-input v-model="formData.url" placeholder="小程序URL" auto-complete="off" tabindex="3"
+                                type="text" />
+                        </el-form-item>
+                    </el-col><el-col :span="24">
+                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="appid"
+                            label="appid">
+                            <el-input v-model="formData.appid" placeholder="appid" auto-complete="off" tabindex="4"
+                                type="text" />
+                        </el-form-item>
+                    </el-col><el-col :span="24">
+                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="pagepath"
+                            label="pagepath">
+                            <el-input v-model="formData.pagepath" placeholder="小程序入口页" auto-complete="off" tabindex="5"
+                                type="text" />
+                        </el-form-item>
+                    </el-col><el-col :span="24">
+                        <el-form-item v-if="formData.menuType == 'click'" class="is-required" label="绑定事件" prop="menuKey">
+                            <el-select v-model="formData.menuKey" placeholder="关键词">
+                                <el-option v-for="item in keyList" :key="item.id" :label="item.value" :value="item.id" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="create">确 定</el-button>
+                    <el-button @click="showCreate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        <el-dialog title="修改公众号" v-model="showUpdate" width="50%">
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="125px">
+                <el-row :gutter="10" style="padding-right:20px;">
+                    <el-col :span="24">
+                        <el-form-item prop="id" label="唯一标识">
+                            <el-input v-model="formData.id" maxlength="100" placeholder="唯一标识" auto-complete="off"
+                                tabindex="1" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="配置URL">
+                            {{ platformInfo.AppDomain }}/wechat/open/weixin/msg/{{ formData.id }}
+                            <el-alert title="微信后台配置的URL" type="success" style="height:32px;" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="appname" label="公众号名称">
+                            <el-input v-model="formData.appname" maxlength="100" placeholder="公众号名称" auto-complete="off"
+                                tabindex="2" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="appid" label="AppId">
+                            <el-input v-model="formData.appid" maxlength="100" placeholder="AppId" auto-complete="off"
+                                tabindex="3" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="appsecret" label="AppSecret">
+                            <el-input v-model="formData.appsecret" maxlength="100" placeholder="AppSecret"
+                                auto-complete="off" tabindex="4" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="token" label="Token">
+                            <el-input v-model="formData.token" maxlength="100" placeholder="Token" auto-complete="off"
+                                tabindex="5" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="encodingAESKey" label="EncodingAESKey">
+                            <el-input v-model="formData.encodingAESKey" maxlength="100" placeholder="EncodingAESKey"
+                                auto-complete="off" tabindex="6" type="text" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="mchid" label="支付商户">
+                            <el-select v-model="formData.mchid" clearable placeholder="微信支付商户绑定">
+                                <el-option v-for="item in payData" :key="item.mchid" :label="item.name"
+                                    :value="item.mchid" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="update">确 定</el-button>
+                    <el-button @click="showUpdate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+    </div>
+</template>
+<script setup lang="ts" name="platform-wechat-conf-menu">
+import { nextTick, onMounted, reactive, ref } from 'vue'
+import modal from '/@/utils/modal'
+import { doCreate, doUpdate, getInfo, getList, doDelete, getSortTree, doSort, getKeywordList } from '/@/api/platform/wechat/menu'
+import { getAccountList } from '/@/api/platform/wechat/account'
+import { toRefs } from '@vueuse/core'
+import { ElForm } from 'element-plus'
+import { usePlatformInfo } from '/@/stores/platformInfo'
+import { handleTree } from '/@/utils/common'
+
+
+const platformInfo = usePlatformInfo()
+
+const createRef = ref<InstanceType<typeof ElForm>>()
+const updateRef = ref<InstanceType<typeof ElForm>>()
+
+
+const showCreate = ref(false)
+const showUpdate = ref(false)
+const tableLoading = ref(false)
+const tableData = ref([])
+const sortData = ref([])
+const accounts = ref([])
+const wxid = ref('')
+const menuOptions = ref([])
+
+// 验证URL
+const validateUrl = (rule: any, value: any, callback: any) => {
+    // const exp = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/)
+    if ((formData.value.menuType === 'view' || formData.value.menuType === 'miniprogram') && formData.value.url === '') {
+        callback(new Error('请输入正确的URL路径'))
+    } else {
+        callback()
+    }
+}
+
+// 验证关键词
+const validateK = (rule: any, value: any, callback: any) => {
+    if (formData.value.menuType === 'click' && (typeof (formData.value.menuKey) === 'undefined' || formData.value.menuKey === '')) {
+        callback(new Error('请选择关键词'))
+    } else {
+        callback()
+    }
+}
+// 验证小程序APPID
+const validateA = (rule: any, value: any, callback: any) => {
+    if (formData.value.menuType === 'miniprogram' && (typeof (formData.value.appid) === 'undefined' || formData.value.appid === '')) {
+        callback(new Error('请输入appid'))
+    } else {
+        callback()
+    }
+}
+// 验证小程序pagepath
+const validateP = (rule: any, value: any, callback: any) => {
+    if (formData.value.menuType === 'miniprogram' && (typeof (formData.value.pagepath) === 'undefined' || formData.value.pagepath === '')) {
+        callback(new Error('请输入pagepath'))
+    } else {
+        callback()
+    }
+}
+
+const data = reactive({
+    formData: {
+        id: '',
+        wxid: '',
+        menuName: '',
+        menuType: '',
+        url: '',
+        menuKey: '',
+        appid: '',
+        pagepath: '',
+        parentId: ''
+    },
+    queryParams: {
+        wxid: '',
+        pageNo: 1,
+        pageSize: 10,
+        totalCount: 0,
+        pageOrderName: 'createdAt',
+        pageOrderBy: 'descending'
+    },
+    formRules: {
+        menuName: [{ required: true, message: "菜单名称不能为空", trigger: ["blur", "change"] }],
+        url: [{ validator: validateUrl, trigger: ['blur', 'change'] }],
+        menuKey: [{ validator: validateK, trigger: ['blur', 'change'] }],
+        appid: [{ validator: validateA, trigger: ['blur', 'change'] }],
+        pagepath: [{ validator: validateP, trigger: ['blur', 'change'] }]
+    },
+})
+
+const { queryParams, formData, formRules } = toRefs(data)
+
+const columns = ref([
+    { prop: 'menuName', label: `菜单名称`, show: true },
+    { prop: 'appid', label: `AppID`, show: true },
+    { prop: 'mchid', label: `商户号`, show: true },
+    { prop: 'createdAt', label: `创建时间`, show: true },
+])
+
+// 重置表单
+const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
+    formData.value = {
+        id: '',
+        wxid: '',
+        menuName: '',
+        menuType: '',
+        url: '',
+        menuKey: '',
+        appid: '',
+        pagepath: '',
+        parentId: ''
+    }
+    formEl?.resetFields()
+}
+
+
+// 查询表格
+const list = () => {
+    tableLoading.value = true
+    getList(wxid.value).then((res) => {
+        tableLoading.value = false
+        tableData.value = handleTree(res.data) as never
+        menuOptions.value = handleTree(res.data) as never
+        sortData.value = handleTree(JSON.parse(JSON.stringify(res.data))) as never
+    })
+}
+
+const accountChange = (val: string) => {
+    queryParams.value.wxid = val
+    list()
+}
+
+const listAccount = () => {
+    getAccountList().then((res) => {
+        accounts.value = res.data as never
+        if (accounts.value.length > 0) {
+            wxid.value = accounts.value[0].id
+            queryParams.value.wxid = accounts.value[0].id
+            formData.value.wxid = accounts.value[0].id
+            list()
+        }
+    })
+}
+
+const handleCreate = (row: any) => {
+    resetForm(createRef.value)
+    if (row && row.id) {
+        formData.value.parentId = row.id
+    }
+    showCreate.value = true
+}
+
+// 修改按钮
+const handleUpdate = (row: any) => {
+    getInfo(row.id).then((res: any) => {
+        formData.value = res.data
+        showUpdate.value = true
+    })
+}
+
+// 删除按钮
+const handleDelete = (row: any) => {
+    modal.confirm('确定删除 ' + row.appname + '？').then(() => {
+        return doDelete(row.id)
+    }).then(() => {
+        queryParams.value.pageNo = 1
+        list()
+        modal.msgSuccess('删除成功')
+    }).catch(() => { })
+}
+
+
+// 提交新增
+const create = () => {
+    if (!createRef.value) return
+    createRef.value.validate((valid) => {
+        if (valid) {
+            doCreate(formData.value).then((res: any) => {
+                modal.msgSuccess(res.msg)
+                showCreate.value = false
+                queryParams.value.pageNo = 1
+                list()
+            })
+        }
+    })
+}
+
+// 提交修改
+const update = () => {
+    if (!updateRef.value) return
+    updateRef.value.validate((valid) => {
+        if (valid) {
+            doUpdate(formData.value).then((res: any) => {
+                modal.msgSuccess(res.msg)
+                showUpdate.value = false
+                list()
+            })
+        }
+    })
+}
+
+onMounted(() => {
+    listAccount()
+})
+</script>
+<route lang="yaml">
+    meta:
+      layout: platform/index
+</route>
