@@ -60,10 +60,9 @@
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
                         <el-form-item prop="parentId" label="父级菜单">
-                            <el-cascader v-model="formData.parentId" style="width: 100%"  value-key="id"
-                                :options="menuOptions" :props="{ value: 'id', label: 'menuName', children: 'children' }" 
-                                check-strictly="false" :render-after-expand="false"
-                                tabindex="1" placeholder="父级菜单" />
+                            <el-cascader v-model="formData.parentId" style="width: 100%" value-key="id"
+                                :options="menuOptions" :props="{ value: 'id', label: 'menuName', children: 'children' }"
+                                check-strictly="false" :render-after-expand="false" tabindex="1" placeholder="父级菜单" />
                         </el-form-item>
                     </el-col><el-col :span="24">
                         <el-form-item prop="menuName" label="菜单名称">
@@ -212,6 +211,9 @@ const sortData = ref([])
 const accounts = ref([])
 const wxid = ref('')
 const menuOptions = ref([])
+const checked1 = ref(false)
+const checked2 = ref(false)
+const account = ref({wxname: '',appid: '',wxid: ''})
 
 // 验证URL
 const validateUrl = (rule: any, value: any, callback: any) => {
@@ -303,6 +305,33 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
 }
 
 
+const checkedChange1 = (val: string) => {
+    if (!formData.value.url) {
+        return
+    }
+    if (checked1.value) {
+        var str = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + account.value.appid + '&redirect_uri=$s&response_type=code&scope=snsapi_base&state=11624317#wechat_redirect'
+        formData.value.url = str.replace('$s', encodeURIComponent(formData.value.url))
+    } else {
+        var url = formData.value.url
+        var str2 = url.substring(url.indexOf('redirect_uri=') + 13, url.indexOf('&response_type='))
+        formData.value.url = decodeURIComponent(str2)
+    }
+}
+
+const checkedChange2 = (val: string) => {
+    if (!formData.value.url) {
+        return
+    }
+    if (checked2.value) {
+        var str = platformInfo.AppDomain + '/wechat/open/auth/' + account.value.wxid + '/oauth?goto_url=$s'
+        formData.value.url = str.replace('$s', formData.value.url)
+    } else {
+        var url = formData.value.url
+        formData.value.url = url.substring(url.indexOf('goto_url=') + 9)
+    }
+}
+
 // 查询表格
 const list = () => {
     tableLoading.value = true
@@ -316,6 +345,13 @@ const list = () => {
 
 const accountChange = (val: string) => {
     queryParams.value.wxid = val
+    account.value.wxname = ''
+    if (accounts.value && accounts.value.length > 0) {
+        var index = accounts.value.findIndex(obj => obj.id === val)
+        account.value.wxname = accounts.value[index].appname
+        account.value.appid = accounts.value[index].appid
+        account.value.wxid = accounts.value[index].id
+    }
     list()
 }
 
@@ -326,6 +362,9 @@ const listAccount = () => {
             wxid.value = accounts.value[0].id
             queryParams.value.wxid = accounts.value[0].id
             formData.value.wxid = accounts.value[0].id
+            account.value.wxname = accounts.value[0].appname
+            account.value.appid = accounts.value[0].appid
+            account.value.wxid = accounts.value[0].id
             list()
         }
     })
