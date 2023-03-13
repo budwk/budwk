@@ -39,7 +39,7 @@
                 type="success"
                 />
             </el-row>
-            <el-row style="padding-top:5px;text-align: center">
+            <el-row style="padding-top:5px;" justify="center">
                 <el-progress type="circle" :percentage="progressNum" :status="progressStatus" />
             </el-row>
             <template #footer>
