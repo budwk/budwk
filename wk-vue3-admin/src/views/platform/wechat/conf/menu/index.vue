@@ -6,7 +6,7 @@
                 </el-button>
             </el-col>
             <el-col :span="1.5">
-                <el-button plain type="info" icon="Promotion" @click="handleCreate"
+                <el-button plain type="info" icon="Promotion" @click="handlePush"
                     v-permission="['wx.conf.menu.update']">发布至微信
                 </el-button>
             </el-col>
@@ -29,6 +29,18 @@
                     :sortable="item.sortable">
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
+                    </template>
+                    <template v-if="item.prop == 'menuType'" #default="scope">
+                        <span v-if="scope.row.menuType==''">菜单</span>
+                        <span v-if="scope.row.menuType=='view'">链接</span>
+                        <span v-if="scope.row.menuType=='click'">事件</span>
+                        <span v-if="scope.row.menuType=='miniprogram'">小程序</span>
+                    </template>
+                    <template v-if="item.prop == 'id'" #default="scope">
+                        <span v-if="scope.row.menuType==''">-</span>
+                        <span v-if="scope.row.menuType=='view'">{{ scope.row.url }}</span>
+                        <span v-if="scope.row.menuType=='click'">关键词: {{ scope.row.menuKey }}</span>
+                        <span v-if="scope.row.menuType=='miniprogram'">小程序: {{ scope.row.appid }}</span>
                     </template>
                 </el-table-column>
             </template>
@@ -61,10 +73,12 @@
                     <el-col :span="24">
                         <el-form-item prop="parentId" label="父级菜单">
                             <el-cascader v-model="formData.parentId" style="width: 100%" value-key="id"
-                                :options="menuOptions" :props="{ value: 'id', label: 'menuName', children: 'children' }"
-                                check-strictly="false" :render-after-expand="false" tabindex="1" placeholder="父级菜单" />
+                                :options="menuOptions"
+                                :props="{ checkStrictly: true, value: 'id', label: 'menuName', children: 'children' }"
+                                tabindex="1" placeholder="父级菜单" />
                         </el-form-item>
-                    </el-col><el-col :span="24">
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item prop="menuName" label="菜单名称">
                             <el-input v-model="formData.menuName" maxlength="100" placeholder="菜单名称" auto-complete="off"
                                 tabindex="1" type="text" />
@@ -72,7 +86,8 @@
                                 type="warning" />
                             <el-alert style="height: 30px;margin-top: 3px;" title="只可设置3个一级菜单，只可设置5个二级菜单" type="warning" />
                         </el-form-item>
-                    </el-col><el-col :span="24">
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item class="is-required" prop="menuType" label="菜单类型">
                             <el-radio-group v-model="formData.menuType" size="medium">
                                 <el-radio label="">菜单</el-radio>
@@ -84,27 +99,31 @@
                         <el-form-item v-if="formData.menuType == 'view'" class="is-required" prop="url" label="URL">
                             <el-input v-model="formData.url" placeholder="https://" auto-complete="off" tabindex="3"
                                 type="text" />
-                            <el-checkbox v-model="checked1" @change="checkedChange1">网页Oauth2.0</el-checkbox>
-                            <el-checkbox v-model="checked2" @change="checkedChange2">应用Oauth2.0</el-checkbox>
+                            <el-checkbox v-model="checked1" @click="checkedChange1">网页Oauth2.0</el-checkbox>
+                            <el-checkbox v-model="checked2" @click="checkedChange2">应用Oauth2.0</el-checkbox>
                         </el-form-item>
-                    </el-col><el-col :span="24">
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="url" label="url">
                             <el-input v-model="formData.url" placeholder="小程序URL" auto-complete="off" tabindex="3"
                                 type="text" />
                         </el-form-item>
-                    </el-col><el-col :span="24">
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="appid"
                             label="appid">
                             <el-input v-model="formData.appid" placeholder="appid" auto-complete="off" tabindex="4"
                                 type="text" />
                         </el-form-item>
-                    </el-col><el-col :span="24">
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="pagepath"
                             label="pagepath">
                             <el-input v-model="formData.pagepath" placeholder="小程序入口页" auto-complete="off" tabindex="5"
                                 type="text" />
                         </el-form-item>
-                    </el-col><el-col :span="24">
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item v-if="formData.menuType == 'click'" class="is-required" label="绑定事件" prop="menuKey">
                             <el-select v-model="formData.menuKey" placeholder="关键词">
                                 <el-option v-for="item in keyList" :key="item.id" :label="item.value" :value="item.id" />
@@ -125,52 +144,54 @@
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="125px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item prop="id" label="唯一标识">
-                            <el-input v-model="formData.id" maxlength="100" placeholder="唯一标识" auto-complete="off"
+                        <el-form-item prop="menuName" label="菜单名称">
+                            <el-input v-model="formData.menuName" maxlength="100" placeholder="菜单名称" auto-complete="off"
                                 tabindex="1" type="text" />
+                            <el-alert style="height: 30px;margin-top: 3px;" title="一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替"
+                                type="warning" />
+                            <el-alert style="height: 30px;margin-top: 3px;" title="只可设置3个一级菜单，只可设置5个二级菜单" type="warning" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="配置URL">
-                            {{ platformInfo.AppDomain }}/wechat/open/weixin/msg/{{ formData.id }}
-                            <el-alert title="微信后台配置的URL" type="success" style="height:32px;" />
+                        <el-form-item class="is-required" prop="menuType" label="菜单类型">
+                            <el-radio-group v-model="formData.menuType" size="medium">
+                                <el-radio label="">菜单</el-radio>
+                                <el-radio label="view">链接</el-radio>
+                                <el-radio label="click">事件</el-radio>
+                                <el-radio label="miniprogram">小程序</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item v-if="formData.menuType == 'view'" class="is-required" prop="url" label="URL">
+                            <el-input v-model="formData.url" placeholder="https://" auto-complete="off" tabindex="3"
+                                type="text" />
+                            <el-checkbox v-model="checked1" @click="checkedChange1">网页Oauth2.0</el-checkbox>
+                            <el-checkbox v-model="checked2" @click="checkedChange2">应用Oauth2.0</el-checkbox>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="appname" label="公众号名称">
-                            <el-input v-model="formData.appname" maxlength="100" placeholder="公众号名称" auto-complete="off"
-                                tabindex="2" type="text" />
+                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="url" label="url">
+                            <el-input v-model="formData.url" placeholder="小程序URL" auto-complete="off" tabindex="3"
+                                type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="appid" label="AppId">
-                            <el-input v-model="formData.appid" maxlength="100" placeholder="AppId" auto-complete="off"
-                                tabindex="3" type="text" />
+                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="appid"
+                            label="appid">
+                            <el-input v-model="formData.appid" placeholder="appid" auto-complete="off" tabindex="4"
+                                type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="appsecret" label="AppSecret">
-                            <el-input v-model="formData.appsecret" maxlength="100" placeholder="AppSecret"
-                                auto-complete="off" tabindex="4" type="text" />
+                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="pagepath"
+                            label="pagepath">
+                            <el-input v-model="formData.pagepath" placeholder="小程序入口页" auto-complete="off" tabindex="5"
+                                type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="token" label="Token">
-                            <el-input v-model="formData.token" maxlength="100" placeholder="Token" auto-complete="off"
-                                tabindex="5" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="encodingAESKey" label="EncodingAESKey">
-                            <el-input v-model="formData.encodingAESKey" maxlength="100" placeholder="EncodingAESKey"
-                                auto-complete="off" tabindex="6" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="mchid" label="支付商户">
-                            <el-select v-model="formData.mchid" clearable placeholder="微信支付商户绑定">
-                                <el-option v-for="item in payData" :key="item.mchid" :label="item.name"
-                                    :value="item.mchid" />
+                        <el-form-item v-if="formData.menuType == 'click'" class="is-required" label="绑定事件" prop="menuKey">
+                            <el-select v-model="formData.menuKey" placeholder="关键词">
+                                <el-option v-for="item in keyList" :key="item.id" :label="item.value" :value="item.id" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -189,7 +210,7 @@
 <script setup lang="ts" name="platform-wechat-conf-menu">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, doDelete, getSortTree, doSort, getKeywordList } from '/@/api/platform/wechat/menu'
+import { doCreate, doUpdate, getInfo, getList, doDelete, doPush, doSort, getKeywordList } from '/@/api/platform/wechat/menu'
 import { getAccountList } from '/@/api/platform/wechat/account'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
@@ -213,7 +234,8 @@ const wxid = ref('')
 const menuOptions = ref([])
 const checked1 = ref(false)
 const checked2 = ref(false)
-const account = ref({wxname: '',appid: '',wxid: ''})
+const account = ref({ wxname: '', appid: '', wxid: '' })
+const keyList = ref([])
 
 // 验证URL
 const validateUrl = (rule: any, value: any, callback: any) => {
@@ -283,8 +305,8 @@ const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
     { prop: 'menuName', label: `菜单名称`, show: true },
-    { prop: 'appid', label: `AppID`, show: true },
-    { prop: 'mchid', label: `商户号`, show: true },
+    { prop: 'menuType', label: `菜单类型`, show: true },
+    { prop: 'id', label: `配置内容`, show: true },
     { prop: 'createdAt', label: `创建时间`, show: true },
 ])
 
@@ -366,7 +388,18 @@ const listAccount = () => {
             account.value.appid = accounts.value[0].appid
             account.value.wxid = accounts.value[0].id
             list()
+            listKeyword()
         }
+    })
+}
+
+const listKeyword = () => {
+    getKeywordList(wxid.value).then((res) => {
+        const r: { value: any; id: any }[] = []
+        res.data.forEach((o: any) => {
+            r.push({ value: o.keyword, id: o.keyword })
+        })
+        keyList.value = r as never
     })
 }
 
@@ -425,6 +458,14 @@ const update = () => {
             })
         }
     })
+}
+
+const handlePush = () => {
+    modal.confirm('确定将推送至微信平台？').then(() => {
+        return doPush(wxid.value)
+    }).then(() => {
+        modal.msgSuccess('推送成功')
+    }).catch(() => { })
 }
 
 onMounted(() => {

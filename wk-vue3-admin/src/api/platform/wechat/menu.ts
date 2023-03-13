@@ -5,7 +5,7 @@ export const API_WX_MENU_CREATE = '/wechat/admin/conf/menu/create'
 export const API_WX_MENU_DELETE = '/wechat/admin/conf/menu/delete/'
 export const API_WX_MENU_GET = '/wechat/admin/conf/menu/get/'
 export const API_WX_MENU_UPDATE = '/wechat/admin/conf/menu/update'
-export const API_WX_MENU_SORT_TREE = '/wechat/admin/conf/menu/get_sort_tree/'
+//export const API_WX_MENU_SORT_TREE = '/wechat/admin/conf/menu/get_sort_tree/'
 export const API_WX_MENU_SORT = '/wechat/admin/conf/menu/sort/'
 export const API_WX_MENU_PUSH = '/wechat/admin/conf/menu/push/'
 // export const API_WX_MENU_LIST_CHANNEL = '/wechat/admin/conf/menu/list_channel'
@@ -30,13 +30,6 @@ export function getTree(wxid: string,pid: string) {
     })
 }
 
-export function getSortTree(wxid: string) {
-    return request({
-        url: API_WX_MENU_SORT_TREE + wxid,
-        method: 'GET'
-    })
-}
-
 export function doSort(wxid: string,ids: string) {
     return request({
         url: API_WX_MENU_SORT + wxid,
@@ -54,8 +47,9 @@ export function doPush(wxid: string) {
 
 export function getKeywordList(wxid: string) {
     return request({
-        url: API_WX_MENU_LIST_KEYWORD + wxid,
-        method: 'POST'
+        url: API_WX_MENU_LIST_KEYWORD,
+        method: 'POST',
+        data: { wxid: wxid }
     })
 }
 
