@@ -7,7 +7,7 @@
                 </el-select>
             </el-col>
             <el-col :span="1.5">
-                <el-button plain type="primary" @click="handleDownload"
+                <el-button plain type="success" icon="Download" @click="handleDownload"
                     v-permission="['wx.user.list.sync']">同步会员资料
                 </el-button>
             </el-col>

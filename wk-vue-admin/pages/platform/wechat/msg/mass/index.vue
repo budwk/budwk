@@ -623,7 +623,7 @@ export default {
     // 跳转到图文管理页
     gotoNews() {
       this.$router.push({
-        path: '/wechat/admin/msg/mass/news',
+        path: '/platform/wechat/msg/mass/news',
         query: {
           wxid: this.account.wxid,
           wxname: this.account.wxname
