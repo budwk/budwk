@@ -464,7 +464,7 @@ export default {
       this.listPage()
     },
     goBack() {
-      this.$router.push('/wechat/admin/msg/mass')
+      this.$router.push('/platform/wechat/msg/mass')
     }
   }
 }
