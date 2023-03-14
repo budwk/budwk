@@ -25,11 +25,11 @@
             </el-select>
           </el-form-item>
           <el-form-item
-            label="微信昵称"
+            label="openid"
           >
             <el-input
-              v-model="pageData.nickname"
-              placeholder="微信昵称"
+              v-model="pageData.openid"
+              placeholder="openid"
               class="platform-content-search-input"
               @keyup.enter.native="doSearch"
             />
@@ -217,7 +217,7 @@ export default {
       listData: [],
       pageData: {
         content: '',
-        nickname: '',
+        openid: '',
         wxid: '',
         pageNo: 1,
         pageSize: 10,

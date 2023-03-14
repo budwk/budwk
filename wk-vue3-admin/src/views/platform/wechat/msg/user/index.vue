@@ -1,11 +1,27 @@
 <template>
     <div class="app-container">
-        <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-                <el-select v-model="wxid" class="m-2" placeholder="切换公众号" @change="accountChange">
+        <el-row>
+            <el-form :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
+                <el-form-item label="公众号" prop="wxid">
+                    <el-select v-model="wxid" class="m-2" placeholder="切换公众号" @change="accountChange">
                     <el-option v-for="item in accounts" :key="item.id" :label="item.appname" :value="item.id" />
                 </el-select>
-            </el-col>
+                    </el-form-item>
+                    <el-form-item label="openid" prop="openid">
+                        <el-input
+v-model="queryParams.openid" placeholder="请输入openid" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item label="消息内容" prop="content">
+                        <el-input
+v-model="queryParams.content" placeholder="请输入消息内容" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
+                        <el-button icon="Refresh" @click="resetSearch">重置</el-button>
+                    </el-form-item>
+                </el-form>
         </el-row>
         <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe @sort-change="sortChange"
             :default-sort="{ prop: 'createdAt', order: 'descending' }">
@@ -128,6 +144,7 @@ const accounts = ref([])
 const wxid = ref('')
 const btnLoading = ref(false)
 const createRef = ref<InstanceType<typeof ElForm>>()
+const queryRef = ref<InstanceType<typeof ElForm>>()
 
 const data = reactive({
     formData: {
@@ -141,6 +158,8 @@ const data = reactive({
     },
     queryParams: {
         wxid: '',
+        openid: '',
+        content: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -199,6 +218,17 @@ const listAccount = () => {
 const sortChange = (column: any) => {
     queryParams.value.pageOrderName = column.prop
     queryParams.value.pageOrderBy = column.order
+    list()
+}
+
+const handleSearch = () => {
+    queryParams.value.pageNo = 1
+    list()
+}
+
+// 重置搜索
+const resetSearch = () => {
+    queryRef.value?.resetFields()
     list()
 }
 
