@@ -12,7 +12,7 @@
                 </el-button>
             </el-col>
         </el-row>
-        <el-table v-loading="tableLoading" :data="tableData" row-key="id">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="{ prop: 'subscribeAt', order: 'descending' }">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="item.overflow" :align="item.align" :width="item.width"
@@ -77,7 +77,7 @@ const data = reactive({
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
-        pageOrderName: 'createdAt',
+        pageOrderName: 'subscribeAt',
         pageOrderBy: 'descending'
     }
 })
@@ -89,7 +89,7 @@ const columns = ref([
     { prop: 'unionid', label: `unionid`, show: true },
     { prop: 'nickname', label: `昵称`, show: true },
     { prop: 'subscribe', label: `是否关注`, show: true, width: 100 },
-    { prop: 'subscribeAt', label: `关注时间`, show: true, width: 180 }
+    { prop: 'subscribeAt', label: `关注时间`, show: true, sortable: true, width: 180 }
 ])
 
 
@@ -103,6 +103,7 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
 
 const accountChange = (val: string) => {
     wxid.value = val
+    queryParams.value.wxid = val
     list()
 }
 
@@ -111,10 +112,18 @@ const listAccount = () => {
         accounts.value = res.data as never
         if (accounts.value.length > 0) {
             wxid.value = accounts.value[0].id
+            queryParams.value.wxid = accounts.value[0].id
             list()
         }
     })
 }
+
+const sortChange = (column: any) => {
+    queryParams.value.pageOrderName = column.prop
+    queryParams.value.pageOrderBy = column.order
+    list()
+}
+
 // 查询表格
 const list = () => {
     tableLoading.value = true
