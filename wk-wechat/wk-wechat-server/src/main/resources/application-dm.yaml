@@ -1,0 +1,111 @@
+nutz:
+  application:
+    name: wk-wechat
+server:
+  port: 0
+  host: 0.0.0.0
+jetty:
+  contextPath: /wechat
+  threadpool:
+    idleTimeout: 60000
+    minThreads: 10
+    maxThreads: 200
+openapi:
+  enable: true
+  scanner:
+    package: com.budwk.app.wx
+  info:
+    title: 微信管理
+    version: 8.0.0
+    contact:
+      name: 大鲨鱼
+      email: wizzer@qq.com
+  servers:
+    - url: ".."
+      description: 本机环境
+  headers:
+    - value: wk-user-token
+      name: 用户Token
+      in: header
+      required: true
+web:
+  sql:
+    ignore:
+  cors:
+    # 正式环境请改成部署的域名或网址,增加安全性
+    origin: "*"
+    headers: "X-Requested-With,Content-Type,lang,wk-member-token,wk-user-token"
+  validation:
+    enable: true
+redis:
+  host: 127.0.0.1
+  port: 6379
+  timeout: 2000
+  max_redir: 10
+  database: 0
+  maxTotal: 100
+  #password: 123
+  pool:
+    maxTotal: 100
+    maxIdle: 50
+    minIdle: 10
+  # cluster 集群模式
+  mode: normal
+  # cluster 集群模式
+  #nodes:
+nacos:
+  discovery:
+    server-addr: 10.10.10.10:8848
+    namespace: dev
+    naming:
+      service-name: budwk.wechat
+      meta-data: "{'version':'budwk.wechat.8.0.0'}"
+  config:
+    server-addr: 10.10.10.10:8848
+    namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
+    data-id: wk-wechat
+    data-type: yaml
+dubbo:
+  registry:
+    address: nacos://10.10.10.10:8848?namespace=dev
+  protocol:
+    name: dubbo
+    threads: 200
+    #随机端口
+    port: 0
+    #默认关闭QOS服务
+  application:
+    qos:
+      enable: false
+log:
+  color: true
+  level: debug
+database:
+  enable: true
+  ig:
+    snowflake: false  #是否启用雪花主键
+  table:
+    create: true      #是否自动建表 默认false
+    migration: true   #是否自动变更 默认false
+    add: true         #变更是否添加列 默认false
+    package:          #相关实体所在包
+      - com.budwk.app.wx
+jdbc:
+  driver: dm.jdbc.driver.DmDriver
+  url: jdbc:dm://10.10.10.10:5236?schema=budwk_v8&databaseProductName=dm mysql&compatibleMode=mysql
+  username: SYSDBA
+  password: '@#pass123'
+  validationQuery: select 1
+  maxActive: 10
+  testWhileIdle: true
+  connectionProperties: druid.stat.slowSqlMillis=2000
+  defaultAutoCommit: true
+
+storage:
+  enable: true
+  #本地方式
+  provider: local
+  local:
+    #本地存储位置
+    path: ~/temp/files
+
