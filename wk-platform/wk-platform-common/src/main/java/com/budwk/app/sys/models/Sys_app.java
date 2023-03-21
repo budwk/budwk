@@ -46,7 +46,7 @@ public class Sys_app extends BaseModel implements Serializable {
     @Column
     @Comment("应用图标")
     @ApiModelProperty(description = "应用图标")
-    @ColDefine(customType = "longtext")
+    @ColDefine(type = ColType.TEXT)
     private String icon;
 
     @Column

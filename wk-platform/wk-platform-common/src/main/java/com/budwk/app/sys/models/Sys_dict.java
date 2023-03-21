@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Table("sys_dict")
 @TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({@Index(name = "INDEX_SYS_DICT_PATH", fields = {"path"}, unique = true),
-        @Index(name = "INDEX_SYS_CONFIG", fields = {"code"}, unique = true)})
+        @Index(name = "INDEX_SYS_DICT_CODE", fields = {"code"}, unique = true)})
 @ApiModel(description = "系统数据字典表")
 public class Sys_dict extends BaseModel implements Serializable {
 

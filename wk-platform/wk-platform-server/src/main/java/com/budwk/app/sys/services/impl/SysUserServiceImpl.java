@@ -134,7 +134,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     @Override
     @CacheResult(cacheKey = "${userId}_getAppList")
     public List<Sys_app> getAppList(String userId) {
-        Sql sql = Sqls.create("select distinct a.* from sys_app a,sys_role_app b where a.id=b.appId and " +
+        Sql sql = Sqls.create("select distinct a.id,a.name,a.path,a.hidden,a.disabled,a.location from sys_app a,sys_role_app b where a.id=b.appId and " +
                 " (b.roleId=@pubRoleId or b.roleId in(select c.roleId from sys_role_user c,sys_role d where c.roleId=d.id and c.userId=@userId and d.disabled=@f) ) and a.disabled=@f order by a.location");
         sql.params().set("pubRoleId", sysRoleService.getPublicId());
         sql.params().set("userId", userId);

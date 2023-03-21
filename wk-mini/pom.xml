@@ -9,7 +9,7 @@
     <version>8.0.0-mini-SNAPSHOT</version>
 
     <properties>
-        <nutzboot.version>2.5.0-SNAPSHOT</nutzboot.version>
+        <nutzboot.version>2.6.0-SNAPSHOT</nutzboot.version>
         <wk.version>8.0.0-SNAPSHOT</wk.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -22,6 +22,14 @@
     </properties>
 
     <dependencies>
+        <!-- dm -->
+        <dependency>
+            <groupId>com.dm</groupId>
+            <artifactId>DmJdbcDriver</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/DmJdbcDriver18.jar</systemPath>
+        </dependency>
         <!-- wk-starter -->
         <dependency>
             <groupId>com.budwk.starter</groupId>

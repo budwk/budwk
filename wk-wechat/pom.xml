@@ -13,7 +13,7 @@
     </modules>
     <packaging>pom</packaging>
     <properties>
-        <nutzboot.version>2.5.0-SNAPSHOT</nutzboot.version>
+        <nutzboot.version>2.6.0-SNAPSHOT</nutzboot.version>
         <wk.version>8.0.0-SNAPSHOT</wk.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
