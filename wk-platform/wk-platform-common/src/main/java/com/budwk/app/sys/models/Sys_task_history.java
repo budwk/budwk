@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Table("sys_task_history_${month}")
 @TableMeta("{'mysql-charset':'utf8mb4'}")
 @ApiModel(description = "定时任务历史记录表")
-@TableIndexes({@Index(name = "INDEX_SYS_TASK_HISTORY", fields = {"instanceId", "jobId"}, unique = true)})
+@TableIndexes({@Index(name = "INDEX_SYS_TASK_HISTORY_${month}", fields = {"instanceId", "jobId"}, unique = true)})
 public class Sys_task_history extends BaseModel implements Serializable {
 
     private static final long serialVersionUID = -3769322238060559811L;
