@@ -23,7 +23,7 @@
         <yitter-idgenerator.version>1.0.6</yitter-idgenerator.version>
         <sa-token.version>1.26.0</sa-token.version>
         <feign.version>11.1</feign.version>
-        <jetty.version>9.4.34.v20201102</jetty.version>
+        <jetty.version>9.4.48.v20220622</jetty.version>
         <ribbon.version>2.7.18</ribbon.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <slf4j.version>1.7.25</slf4j.version>
