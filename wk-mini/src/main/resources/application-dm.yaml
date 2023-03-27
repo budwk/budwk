@@ -101,15 +101,17 @@ database:
     snowflake: true  #是否启用雪花主键
   table:
     create: true      #是否自动建表 默认false
-    migration: false   #是否自动变更 默认false
-    add: false         #变更是否添加列 默认false
+    migration: true   #是否自动变更 默认false
+    add: true         #变更是否添加列 默认false
+    check: true
+    delete: true
     package:          #相关实体所在包
       - com.budwk.app
 jdbc:
   driver: dm.jdbc.driver.DmDriver
   url: jdbc:dm://10.10.10.10:5236?schema=budwk_v8&databaseProductName=dm mysql&compatibleMode=mysql
   username: SYSDBA
-  password: '@#pass123'
+  password: 'pass123'
   validationQuery: select 1
   maxActive: 10
   testWhileIdle: true
