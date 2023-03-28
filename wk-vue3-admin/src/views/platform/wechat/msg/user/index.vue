@@ -92,9 +92,12 @@ v-model="queryParams.content" placeholder="请输入消息内容" clearable styl
 
         <el-dialog title="回复消息" v-model="showReply" width="40%">
             <el-form ref="createRef" :model="formData" :rules="formRules" size="small" label-width="80px">
-                <el-form-item label="微信昵称">
+                <el-form-item label="微信昵称 ">
                     <span v-if="formData.nickname">{{ formData.nickname }}</span>
-                    <span v-else>{{ formData.openid }}</span>
+                    <span v-else>未获取</span>
+                </el-form-item>
+                <el-form-item label="openid">
+                    {{ formData.openid }}
                 </el-form-item>
                 <el-form-item label="消息内容">
                     <span v-if="formData.type === 'txt'">
@@ -174,7 +177,7 @@ const data = reactive({
 const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
-    { prop: 'openid', label: `会员昵称`, show: true },
+    { prop: 'openid', label: `微信昵称 | openid`, show: true },
     { prop: 'type', label: `消息类型`, show: true, width: 100 },
     { prop: 'content', label: `消息内容`, show: true },
     { prop: 'replyId', label: `消息状态`, show: true, width: 150 },

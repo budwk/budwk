@@ -7,7 +7,8 @@
                 </el-button>
             </el-col>
         </el-row>
-        <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="{ prop: 'createdAt', order: 'descending' }">
+        <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe @sort-change="sortChange"
+            :default-sort="{ prop: 'createdAt', order: 'descending' }">
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" v-if="item.show"
                     :show-overflow-tooltip="item.overflow" :align="item.align" :width="item.width"
@@ -16,7 +17,8 @@
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
                     <template v-if="item.prop == 'picurl'" #default="scope">
-                        <img v-if="scope.row.picurl!=''" :src="platformInfo.AppFileDomain+scope.row.picurl" width="30" height="30">
+                        <img v-if="scope.row.picurl != ''" :src="platformInfo.AppFileDomain + scope.row.picurl" width="30"
+                            height="30">
                     </template>
                 </el-table-column>
             </template>
@@ -24,8 +26,7 @@
                 class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-tooltip content="查看" placement="top">
-                        <el-button link type="primary" icon="View" @click="handleView(scope.row)"
-                            ></el-button>
+                        <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
                     </el-tooltip>
                     <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
@@ -38,67 +39,97 @@
             <pagination :total="queryParams.totalCount" v-model:page="queryParams.pageNo"
                 v-model:limit="queryParams.pageSize" @pagination="list" />
         </el-row>
-        <el-dialog title="新增公众号" v-model="showCreate" width="50%">
-            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="130px">
+        <el-dialog title="新增图文" v-model="showCreate" width="60%">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="160px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item prop="parentId" label="父级菜单">
-                            <el-cascader v-model="formData.parentId" style="width: 100%" value-key="id"
-                                :options="menuOptions"
-                                :props="{ checkStrictly: true, value: 'id', label: 'menuName', children: 'children' }"
-                                tabindex="1" placeholder="父级菜单" />
+                        <el-form-item prop="title" label="所属公众号" class="label-font-weight">
+                            {{ formData.wxname }}
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item prop="menuName" label="菜单名称">
-                            <el-input v-model="formData.menuName" maxlength="100" placeholder="菜单名称" auto-complete="off"
+                        <el-form-item prop="title" label="图文标题">
+                            <el-input v-model="formData.title" maxlength="255" placeholder="图文标题" auto-complete="off"
                                 tabindex="1" type="text" />
-                            <el-alert style="height: 30px;margin-top: 3px;" title="一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替"
-                                type="warning" />
-                            <el-alert style="height: 30px;margin-top: 3px;" title="只可设置3个一级菜单，只可设置5个二级菜单" type="warning" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item class="is-required" prop="menuType" label="菜单类型">
-                            <el-radio-group v-model="formData.menuType" size="medium">
-                                <el-radio label="">菜单</el-radio>
-                                <el-radio label="view">链接</el-radio>
-                                <el-radio label="click">事件</el-radio>
-                                <el-radio label="miniprogram">小程序</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item v-if="formData.menuType == 'view'" class="is-required" prop="url" label="URL">
-                            <el-input v-model="formData.url" placeholder="https://" auto-complete="off" tabindex="3"
-                                type="text" />
-                            <el-checkbox v-model="checked1" @click="checkedChange1">网页Oauth2.0</el-checkbox>
-                            <el-checkbox v-model="checked2" @click="checkedChange2">应用Oauth2.0</el-checkbox>
+                        <el-form-item prop="author" label="图文作者">
+                            <el-input v-model="formData.author" maxlength="50" placeholder="图文作者" auto-complete="off"
+                                tabindex="2" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="url" label="url">
-                            <el-input v-model="formData.url" placeholder="小程序URL" auto-complete="off" tabindex="3"
-                                type="text" />
+                        <el-form-item prop="picurl" label="缩略图(64kb以内)" class="label-font-weight">
+                            <el-upload
+action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
+                    :before-upload="beforeUpload">
+                    <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl" class="_img"/>
+                    <el-button v-else>
+                        选择
+                        <el-icon class="el-icon--right">
+                            <Upload />
+                        </el-icon>
+                    </el-button>
+                </el-upload>
+                            
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="appid"
-                            label="appid">
-                            <el-input v-model="formData.appid" placeholder="appid" auto-complete="off" tabindex="4"
-                                type="text" />
+                        <el-form-item prop="digest" label="摘要">
+                            <el-input v-model="formData.digest" type="textarea" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item v-if="formData.menuType == 'miniprogram'" class="is-required" prop="pagepath"
-                            label="pagepath">
-                            <el-input v-model="formData.pagepath" placeholder="小程序入口页" auto-complete="off" tabindex="5"
-                                type="text" />
+                        <el-form-item prop="content_source_url" label="原文链接">
+                            <el-checkbox v-model="checkedSourceUrl">原文链接</el-checkbox>
+                            <el-input v-if="checkedSourceUrl" v-model="formData.url" maxlength="50" placeholder="原文链接"
+                                auto-complete="off" tabindex="2" type="text" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item v-if="formData.menuType == 'click'" class="is-required" label="绑定事件" prop="menuKey">
-                            <el-select v-model="formData.menuKey" placeholder="关键词">
-                                <el-option v-for="item in keyList" :key="item.id" :label="item.value" :value="item.id" />
-                            </el-select>
+                        <el-form-item prop="show_cover_pic" label="显示封面">
+                            <el-checkbox v-model="formData.show_cover_pic" true-label="1" false-label="0">显示封面</el-checkbox>
+                            <el-alert v-if="formData.show_cover_pic == '1'" title="会自动使用文章中第一张图片作为封面图" type="info"
+                                close-text="知道了" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="need_open_comment" label="打开评论">
+                            <el-checkbox v-model="formData.need_open_comment" true-label="1"
+                                false-label="0">打开评论</el-checkbox>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item prop="only_fans_can_comment" label="粉丝评论">
+                            <el-checkbox v-model="formData.only_fans_can_comment" true-label="1"
+                                false-label="0">只给粉丝评论</el-checkbox>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <div style="border: 1px solid #ccc;z-index: 1000;">
+                            <Toolbar
+                                v-if="showCreate"
+                                style="border-bottom: 1px solid #ccc"
+                                :editor="editorRef"
+                                :defaultConfig="toolbarConfig"
+                                :mode="editorMode"
+                            />
+                            <Editor
+                                v-if="showCreate"
+                                style="height: 500px; overflow-y: hidden;"
+                                v-model="formData.content"
+                                :defaultConfig="editorConfig"
+                                :mode="editorMode"
+                                @onCreated="handleEditorCreated"
+                            />
+                        </div>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item style="padding-top:75px;">
+                            <el-alert style="margin-top: 5px;" title="图文中上传的图片只可在微信中查看" type="info" close-text="知道了" />
+                            <el-alert style="margin-top: 5px;" title="具备微信支付权限的公众号，才可以使用a标签，其他公众号不能使用" type="info"
+                                close-text="知道了" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -112,16 +143,63 @@
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts" name="platform-wechat-msg-news">
-import { nextTick, onMounted, reactive, ref } from 'vue'
+<script setup lang="ts" name="platform-wechat-msg-mass-news">
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { IEditorConfig } from '@wangeditor/editor'
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue'
 import modal from '/@/utils/modal'
 import { getList, getNewsList, doCreate, doDelete, doPush } from '/@/api/platform/wechat/mass'
 import { getAccountList } from '/@/api/platform/wechat/account'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
+import { fileUpload, platformUploadImageUrl } from '/@/api/common'
 import { usePlatformInfo } from '/@/stores/platformInfo'
+import { useUserInfo } from '/@/stores/userInfo'
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const platformInfo = usePlatformInfo()
+const userInfo = useUserInfo()
+
+// 富文本编辑器
+const editorRef = shallowRef()
+const editorMode = ref('default')
+const toolbarConfig = {modalAppendToBody: true}
+type InsertFnType = (url: string, alt: string, href: string) => void
+const editorConfig: Partial<IEditorConfig> = { 
+    MENU_CONF: {
+        uploadImage: {
+            server: import.meta.env.VITE_AXIOS_BASE_URL + platformUploadImageUrl,
+            fieldName: 'Filedata',
+            headers: {
+                "wk-user-token": userInfo.getToken()
+            },
+            // 单个文件上传成功之后
+            onSuccess(file: File, res: any) {
+                console.log(`${file.name} 上传成功`, res)
+            },
+            customInsert(res: any, insertFn: InsertFnType) { 
+                if(res.code == 0 ) {
+                    insertFn(platformInfo.AppFileDomain + res.data.url, res.data.filename, res.data.url)
+                }
+            },
+        }
+    }
+}
+
+// 组件销毁时, 也及时销毁编辑器
+onBeforeUnmount(() => {
+    const editor = editorRef.value
+    if (editor){
+        editor.destroy()
+    }
+})
+
+const handleEditorCreated = (editor: any) => {
+    editorRef.value = editor // 记录 editor 实例，重要！
+}
+
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -132,10 +210,21 @@ const tableLoading = ref(false)
 const tableData = ref([])
 const accounts = ref([])
 const wxid = ref('')
+const wxname = ref('')
 const btnLoading = ref(false)
 
 const data = reactive({
     formData: {
+        wxid: '',
+        wxname: '',
+        title: '',
+        author: '',
+        digest: '',
+        content: '',
+        picurl: '',
+        show_cover_pic: 1,
+        need_open_comment: 0,
+        only_fans_can_comment: 0
     },
     queryParams: {
         wxid: '',
@@ -151,7 +240,7 @@ const data = reactive({
     }
 })
 
-const { queryParams, formData, formRules} = toRefs(data)
+const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
     { prop: 'picurl', label: ``, show: true, width: 80 },
@@ -164,24 +253,32 @@ const columns = ref([
 // 重置表单
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
+        wxid: '',
+        wxname: '',
+        title: '',
+        author: '',
+        digest: '',
+        content: '',
+        picurl: '',
+        show_cover_pic: 1,
+        need_open_comment: 0,
+        only_fans_can_comment: 0
     }
     formEl?.resetFields()
 }
 
-
-const accountChange = (val: string) => {
-    wxid.value = val
-    queryParams.value.wxid = val
-    list()
+const beforeUpload = (file: any) => {
+    if (file.type.indexOf("image/") == -1) {
+        modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
+    }
 }
 
-const listAccount = () => {
-    getAccountList().then((res) => {
-        accounts.value = res.data as never
-        if (accounts.value.length > 0) {
-            wxid.value = accounts.value[0].id
-            queryParams.value.wxid = accounts.value[0].id
-            list()
+const uploadPic = (file: any) => {
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUpload(f,{},'image').then((res) => {
+        if (res.code == 0) {
+            formData.value.picurl = res.data.url
         }
     })
 }
@@ -202,11 +299,44 @@ const list = () => {
     })
 }
 
+// 新增按钮
+const handleCreate = (row: any) => {
+    resetForm(createRef.value)
+    formData.value.wxid = wxid.value
+    formData.value.wxname = wxname.value
+    showCreate.value = true
+}
+
+// 提交新增
+const create = () => {
+    if (!createRef.value) return
+    createRef.value.validate((valid) => {
+        if (valid) {
+            doCreate(formData.value).then((res: any) => {
+                modal.msgSuccess(res.msg)
+                showCreate.value = false
+                queryParams.value.pageNo = 1
+                list()
+            })
+        }
+    })
+}
+
+
 onMounted(() => {
-    listAccount()
+    const { query } = router.currentRoute.value
+    wxid.value = query.wxid as never
+    wxname.value = query.wxname as never
+    list()
 })
 </script>
 <route lang="yaml">
     meta:
       layout: platform/index
 </route>
+<style scoped>
+._img {
+    width: 50px;
+    height: 50px;   
+}
+</style>
