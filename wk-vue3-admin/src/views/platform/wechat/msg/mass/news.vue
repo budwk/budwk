@@ -62,7 +62,7 @@
                     <el-col :span="24">
                         <el-form-item prop="picurl" label="缩略图(64kb以内)" class="label-font-weight">
                             <el-upload action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
-                                :before-upload="beforeUpload">
+                                >
                                 <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl"
                                     class="_img" />
                                 <el-button v-else>
@@ -321,13 +321,12 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formEl?.resetFields()
 }
 
-const beforeUpload = (file: any) => {
-    if (file.type.indexOf("image/") == -1) {
-        modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
-    }
-}
-
 const uploadPic = (file: any) => {
+    const type = file.raw.type
+    if (type != 'image/jpeg' && type != 'image/png') {
+        modal.notifyError('仅支持jpg、png格式图片')
+        return
+    }
     let f = new FormData()
     f.append('Filedata', file.raw)
     fileUploadExt(f, {}, API_WX_FILE_UPLOAD_THUMB + wxid.value, 64).then((res) => {

@@ -385,7 +385,7 @@ import {
   API_WX_MSG_MASS_PUSH
 } from '@/constant/api/wechat/msg_mass'
 import {
-  API_WX_FILE_UPLOAD_IMAGE
+  API_WX_FILE_UPLOAD_IMAGE_METERIAL
 } from '@/constant/api/wechat/file'
 import {
   API_WX_USER_LIST
@@ -639,7 +639,7 @@ export default {
             this.account.wxid = this.accounts[0].id
             this.account.wxname = this.accounts[0].appname
             this.account.appid = this.accounts[0].appid
-            this.uploadImageUrl = process.env.API + API_WX_FILE_UPLOAD_IMAGE + this.account.wxid
+            this.uploadImageUrl = process.env.API + API_WX_FILE_UPLOAD_IMAGE_METERIAL + this.account.wxid
             this.listPage()
           }
         }
@@ -653,7 +653,7 @@ export default {
         this.account.wxname = this.accounts[index].wxname
         this.account.appid = this.accounts[index].appid
       }
-      this.uploadImageUrl = process.env.API + API_WX_FILE_UPLOAD_IMAGE + val
+      this.uploadImageUrl = process.env.API + API_WX_FILE_UPLOAD_IMAGE_METERIAL + val
       this.listPage()
     },
     // 图片上传成功后

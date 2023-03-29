@@ -4,12 +4,21 @@ export const API_WX_MSG_MASS_NEWS_CREATE = '/wechat/admin/msg/mass/news_create'
 export const API_WX_MSG_MASS_NEWS_DETAIL = '/wechat/admin/msg/mass/news_detail/'
 export const API_WX_MSG_MASS_NEWS_DELETE = '/wechat/admin/msg/mass/news_delete/'
 export const API_WX_MSG_MASS_PUSH = '/wechat/admin/msg/mass/push'
+export const API_WX_USER_LIST = '/wechat/admin/user/list'
 
 import request from '/@/utils/request'
 
 export function getList(data: object) {
     return request({
         url: API_WX_MSG_MASS_LIST,
+        method: 'POST',
+        data: data
+    })
+}
+
+export function getUserList(data: object) {
+    return request({
+        url: API_WX_USER_LIST,
         method: 'POST',
         data: data
     })
