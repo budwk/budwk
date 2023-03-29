@@ -79,6 +79,37 @@ export function fileUpload(fd: FormData, params: anyObj = {}, type = 'file', for
     }
 }
 
+/**
+ * 上传文件
+ */
+export function fileUploadExt(fd: FormData, params: anyObj = {}, url = '', size = 1024): ApiPromise {
+    let errorMsg = ''
+    const file = fd.get('Filedata') as UploadRawFile
+    if (!file.name || typeof file.size == 'undefined') {
+        errorMsg = i18n.global.t('utils.The data of the uploaded file is incomplete!')
+    } else if (file.size > size * 1024 ) {
+        errorMsg = i18n.global.t('utils.The size of the uploaded file exceeds the allowed range!')
+    }
+    if (errorMsg) {
+        return new Promise((resolve, reject) => {
+            ElNotification({
+                type: 'error',
+                message: errorMsg,
+            })
+            reject(errorMsg)
+        })
+    }
+    const userInfo = useUserInfo()
+
+    return request({
+        url: url,
+        method: 'POST',
+        data: fd,
+        headers: { "wk-user-token": userInfo.getToken() },
+        params: params,
+    }) as ApiPromise
+}
+
 
 const uploadExpandState: () => 'disable' | 'enable' = () => 'disable'
 

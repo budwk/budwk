@@ -61,18 +61,18 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item prop="picurl" label="缩略图(64kb以内)" class="label-font-weight">
-                            <el-upload
-action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
-                    :before-upload="beforeUpload">
-                    <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl" class="_img"/>
-                    <el-button v-else>
-                        选择
-                        <el-icon class="el-icon--right">
-                            <Upload />
-                        </el-icon>
-                    </el-button>
-                </el-upload>
-                            
+                            <el-upload action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
+                                :before-upload="beforeUpload">
+                                <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl"
+                                    class="_img" />
+                                <el-button v-else>
+                                    选择
+                                    <el-icon class="el-icon--right">
+                                        <Upload />
+                                    </el-icon>
+                                </el-button>
+                            </el-upload>
+
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
@@ -83,7 +83,7 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                     <el-col :span="24">
                         <el-form-item prop="content_source_url" label="原文链接">
                             <el-checkbox v-model="checkedSourceUrl">原文链接</el-checkbox>
-                            <el-input v-if="checkedSourceUrl" v-model="formData.url" maxlength="50" placeholder="原文链接"
+                            <el-input v-if="checkedSourceUrl" v-model="formData.content_source_url" maxlength="50" placeholder="原文链接"
                                 auto-complete="off" tabindex="2" type="text" />
                         </el-form-item>
                     </el-col>
@@ -108,25 +108,14 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                     </el-col>
                     <el-col :span="24">
                         <div style="border: 1px solid #ccc;z-index: 1000;">
-                            <Toolbar
-                                v-if="showCreate"
-                                style="border-bottom: 1px solid #ccc"
-                                :editor="editorRef"
-                                :defaultConfig="toolbarConfig"
-                                :mode="editorMode"
-                            />
-                            <Editor
-                                v-if="showCreate"
-                                style="height: 500px; overflow-y: hidden;"
-                                v-model="formData.content"
-                                :defaultConfig="editorConfig"
-                                :mode="editorMode"
-                                @onCreated="handleEditorCreated"
-                            />
+                            <Toolbar v-if="showCreate" style="border-bottom: 1px solid #ccc" :editor="editorRef"
+                                :defaultConfig="toolbarConfig" :mode="editorMode" />
+                            <Editor v-if="showCreate" style="height: 500px; overflow-y: hidden;" v-model="formData.content"
+                                :defaultConfig="editorConfig" :mode="editorMode" @onCreated="handleEditorCreated" />
                         </div>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item style="padding-top:75px;">
+                        <el-form-item style="padding-top: 5px;">
                             <el-alert style="margin-top: 5px;" title="图文中上传的图片只可在微信中查看" type="info" close-text="知道了" />
                             <el-alert style="margin-top: 5px;" title="具备微信支付权限的公众号，才可以使用a标签，其他公众号不能使用" type="info"
                                 close-text="知道了" />
@@ -141,6 +130,65 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                 </div>
             </template>
         </el-dialog>
+
+        <el-drawer v-model="showDetail" direction="rtl" title="预览文章" size="50%">
+
+            <template #default>
+                <el-form :model="formData" label-width="80px">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="文章标题" prop="title">
+                                <span>{{ formData.title }}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="文章作者" prop="author">
+                                <span>{{ formData.author }}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="摘要" prop="info">
+                                {{ formData.digest }}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="标题图" prop="picUrl">
+                                <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl"
+                                    style="width: 100px;height: 100px;" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="原文链接" prop="content_source_url">
+                                {{ formData.content_source_url }}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="显示封面" prop="show_cover_pic">
+                                <span v-if="formData.show_cover_pic == 1">显示封面</span>
+                                <span v-else>不显示</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="打开评论" prop="need_open_comment">
+                                <span v-if="formData.need_open_comment == 1">打开评论</span>
+                                <span v-else>不打开</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="评论限制" prop="only_fans_can_comment">
+                                <span v-if="formData.only_fans_can_comment == 1">仅限粉丝</span>
+                                <span v-else>不限制</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="文章内容" prop="content">
+                                <div v-html="formData.content"></div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </template>
+        </el-drawer>
     </div>
 </template>
 <script setup lang="ts" name="platform-wechat-msg-mass-news">
@@ -149,11 +197,11 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { IEditorConfig } from '@wangeditor/editor'
 import { nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue'
 import modal from '/@/utils/modal'
-import { getList, getNewsList, doCreate, doDelete, doPush } from '/@/api/platform/wechat/mass'
-import { getAccountList } from '/@/api/platform/wechat/account'
+import { getNewsList, doCreate, doDelete, getInfo } from '/@/api/platform/wechat/mass'
+import { API_WX_FILE_UPLOAD_THUMB, API_WX_FILE_UPLOAD_IMAGE_METERIAL } from '/@/api/platform/wechat/file'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
-import { fileUpload, platformUploadImageUrl } from '/@/api/common'
+import { fileUploadExt } from '/@/api/common'
 import { usePlatformInfo } from '/@/stores/platformInfo'
 import { useUserInfo } from '/@/stores/userInfo'
 import { useRouter } from "vue-router"
@@ -162,15 +210,19 @@ const router = useRouter()
 const platformInfo = usePlatformInfo()
 const userInfo = useUserInfo()
 
+
+const { query } = router.currentRoute.value
+
+console.log(query)
 // 富文本编辑器
 const editorRef = shallowRef()
 const editorMode = ref('default')
-const toolbarConfig = {modalAppendToBody: true}
+const toolbarConfig = { modalAppendToBody: true }
 type InsertFnType = (url: string, alt: string, href: string) => void
-const editorConfig: Partial<IEditorConfig> = { 
+const editorConfig: Partial<IEditorConfig> = {
     MENU_CONF: {
         uploadImage: {
-            server: import.meta.env.VITE_AXIOS_BASE_URL + platformUploadImageUrl,
+            server: import.meta.env.VITE_AXIOS_BASE_URL + API_WX_FILE_UPLOAD_IMAGE_METERIAL + query.wxid,
             fieldName: 'Filedata',
             headers: {
                 "wk-user-token": userInfo.getToken()
@@ -179,9 +231,9 @@ const editorConfig: Partial<IEditorConfig> = {
             onSuccess(file: File, res: any) {
                 console.log(`${file.name} 上传成功`, res)
             },
-            customInsert(res: any, insertFn: InsertFnType) { 
-                if(res.code == 0 ) {
-                    insertFn(platformInfo.AppFileDomain + res.data.url, res.data.filename, res.data.url)
+            customInsert(res: any, insertFn: InsertFnType) {
+                if (res.code == 0) {
+                    insertFn(res.data.wx_picurl, res.data.filename, res.data.wx_picurl)
                 }
             },
         }
@@ -191,7 +243,7 @@ const editorConfig: Partial<IEditorConfig> = {
 // 组件销毁时, 也及时销毁编辑器
 onBeforeUnmount(() => {
     const editor = editorRef.value
-    if (editor){
+    if (editor) {
         editor.destroy()
     }
 })
@@ -202,16 +254,14 @@ const handleEditorCreated = (editor: any) => {
 
 
 const createRef = ref<InstanceType<typeof ElForm>>()
-const updateRef = ref<InstanceType<typeof ElForm>>()
 
 const showCreate = ref(false)
-const showUpdate = ref(false)
 const tableLoading = ref(false)
 const tableData = ref([])
-const accounts = ref([])
 const wxid = ref('')
 const wxname = ref('')
-const btnLoading = ref(false)
+const checkedSourceUrl = ref(false)
+const showDetail = ref(false)
 
 const data = reactive({
     formData: {
@@ -222,9 +272,11 @@ const data = reactive({
         digest: '',
         content: '',
         picurl: '',
-        show_cover_pic: 1,
+        content_source_url: '',
+        show_cover_pic: 0,
         need_open_comment: 0,
-        only_fans_can_comment: 0
+        only_fans_can_comment: 0,
+        thumb_media_id: ''
     },
     queryParams: {
         wxid: '',
@@ -260,9 +312,11 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         digest: '',
         content: '',
         picurl: '',
-        show_cover_pic: 1,
+        content_source_url: '',
+        show_cover_pic: 0,
         need_open_comment: 0,
-        only_fans_can_comment: 0
+        only_fans_can_comment: 0,
+        thumb_media_id: ''
     }
     formEl?.resetFields()
 }
@@ -276,9 +330,10 @@ const beforeUpload = (file: any) => {
 const uploadPic = (file: any) => {
     let f = new FormData()
     f.append('Filedata', file.raw)
-    fileUpload(f,{},'image').then((res) => {
+    fileUploadExt(f, {}, API_WX_FILE_UPLOAD_THUMB + wxid.value, 64).then((res) => {
         if (res.code == 0) {
-            formData.value.picurl = res.data.url
+            formData.value.picurl = res.data.picurl
+            formData.value.thumb_media_id = res.data.id
         }
     })
 }
@@ -322,9 +377,26 @@ const create = () => {
     })
 }
 
+// 删除按钮
+const handleDelete = (row: any) => {
+    modal.confirm('确定删除 ' + row.title + '？').then(() => {
+        return doDelete(row.id)
+    }).then(() => {
+        queryParams.value.pageNo = 1
+        list()
+        modal.msgSuccess('删除成功')
+    }).catch(() => { })
+}
+
+// 预览文章
+const handleView = (row: any) => {
+    getInfo(row.id).then((res: any) => {
+        formData.value = res.data
+        showDetail.value = true
+    })
+}
 
 onMounted(() => {
-    const { query } = router.currentRoute.value
     wxid.value = query.wxid as never
     wxname.value = query.wxname as never
     list()
@@ -337,6 +409,6 @@ onMounted(() => {
 <style scoped>
 ._img {
     width: 50px;
-    height: 50px;   
+    height: 50px;
 }
 </style>
