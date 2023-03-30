@@ -11,7 +11,7 @@
 <div align="center">
 
 **[官网](https://budwk.com)** |
-**[V7演示地址](https://demo.budwk.com)** |
+**[V8演示地址](https://demo.budwk.com)** |
 **[V8开发指南](https://budwk.com)** |
 **[V5演示地址](https://nutzwk.wizzer.cn)** |
 **[捐赠清单](https://budwk.com/donation)** |
@@ -158,19 +158,19 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 * 编译可执行jar `mvn clean package nutzboot:shade`
 
-* 编译docker image `docker build -t wizzer/budwk-wk-gateway:v8 .`
+* 编译docker image `docker build -t wizzer/budwk-wk-gateway:v8.1.0 . --platform linux/amd64`
 
 `wk-platform`
 
 * 编译可执行jar `mvn clean package nutzboot:shade`
 
-* 编译docker image `docker build -t wizzer/budwk-wk-platform:v8 .`
+* 编译docker image `docker build -t wizzer/budwk-wk-platform:v8.1.0 . --platform linux/amd64`
 
 `wk-ucenter`
 
 * 编译可执行jar `mvn clean package nutzboot:shade`
 
-* 编译docker image `docker build -t wizzer/budwk-wk-ucenter:v8 .`
+* 编译docker image `docker build -t wizzer/budwk-wk-ucenter:v8.1.0 . --platform linux/amd64`
 
 其他NB模块省略...然后挂载 `/conf` 路径,把配置文件 `application.yaml` 放好
 
