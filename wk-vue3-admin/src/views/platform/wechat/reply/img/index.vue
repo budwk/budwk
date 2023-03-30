@@ -8,13 +8,13 @@
             </el-col>
             <el-col :span="1.5">
                 <el-button plain type="primary" icon="Plus" @click="handleCreate"
-                    v-permission="['wx.reply.txt.create']">新增文本
+                    v-permission="['wx.reply.img.create']">新增图片
                 </el-button>
             </el-col>
             <el-col :span="1.5">
                         <el-button
 type="danger" plain icon="Delete" :disabled="select_ids.length<1" @click="handleDeleteMore"
-                            v-permission="['wx.reply.txt.delete']">删除</el-button>
+                            v-permission="['wx.reply.img.delete']">删除</el-button>
             </el-col>
         </el-row>
         <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe @sort-change="sortChange"
@@ -28,18 +28,21 @@ type="danger" plain icon="Delete" :disabled="select_ids.length<1" @click="handle
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
+                    <template v-if="item.prop == 'picurl'" #default="scope">
+                        <img v-if="scope.row.picurl" :src="platformInfo.AppFileDomain + scope.row.picurl" class="_img_small" />
+                    </template>
                 </el-table-column>
             </template>
             <el-table-column fixed="right" header-align="center" align="center" label="操作"
-                class-name="small-padding fixed-width">
+                class-name="small-padding fixed-width" width="180">
                 <template #default="scope">
                     <el-tooltip content="修改" placement="top">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                            v-permission="['wx.reply.txt.update']"></el-button>
+                            v-permission="['wx.reply.img.update']"></el-button>
                     </el-tooltip>
                     <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
-                            v-permission="['wx.reply.txt.delete']"></el-button>
+                            v-permission="['wx.reply.img.delete']"></el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -49,19 +52,20 @@ type="danger" plain icon="Delete" :disabled="select_ids.length<1" @click="handle
                 v-model:limit="queryParams.pageSize" @pagination="list" />
         </el-row>
 
-        <el-dialog title="新增文本" v-model="showCreate" width="40%">
-            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="130px">
+        <el-dialog title="新增图片" v-model="showCreate" width="40%">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="150px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item prop="title" label="文本标题">
-                            <el-input v-model="formData.title" maxlength="120" placeholder="文本标题" auto-complete="off"
-                                tabindex="1" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="content" label="文本内容">
-                            <el-input v-model="formData.content" placeholder="文本内容" auto-complete="off" tabindex="2"
-                                type="textarea" />
+                        <el-form-item prop="picurl" label="上传图片(2M以内)" class="label-font-weight">
+                            <el-upload action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false">
+                                <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl" class="_img" />
+                                <el-button v-else>
+                                    选择
+                                    <el-icon class="el-icon--right">
+                                        <Upload />
+                                    </el-icon>
+                                </el-button>
+                            </el-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -74,19 +78,20 @@ type="danger" plain icon="Delete" :disabled="select_ids.length<1" @click="handle
             </template>
         </el-dialog>
 
-        <el-dialog title="修改文本" v-model="showUpdate" width="50%">
-            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="125px">
+        <el-dialog title="修改图片" v-model="showUpdate" width="40%">
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="150px">
                 <el-row :gutter="10" style="padding-right:20px;">
                     <el-col :span="24">
-                        <el-form-item prop="title" label="文本标题">
-                            <el-input v-model="formData.title" maxlength="200" placeholder="文本标题" auto-complete="off"
-                                tabindex="1" type="text" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item prop="content" label="文本内容">
-                            <el-input v-model="formData.content" placeholder="文本内容" auto-complete="off" tabindex="2"
-                                type="textarea" />
+                        <el-form-item prop="picurl" label="上传图片(2M以内)" class="label-font-weight">
+                            <el-upload action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false">
+                                <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl" class="_img" />
+                                <el-button v-else>
+                                    选择
+                                    <el-icon class="el-icon--right">
+                                        <Upload />
+                                    </el-icon>
+                                </el-button>
+                            </el-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -100,13 +105,18 @@ type="danger" plain icon="Delete" :disabled="select_ids.length<1" @click="handle
         </el-dialog>
     </div>
 </template>
-<script setup lang="ts" name="platform-wechat-reply-txt">
+<script setup lang="ts" name="platform-wechat-reply-img">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { getList, getInfo, doCreate, doDelete, doUpdate, doDeleteMore } from '/@/api/platform/wechat/reply_txt'
+import { getList, getInfo, doCreate, doDelete, doUpdate, doDeleteMore } from '/@/api/platform/wechat/reply_img'
 import { getAccountList } from '/@/api/platform/wechat/account'
+import { API_WX_FILE_UPLOAD_IMAGE_METERIAL } from '/@/api/platform/wechat/file'
+import { fileUploadExt } from '/@/api/common'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
+import { usePlatformInfo } from '/@/stores/platformInfo'
+
+const platformInfo = usePlatformInfo()
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
@@ -119,14 +129,14 @@ const accounts = ref([])
 const wxid = ref('')
 const btnLoading = ref(false)
 const select_ids = ref([])
-const select_titles = ref([])
+const select_picurls = ref([])
 
 const data = reactive({
     formData: {
         id: '',
         wxid: '',
-        title: '',
-        content: ''
+        picurl: '',
+        mediaId: ''
     },
     queryParams: {
         wxid: '',
@@ -137,16 +147,15 @@ const data = reactive({
         pageOrderBy: 'descending'
     },
     formRules: {
-        title: [{ required: true, message: "文本标题不能为空", trigger: ["blur", "change"] }],
-        content: [{ required: true, message: "文本内容不能为空", trigger: ["blur", "change"] }]
+        picurl: [{ required: true, message: "图片不能为空", trigger: ["blur", "change"] }],
     }
 })
 
 const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
-    { prop: 'title', label: `文本标题`, show: true },
-    { prop: 'content', label: `文本内容`, show: true },
+    { prop: 'picurl', label: `图片`, show: true, width: 80 },
+    { prop: 'mediaId', label: `mediaId`, show: true },
     { prop: 'createdAt', label: `创建时间`, show: true, sortable: true, width: 180 }
 ])
 
@@ -156,12 +165,28 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
         wxid: wxid.value,
-        title: '',
-        content: ''
+        picurl: '',
+        mediaId: ''
     }
     formEl?.resetFields()
 }
 
+
+const uploadPic = (file: any) => {
+    const type = file.raw.type
+    if (type != 'image/jpeg' && type != 'image/png') {
+        modal.notifyError('仅支持jpg、png格式图片')
+        return
+    }
+    let f = new FormData()
+    f.append('Filedata', file.raw)
+    fileUploadExt(f, {}, API_WX_FILE_UPLOAD_IMAGE_METERIAL + wxid.value, 2048).then((res) => {
+        if (res.code == 0) {
+            formData.value.picurl = res.data.picurl
+            formData.value.mediaId = res.data.id
+        }
+    })
+}
 
 const accountChange = (val: string) => {
     wxid.value = val
@@ -182,7 +207,7 @@ const listAccount = () => {
 
 const handleSelect = (selection: any) => {
     select_ids.value = selection.map(item => item.id)
-    select_titles.value = selection.map(item => item.title)
+    select_picurls.value = selection.map(item => item.picurl)
 }
 
 const sortChange = (column: any) => {
@@ -218,7 +243,7 @@ const handleUpdate = (row: any) => {
 
 // 删除按钮
 const handleDelete = (row: any) => {
-    modal.confirm('确定删除 ' + row.title + '？').then(() => {
+    modal.confirm('确定删除 ' + row.picurl + '？').then(() => {
         return doDelete(row.id)
     }).then(() => {
         queryParams.value.pageNo = 1
@@ -233,8 +258,8 @@ const handleDeleteMore = () => {
         modal.msgError('请选择要删除的数据')
         return
     }
-    modal.confirm('确定删除 ' + select_titles.value.join(',') + '？').then(() => {
-        return doDeleteMore(select_ids.value.toString(), select_titles.value.toString())
+    modal.confirm('确定删除 ' + select_picurls.value.join(',') + '？').then(() => {
+        return doDeleteMore(select_ids.value.toString(), select_picurls.value.toString())
     }).then(() => {
         queryParams.value.pageNo = 1
         list()
@@ -279,3 +304,13 @@ onMounted(() => {
     meta:
       layout: platform/index
 </route>
+<style scoped>
+._img {
+    width: 50px;
+    height: 50px;
+}
+._img_small {
+    width: 30px;
+    height: 30px;
+}
+</style>

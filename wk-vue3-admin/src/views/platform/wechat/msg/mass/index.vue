@@ -99,7 +99,7 @@
                     <el-col :span="24" v-if="formData.type == 'image'">
                         <el-form-item prop="picurl" label="发送图片(1M以内)" class="label-font-weight">
                             <el-upload action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false">
-                                <img v-if="formData.picurl" :src="formData.picurl" class="_img" />
+                                <img v-if="formData.picurl" :src="platformInfo.AppFileDomain + formData.picurl" class="_img" />
                                 <el-button v-else>
                                     选择
                                     <el-icon class="el-icon--right">
