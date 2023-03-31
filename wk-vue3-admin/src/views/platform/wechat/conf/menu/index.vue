@@ -89,7 +89,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item class="is-required" prop="menuType" label="菜单类型">
-                            <el-radio-group v-model="formData.menuType" size="medium">
+                            <el-radio-group v-model="formData.menuType">
                                 <el-radio label="">菜单</el-radio>
                                 <el-radio label="view">链接</el-radio>
                                 <el-radio label="click">事件</el-radio>
@@ -154,7 +154,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item class="is-required" prop="menuType" label="菜单类型">
-                            <el-radio-group v-model="formData.menuType" size="medium">
+                            <el-radio-group v-model="formData.menuType">
                                 <el-radio label="">菜单</el-radio>
                                 <el-radio label="view">链接</el-radio>
                                 <el-radio label="click">事件</el-radio>
@@ -314,7 +314,7 @@ const columns = ref([
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
-        wxid: '',
+        wxid: wxid.value,
         menuName: '',
         menuType: '',
         url: '',

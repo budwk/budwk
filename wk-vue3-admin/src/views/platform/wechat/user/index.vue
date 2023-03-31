@@ -11,6 +11,7 @@
                     v-permission="['wx.user.list.sync']">同步会员资料
                 </el-button>
             </el-col>
+            <right-toolbar @quickSearch="quickSearch" />
         </el-row>
         <el-table v-loading="tableLoading" :data="tableData" row-key="id" stripe  @sort-change="sortChange" :default-sort="{ prop: 'subscribeAt', order: 'descending' }">
             <template v-for="(item, idx) in columns" :key="idx">
@@ -121,6 +122,11 @@ const listAccount = () => {
 const sortChange = (column: any) => {
     queryParams.value.pageOrderName = column.prop
     queryParams.value.pageOrderBy = column.order
+    list()
+}
+
+// 快速搜索&刷新
+const quickSearch = () => {
     list()
 }
 

@@ -47,7 +47,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="配置URL" class="label-font-weight">
-                            {{ platformInfo.AppDomain }}/wechat/open/weixin/msg/{{ formData.id }}
+                            {{ platformInfo.AppDomain }}/api/wechat/open/weixin/msg/{{ formData.id }}
                             <el-alert title="微信后台配置的URL" type="success" style="height:32px;" />
                         </el-form-item>
                     </el-col>
@@ -110,7 +110,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="配置URL">
-                            {{ platformInfo.AppDomain }}/wechat/open/weixin/msg/{{ formData.id }}
+                            {{ platformInfo.AppDomain }}/api/wechat/open/weixin/msg/{{ formData.id }}
                             <el-alert title="微信后台配置的URL" type="success" style="height:32px;" />
                         </el-form-item>
                     </el-col>
