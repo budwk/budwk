@@ -178,7 +178,7 @@
                                     <div style="padding: 3px;">
                                         <span v-if="formData.content == o.id" style="font-size: 12px;color: red;">已选中</span>
                                         <div class="bottom clearfix">
-                                            <el-button type="text" class="button" @click="imgClassSel(o.id)">选中</el-button>
+                                            <el-button plain type="primary" class="button" @click="imgClassSel(o.id)">选中</el-button>
                                         </div>
                                     </div>
                                 </el-card>
