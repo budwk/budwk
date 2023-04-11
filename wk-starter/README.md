@@ -10,12 +10,14 @@
 | wk-starter-openapi | 接口文档生成组件 | 控制层 | 通过注解定义生成API文档,详见 [README](wk-starter-openapi/README.md)| |
 | wk-starter-security | 权限验证组件 | 控制层 | 详见 [README](wk-starter-security/README.md) | nutzboot-starter-redis, nutzboot-starter-nutz-mvc |
 | wk-starter-web | Web组件 | 控制层 | 防止跨站攻击/SQL注入/CORS/表单验证/权限验证,详见 [README](wk-starter-web/README.md) | nutzboot-starter-nutz-mvc |
+| wk-starter-websocket | WebSocket组件 | 控制层 | 详见 [README](wk-starter-websocket/README.md)| nutzboot-starter-nutz-mvc |
 | wk-starter-log | 日志组件 | 控制层 |  详见 [README](wk-starter-log/README.md) | wk-starter-security (nutzboot-starter-redis), nutzboot-starter-dubbo (使用 @SLog 注解需 wk-platform 启动) |
 | wk-starter-gateway | 网关组件 | 控制层 | 详见 [README](wk-starter-gateway/README.md) | nutzboot-starter-nacos-discovery, nutzboot-starter-nacos-config |
 | wk-starter-dubbo | RPC组件 | 服务层 | 详见 [README](wk-starter-dubbo/README.md) | |
 | wk-starter-sms | 短信组件 | 服务层 | 详见 [README](wk-starter-sms/README.md) | 短信服务商SDK |
-| wk-starter-email | 邮件组件 | 服务层 | 详见 [README](wk-starter-email/README.md) | nutzboot-starter-email |
-| wk-starter-storage | 文件服务组件 | 服务层 | 详见 [README](wk-starter-storage/README.md) | nutzboot-starter-storage |
+| wk-starter-email | 邮件组件 | 服务层 | 详见 [README](wk-starter-email/README.md) |  |
+| wk-starter-storage | 文件服务组件 | 服务层 | 详见 [README](wk-starter-storage/README.md) |  |
+| wk-starter-apiauth | 对外API接口验证 | 控制层 | 详见 [README](wk-starter-apiauth/README.md) |  |
 
 ## 开发事项
 
