@@ -60,18 +60,18 @@ V8 在 V7具备的API网关、组件库、认证中心、控制中心等功能�
 
 ```
 ┌ 前端
-│    ├─wk-vue3-admin   【Vue3】
-│    └─wk-vue-admin    【Vue2】
+│    ├─wk-vue3-admin    Vue3
+│    └─wk-vue-admin     Vue2
 └─后端
-     ├─wk-starter      【组件库】
-     ├─wk-mini         【单应用版本】
-     └─···             【分布式版本】
-        ├─wk-gateway   【API网关】 
-        ├─wk-ucenter   【用户中心】 
-        ├─wk-platform  【控制中心】
-        ├─wk-cms       【内容管理】 
-        ├─wk-wechat    【微信管理】 
-        └─wk-device    【设备管理】
+     ├─wk-starter       组件库
+     ├─wk-mini          单应用版本
+     └─···              分布式版本
+        ├─wk-gateway    API网关
+        ├─wk-ucenter    用户中心 
+        ├─wk-platform   控制中心
+        ├─wk-cms        内容管理 
+        ├─wk-wechat     微信管理 
+        └─wk-device     设备管理
 ```        
 
 * 代码生成器IDEA插件,请下载安装 [https://gitee.com/budwk/budwk-codegenerator](https://gitee.com/budwk/budwk-codegenerator)
