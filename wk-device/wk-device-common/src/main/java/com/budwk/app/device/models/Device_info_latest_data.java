@@ -1,5 +1,6 @@
 package com.budwk.app.device.models;
 
+import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
 import lombok.Data;
@@ -14,6 +15,9 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table
+@TableMeta("{'mysql-charset':'utf8mb4'}")
+@Comment("设备最新数据")
+@ApiModel(description = "设备最新数据")
 public class Device_info_latest_data extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 

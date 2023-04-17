@@ -33,6 +33,7 @@
         <netty.version>4.1.63.Final</netty.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
+        <rocketmq.version>5.0.5</rocketmq.version>
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
         <hutool.version>5.8.11</hutool.version>
         <poi.version>4.1.2</poi.version>
@@ -217,6 +218,12 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <!-- rocketmq -->
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client-java</artifactId>
+                <version>${rocketmq.version}</version>
             </dependency>
             <!-- swagger -->
             <dependency>

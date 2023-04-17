@@ -3,22 +3,20 @@ package com.budwk.app.device.enums;
 import org.nutz.json.JsonShape;
 
 /**
- * 协议类型
+ * 规则执行方式
  * @author wizzer.cn
  */
 @JsonShape(JsonShape.Type.OBJECT)
-public enum ProtocolType {
-    TCP("TCP", "TCP"),
-    UDP("UDP", "UDP"),
-    MQTT("MQTT", "MQTT"),
-    LWM2M("LWM2M", "LWM2M"),
-    COAP("COAP", "COAP"),
-    HTTP("HTTP", "HTTP");
+public enum RuleAction {
+    NOTICE("NOTICE", "通知"),
+    URL("URL", "URL转发"),
+    PUSH("PUSH", "队列推送"),
+    CMD("CMD", "指令下发");
 
     private String value;
     private String text;
 
-    ProtocolType(String value, String text) {
+    RuleAction(String value, String text) {
         this.value = value;
         this.text = text;
     }
@@ -39,12 +37,12 @@ public enum ProtocolType {
         return text;
     }
 
-    public static ProtocolType from(String value) {
-        for (ProtocolType t : values()) {
+    public static RuleAction from(String value) {
+        for (RuleAction t : values()) {
             if (t.value.equals(value)) {
                 return t;
             }
         }
-        throw new IllegalArgumentException("unknown ProtocolType: " + value);
+        throw new IllegalArgumentException("unknown RuleAction: " + value);
     }
 }

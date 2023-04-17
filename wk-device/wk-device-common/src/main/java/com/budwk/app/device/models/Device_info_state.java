@@ -18,12 +18,13 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table
+@TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({
         @Index(name = "IDX_DEVICE_STATE", fields = "state", unique = false),
         @Index(name = "IDX_DEVICE_ONLINE", fields = "online", unique = false),
 })
-@Comment("设备基础信息")
-@ApiModel(description = "设备基础信息")
+@Comment("设备状态信息")
+@ApiModel(description = "设备状态信息")
 public class Device_info_state extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 

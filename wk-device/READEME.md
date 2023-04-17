@@ -13,7 +13,7 @@ wk-device-network | 网络协议支持  ||
 &nbsp;&nbsp;&nbsp;wk-device-network-udp | UDP协议  ||
 &nbsp;&nbsp;&nbsp;wk-device-network-http | HTTP协议  ||
 wk-device-gateway | 设备通信网关 | 是 | 加载 network 协议模块提供协议接入服务
-wk-device-hanlder | 协议解析加载  | 是 | 加载 protocol 设备协议解析包
+wk-device-handler | 协议解析加载  | 是 | 加载 protocol 设备协议解析包
 wk-device-processor | 业务处理  | 是 | 业务处理、规则引擎、支持拓展计费等自定义业务
 wk-device-cache | 设备缓存  | | 产品信息缓存、设备基本信息缓存
 wk-device-storage | 数据存储  | | 原始报文存储、上报数据存储、事件数据存储
@@ -25,7 +25,7 @@ wk-device-server | 业务类、控制类 | 是 | 提供网页管理API、业务�
 名称 | 功能 | 是否必须 | 版本要求 | 说明 |
 ----|------|----|----|----
 Redis | 缓存 | 是 | 无 |缓存服务提升读取性能 |
-MariaDB 或 MySQL | 数据库 | 是 | MariaDB 10+ 或 MySQL 5.8+ |基本信息数据、业务结果数据、统计数据等 |
-Kafka | 消息队列 | 是 | Kafka 3.4.0 | 支撑系统内部的数据流转 |
+MariaDB | 数据库 | 是 | 支持达梦/人大金仓 |基本信息数据、业务结果数据、统计数据等 |
+RocketMQ | 消息队列 | 是 | RocketMQ 5.1.0 | 支撑系统内部的数据流转 |
 MongoDB | NoSQL数据库 | 是 | MongoDB 6.0 |原始报文、操作日志等过期自动删除数据 |
-MongoDB 或 TDengine | 时序数据库 | 是 | MongoDB 6.0 或 TDengine 3.0 | 设备有效上报数据 |
+MongoDB 或 TDengine | 时序数据库 | 是 | MongoDB 6.0 或 TDengine 3.0.4.0 | 设备有效上报数据 |

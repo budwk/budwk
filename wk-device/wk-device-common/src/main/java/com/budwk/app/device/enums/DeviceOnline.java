@@ -3,6 +3,7 @@ package com.budwk.app.device.enums;
 import org.nutz.json.JsonShape;
 
 /**
+ * 设备在线状态
  * @author wizzer.cn
  */
 @JsonShape(JsonShape.Type.OBJECT)

@@ -19,6 +19,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Table
 @TableMeta("{'mysql-charset':'utf8mb4'}")
+@TableIndexes({
+        @Index(name = "IDX_PRODUCT_CMD_CODE", fields = {"productId", "code"})
+})
 @Comment("产品设备指令")
 @ApiModel(description = "产品设备指令")
 public class Device_product_cmd extends BaseModel implements Serializable {
@@ -48,7 +51,7 @@ public class Device_product_cmd extends BaseModel implements Serializable {
     @Comment("指令标识")
     @ColDefine(type = ColType.VARCHAR, width = 50)
     @ApiModelProperty(description = "指令标识")
-    private String identifier;
+    private String code;
 
     /**
      * @see CommandType

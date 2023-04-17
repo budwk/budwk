@@ -1,24 +1,25 @@
-package com.budwk.app.device.enums;
+package com.budwk.app.device.storage.enums;
 
 import org.nutz.json.JsonShape;
 
 /**
- * 协议类型
+ * 设备数据类型
  * @author wizzer.cn
  */
 @JsonShape(JsonShape.Type.OBJECT)
-public enum ProtocolType {
-    TCP("TCP", "TCP"),
-    UDP("UDP", "UDP"),
-    MQTT("MQTT", "MQTT"),
-    LWM2M("LWM2M", "LWM2M"),
-    COAP("COAP", "COAP"),
-    HTTP("HTTP", "HTTP");
+public enum DataType {
+    INTEGER("INTEGER", "整型"),
+    FLOAT("FLOAT", "浮点型"),
+    STRING("STRING", "字符串"),
+    ENUM("ENUM", "枚举"),
+    TIMESTAMP("TIMESTAMP", "时间戳"),
+    DATETIME("DATETIME", "日期时间"),
+    IP("IP", "IP地址");
 
     private String value;
     private String text;
 
-    ProtocolType(String value, String text) {
+    DataType(String value, String text) {
         this.value = value;
         this.text = text;
     }
@@ -39,12 +40,12 @@ public enum ProtocolType {
         return text;
     }
 
-    public static ProtocolType from(String value) {
-        for (ProtocolType t : values()) {
+    public static DataType from(String value) {
+        for (DataType t : values()) {
             if (t.value.equals(value)) {
                 return t;
             }
         }
-        throw new IllegalArgumentException("unknown ProtocolType: " + value);
+        throw new IllegalArgumentException("unknown DataType: " + value);
     }
 }

@@ -25,6 +25,7 @@
         <module>wk-starter-job</module>
         <module>wk-starter-excel</module>
         <module>wk-starter-websocket</module>
+        <module>wk-starter-rocketmq</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

@@ -3,22 +3,18 @@ package com.budwk.app.device.enums;
 import org.nutz.json.JsonShape;
 
 /**
- * 协议类型
+ * 设备事件类型
  * @author wizzer.cn
  */
 @JsonShape(JsonShape.Type.OBJECT)
-public enum ProtocolType {
-    TCP("TCP", "TCP"),
-    UDP("UDP", "UDP"),
-    MQTT("MQTT", "MQTT"),
-    LWM2M("LWM2M", "LWM2M"),
-    COAP("COAP", "COAP"),
-    HTTP("HTTP", "HTTP");
+public enum EventType {
+    INFO("INFO", "信息"),
+    WARNING("WARNING", "告警");
 
     private String value;
     private String text;
 
-    ProtocolType(String value, String text) {
+    EventType(String value, String text) {
         this.value = value;
         this.text = text;
     }
@@ -39,12 +35,12 @@ public enum ProtocolType {
         return text;
     }
 
-    public static ProtocolType from(String value) {
-        for (ProtocolType t : values()) {
+    public static EventType from(String value) {
+        for (EventType t : values()) {
             if (t.value.equals(value)) {
                 return t;
             }
         }
-        throw new IllegalArgumentException("unknown ProtocolType: " + value);
+        throw new IllegalArgumentException("unknown EventType: " + value);
     }
 }
