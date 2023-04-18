@@ -6,7 +6,7 @@
 
     <groupId>com.budwk</groupId>
     <artifactId>wk-cms</artifactId>
-    <version>8.1.0-SNAPSHOT</version>
+    <version>8.2.0-SNAPSHOT</version>
     <modules>
         <module>wk-cms-common</module>
         <module>wk-cms-server</module>
@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <budwk.version>8.1.0-SNAPSHOT</budwk.version>
+        <budwk.version>8.2.0-SNAPSHOT</budwk.version>
         <nutzboot.version>2.6.0-SNAPSHOT</nutzboot.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>

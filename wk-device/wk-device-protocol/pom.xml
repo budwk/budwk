@@ -6,7 +6,7 @@
 
     <groupId>com.budwk.app</groupId>
     <artifactId>wk-device-protocol</artifactId>
-    <version>8.1.0-SNAPSHOT</version>
+    <version>8.2.0-SNAPSHOT</version>
     <modules>
         <module>wk-device-protocol-core</module>
     </modules>
