@@ -135,6 +135,11 @@
                 <artifactId>wk-starter-excel</artifactId>
                 <version>${budwk.version}</version>
             </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-rocketmq</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
             <!-- nutz -->
             <dependency>
                 <groupId>org.nutz</groupId>

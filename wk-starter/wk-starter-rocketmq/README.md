@@ -1,12 +1,31 @@
 # wk-starter-rocketmq
 
-rocketmq
+
+## 启动 rocketmq
+
+* 启动 nameServer
+
+```text
+./mqnamesrv
+```
+
+* 启动broker
+
+```text
+./mqbroker -n localhost:9876 autoCreateTopicEnable=true --enable-proxy 
+```
+`--add-exports=java.base/sun.nio.ch=ALL-UNNAMED`
+* 创建topic
+
+```text
+$ ./mqadmin updatetopic -n localhost:9876 -t DemoTopic -c DefaultCluster
+```
 
 ## 配置说明
 
 ```yaml
 rocketmq:
-  # 是否启用
+  # 集群环境多个nameserver用;分割
   nameserver-address: 127.0.0.1:9876
   # 可选,如果无需发送消息则忽略该配置
   producer-group: wk_local_producer

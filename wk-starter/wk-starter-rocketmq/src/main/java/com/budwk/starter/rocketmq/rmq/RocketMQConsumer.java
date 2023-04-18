@@ -28,20 +28,19 @@ import java.util.List;
 public class RocketMQConsumer {
     @Inject("refer:$ioc")
     protected Ioc ioc;
-    @Inject
-    private AppContext appContext;
 
     private String namesrvAddr;
     private List<DefaultMQPushConsumer> consumerList = new ArrayList<>();
 
     public void init(String namesrvAddr) {
         this.namesrvAddr = namesrvAddr;
-        List<RMQConsumerListener> list = appContext.getBeans(RMQConsumerListener.class);
-        for (RMQConsumerListener listener : list) {
-            DefaultMQPushConsumer consumer = createRocketMQConsumer(listener, listener.getClass().getAnnotation(RMQConsumer.class));
+        for (String name : ioc.getNamesByAnnotation(RMQConsumer.class)) {
+            RMQConsumerListener listener = ioc.get(RMQConsumerListener.class, name);
+            RMQConsumer rmqConsumer = listener.getClass().getAnnotation(RMQConsumer.class);
+            DefaultMQPushConsumer consumer = createRocketMQConsumer(listener, rmqConsumer);
             try {
                 consumer.start();
-                log.info("A consumer as {} init on namesrc {}", listener.getClass().getSimpleName(), namesrvAddr);
+                log.info("A consumer as {} topic:{},consumerGroup:{},tag:{} init on namesrc {}", listener.getClass().getSimpleName(), rmqConsumer.topic(), rmqConsumer.consumerGroup(), rmqConsumer.tag(), namesrvAddr);
             } catch (MQClientException e) {
                 throw new RuntimeException("A consumer as " + listener.getClass().getSimpleName() + " start fail, " + e.getMessage());
             }
