@@ -22,7 +22,7 @@ import java.util.List;
  */
 @IocBean(create = "init", depose = "close")
 @Slf4j
-public class RMQProducerServer {
+public class RocketMQServer {
     @Inject
     private PropertiesProxy conf;
 
