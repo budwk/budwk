@@ -12,9 +12,19 @@
     <artifactId>wk-starter-rocketmq</artifactId>
 
     <dependencies>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- nutz -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-client-java</artifactId>
+            <artifactId>rocketmq-client</artifactId>
         </dependency>
     </dependencies>
 </project>

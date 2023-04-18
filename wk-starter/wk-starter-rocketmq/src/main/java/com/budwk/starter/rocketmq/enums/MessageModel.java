@@ -13,13 +13,13 @@ public enum MessageModel {
      */
     CLUSTERING("CLUSTERING");
 
-    private final String mode;
+    private final String model;
 
-    MessageModel(String mode) {
-        this.mode = mode;
+    MessageModel(String model) {
+        this.model = model;
     }
 
-    public String getMode() {
-        return this.mode;
+    public String getModel() {
+        return this.model;
     }
 }
