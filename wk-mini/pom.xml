@@ -10,7 +10,7 @@
 
     <properties>
         <nutzboot.version>2.6.0-SNAPSHOT</nutzboot.version>
-        <wk.version>8.2.0-SNAPSHOT</wk.version>
+        <budwk.version>8.2.0-SNAPSHOT</budwk.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -218,7 +218,7 @@
             <dependency>
                 <groupId>com.budwk.starter</groupId>
                 <artifactId>wk-starter-dependencies</artifactId>
-                <version>${wk.version}</version>
+                <version>${budwk.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

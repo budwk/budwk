@@ -12,6 +12,12 @@ jetty:
     maxThreads: 2000
   staticPath: /Users/wizzer/temp/data/files
 
+rocketmq:
+  # 是否启用
+  nameserver-address: 127.0.0.1:9876
+  # 可选,如果无需发送消息则忽略该配置
+  producer-group: wk_local_producer
+
 openapi:
   enable: true
   scanner:
