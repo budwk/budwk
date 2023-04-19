@@ -1,5 +1,6 @@
 package com.budwk.app.device.storage.objects.dto;
 
+import com.budwk.app.device.enums.DataType;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,11 +11,16 @@ import java.io.Serializable;
 @Data
 public class DeviceAttributeDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    //参数名
+    private String name;
     //标识符
     private String code;
     //长度
     private Integer dataLen;
     //数据类型
-    private Integer dataType;
+    private DataType dataType;
+    //小数位
+    private Integer scale;
+    //单位
+    private String unit;
 }
