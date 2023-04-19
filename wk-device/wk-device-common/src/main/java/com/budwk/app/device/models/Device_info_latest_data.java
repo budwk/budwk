@@ -29,9 +29,9 @@ public class Device_info_latest_data extends BaseModel implements Serializable {
     private String deviceId;
 
     @Column
-    @Comment("最新通讯连接时间")
-    @ApiModelProperty(description = "最新通讯连接时间")
-    private Long lastConnectionAt;
+    @Comment("接收时间")
+    @ApiModelProperty(description = "接收时间")
+    private Long receiveTime;
 
     @Column
     @ColDefine(type = ColType.TEXT)

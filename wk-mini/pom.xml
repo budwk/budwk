@@ -83,6 +83,10 @@
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-websocket</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-rocketmq</artifactId>
+        </dependency>
         <!-- nutzboot-starter -->
         <dependency>
             <groupId>org.nutz</groupId>

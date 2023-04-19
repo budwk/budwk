@@ -37,6 +37,12 @@ public class RocketMQServer {
     @PropDoc(value = "RocketMQ 生产者组", defaultValue = "")
     public static final String PROP_PRODUCER_GROUP = PRE + "producer-group";
 
+    @PropDoc(value = "RocketMQ 消费者最大线程数", defaultValue = "")
+    public static final String PROP_CONSUMER_THREAD_MAX = PRE + "consumer-thread-max";
+
+    @PropDoc(value = "RocketMQ 消费者最小线程数", defaultValue = "")
+    public static final String PROP_CONSUMER_THREAD_MIN = PRE + "consumer-thread-min";
+
     @Inject
     private RocketMQProducer rmqProducer;
     @Inject
@@ -47,7 +53,7 @@ public class RocketMQServer {
 
     public void init() throws MQClientException {
         rmqProducer.init(conf.get(PROP_NAMESERVER_ADDRESS), conf.get(PROP_PRODUCER_GROUP));
-        rmqConsumer.init(conf.get(PROP_NAMESERVER_ADDRESS));
+        rmqConsumer.init(conf.get(PROP_NAMESERVER_ADDRESS), conf.getInt(PROP_CONSUMER_THREAD_MAX, 0), conf.getInt(PROP_CONSUMER_THREAD_MIN, 0));
         defaultMQProducer = rmqProducer.getDefaultMQProducer();
         transactionMQProducer = rmqProducer.getTransactionMQProducer();
     }

@@ -30,10 +30,14 @@ public class RocketMQConsumer {
     protected Ioc ioc;
 
     private String namesrvAddr;
+    private int consumeThreadMax = 0;
+    private int consumeThreadMin = 0;
     private List<DefaultMQPushConsumer> consumerList = new ArrayList<>();
 
-    public void init(String namesrvAddr) {
+    public void init(String namesrvAddr,int consumeThreadMax,int consumeThreadMin) {
         this.namesrvAddr = namesrvAddr;
+        this.consumeThreadMax = consumeThreadMax;
+        this.consumeThreadMin = consumeThreadMin;
         for (String name : ioc.getNamesByAnnotation(RMQConsumer.class)) {
             RMQConsumerListener listener = ioc.get(RMQConsumerListener.class, name);
             RMQConsumer rmqConsumer = listener.getClass().getAnnotation(RMQConsumer.class);
@@ -57,6 +61,12 @@ public class RocketMQConsumer {
 
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroup);
         consumer.setNamesrvAddr(namesrvAddr);
+        if(consumeThreadMax>0) {
+            consumer.setConsumeThreadMax(consumeThreadMax);
+        }
+        if(consumeThreadMin>0) {
+            consumer.setConsumeThreadMin(consumeThreadMin);
+        }
         try {
             consumer.subscribe(topic, tag);
             switch (messageModel) {

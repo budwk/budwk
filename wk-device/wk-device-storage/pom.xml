@@ -13,6 +13,7 @@
         <module>wk-device-storage-common</module>
         <module>wk-device-storage-tdengine</module>
         <module>wk-device-storage-mongodb</module>
+        <module>wk-device-storage-starter</module>
     </modules>
     <groupId>com.budwk.app</groupId>
     <artifactId>wk-device-storage</artifactId>

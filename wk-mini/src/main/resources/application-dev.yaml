@@ -15,7 +15,7 @@ jetty:
 rocketmq:
   # 集群环境多个nameserver用;分割
   nameserver-address: 127.0.0.1:9876
-  # 可选,如果无需发送消息则忽略该配置
+  # 生产者组
   producer-group: wk_local_producer
 
 openapi:

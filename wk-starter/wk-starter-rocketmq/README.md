@@ -27,13 +27,17 @@ $ ./mqadmin updatetopic -n localhost:9876 -t DemoTopic -c DefaultCluster
 rocketmq:
   # 集群环境多个nameserver用;分割
   nameserver-address: 127.0.0.1:9876
-  # 可选,如果无需发送消息则忽略该配置
+  # 生产者组
   producer-group: wk_local_producer
+  consumer-thread-max: 0
+  consumer-thread-min: 0
 ```
 
 ## 生产者
-```java
 
+```java
+@Inject
+RocketMQServer rocketMQServer;
 ```
 
 ## 消费者

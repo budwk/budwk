@@ -11,4 +11,21 @@
 
     <artifactId>wk-device-storage-mongodb</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-storage-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutz</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-mongodb-plus</artifactId>
+            <version>${nutzboot.version}</version>
+        </dependency>
+    </dependencies>
 </project>
