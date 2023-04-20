@@ -1,7 +1,6 @@
 package com.budwk.starter.tdengine;
 
 import org.nutz.boot.annotation.PropDoc;
-import org.nutz.boot.starter.ServerFace;
 import org.nutz.boot.starter.jdbc.DataSourceStarter;
 import org.nutz.dao.impl.NutDao;
 import org.nutz.ioc.Ioc;
@@ -16,8 +15,8 @@ import javax.sql.DataSource;
 /**
  * @author wizzer@qq.com
  */
-@IocBean
-public class TDEngineStarter implements ServerFace {
+@IocBean(create = "init")
+public class TDEngineStarter {
     private static final Log log = Logs.get();
 
     @Inject
@@ -31,8 +30,7 @@ public class TDEngineStarter implements ServerFace {
     @PropDoc(value = "TDengine 是否启用数据库功能", defaultValue = "false", type = "boolean")
     public static final String PROP_TDENGINE_ENABLE = PRE + "enable";
 
-    @Override
-    public void start() throws Exception {
+    public void init() {
         if (!conf.getBoolean(PROP_TDENGINE_ENABLE, false)) {
             return;
         }
@@ -40,8 +38,4 @@ public class TDEngineStarter implements ServerFace {
         ioc.addBean("taos", new NutDao(taos));
     }
 
-    @Override
-    public void stop() throws Exception {
-
-    }
 }
