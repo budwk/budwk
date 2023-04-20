@@ -5,24 +5,23 @@ import com.budwk.starter.rocketmq.rmq.RocketMQConsumer;
 import com.budwk.starter.rocketmq.rmq.RocketMQProducer;
 import com.budwk.starter.rocketmq.utils.MessagesSplitter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.nutz.boot.annotation.PropDoc;
+import org.nutz.boot.starter.ServerFace;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
  * @author wizzer.cn
  */
-@IocBean(create = "init", depose = "close")
+@IocBean
 @Slf4j
-public class RocketMQServer {
+public class RocketMQServer implements ServerFace {
     @Inject
     private PropertiesProxy conf;
 
@@ -51,14 +50,17 @@ public class RocketMQServer {
     private DefaultMQProducer defaultMQProducer;
     private TransactionMQProducer transactionMQProducer;
 
-    public void init() throws MQClientException {
+
+    @Override
+    public void start() throws Exception {
         rmqProducer.init(conf.get(PROP_NAMESERVER_ADDRESS), conf.get(PROP_PRODUCER_GROUP));
         rmqConsumer.init(conf.get(PROP_NAMESERVER_ADDRESS), conf.getInt(PROP_CONSUMER_THREAD_MAX, 0), conf.getInt(PROP_CONSUMER_THREAD_MIN, 0));
         defaultMQProducer = rmqProducer.getDefaultMQProducer();
         transactionMQProducer = rmqProducer.getTransactionMQProducer();
     }
 
-    public void close() throws IOException {
+    @Override
+    public void stop() throws Exception {
         rmqProducer.close();
         rmqConsumer.close();
     }
@@ -174,5 +176,4 @@ public class RocketMQServer {
     public TransactionSendResult sendTransactionMsg(Message message) throws Exception {
         return this.transactionMQProducer.sendMessageInTransaction(message, null);
     }
-
 }

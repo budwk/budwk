@@ -8,7 +8,7 @@ import org.nutz.json.JsonShape;
  */
 @JsonShape(JsonShape.Type.OBJECT)
 public enum DataType {
-    INTEGER("INTEGER", "整型"),
+    INT("INT", "整型"),
     FLOAT("FLOAT", "浮点型"),
     STRING("STRING", "字符串"),
     ENUM("ENUM", "枚举"),

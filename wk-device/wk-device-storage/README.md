@@ -27,6 +27,7 @@ device:
 
 ```yaml
 mongodb:
+  # mongodb://用户名:密码@IP:端口/数据库名
   url: mongodb://127.0.0.1:27017/device_test
 ```
 

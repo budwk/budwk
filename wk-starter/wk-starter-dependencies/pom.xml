@@ -34,6 +34,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <rocketmq.version>5.1.0</rocketmq.version>
+        <tdengine.version>3.1.0</tdengine.version>
         <gson.version>2.2.4</gson.version>
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
         <hutool.version>5.8.11</hutool.version>
@@ -140,6 +141,11 @@
                 <artifactId>wk-starter-rocketmq</artifactId>
                 <version>${budwk.version}</version>
             </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-tdengine</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
             <!-- nutz -->
             <dependency>
                 <groupId>org.nutz</groupId>
@@ -235,6 +241,12 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+            <!-- tdengine -->
+            <dependency>
+                <groupId>com.taosdata.jdbc</groupId>
+                <artifactId>taos-jdbcdriver</artifactId>
+                <version>${tdengine.version}</version>
             </dependency>
             <!-- swagger -->
             <dependency>
