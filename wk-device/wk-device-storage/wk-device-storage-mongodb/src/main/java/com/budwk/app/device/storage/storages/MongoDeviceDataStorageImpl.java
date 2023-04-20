@@ -1,7 +1,7 @@
 package com.budwk.app.device.storage.storages;
 
 import com.budwk.app.device.storage.constants.StorageConstant;
-import com.budwk.app.device.storage.objects.container.TableScheme;
+import com.budwk.app.device.storage.objects.dto.DeviceAttributeDTO;
 import com.budwk.app.device.storage.objects.dto.DeviceDataDTO;
 import com.budwk.app.device.storage.objects.query.DeviceDataQuery;
 import com.mongodb.client.FindIterable;
@@ -95,7 +95,7 @@ public class MongoDeviceDataStorageImpl implements DeviceDataStorage {
     }
 
     @Override
-    public void createTable(TableScheme scheme) {
+    public void createTable(DeviceDataDTO deviceDTO, List<DeviceAttributeDTO> attributeDTOS) {
 
     }
 

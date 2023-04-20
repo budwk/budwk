@@ -23,4 +23,8 @@ public class DeviceAttributeDTO implements Serializable {
     private Integer scale;
     //单位
     private String unit;
+
+    public String getDataTypeValue() {
+        return dataType.getValue();
+    }
 }

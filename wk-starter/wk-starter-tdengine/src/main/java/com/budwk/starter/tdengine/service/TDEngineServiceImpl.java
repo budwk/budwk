@@ -236,10 +236,10 @@ public class TDEngineServiceImpl<T> implements TDEngineService<T> {
 
                         for (NutMap it : fieldsList) {
                             fieldStr.setLength(0);
-                            Integer dataLen = it.getInt("dataLen", 0);
-                            fieldStr.append(it.getString("code"));
+                            Integer dataLen = it.getInt("length", 0);
+                            fieldStr.append(it.getString("field"));
                             fieldStr.append(" ");
-                            switch (it.getString("dataType", "")) {
+                            switch (it.getString("type", "")) {
                                 case "INT":
                                     if (dataLen == 2) {
                                         fieldStr.append("SMALLINT");
