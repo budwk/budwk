@@ -1,10 +1,9 @@
 package com.budwk.starter.tdengine.service;
 
-import com.budwk.starter.tdengine.annotation.TDEngineTag;
 import com.budwk.starter.tdengine.dto.TableInfo;
+import com.budwk.starter.tdengine.maker.TDEngineSqlMaker;
 import com.budwk.starter.tdengine.maker.TaosFetchMapCallback;
 import com.budwk.starter.tdengine.maker.TaosQueryMapCallBack;
-import com.budwk.starter.tdengine.maker.TDEngineSqlMaker;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
@@ -18,7 +17,6 @@ import org.nutz.lang.Lang;
 import org.nutz.lang.Mirror;
 import org.nutz.lang.Stopwatch;
 import org.nutz.lang.util.NutMap;
-import org.nutz.service.EntityService;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -34,10 +32,16 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author caoshi
  */
 @Slf4j
-public class TDEngineServiceImpl<T> extends EntityService<T> implements TDEngineService<T> {
+public class TDEngineServiceImpl<T> implements TDEngineService<T> {
 
     public TDEngineServiceImpl(Dao dao) {
-        super(dao);
+        this.dao = dao;
+    }
+
+    private Dao dao;
+
+    public Dao dao() {
+        return this.dao;
     }
 
     protected ConcurrentHashMap<String, Map<String, TableInfo>> localColumnCache = new ConcurrentHashMap<>(20);
@@ -185,8 +189,10 @@ public class TDEngineServiceImpl<T> extends EntityService<T> implements TDEngine
                         Mirror<?> mir = Mirror.me(tableClass);
                         Field[] fields = mir.getFields();
                         for (Field it : fields) {
-                            ColType type = it.getAnnotation(ColDefine.class).type();
-                            int width = it.getAnnotation(ColDefine.class).width();
+                            ColDefine colDefine = it.getAnnotation(ColDefine.class);
+                            ColType type = colDefine.type();
+                            int width = colDefine.width();
+                            String customType = colDefine.customType();
 
                             fieldStr.setLength(0);
                             fieldStr.append(it.getName());
@@ -217,11 +223,11 @@ public class TDEngineServiceImpl<T> extends EntityService<T> implements TDEngine
                                     break;
                             }
 
-                            if (null != it.getAnnotation(Id.class)) {
+                            if (customType.equalsIgnoreCase("TAG")) {
+                                tags.add(fieldStr);
+                            } else if (null != it.getAnnotation(Id.class)) {
                                 fieldStr.append(",");
                                 sql.insert(0, fieldStr);
-                            } else if (null != it.getAnnotation(TDEngineTag.class)) {
-                                tags.add(fieldStr);
                             } else {
                                 fieldStr.append(",");
                                 sql.append(fieldStr);
