@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class TaosFetchMapCallback implements SqlCallback {
+public class FetchMapCallback implements SqlCallback {
     @Override
     public Object invoke(Connection conn, ResultSet rs, Sql sql) throws SQLException {
         if (null != rs && rs.next()) {

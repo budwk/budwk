@@ -2,8 +2,8 @@ package com.budwk.starter.tdengine.service;
 
 import com.budwk.starter.tdengine.dto.TableInfo;
 import com.budwk.starter.tdengine.maker.TDEngineSqlMaker;
-import com.budwk.starter.tdengine.maker.TaosFetchMapCallback;
-import com.budwk.starter.tdengine.maker.TaosQueryMapCallBack;
+import com.budwk.starter.tdengine.maker.FetchMapCallback;
+import com.budwk.starter.tdengine.maker.QueryMapCallBack;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
@@ -297,7 +297,7 @@ public class TDEngineServiceImpl<T> implements TDEngineService<T> {
         }
         int offset = pageSize * (pageNumber - 1);
         Sql sql = Sqls.create("select * from $table $condition limit $offset,$pageSize");
-        sql.setCallback(new TaosQueryMapCallBack());
+        sql.setCallback(new QueryMapCallBack());
         sql.setVar("table", tableName);
         sql.setVar("offset", offset);
         sql.setVar("pageSize", pageSize);
@@ -312,7 +312,7 @@ public class TDEngineServiceImpl<T> implements TDEngineService<T> {
         sql.setVar("fields", fields);
         sql.setVar("table", tableName);
         sql.setCondition(cnd);
-        sql.setCallback(new TaosFetchMapCallback());
+        sql.setCallback(new FetchMapCallback());
         dao().execute(sql);
         return sql.getObject(NutMap.class);
     }

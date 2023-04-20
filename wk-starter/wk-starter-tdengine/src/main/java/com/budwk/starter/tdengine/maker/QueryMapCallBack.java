@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-public class TaosQueryMapCallBack implements SqlCallback {
+public class QueryMapCallBack implements SqlCallback {
 
     @Override
     public Object invoke(Connection conn, ResultSet rs, Sql sql) throws SQLException {
