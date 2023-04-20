@@ -11,6 +11,7 @@ import java.io.Serializable;
 /**
  * 设备上报数据基本信息
  * customType = "TAG" 时序数据库的TAG字段,可以为所属公司等固定数据
+ *
  * @author wizzer.cn
  */
 @Data
@@ -36,6 +37,9 @@ public class DeviceDataDTO implements Serializable {
 
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String device_code;
+
+    @ColDefine(type = ColType.VARCHAR, width = 32, customType = "TAG")
+    private String handler;
 
     @ColDefine(type = ColType.VARCHAR, width = 32, customType = "TAG")
     private String ext1;

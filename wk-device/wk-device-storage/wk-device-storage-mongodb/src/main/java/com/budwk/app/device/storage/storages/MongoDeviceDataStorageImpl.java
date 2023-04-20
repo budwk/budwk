@@ -2,7 +2,7 @@ package com.budwk.app.device.storage.storages;
 
 import com.budwk.app.device.storage.constants.StorageConstant;
 import com.budwk.app.device.storage.objects.container.TableScheme;
-import com.budwk.app.device.storage.objects.dto.DeviceDTO;
+import com.budwk.app.device.storage.objects.dto.DeviceDataDTO;
 import com.budwk.app.device.storage.objects.query.DeviceDataQuery;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -18,6 +18,7 @@ import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 
@@ -39,7 +40,6 @@ public class MongoDeviceDataStorageImpl implements DeviceDataStorage {
     @Inject
     private PropertiesProxy conf;
 
-
     private JsonWriterSettings jsonWriterSettings = JsonWriterSettings.builder().objectIdConverter((value, writer) -> {
                 writer.writeString(value.toString());
             }).dateTimeConverter((value, writer) -> {
@@ -48,15 +48,11 @@ public class MongoDeviceDataStorageImpl implements DeviceDataStorage {
             .build();
 
     @Override
-    public void save(DeviceDTO device, long timestamp, Map<String, Object> dataList) {
-        String tableName = String.format("%s_%s", TABLE_PREFIX, device.getHandler());
+    public void save(DeviceDataDTO dataDTO, Map<String, Object> dataList) {
+        String tableName = String.format("%s_%s", TABLE_PREFIX, dataDTO.getHandler());
         MongoCollection<Document> collection = getCollection(tableName);
-        dataList.put("ts", new Date(timestamp));
-        Document meta = new Document();
-        meta.put("deviceId", device.getDeviceId());
-        meta.put("productId", device.getProductId());
-        meta.put("deviceNo", device.getDeviceNo());
-        meta.put("deviceCode", device.getDeviceCode());
+        dataList.put("ts", new Date(dataDTO.getTs()));
+        Document meta = Lang.obj2map(dataDTO, Document.class);
         Document doc = new Document();
         doc.put("meta", meta);
         doc.putAll(dataList);
@@ -128,15 +124,15 @@ public class MongoDeviceDataStorageImpl implements DeviceDataStorage {
         IndexOptions indexOptions = new IndexOptions().unique(false).background(true);
         collection.createIndexes(List.of(
                 new IndexModel(Indexes.descending("ts"), indexOptions),
-                new IndexModel(Indexes.ascending("meta.deviceId"), indexOptions),
-                new IndexModel(Indexes.ascending("meta.productId"), indexOptions)
+                new IndexModel(Indexes.ascending("meta.device_id"), indexOptions),
+                new IndexModel(Indexes.ascending("meta.product_id"), indexOptions)
         ));
         return collection;
     }
 
     protected List<Bson> buildConditions(DeviceDataQuery query) {
         List<Bson> conditions = new LinkedList<>();
-        conditions.add(Filters.eq("meta.deviceId", query.getDeviceId()));
+        conditions.add(Filters.eq("meta.device_id", query.getDeviceId()));
         if (query.getStartTime() != null) {
             conditions.add(Filters.gte("ts", new Date(query.getStartTime())));
         }

@@ -1,7 +1,7 @@
 package com.budwk.app.device.storage.storages;
 
 import com.budwk.app.device.storage.objects.container.TableScheme;
-import com.budwk.app.device.storage.objects.dto.DeviceDTO;
+import com.budwk.app.device.storage.objects.dto.DeviceDataDTO;
 import com.budwk.app.device.storage.objects.query.DeviceDataQuery;
 import org.nutz.lang.util.NutMap;
 
@@ -14,7 +14,7 @@ import java.util.Map;
  * @author wizzer.cn
  */
 public interface DeviceDataStorage {
-    void save(DeviceDTO device, long timestamp, Map<String, Object> dataList);
+    void save(DeviceDataDTO device, Map<String, Object> dataList);
 
     List<NutMap> list(DeviceDataQuery query);
 

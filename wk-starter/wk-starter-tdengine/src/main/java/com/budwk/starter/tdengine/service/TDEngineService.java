@@ -56,16 +56,16 @@ public interface TDEngineService<T> {
      *
      * @param tableName    超级表名
      * @param subTableName 子表名
-     * @param data         k=v
+     * @param data         k=v ,k 必须全为小写字母
      */
     void insert(String tableName, String subTableName, NutMap data);
 
     /**
-     * 创建超级表
+     * 创建超级表(注意: 建表后所有字段名都变成小写字母)
      *
      * @param tableName  超级表名
      * @param tableClass 设备Pojo类
-     * @param fieldsList 设备扩展字段
+     * @param fieldsList 设备扩展字段 [{"code":"t1","name":"扩展字段1","dataLen":10,"dataType":"INT"}]
      */
     void createTable(String tableName, Class<T> tableClass, List<NutMap> fieldsList);
 

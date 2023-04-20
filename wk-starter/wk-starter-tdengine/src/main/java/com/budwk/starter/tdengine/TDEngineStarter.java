@@ -35,7 +35,7 @@ public class TDEngineStarter {
             return;
         }
         DataSource taos = DataSourceStarter.createManyDataSource(ioc, conf, PRE + "jdbc.");
-        ioc.addBean("taos", new NutDao(taos));
+        ioc.addBean("tdengineDao", new NutDao(taos));
     }
 
 }
