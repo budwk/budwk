@@ -1,5 +1,6 @@
 package com.budwk.app.ucenter.services.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.app.sys.providers.ISysUserProvider;
 import com.budwk.app.ucenter.services.ValidateService;
@@ -36,6 +37,7 @@ public class ValidateServiceImpl implements ValidateService {
     @Inject
     private EmailSendServer emailSendServer;
     @Inject
+    @Reference(check = false)
     private ISysUserProvider sysUserProvider;
 
     /**
