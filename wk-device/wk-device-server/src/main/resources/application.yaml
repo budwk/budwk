@@ -1,11 +1,11 @@
-nutz:
+asddcnutz:
   application:
-    name: wk-platform
+    name: wk-device
 server:
   port: 0
   host: 0.0.0.0
 jetty:
-  contextPath: /platform
+  contextPath: /device
   threadpool:
     idleTimeout: 60000
     minThreads: 10
@@ -15,8 +15,8 @@ openapi:
   scanner:
     package: com.budwk.app
   info:
-    title: 控制中心
-    version: 8.0.0
+    title: 设备中心
+    version: 8.2.0
     contact:
       name: 大鲨鱼
       email: wizzer@qq.com
@@ -36,19 +36,6 @@ web:
     origin: "*"
   validation:
     enable: true
-
-websocket:
-  # 实现方式
-  type: redis
-  # 超时时间(默认3600秒)
-  timeout: 3600
-
-redisson:
-  # 集群/分片/主从等配置见 https://github.com/nutzam/nutzmore/tree/master/nutz-integration-redisson
-  mode: single
-  single:
-    address: redis://127.0.0.1:6379
-    #password: 123
 
 redis:
   host: 127.0.0.1
@@ -71,12 +58,12 @@ nacos:
     server-addr: 10.10.10.10:8848
     namespace: dev
     naming:
-      service-name: budwk.platform
-      meta-data: "{'version':'budwk.platform.8.0.0'}"
+      service-name: budwk.device
+      meta-data: "{'version':'budwk.device.8.0.0'}"
   config:
     server-addr: 10.10.10.10:8848
     namespace: dev #千万别写 public 因为查询条件是命名空间ID,而nacos默认的public命名空间ID是空白!!!
-    data-id: wk-platform
+    data-id: wk-device
     data-type: yaml
 dubbo:
   registry:
@@ -90,15 +77,10 @@ dubbo:
   application:
     qos:
       enable: false
-log:
-  # database=存数据库,mongodb=mongodb 此配置项只需要在 wk-platform 配置即可
-  save: database
-  color: true
-  level: debug
 
 # log存储方式为 mongodb 设置
 mongodb:
-  url: mongodb://127.0.0.1:27017/budwk_v8
+  url: mongodb://10.10.10.10:27017/budwk_v8
 
 database:
   enable: true
@@ -120,42 +102,6 @@ jdbc:
   connectionProperties: druid.stat.slowSqlMillis=2000
   defaultAutoCommit: true
 
-quartz:
-  startupDelay: 10                  #延迟启动秒数
-  scheduler:
-    instanceName: defaultScheduler  #集群名称
-    instanceId: AUTO
-    skipUpdateCheck: true
-  jobStore:
-    class: org.quartz.impl.jdbcjobstore.JobStoreTX
-    driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-    #不同数据库到适配
-    #driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
-    #driverDelegateClass = org.quartz.impl.jdbcjobstore.oracle.OracleDelegate
-    dataSource: myDS                #数据源名称
-    tablePrefix: SYS_QRTZ_          #表前缀
-    isClustered: true               #启用集群模式
-    clusterCheckinInterval: 20000
-    maxMisfiresToHandleAtATime: 120
-    misfireThreshold: 120000
-    txIsolationLevelSerializable: false
-  threadPool:
-    class: org.quartz.simpl.SimpleThreadPool
-    threadCount: 2
-    threadPriority: 5
-    threadsInheritContextClassLoaderOfInitializingThread: true
-  plugin:
-    triggHistory:
-      class: org.quartz.plugins.history.LoggingJobHistoryPlugin
-    shutdownhook:
-      class: org.quartz.plugins.management.ShutdownHookPlugin
-      cleanShutdown: true
-  dataSource:
-    myDS:
-      connectionProvider:
-        #数据源
-        class: com.budwk.app.sys.commons.task.NutConnectionProvider
-
 storage:
   enable: true
   #本地方式
@@ -164,13 +110,6 @@ storage:
     #本地存储位置
     path: /Users/wizzer/temp/files
 
-monitor:
-  nacos:
-    url: http://10.10.10.10:8848/nacos
-    username: nacos
-    password: nacos
-    namespace: dev
-
 job:
   # 定时任务所在的包名 多个包名用,分割
-  package: com.budwk.app.sys.commons.task
+  package: com.budwk.app.device.commons.task
