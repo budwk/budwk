@@ -1,5 +1,6 @@
 package com.budwk.app.device.models;
 
+import com.budwk.starter.common.enums.Validation;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
@@ -9,7 +10,6 @@ import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author wizzer.cn
@@ -23,7 +23,7 @@ import java.util.List;
 })
 @Comment("协议解析包")
 @ApiModel(description = "协议解析包")
-public class Device_handler  extends BaseModel implements Serializable {
+public class Device_handler extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column
@@ -42,7 +42,7 @@ public class Device_handler  extends BaseModel implements Serializable {
     @Column
     @Comment("标识符")
     @ColDefine(type = ColType.VARCHAR, width = 30)
-    @ApiModelProperty(name = "identifier", description = "标识符")
+    @ApiModelProperty(name = "code", description = "标识符", required = true, check = true, validation = Validation.LOWER)
     private String code;
 
     @Column

@@ -2,6 +2,7 @@ package com.budwk.app.device.models;
 
 import com.budwk.app.device.enums.DataType;
 import com.budwk.app.device.enums.ParamType;
+import com.budwk.starter.common.enums.Validation;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
@@ -47,7 +48,7 @@ public class Device_product_attr extends BaseModel implements Serializable {
     @Column
     @Comment("标识")
     @ColDefine(type = ColType.VARCHAR, width = 50)
-    @ApiModelProperty(description = "标识")
+    @ApiModelProperty(name = "code", description = "标识符", required = true, check = true, validation = Validation.LOWER)
     private String code;
 
     /**
