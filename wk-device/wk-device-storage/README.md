@@ -15,9 +15,9 @@
 ```yaml
 device:
   storage:
-    # 原始报文存储时间(单位天,默认30天)
+    # 原始报文存储时间(单位天,默认30天  仅对mongodb有效) 
     raw-save-ttl: 30
-    # 解析后数据存储时间(单位天,默认0=永久存储)
+    # 解析后数据存储时间(单位天,默认0=永久存储  仅对mongodb有效,tdengine 是建库语句设置)
     data-save-ttl: 0
     # 解析后数据存储方式(mongodb/tdengine)
     data-save-type: mongodb
@@ -34,17 +34,20 @@ mongodb:
 * 使用 TDEngine 数据库时配置内容
 
 ```yaml
-jdbc:
-  taos:
+tdengine:
+  enable: true
+  jdbc:
     type: druid
     driverClassName: com.taosdata.jdbc.TSDBDriver
-    url: jdbc:TAOS://:/device_test?timezone=UTC-8
+    url: jdbc:TAOS://127.0.0.1:6030/device_test?timezone=UTC-8
+    # Restful API
+    # driverClassName: com.taosdata.jdbc.rs.RestfulDriver
+    # url: jdbc:TAOS-RS://127.0.0.1:6041/device_test?timezone=UTC-8
     username: root
     password: taosdata
-    validationQuery: select server_status()
     maxActive: 10
     maxIdle: 10
     minIdle: 1
     testWhileIdle: true
-    connectionProperties: druid.stat.slowSqlMillis=2000
+    validationQuery: select server_status()
 ```
