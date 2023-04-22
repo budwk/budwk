@@ -6,6 +6,8 @@ server:
   host: 0.0.0.0
 jetty:
   # extports: 9990 配置多端口监听,逗号分隔
+  http:
+    idleTimeout: 30000
   threadpool:
     idleTimeout: 60000
     minThreads: 10
