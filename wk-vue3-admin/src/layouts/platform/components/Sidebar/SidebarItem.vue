@@ -10,7 +10,7 @@
         </app-link>
       </template>
       
-      <el-sub-menu v-else ref="subMenu" :index="item.tree" popper-append-to-body :class="isTop?'top-nav-submenu':''">
+      <el-sub-menu v-else ref="subMenu" :index="item.tree" :class="isTop?'top-nav-submenu':''">
         <template v-if="item.meta" #title>
           <svg-icon v-if="item.meta&&item.meta.icon" :icon-class="item.meta.icon" />
           <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>

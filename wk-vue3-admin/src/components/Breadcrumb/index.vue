@@ -18,7 +18,15 @@ const router = useRouter()
 const levelList = ref([])
   
 function getBreadcrumb() {
-    if(isDashboard(route)){
+    const name = route && route.name?.toString()
+    if (!name) {
+        return
+    }
+    if(name.trim() == 'platform-dashboard'){
+        levelList.value = []
+        return
+    } else if(name.trim().indexOf('dashboard') > 0){
+        levelList.value = [route.meta.breadcrumb]
         return
     }
     if(route.meta && route.meta.breadcrumb && route.meta.breadcrumb.indexOf('|') > 0) {
@@ -26,13 +34,6 @@ function getBreadcrumb() {
     } else if(route.meta && route.meta.breadcrumb) {
         levelList.value.push(route.meta.breadcrumb)
     }
-}
-function isDashboard(route: any) {
-    const name = route && route.name
-    if (!name) {
-        return false
-    }
-    return name.trim() === 'platformDashboard'
 }
 function handleLink(item: any) {
     const { redirect, path } = item
