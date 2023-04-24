@@ -20,11 +20,11 @@ import java.util.Map;
 @Table
 @TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({
-        @Index(name = "IDX_DEVICE_HANDLER_CODE", fields = "code")
+        @Index(name = "IDX_DEVICE_CMD_RECORD", fields = "commandId", unique = false)
 })
 @Comment("设备指令记录")
 @ApiModel(description = "设备指令记录")
-public class Device_command_record extends BaseModel implements Serializable {
+public class Device_cmd_record extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column

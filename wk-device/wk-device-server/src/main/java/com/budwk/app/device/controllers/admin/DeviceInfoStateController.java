@@ -121,7 +121,7 @@ public class DeviceInfoStateController {
             return Result.error(ResultCode.NULL_DATA_ERROR);
         }
         deviceInfoStateService.delete(id);
-        req.setAttribute("_slog_msg", deviceInfoState.getId());
+        req.setAttribute("_slog_msg", deviceInfoState.getDeviceId());
         return Result.success();
     }
 }

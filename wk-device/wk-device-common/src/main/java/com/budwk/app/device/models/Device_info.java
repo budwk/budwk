@@ -21,10 +21,9 @@ import java.io.Serializable;
 @TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({
         @Index(name = "IDX_DEVICE_CODE", fields = "deviceCode"),
-        @Index(name = "IDX_DEVICE_CONNET_NO", fields = "connectNo", unique = false),
+        @Index(name = "IDX_DEVICE_CONNET_NO", fields = "deviceNo", unique = false),
         @Index(name = "IDX_DEVICE_NO", fields = "deviceNo", unique = false),
         @Index(name = "IDX_DEVICE_IMEI", fields = "imei", unique = false),
-        @Index(name = "IDX_DEVICE_ACCOUNT_NO", fields = "accountNo", unique = false),
         @Index(name = "IDX_DEVICE_PRODUCT_ID", fields = "productId", unique = false),
 })
 @Comment("设备信息")

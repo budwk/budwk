@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @IocBean
 @At("/admin/type")
-@SLog(tag = "Device_type")
-@ApiDefinition(tag = "Device_type")
+@SLog(tag = "设备类型")
+@ApiDefinition(tag = "设备类型")
 @Slf4j
 public class DeviceTypeController {
     @Inject
@@ -34,50 +34,46 @@ public class DeviceTypeController {
 
     @At
     @Ok("json")
-    @POST
-    @ApiOperation(name = "分页查询")
-    @ApiFormParams(
-            {
-                    @ApiFormParam(name = "pageNo", example = "1", description = "页码", type = "integer"),
-                    @ApiFormParam(name = "pageSize", example = "10", description = "页大小", type = "integer"),
-                    @ApiFormParam(name = "pageOrderName", example = "createdAt", description = "排序字段"),
-                    @ApiFormParam(name = "pageOrderBy", example = "descending", description = "排序方式")
-            }
-    )
+    @GET
+    @ApiOperation(name = "列表查询")
+    @ApiImplicitParams
     @ApiResponses(
             implementation = Pagination.class
     )
-    @SaCheckPermission("device.type")
-    public Result<?> list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
-        return Result.data(deviceTypeService.listPage(pageNo, pageSize, Cnd.NEW().asc("location")));
+    @SaCheckPermission("device.settings.devtype")
+    public Result<?> list() {
+        Cnd cnd = Cnd.NEW();
+        cnd.asc("location");
+        cnd.asc("path");
+        return Result.success().addData(deviceTypeService.query(cnd));
     }
 
     @At
     @Ok("json")
     @POST
-    @ApiOperation(name = "新增Device_type")
+    @ApiOperation(name = "新增设备类型")
     @ApiFormParams(
             implementation = Device_type.class
     )
     @ApiResponses
-    @SLog("新增Device_type:${deviceType.id}")
-    @SaCheckPermission("device.type.create")
-    public Result<?> create(@Param("..") Device_type deviceType, HttpServletRequest req) {
+    @SLog("新增设备类型:${deviceType.name}")
+    @SaCheckPermission("device.settings.devtype.create")
+    public Result<?> create(@Param("..") Device_type deviceType, String pid, HttpServletRequest req) {
         deviceType.setCreatedBy(SecurityUtil.getUserId());
-        deviceTypeService.insert(deviceType);
+        deviceTypeService.save(deviceType, pid);
         return Result.success();
     }
 
     @At
     @Ok("json")
     @POST
-    @ApiOperation(name = "修改Device_type")
+    @ApiOperation(name = "修改设备类型")
     @ApiFormParams(
             implementation = Device_type.class
     )
     @ApiResponses
-    @SLog("修改Device_type:${deviceType.name}")
-    @SaCheckPermission("device.type.update")
+    @SLog("修改设备类型:${deviceType.name}")
+    @SaCheckPermission("device.settings.devtype.update")
     public Result<?> update(@Param("..") Device_type deviceType, HttpServletRequest req) {
         deviceType.setUpdatedBy(SecurityUtil.getUserId());
         deviceTypeService.updateIgnoreNull(deviceType);
@@ -87,14 +83,14 @@ public class DeviceTypeController {
     @At("/get/{id}")
     @Ok("json")
     @GET
-    @ApiOperation(name = "获取Device_type")
+    @ApiOperation(name = "获取设备类型")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "id", in = ParamIn.PATH, required = true, check = true)
             }
     )
     @ApiResponses
-    @SaCheckPermission("device.type")
+    @SaCheckPermission("device.settings.devtype")
     public Result<?> getData(String id, HttpServletRequest req) {
         Device_type deviceType = deviceTypeService.fetch(id);
         if (deviceType == null) {
@@ -106,15 +102,15 @@ public class DeviceTypeController {
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
-    @ApiOperation(name = "删除Device_type")
+    @ApiOperation(name = "删除设备类型")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "id", in = ParamIn.PATH, required = true, check = true)
             }
     )
     @ApiResponses
-    @SLog("删除Device_type:")
-    @SaCheckPermission("device.type.delete")
+    @SLog("删除设备类型:")
+    @SaCheckPermission("device.settings.devtype.delete")
     public Result<?> delete(String id, HttpServletRequest req) {
         Device_type deviceType = deviceTypeService.fetch(id);
         if (deviceType == null) {

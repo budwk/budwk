@@ -121,7 +121,7 @@ public class DeviceInfoLatestDataController {
             return Result.error(ResultCode.NULL_DATA_ERROR);
         }
         deviceInfoLatestDataService.delete(id);
-        req.setAttribute("_slog_msg", deviceInfoLatestData.getId());
+        req.setAttribute("_slog_msg", deviceInfoLatestData.getDeviceId());
         return Result.success();
     }
 }

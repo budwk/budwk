@@ -133,5 +133,18 @@
             <artifactId>wk-device-storage-tdengine</artifactId>
             <version>${project.version}</version>
         </dependency-->
+        <!-- poi -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-poi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
     </dependencies>
 </project>
