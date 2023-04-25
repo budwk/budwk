@@ -81,7 +81,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="颜色标识" prop="color" v-if="formData.parentId.length==0">
+                        <el-form-item label="背景色" prop="color" v-if="formData.parentId.length==0">
                                 <el-color-picker v-model="formData.color" />
                         </el-form-item>
                     </el-col>
@@ -122,7 +122,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24" v-if="formData.parentId.length==0">
-                        <el-form-item label="颜色标识" prop="code">
+                        <el-form-item label="背景色" prop="code">
                                 <el-color-picker v-model="formData.color" />
                         </el-form-item>
                     </el-col>
@@ -185,7 +185,7 @@ const { queryParams, formData, formRules } = toRefs(data)
 const columns = ref([
     { prop: 'name', label: `类型名称`, show: true, fixed: false },
     { prop: 'code', label: `类型标识`, show: true, fixed: false },
-    { prop: 'color', label: `颜色`, show: true, fixed: false }
+    { prop: 'color', label: `背景色`, show: true, fixed: false }
 ])
 
 // 重置表单
