@@ -38,7 +38,7 @@
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                             v-permission="['device.settings.devtype.update']"></el-button>
                         </el-tooltip>
-                    <el-tooltip content="删除" placement="top" v-if="scope.row.path != '0001'">
+                    <el-tooltip content="删除" placement="top">
                         <el-button link type="danger" icon="Delete"
                         @click="handleDelete(scope.row)" v-permission="['device.settings.devtype.delete']"></el-button>
                     </el-tooltip>
@@ -98,18 +98,6 @@
         <el-dialog title="修改设备类型" v-model="showUpdate" width="40%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row>
-                    <el-col>
-                        <el-form-item label="业务类型" prop="type">
-                            <el-select v-model="formData.type" placeholder="请选择业务类型" :disabled="formData.parentId.length>0">
-                                <el-option
-                                v-for="item in typeList"
-                                :key="item.value"
-                                :label="item.text"
-                                :value="item.value"
-                                />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="24">
                         <el-form-item label="类型名称" prop="name">
                             <el-input v-model="formData.name" placeholder="请输入类型名称" maxlength="100" />
@@ -175,7 +163,7 @@ const data = reactive({
         name: [{ required: true, message: "类型名称不能为空", trigger: "blur" }],
         code: [
             { required: true, message: "类型标识不能为空", trigger: "blur" },
-            { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母、下划线和数字的组合，并以字母开头", trigger: "blur" }
+            { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母或小写字母、下划线和数字的组合，并以小写字母开头", trigger: "blur" }
         ],
         type: [{ required: true, message: "业务类型不能为空", trigger: "blur" }],
     },

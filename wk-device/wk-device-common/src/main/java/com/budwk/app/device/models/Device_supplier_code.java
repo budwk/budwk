@@ -48,7 +48,7 @@ public class Device_supplier_code extends BaseModel implements Serializable {
 
     @Column
     @Comment("型号编码")
-    @ColDefine(type = ColType.VARCHAR, width = 10)
+    @ColDefine(type = ColType.VARCHAR, width = 32)
     @ApiModelProperty(name = "code", description = "型号编码", required = true)
     private String code;
 }

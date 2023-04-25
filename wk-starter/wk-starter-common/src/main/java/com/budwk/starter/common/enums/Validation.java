@@ -16,7 +16,7 @@ public enum Validation implements IValidation{
     CHINESE("[\u4e00-\u9fa5]+", "要求为汉字"),
     UPPER("[A-Z]+", "要求全部为大写字母"),
     LOWER("[a-z]+", "要求全部为小写字母"),
-    LOWER_UNDERLINE_NUMBER("[a-z][a-z0-9_]+", "为小写字母、下划线和数字的组合，并以字母开头"),
+    LOWER_UNDERLINE_NUMBER("[a-z][a-z0-9_]+", "为小写字母或小写字母、下划线和数字的组合，并以小写字母开头"),
     PASSWORD("^(?!([a-zA-Z\\d]*|[\\d!@#\\$%_\\.]*|[a-zA-Z!@#\\$%_\\.]*)$)[a-zA-Z\\d!@#\\$%_\\.]{8,}$","密码需8位以上并且包含数字、字母、特殊字符");
 
     final String regex;

@@ -136,7 +136,7 @@ public class DeviceTypeController {
             return Result.error(ResultCode.NULL_DATA_ERROR);
         }
         deviceTypeService.delete(id);
-        req.setAttribute("_slog_msg", deviceType.getId());
+        req.setAttribute("_slog_msg", deviceType.getName());
         return Result.success();
     }
 }
