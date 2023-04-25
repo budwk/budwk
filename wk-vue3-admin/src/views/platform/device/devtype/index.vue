@@ -21,14 +21,10 @@
                     <template v-if="item.prop == 'createdAt'" #default="scope">
                         <span>{{ formatTime(scope.row.createdAt) }}</span>
                     </template>
-                    <template v-if="item.prop == 'disabled'" #default="scope">
-                        <el-switch
-                        v-model="scope.row.disabled"
-                        :active-value="false"
-                        :inactive-value="true"
-                        active-color="green"
-                        inactive-color="red"
-                        />
+                    <template v-if="item.prop == 'color'" #default="scope">
+                        <div :style="'width: 60px;height: 20px;background-color:'+scope.row.color">
+                            &nbsp;&nbsp;&nbsp;
+                        </div>
                     </template>
                 </el-table-column>
             </template>
@@ -61,6 +57,18 @@
                                 />
                         </el-form-item>
                     </el-col>
+                    <el-col>
+                        <el-form-item label="业务类型" prop="type">
+                            <el-select v-model="formData.type" placeholder="请选择业务类型" :disabled="formData.parentId.length>0">
+                                <el-option
+                                v-for="item in typeList"
+                                :key="item.value"
+                                :label="item.text"
+                                :value="item.value"
+                                />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="24">
                         <el-form-item label="类型名称" prop="name">
                             <el-input v-model="formData.name" placeholder="请输入类型名称" maxlength="100" />
@@ -72,20 +80,8 @@
                                 auto-complete="off" type="text" />
                         </el-form-item>
                     </el-col>
-                    <el-col>
-                        <el-form-item label="业务类型" prop="type">
-                            <el-select v-model="formData.type" placeholder="请选择业务类型">
-                                <el-option
-                                v-for="item in typeList"
-                                :key="item.value"
-                                :label="item.text"
-                                :value="item.value"
-                                />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="24">
-                        <el-form-item label="颜色标识" prop="color">
+                        <el-form-item label="颜色标识" prop="color" v-if="formData.parentId.length==0">
                                 <el-color-picker v-model="formData.color" />
                         </el-form-item>
                     </el-col>
@@ -102,6 +98,18 @@
         <el-dialog title="修改设备类型" v-model="showUpdate" width="40%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row>
+                    <el-col>
+                        <el-form-item label="业务类型" prop="type">
+                            <el-select v-model="formData.type" placeholder="请选择业务类型" :disabled="formData.parentId.length>0">
+                                <el-option
+                                v-for="item in typeList"
+                                :key="item.value"
+                                :label="item.text"
+                                :value="item.value"
+                                />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="24">
                         <el-form-item label="类型名称" prop="name">
                             <el-input v-model="formData.name" placeholder="请输入类型名称" maxlength="100" />
@@ -113,7 +121,7 @@
                                 auto-complete="off" type="text" />
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col :span="24" v-if="formData.parentId.length==0">
                         <el-form-item label="颜色标识" prop="code">
                                 <el-color-picker v-model="formData.color" />
                         </el-form-item>
@@ -134,7 +142,7 @@
 import { nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElForm } from 'element-plus'
 import { doCreate, doUpdate, getInfo, getList, doDelete, getInit } from '/@/api/platform/device/devtype'
-import { handleTree } from '/@/utils/common'
+import { handleTree, findOneValue } from '/@/utils/common'
 import modal from '/@/utils/modal'
 
 const queryRef = ref<InstanceType<typeof ElForm>>()
@@ -165,7 +173,10 @@ const data = reactive({
     },
     formRules: {
         name: [{ required: true, message: "类型名称不能为空", trigger: "blur" }],
-        code: [{ required: true, message: "类型标识不能为空", trigger: "blur" }],
+        code: [
+            { required: true, message: "类型标识不能为空", trigger: "blur" },
+            { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母、下划线和数字的组合，并以字母开头", trigger: "blur" }
+        ],
         type: [{ required: true, message: "业务类型不能为空", trigger: "blur" }],
     },
 })
@@ -213,7 +224,8 @@ onMounted(() => {
 })
 
 const parentChange = (val: any) => {
-    console.log(val)
+    const type = findOneValue(dataOptions.value, val, 'type', 'id')
+    formData.value.type = type.value
 }
 
 // 快速搜索&刷新
@@ -252,6 +264,7 @@ const handleCreate = (row: any) => {
     resetForm(createRef.value)
     if (row && row.id) {
         formData.value.parentId = row.id
+        formData.value.type = row.type.value
     }
     showCreate.value = true
 }
