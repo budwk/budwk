@@ -24,7 +24,7 @@ public class Device_rule_device extends BaseModel implements Serializable {
     @Column
     @Name
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @PrevInsert(els = {@EL(value = "snowflake()")}, nullEffective = true)
+    @PrevInsert(els = {@EL(value = "snowflake()")})
     private String id;
 
     @Column

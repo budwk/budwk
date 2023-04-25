@@ -1,6 +1,7 @@
 package com.budwk.app.device.models;
 
 import com.budwk.app.device.enums.DeviceType;
+import com.budwk.starter.common.enums.Validation;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
@@ -28,7 +29,7 @@ public class Device_type extends BaseModel implements Serializable {
     @Column
     @Name
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @PrevInsert(els = {@EL("snowflake()")}, nullEffective = true)
+    @PrevInsert(els = {@EL("snowflake()")})
     @ApiModelProperty(description = "id")
     private String id;
 
@@ -45,9 +46,9 @@ public class Device_type extends BaseModel implements Serializable {
     private DeviceType type;
 
     @Column
-    @Comment("分类编码")
+    @Comment("类型标识")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @ApiModelProperty(name = "code", description = "分类编码", required = true)
+    @ApiModelProperty(name = "code", description = "分类编码", required = true, check = true, validation = Validation.LOWER)
     private String code;
 
     @Column
@@ -77,4 +78,10 @@ public class Device_type extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     @ApiModelProperty(name = "icon", description = "图标")
     private String icon;
+
+    @Column
+    @Comment("颜色")
+    @ColDefine(type = ColType.VARCHAR, width = 20)
+    @ApiModelProperty(name = "color", description = "颜色")
+    private String color;
 }

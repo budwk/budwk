@@ -25,14 +25,14 @@ public class DeviceTypeServiceImpl extends BaseServiceImpl<Device_type> implemen
     @Aop(TransAop.READ_COMMITTED)
     public void save(Device_type deviceType, String pid) {
         String path = "";
-        if (!Strings.isEmpty(pid)) {
+        if (Strings.isNotBlank(pid)) {
             Device_type pp = this.fetch(pid);
             path = pp.getPath();
         }
         deviceType.setPath(getSubPath("Device_type", "path", path));
         deviceType.setParentId(pid);
         dao().insert(deviceType);
-        if (!Strings.isEmpty(pid)) {
+        if (Strings.isNotBlank(pid)) {
             this.update(Chain.make("hasChildren", true), Cnd.where("id", "=", pid));
         }
     }

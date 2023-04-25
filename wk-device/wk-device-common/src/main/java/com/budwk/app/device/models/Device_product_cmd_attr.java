@@ -27,7 +27,7 @@ public class Device_product_cmd_attr extends BaseModel implements Serializable {
     @Column
     @Name
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @PrevInsert(els = {@EL(value = "snowflake()")}, nullEffective = true)
+    @PrevInsert(els = {@EL(value = "snowflake()")})
     @Comment("ID")
     @ApiModelProperty(description = "ID")
     private String id;

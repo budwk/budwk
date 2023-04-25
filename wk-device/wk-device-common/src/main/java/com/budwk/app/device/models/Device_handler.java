@@ -29,7 +29,7 @@ public class Device_handler extends BaseModel implements Serializable {
     @Column
     @Name
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @PrevInsert(els = {@EL("snowflake()")}, nullEffective = true)
+    @PrevInsert(els = {@EL("snowflake()")})
     @ApiModelProperty(description = "id")
     private String id;
 

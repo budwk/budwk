@@ -1,6 +1,8 @@
 package com.budwk.app.device.controllers.admin;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.budwk.app.device.enums.DeviceType;
 import com.budwk.app.device.models.Device_type;
 import com.budwk.app.device.services.DeviceTypeService;
 import com.budwk.starter.common.openapi.annotation.*;
@@ -11,10 +13,11 @@ import com.budwk.starter.common.result.ResultCode;
 import com.budwk.starter.log.annotation.SLog;
 import com.budwk.starter.security.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
+import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wizzer.cn
  */
 @IocBean
-@At("/admin/type")
+@At("/admin/devtype")
 @SLog(tag = "设备类型")
 @ApiDefinition(tag = "设备类型")
 @Slf4j
@@ -35,14 +38,30 @@ public class DeviceTypeController {
     @At
     @Ok("json")
     @GET
+    @ApiOperation(name = "获取所需数据")
+    @ApiImplicitParams
+    @ApiResponses(
+            implementation = DeviceType.class
+    )
+    @SaCheckLogin
+    public Result<?> init() {
+        return Result.success().addData(NutMap.NEW().addv("DeviceType", DeviceType.values()));
+    }
+
+    @At
+    @Ok("json")
+    @POST
     @ApiOperation(name = "列表查询")
     @ApiImplicitParams
     @ApiResponses(
             implementation = Pagination.class
     )
     @SaCheckPermission("device.settings.devtype")
-    public Result<?> list() {
+    public Result<?> list(@Param("name") String name) {
         Cnd cnd = Cnd.NEW();
+        if (Strings.isNotBlank(name)) {
+            cnd.and("name", "like", "%" + name + "%");
+        }
         cnd.asc("location");
         cnd.asc("path");
         return Result.success().addData(deviceTypeService.query(cnd));
@@ -58,9 +77,9 @@ public class DeviceTypeController {
     @ApiResponses
     @SLog("新增设备类型:${deviceType.name}")
     @SaCheckPermission("device.settings.devtype.create")
-    public Result<?> create(@Param("..") Device_type deviceType, String pid, HttpServletRequest req) {
+    public Result<?> create(@Param("..") Device_type deviceType,@Param("parentId") String parentId, HttpServletRequest req) {
         deviceType.setCreatedBy(SecurityUtil.getUserId());
-        deviceTypeService.save(deviceType, pid);
+        deviceTypeService.save(deviceType, parentId);
         return Result.success();
     }
 
