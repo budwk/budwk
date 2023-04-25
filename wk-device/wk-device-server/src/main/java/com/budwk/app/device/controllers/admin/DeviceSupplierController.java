@@ -29,8 +29,8 @@ import java.util.List;
  */
 @IocBean
 @At("/admin/supplier")
-@SLog(tag = "Device_supplier")
-@ApiDefinition(tag = "Device_supplier")
+@SLog(tag = "厂家管理")
+@ApiDefinition(tag = "厂家管理")
 @Slf4j
 public class DeviceSupplierController {
     @Inject

@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @IocBean
 @At("/admin/handler")
-@SLog(tag = "Device_handler")
-@ApiDefinition(tag = "Device_handler")
+@SLog(tag = "协议管理")
+@ApiDefinition(tag = "协议管理")
 @Slf4j
 public class DeviceHandlerController {
     @Inject
@@ -47,21 +47,21 @@ public class DeviceHandlerController {
     @ApiResponses(
             implementation = Pagination.class
     )
-    @SaCheckPermission("device.handler")
+    @SaCheckPermission("device.settings.handler")
     public Result<?> list(@Param("pageNo") int pageNo, @Param("pageSize") int pageSize, @Param("pageOrderName") String pageOrderName, @Param("pageOrderBy") String pageOrderBy) {
-        return Result.data(deviceHandlerService.listPage(pageNo, pageSize, Cnd.NEW().asc("location")));
+        return Result.data(deviceHandlerService.listPage(pageNo, pageSize, Cnd.NEW()));
     }
 
     @At
     @Ok("json")
     @POST
-    @ApiOperation(name = "新增Device_handler")
+    @ApiOperation(name = "新增设备协议")
     @ApiFormParams(
             implementation = Device_handler.class
     )
     @ApiResponses
-    @SLog("新增Device_handler:${deviceHandler.id}")
-    @SaCheckPermission("device.handler.create")
+    @SLog("新增设备协议:${deviceHandler.name}")
+    @SaCheckPermission("device.settings.handler.create")
     public Result<?> create(@Param("..") Device_handler deviceHandler, HttpServletRequest req) {
         deviceHandler.setCreatedBy(SecurityUtil.getUserId());
         deviceHandlerService.insert(deviceHandler);
@@ -71,13 +71,13 @@ public class DeviceHandlerController {
     @At
     @Ok("json")
     @POST
-    @ApiOperation(name = "修改Device_handler")
+    @ApiOperation(name = "修改设备协议")
     @ApiFormParams(
             implementation = Device_handler.class
     )
     @ApiResponses
-    @SLog("修改Device_handler:${deviceHandler.name}")
-    @SaCheckPermission("device.handler.update")
+    @SLog("修改设备协议:${deviceHandler.name}")
+    @SaCheckPermission("device.settings.handler.update")
     public Result<?> update(@Param("..") Device_handler deviceHandler, HttpServletRequest req) {
         deviceHandler.setUpdatedBy(SecurityUtil.getUserId());
         deviceHandlerService.updateIgnoreNull(deviceHandler);
@@ -87,14 +87,14 @@ public class DeviceHandlerController {
     @At("/get/{id}")
     @Ok("json")
     @GET
-    @ApiOperation(name = "获取Device_handler")
+    @ApiOperation(name = "获取设备协议")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "id", in = ParamIn.PATH, required = true, check = true)
             }
     )
     @ApiResponses
-    @SaCheckPermission("device.handler")
+    @SaCheckPermission("device.settings.handler")
     public Result<?> getData(String id, HttpServletRequest req) {
         Device_handler deviceHandler = deviceHandlerService.fetch(id);
         if (deviceHandler == null) {
@@ -106,15 +106,15 @@ public class DeviceHandlerController {
     @At("/delete/{id}")
     @Ok("json")
     @DELETE
-    @ApiOperation(name = "删除Device_handler")
+    @ApiOperation(name = "删除设备协议")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "id", in = ParamIn.PATH, required = true, check = true)
             }
     )
     @ApiResponses
-    @SLog("删除Device_handler:")
-    @SaCheckPermission("device.handler.delete")
+    @SLog("删除设备协议:")
+    @SaCheckPermission("device.settings.handler.delete")
     public Result<?> delete(String id, HttpServletRequest req) {
         Device_handler deviceHandler = deviceHandlerService.fetch(id);
         if (deviceHandler == null) {
@@ -122,6 +122,32 @@ public class DeviceHandlerController {
         }
         deviceHandlerService.delete(id);
         req.setAttribute("_slog_msg", deviceHandler.getId());
+        return Result.success();
+    }
+
+    @At("/enabled")
+    @Ok("json")
+    @POST
+    @ApiOperation(name = "启用禁用")
+    @ApiFormParams(
+            {
+                    @ApiFormParam(name = "id", description = "id")
+            }
+    )
+    @ApiResponses
+    @SLog("启用禁用:")
+    @SaCheckPermission("device.settings.handler.update")
+    public Result<?> changeDisabled(@Param("id") String id, @Param("enabled") boolean enabled, HttpServletRequest req) {
+        Device_handler deviceHandler = deviceHandlerService.fetch(id);
+        int res = deviceHandlerService.update(Chain.make("enabled", enabled), Cnd.where("id", "=", id));
+        if (res > 0) {
+            if (enabled) {
+                req.setAttribute("_slog_msg", String.format("%s 启用", deviceHandler.getName()));
+            } else {
+                req.setAttribute("_slog_msg", String.format("%s 禁用", deviceHandler.getName()));
+            }
+            return Result.success();
+        }
         return Result.success();
     }
 }

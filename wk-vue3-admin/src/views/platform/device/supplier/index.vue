@@ -97,7 +97,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="型号标识" prop="code">
-                            <el-input v-model="formDataCode.code" placeholder="请输入型号标识" maxlength="20" />
+                            <el-input v-model="formDataCode.code" placeholder="请输入型号标识" maxlength="5" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -120,7 +120,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="型号标识" prop="code">
-                            <el-input v-model="formDataCode.code" placeholder="请输入型号标识" maxlength="20" />
+                            <el-input v-model="formDataCode.code" placeholder="请输入型号标识" maxlength="5" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -177,7 +177,7 @@ const data = reactive({
     formCodeRules: {
         name: [{ required: true, message: "设备型号不能为空", trigger: "blur" }],
         code: [{ required: true, message: "型号标识不能为空", trigger: "blur" },
-            { pattern: /^[A-Za-z][A-Za-z0-9_]+$/, message: "为字母或字母、下划线和数字的组合，并以字母开头", trigger: "blur" }]
+            { pattern: /^[A-Z][A-Z]+$/, message: "为2-5位大写字母，且不可重复", trigger: "blur" }]
     },
 })
 const { queryParams, formData, formRules, formDataCode, formCodeRules } = toRefs(data)
