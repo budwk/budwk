@@ -51,11 +51,11 @@
         </el-table>
 
         <el-dialog title="新增设备类型" v-model="showCreate" width="40%">
-            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="120px">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="上级类型" prop="parentId">
-                            <el-tree-select v-model="formData.parentId" :data="dataOptions"
+                            <el-tree-select v-model="formData.parentId" :data="dataOptions" @change="parentChange($event)"
                                 :props="{ value: 'id', label: 'name', children: 'children' }" value-key="id"
                                 placeholder="选择上级类型" check-strictly :render-after-expand="false" style="width:100%"
                                 />
@@ -100,7 +100,7 @@
         </el-dialog>
 
         <el-dialog title="修改设备类型" v-model="showUpdate" width="40%">
-            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="120px">
+            <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="类型名称" prop="name">
@@ -164,8 +164,9 @@ const data = reactive({
         name: ''
     },
     formRules: {
-        name: [{ required: true, message: "字典名称不能为空", trigger: "blur" }],
-        code: [{ required: true, message: "字典编码不能为空", trigger: "blur" }],
+        name: [{ required: true, message: "类型名称不能为空", trigger: "blur" }],
+        code: [{ required: true, message: "类型标识不能为空", trigger: "blur" }],
+        type: [{ required: true, message: "业务类型不能为空", trigger: "blur" }],
     },
 })
 const { queryParams, formData, formRules } = toRefs(data)
@@ -193,7 +194,6 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
 const init = () => {
     getInit().then((res) => {
         typeList.value = res.data.DeviceType
-        console.log(typeList.value)
     })
 }
 
@@ -211,6 +211,10 @@ onMounted(() => {
     list()
     init()
 })
+
+const parentChange = (val: any) => {
+    console.log(val)
+}
 
 // 快速搜索&刷新
 const quickSearch = (data: any) => {

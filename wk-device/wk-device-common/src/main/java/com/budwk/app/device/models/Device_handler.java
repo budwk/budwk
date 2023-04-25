@@ -42,7 +42,7 @@ public class Device_handler extends BaseModel implements Serializable {
     @Column
     @Comment("标识符")
     @ColDefine(type = ColType.VARCHAR, width = 30)
-    @ApiModelProperty(name = "code", description = "标识符", required = true, check = true, validation = Validation.LOWER)
+    @ApiModelProperty(name = "code", description = "标识符", required = true, check = true, validation = Validation.LOWER_UNDERLINE_NUMBER)
     private String code;
 
     @Column

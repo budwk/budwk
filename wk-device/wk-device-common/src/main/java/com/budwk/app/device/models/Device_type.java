@@ -48,7 +48,7 @@ public class Device_type extends BaseModel implements Serializable {
     @Column
     @Comment("类型标识")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @ApiModelProperty(name = "code", description = "分类编码", required = true, check = true, validation = Validation.LOWER)
+    @ApiModelProperty(name = "code", description = "分类编码", required = true, check = true, validation = Validation.LOWER_UNDERLINE_NUMBER)
     private String code;
 
     @Column

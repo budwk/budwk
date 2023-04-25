@@ -48,7 +48,7 @@ public class Device_product_attr extends BaseModel implements Serializable {
     @Column
     @Comment("标识")
     @ColDefine(type = ColType.VARCHAR, width = 50)
-    @ApiModelProperty(name = "code", description = "标识符", required = true, check = true, validation = Validation.LOWER)
+    @ApiModelProperty(name = "code", description = "标识符", required = true, check = true, validation = Validation.LOWER_UNDERLINE_NUMBER)
     private String code;
 
     /**
