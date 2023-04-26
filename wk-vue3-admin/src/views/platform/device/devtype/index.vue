@@ -18,12 +18,11 @@
             <template v-for="(item, idx) in columns" :key="idx">
                 <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" :width="item.width" v-if="item.show"
                     :show-overflow-tooltip="true">
-                    <template v-if="item.prop == 'createdAt'" #default="scope">
-                        <span>{{ formatTime(scope.row.createdAt) }}</span>
+                    <template v-if="item.prop == 'type'" #default="scope">
+                        <span>{{ scope.row.type?.text }}</span>
                     </template>
                     <template v-if="item.prop == 'color'" #default="scope">
-                        <div :style="'width: 60px;height: 20px;background-color:'+scope.row.color">
-                            &nbsp;&nbsp;&nbsp;
+                        <div :style="'width: 50px;height: 20px;background-color:'+scope.row.color">
                         </div>
                     </template>
                 </el-table-column>
@@ -58,8 +57,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="业务类型" prop="type">
-                            <el-select v-model="formData.type" placeholder="请选择业务类型" :disabled="formData.parentId.length>0">
+                        <el-form-item label="业务分类" prop="type">
+                            <el-select v-model="formData.type" placeholder="请选择业务分类" :disabled="formData.parentId.length>0">
                                 <el-option
                                 v-for="item in typeList"
                                 :key="item.value"
@@ -173,6 +172,7 @@ const { queryParams, formData, formRules } = toRefs(data)
 const columns = ref([
     { prop: 'name', label: `类型名称`, show: true, fixed: false },
     { prop: 'code', label: `类型标识`, show: true, fixed: false },
+    { prop: 'type', label: `业务分类`, show: true, fixed: false },
     { prop: 'color', label: `背景色`, show: true, fixed: false }
 ])
 

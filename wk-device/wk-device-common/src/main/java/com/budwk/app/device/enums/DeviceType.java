@@ -13,7 +13,9 @@ public enum DeviceType {
     COLLECTOR("COLLECTOR", "集中器"),
     VALVE("VALVE", "远控阀门"),
     PRESSURE("PRESSURE", "压力监测"),
-    CAMARA("CAMARA", "摄像头");
+    CAMARA("CAMARA", "摄像头"),
+    HOME("HOME", "家居"),
+    OTHER("OTHER", "其他");
 
     private String value;
     private String text;
