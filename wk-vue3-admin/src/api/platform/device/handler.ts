@@ -48,7 +48,7 @@ export function doDelete(id: string) {
 
 export function doEnabled(id: string, enbaled: boolean) {
     return request({
-        url: API_DEVICE_HANDLER_UPDATE,
+        url: API_DEVICE_HANDLER_ENABLED,
         method: 'POST',
         data: {id: id, enabled: enbaled}
     })

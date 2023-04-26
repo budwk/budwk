@@ -8,15 +8,11 @@
             <right-toolbar @quickSearch="quickSearch" />
         </el-row>
         <el-table v-if="refreshTable" v-loading="tableLoading" :data="tableData" row-key="id">
-            <el-table-column prop="name" label="协议名称">
-            </el-table-column>
-            <el-table-column prop="code" label="协议标识">
-            </el-table-column>
-            <el-table-column prop="description" label="协议描述">
-            </el-table-column>
-            <el-table-column prop="enabled" label="状态" align="center" width="150">
-                <template #default="scope">
-                    <el-switch
+            <template v-for="(item, idx) in columns" :key="idx">
+                <el-table-column :prop="item.prop" :label="item.label" :fixed="item.fixed" :width="item.width" v-if="item.show"
+                    :show-overflow-tooltip="true">
+                    <template v-if="item.prop == 'enabled'" #default="scope">
+                        <el-switch
                         v-model="scope.row.enabled"
                         :active-value="true"
                         :inactive-value="false"
@@ -24,8 +20,12 @@
                         inactive-color="red"
                         @change="enabledChange(scope.row)"
                         />
-              </template>
-            </el-table-column>
+                    </template>
+                    <template v-if="item.prop == 'updatedAt'" #default="scope">
+                        {{ formatTime(scope.row.updatedAt) }}
+                    </template>
+                </el-table-column>
+            </template>
             <el-table-column fixed="right" header-align="center" align="center" label="操作" class-name="small-padding fixed-width">
                 <template #default="scope">
                     <el-tooltip content="修改" placement="top">
@@ -46,45 +46,51 @@
                @pagination="list"
         />
 
-        <el-dialog title="新增协议" v-model="showCreate" width="35%">
+        <el-dialog title="新增协议" v-model="showCreate" width="40%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-form-item label="协议名称" prop="name">
                     <el-input v-model="formData.name" placeholder="请输入协议名称"/>
                 </el-form-item>
                 <el-form-item label="协议标识" prop="code">
-                    <el-input v-model="formData.id" placeholder="请输入协议标识"/>
+                    <el-input v-model="formData.code" placeholder="请输入协议标识"/>
+                </el-form-item>
+                <el-form-item label="入口类" prop="classPath">
+                    <el-input v-model="formData.classPath" placeholder="如：com.budwk.app.device.handler.DemoHandler"/>
                 </el-form-item>
                 <el-form-item
-                    prop="icon"
-                    label="协议图标"
+                    prop="filePath"
+                    label="上传jar包"
+                    class="label-font-weight"
                     >
                     <el-upload
                         ref="uploadRef"
                         :limit="1"
-                        accept=".png, .jpg, .svg"
+                        accept=".jar"
                         :show-file-list="false"
-                        @change="imgUpload"
+                        @change="jarUpload"
                         :auto-upload="false"
-                        list-type="picture-card"
                     >
-                        <img
-                        v-if="formData.icon"
-                        :src="formData.icon"
-                        class="avatar"
-                        >
-                        <div v-else>
-                            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                        </div>
+                        <el-row>
+                            <el-col :span="24" v-if="formData.filePath">
+                                {{  formData.filePath }}
+                            </el-col>
+                            <el-col :span="24" >
+                                <el-button type="primary" :loading="uploading">点击上传</el-button>
+                            </el-col>
+                        </el-row>
                         <template #tip>
-                                <div class="el-upload__tip text-center">
+                                <div class="el-upload__tip">
                                     <div class="el-upload__tip">
-                                        仅允许上传图片格式文件，推荐上传svg文件
+                                        仅允许上传 jar 文件
                                     </div>
                                 </div>
-                            </template>
+                        </template>
                     </el-upload>
                 </el-form-item>      
-                <el-form-item prop="enabled" label="协议状态">
+                <el-form-item label="协议描述" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="启用状态" prop="enabled" >
                     <el-switch
                         v-model="formData.enabled"
                         :active-value="true"
@@ -102,48 +108,51 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改协议" v-model="showUpdate" width="35%">
+        <el-dialog title="修改协议" v-model="showUpdate" width="40%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-form-item label="协议名称" prop="name">
                     <el-input v-model="formData.name" placeholder="请输入协议名称"/>
                 </el-form-item>
                 <el-form-item label="协议标识" prop="code">
-                    <el-input v-model="formData.id" placeholder="请输入协议标识"/>
+                    <el-input v-model="formData.code" placeholder="请输入协议标识"/>
                 </el-form-item>
-                <el-form-item label="默认路径" prop="path">
-                    <el-input v-model="formData.path" placeholder="请输入默认路径"/>
+                <el-form-item label="入口类" prop="classPath">
+                    <el-input v-model="formData.classPath" placeholder="如：com.budwk.app.device.handler.DemoHandler"/>
                 </el-form-item>
                 <el-form-item
-                    prop="icon"
-                    label="协议图标"
+                    prop="filePath"
+                    label="上传jar包"
+                    class="label-font-weight"
                     >
                     <el-upload
                         ref="uploadRef"
                         :limit="1"
-                        accept=".png, .jpg, .svg"
+                        accept=".jar"
                         :show-file-list="false"
-                        @change="imgUpload"
+                        @change="jarUpload"
                         :auto-upload="false"
-                        list-type="picture-card"
                     >
-                        <img
-                        v-if="formData.icon"
-                        :src="formData.icon"
-                        class="avatar"
-                        >
-                        <div v-else>
-                            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                        </div>
+                        <el-row>
+                            <el-col :span="24" v-if="formData.filePath">
+                                {{  formData.filePath }}
+                            </el-col>
+                            <el-col :span="24" >
+                                <el-button type="primary" :loading="uploading">点击上传</el-button>
+                            </el-col>
+                        </el-row>
                         <template #tip>
-                                <div class="el-upload__tip text-center">
+                                <div class="el-upload__tip">
                                     <div class="el-upload__tip">
-                                        仅允许上传图片格式文件，推荐上传svg文件
+                                        仅允许上传 jar 文件
                                     </div>
                                 </div>
-                            </template>
+                        </template>
                     </el-upload>
-                </el-form-item>    
-                <el-form-item prop="enabled" label="协议状态">
+                </el-form-item>      
+                <el-form-item label="协议描述" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="启用状态" prop="enabled" >
                     <el-switch
                         v-model="formData.enabled"
                         :active-value="true"
@@ -168,9 +177,9 @@ import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, doDelete, doEnabled } from '/@/api/platform/device/handler'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElUpload } from 'element-plus'
-import { useUserInfo } from '/@/stores/userInfo'
+import { fileUpload } from '/@/api/common'
+import { formatTime } from '/@/utils/common'
 
-const userInfo = useUserInfo()
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
 const uploadRef = ref<InstanceType<typeof ElUpload>>()    
@@ -180,27 +189,18 @@ const showUpdate = ref(false)
 const refreshTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
-
-const upload = reactive({
-    // 是否禁用上传
-    isUploading: false,
-    // 是否更新已经存在的用户数据
-    updateSupport: 0,
-    // 新用户默认密码
-    pwd: '',
-    // 设置上传的请求头部
-    headers: { "wk-user-token": userInfo.getToken() },
-    // 上传的地址
-    url: '' + import.meta.env.VITE_AXIOS_BASE_URL
-})
+const uploading = ref(false)
 
 const data = reactive({
     formData: {
         id: '',
         name: '',
-        path: '',
-        enabled: true,
-        location: 0,
+        code: '',
+        fileName: '',
+        filePath: '',
+        classPath: '',
+        description: '',
+        enabled: true
     },
     queryParams: {
         pageNo: 1,
@@ -214,39 +214,55 @@ const data = reactive({
         code: [
             { required: true, message: "协议标识不能为空", trigger: ["blur","change"] },
             { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母或小写字母、下划线和数字的组合，并以小写字母开头", trigger: "blur" }
-        ]
+        ],
+        classPath: [{ required: true, message: "入口类不能为空", trigger: ["blur","change"] }],
+        filePath: [{ required: true, message: "jar文件不能为空", trigger: ["blur","change"] }],
     },
 })
 
 const { queryParams, formData, formRules } = toRefs(data)
+
+const columns = ref([
+    { prop: 'name', label: `协议名称`, show: true, fixed: false },
+    { prop: 'code', label: `协议标识`, show: true, fixed: false },
+    { prop: 'description', label: `协议描述`, show: true, fixed: false },
+    { prop: 'enabled', label: `启用状态`, show: true, fixed: false },
+    { prop: 'updatedAt', label: `更新时间`, show: true, fixed: false }
+])
 
 // 重置表单
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
         id: '',
         name: '',
-        path: '',
-        enabled: true,
-        location: 0,
+        code: '',
+        fileName: '',
+        filePath: '',
+        classPath: '',
+        description: '',
+        enabled: true
     }
     formEl?.resetFields()
 }
 
-const imgUpload = (file: any) => {
-    // let fd = new FormData()
-    // fd.append('Filedata', file.raw)
-    // fileUpload(fd,{},'image').then((res) => {
-    //     if (res.code == 0) {
-  
-    //     }
-    // })
-    let reader = new FileReader()
-    // 转base64
-    reader.onload = ((e) => {
-        formData.value.icon = e.target.result
-        uploadRef.value?.clearFiles()
+const jarUpload = (file: any) => {
+    uploading.value = true
+    let fd = new FormData()
+    fd.append('Filedata', file.raw)
+    fileUpload(fd,{},'file').then((res) => {
+        if (res.code == 0) {
+            formData.value.fileName = res.data.filename
+            formData.value.filePath = res.data.url
+            uploading.value = false
+        }
     })
-    reader.readAsDataURL(file.raw)
+    // let reader = new FileReader()
+    // // 转base64
+    // reader.onload = ((e) => {
+    //     formData.value.filePath = e.target.result
+    //     uploadRef.value?.clearFiles()
+    // })
+    // reader.readAsDataURL(file.raw)
 }
 
 // 查询表格
