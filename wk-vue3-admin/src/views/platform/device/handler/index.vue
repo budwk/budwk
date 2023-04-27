@@ -215,7 +215,10 @@ const data = reactive({
             { required: true, message: "协议标识不能为空", trigger: ["blur","change"] },
             { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母或小写字母、下划线和数字的组合，并以小写字母开头", trigger: "blur" }
         ],
-        classPath: [{ required: true, message: "入口类不能为空", trigger: ["blur","change"] }],
+        classPath: [
+            { required: true, message: "入口类不能为空", trigger: ["blur","change"] },
+            { pattern: /^[A-Za-z][A-Za-z0-9.]+$/, message: "请输入正确的类路径", trigger: "blur" }
+        ],
         filePath: [{ required: true, message: "jar文件不能为空", trigger: ["blur","change"] }],
     },
 })
