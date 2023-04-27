@@ -3,23 +3,19 @@ package com.budwk.app.device.enums;
 import org.nutz.json.JsonShape;
 
 /**
- * 协议类型
+ * AEP http协议所需信息（前后端约定内容，不用枚举了）
  * @author wizzer.cn
  */
 @JsonShape(JsonShape.Type.OBJECT)
-public enum ProtocolType {
-    TCP("TCP", "TCP"),
-    UDP("UDP", "UDP"),
-    MQ("MQ", "MQ"),
-    MQTT("MQTT", "MQTT"),
-    LWM2M("LWM2M", "LWM2M"),
-    COAP("COAP", "COAP"),
-    HTTP("HTTP", "HTTP");
+@Deprecated
+public enum AuthAepHttp {
+    masterKey("masterKey", "AEP产品masterKey"),
+    productId("productId", "AEP产品ID");
 
     private String value;
     private String text;
 
-    ProtocolType(String value, String text) {
+    AuthAepHttp(String value, String text) {
         this.value = value;
         this.text = text;
     }
@@ -40,12 +36,12 @@ public enum ProtocolType {
         return text;
     }
 
-    public static ProtocolType from(String value) {
-        for (ProtocolType t : values()) {
+    public static AuthAepHttp from(String value) {
+        for (AuthAepHttp t : values()) {
             if (t.value.equals(value)) {
                 return t;
             }
         }
-        throw new IllegalArgumentException("unknown ProtocolType: " + value);
+        throw new IllegalArgumentException("unknown AuthAepHttp: " + value);
     }
 }

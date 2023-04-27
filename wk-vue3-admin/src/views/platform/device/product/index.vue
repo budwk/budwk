@@ -96,6 +96,9 @@ v-model="queryParams.name" placeholder="请输入产品名称" clearable style="
                     </el-card>    
             </el-col>
         </el-row>
+        <el-row v-show="tableData.length ==0" justify="center">
+            <span class="no-data">暂无数据</span>
+        </el-row>
         <pagination
                :total="queryParams.totalCount"
                v-model:page="queryParams.pageNo"
@@ -311,5 +314,11 @@ onMounted(()=>{
     font-weight: 700;
     margin-top: 8px;
     margin-bottom: 2px;
+}
+.no-data {
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+    height: 50px;
 }
 </style>

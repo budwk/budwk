@@ -46,7 +46,7 @@ public class DeviceProductController {
     @Ok("json")
     @GET
     @ApiOperation(name = "获取初始化数据")
-    @ApiFormParams
+    @ApiImplicitParams
     @ApiResponses(
             value = {
                     @ApiResponse(name = "typeList", description = "设备类型"),
