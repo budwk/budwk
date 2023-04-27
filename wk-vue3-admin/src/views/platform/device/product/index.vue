@@ -1,12 +1,45 @@
 
 <template>
     <div class="app-container">
+        <el-row>
+            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+                    <el-form-item label="设备类型" prop="typeId">
+                        <el-select v-model="queryParams.typeId" clearable placeholder="请选择设备类型">
+                            <el-option
+                            v-for="item in typeList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                            />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="设备厂家" prop="supplierId">
+                        <el-select v-model="queryParams.supplierId" clearable placeholder="请选择设备厂家">
+                            <el-option
+                            v-for="item in supplierList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                            />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="产品名称" prop="name">
+                        <el-input
+v-model="queryParams.name" placeholder="请输入产品名称" clearable style="width: 180px"
+                            @keyup.enter="handleSearch" />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" icon="Search" @click="handleSearch">搜索</el-button>
+                        <el-button icon="Refresh" @click="resetSearch">重置</el-button>
+                    </el-form-item>
+                </el-form>
+        </el-row>
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
-                <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['device.settings.handler.create']">新增
+                <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['devcie.manage.product.create']">新增
                 </el-button>
             </el-col>
-            <right-toolbar @quickSearch="quickSearch" />
+            <right-toolbar v-model:showSearch="showSearch" :extendSearch="true" @quickSearch="handleSearch" />
         </el-row>
         <el-row :gutter="20">
             <el-col :lg="6" :xs="24" class="product-box" v-for="(product,idx) in tableData" :key="idx">
@@ -20,11 +53,11 @@
                                 <el-col :span="12" style="text-align: right" v-show="showButtonIdx==idx">
                                     <el-tooltip content="修改" placement="top">
                                         <el-button link type="primary" icon="EditPen"
-                                            v-permission="['device.settings.handler.update']"></el-button>
+                                            v-permission="['devcie.manage.product.update']"></el-button>
                                         </el-tooltip>
                                     <el-tooltip content="删除" placement="top">
                                         <el-button link type="danger" icon="Delete"
-                                        v-permission="['device.settings.handler.delete']"></el-button>
+                                        v-permission="['devcie.manage.product.delete']"></el-button>
                                     </el-tooltip>
                                 </el-col>
                             </el-row>
@@ -74,20 +107,24 @@
 <script setup lang="ts" name="platform-device-product">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, doDelete } from '/@/api/platform/device/handler'
+import { doCreate, doUpdate, getInfo, getList, doDelete, getInit } from '/@/api/platform/device/product'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElUpload } from 'element-plus'
-import { formatTime } from '/@/utils/common'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
 const updateRef = ref<InstanceType<typeof ElForm>>()
+const queryRef = ref<InstanceType<typeof ElForm>>()
 
+const showSearch = ref(true)    
 const showCreate = ref(false)
 const showUpdate = ref(false)
 const refreshTable = ref(true)
 const tableLoading = ref(false)
 const tableData = ref([])
 const showButtonIdx = ref(-1)
+const iotPlatform = ref([])
+const typeList = ref([])
+const supplierList = ref([])
 
 const data = reactive({
     formData: {
@@ -101,6 +138,9 @@ const data = reactive({
         enabled: true
     },
     queryParams: {
+        typeId: '',
+        name: '',
+        supplierId: '',
         pageNo: 1,
         pageSize: 10,
         totalCount: 0,
@@ -123,14 +163,6 @@ const data = reactive({
 
 const { queryParams, formData, formRules } = toRefs(data)
 
-const columns = ref([
-    { prop: 'name', label: `协议名称`, show: true, fixed: false },
-    { prop: 'code', label: `协议标识`, show: true, fixed: false },
-    { prop: 'description', label: `协议描述`, show: true, fixed: false },
-    { prop: 'enabled', label: `启用状态`, show: true, fixed: false },
-    { prop: 'updatedAt', label: `更新时间`, show: true, fixed: false }
-])
-
 // 重置表单
 const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
     formData.value = {
@@ -147,9 +179,21 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
 }
 
 const showButton = (val: any) => {
-    console.log(val)
     showButtonIdx.value = val
 }
+
+// 刷新
+const handleSearch = () => {
+    queryParams.value.pageNo = 1
+    list()
+}
+
+// 重置搜索
+const resetSearch = () => {
+    queryRef.value?.resetFields()
+    list()
+}
+
 
 // 查询表格
 const list = () => {
@@ -158,6 +202,14 @@ const list = () => {
         tableLoading.value = false
         tableData.value = res.data.list as never
         queryParams.value.totalCount = res.data.totalCount as never
+    })
+}
+
+const init = () => {
+    getInit().then((res) => {
+        iotPlatform.value = res.data.iotPlatform
+        typeList.value = res.data.typeList
+        supplierList.value = res.data.supplierList
     })
 }
 
@@ -229,6 +281,7 @@ const update = () => {
 
 onMounted(()=>{
     list()
+    init()
 })
 </script>
 <!--定义布局-->

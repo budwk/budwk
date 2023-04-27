@@ -8,6 +8,7 @@ import org.nutz.json.JsonShape;
  */
 @JsonShape(JsonShape.Type.OBJECT)
 public enum IotPlatform {
+    DIRECT("DIRECT", "设备直连"),
     AEP("AEP", "中国电信AEP平台"),
     ONENET("ONENET", "中国移动物联网开放平台"),
     OTHER("OTHER", "其他");
