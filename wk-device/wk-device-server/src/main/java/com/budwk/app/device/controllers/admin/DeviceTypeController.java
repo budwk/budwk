@@ -6,6 +6,7 @@ import com.budwk.app.device.enums.DeviceType;
 import com.budwk.app.device.models.Device_type;
 import com.budwk.app.device.services.DeviceTypeService;
 import com.budwk.starter.common.openapi.annotation.*;
+import com.budwk.starter.common.openapi.enums.DataType;
 import com.budwk.starter.common.openapi.enums.ParamIn;
 import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
@@ -58,7 +59,10 @@ public class DeviceTypeController {
                     @ApiImplicitParam(name = "id", required = true, in = ParamIn.PATH)
             }
     )
-    @ApiResponses
+    @ApiResponses(
+            implementation = Device_type.class,
+            dataType = "array"
+    )
     @SaCheckLogin
     public Result<?> getSubType(String pid) {
         return Result.success().addData(deviceTypeService.query(Cnd.where("parentId", "=", pid)));

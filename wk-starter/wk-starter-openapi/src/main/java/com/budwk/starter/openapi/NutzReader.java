@@ -3,13 +3,14 @@ package com.budwk.starter.openapi;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.budwk.starter.common.openapi.annotation.*;
+import com.budwk.starter.common.openapi.enums.DataType;
+import com.budwk.starter.openapi.http.GlobalHeaderParam;
+import com.budwk.starter.openapi.utils.NutzReaderUtils;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.budwk.starter.common.openapi.annotation.*;
-import com.budwk.starter.openapi.http.GlobalHeaderParam;
-import com.budwk.starter.openapi.utils.NutzReaderUtils;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.core.util.PathUtils;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.integration.api.OpenAPIConfiguration;
 import io.swagger.v3.oas.integration.api.OpenApiReader;
 import io.swagger.v3.oas.models.*;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
@@ -312,7 +314,6 @@ public class NutzReader implements OpenApiReader {
         if (apiFormParams != null) {
             MediaType mediaType = new MediaType();
             Schema schema = new Schema();
-            schema.setType("object");
             List<String> requiredItem = new ArrayList<>();
             for (ApiFormParam formParam : apiFormParams.value()) {
                 Schema property = new Schema();
@@ -379,7 +380,14 @@ public class NutzReader implements OpenApiReader {
                 }
             }
             schema.required(requiredItem);
-            mediaType.setSchema(schema);
+            if ("array".equalsIgnoreCase(apiFormParams.dataType())) {
+                ArraySchema arraySchema = new ArraySchema();
+                arraySchema.setItems(schema);
+                mediaType.setSchema(arraySchema);
+            } else {
+                schema.setType("object");
+                mediaType.setSchema(schema);
+            }
             RequestBody requestBody = new RequestBody();
             Content content = new Content();
             content.addMediaType(apiFormParams.mediaType(), mediaType);
@@ -457,7 +465,13 @@ public class NutzReader implements OpenApiReader {
                         }
                     }
                 }
-                contentSchema.addProperties("data", data);
+                if ("array".equalsIgnoreCase(apiResponses.dataType())) {
+                    ArraySchema schema = new ArraySchema();
+                    schema.setItems(data);
+                    contentSchema.addProperties("data", schema);
+                } else {
+                    contentSchema.addProperties("data", data);
+                }
                 if (Strings.isNotBlank(apiResponses.example())) {
                     contentSchema.example(org.nutz.json.Json.fromJson(apiResponses.example()));
                 }
