@@ -105,12 +105,57 @@ v-model="queryParams.name" placeholder="请输入产品名称" clearable style="
                v-model:limit="queryParams.pageSize"
                @pagination="list"
         />
+
+        <el-dialog title="新增产品" v-model="showCreate" width="50%">
+            <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
+                <el-form-item label="产品名称" prop="name">
+                    <el-input v-model="formData.name" placeholder="请输入产品名称"/>
+                </el-form-item>
+                <el-form-item label="设备类型" prop="code">
+                    <el-input v-model="formData.code" placeholder="请输入解析器标识"/>
+                </el-form-item>
+                <el-form-item label="厂家型号" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="接入平台" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="接入协议" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="协议解析器" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="协议认证" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+                <el-form-item label="是否有阀门" prop="enabled" >
+                    <el-switch
+                        v-model="formData.enabled"
+                        :active-value="true"
+                        :inactive-value="false"
+                        active-color="green"
+                        inactive-color="red"
+                    />
+                </el-form-item>
+                <el-form-item label="产品描述" prop="description">
+                    <el-input v-model="formData.description" placeholder="" type="textarea"/>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="create">确 定</el-button>
+                    <el-button @click="showCreate = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts" name="platform-device-product">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, doDelete, getInit } from '/@/api/platform/device/product'
+import { getSubType } from '/@/api/platform/device/devtype'
 import { toRefs } from '@vueuse/core'
 import { ElForm, ElUpload } from 'element-plus'
 

@@ -54,7 +54,7 @@ public class Device_type extends BaseModel implements Serializable {
     @Column
     @Comment("父级ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @ApiModelProperty(name = "parentId", description = "一级分类id")
+    @ApiModelProperty(name = "parentId", description = "父级ID")
     private String parentId;
 
     @Column

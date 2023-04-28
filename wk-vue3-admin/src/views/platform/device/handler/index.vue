@@ -46,13 +46,13 @@
                @pagination="list"
         />
 
-        <el-dialog title="新增协议" v-model="showCreate" width="40%">
+        <el-dialog title="新增解析器" v-model="showCreate" width="40%">
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="协议名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入协议名称"/>
+                <el-form-item label="解析器名称" prop="name">
+                    <el-input v-model="formData.name" placeholder="请输入解析器名称"/>
                 </el-form-item>
-                <el-form-item label="协议标识" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入协议标识"/>
+                <el-form-item label="解析器标识" prop="code">
+                    <el-input v-model="formData.code" placeholder="请输入解析器标识"/>
                 </el-form-item>
                 <el-form-item label="入口类" prop="classPath">
                     <el-input v-model="formData.classPath" placeholder="如：com.budwk.app.device.handler.DemoHandler"/>
@@ -87,7 +87,7 @@
                         </template>
                     </el-upload>
                 </el-form-item>      
-                <el-form-item label="协议描述" prop="description">
+                <el-form-item label="解析器描述" prop="description">
                     <el-input v-model="formData.description" placeholder="" type="textarea"/>
                 </el-form-item>
                 <el-form-item label="启用状态" prop="enabled" >
@@ -108,13 +108,13 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="修改协议" v-model="showUpdate" width="40%">
+        <el-dialog title="修改解析器" v-model="showUpdate" width="40%">
             <el-form ref="updateRef" :model="formData" :rules="formRules" label-width="100px">
-                <el-form-item label="协议名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入协议名称"/>
+                <el-form-item label="解析器名称" prop="name">
+                    <el-input v-model="formData.name" placeholder="请输入解析器名称"/>
                 </el-form-item>
-                <el-form-item label="协议标识" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入协议标识"/>
+                <el-form-item label="解析器标识" prop="code">
+                    <el-input v-model="formData.code" placeholder="请输入解析器标识"/>
                 </el-form-item>
                 <el-form-item label="入口类" prop="classPath">
                     <el-input v-model="formData.classPath" placeholder="如：com.budwk.app.device.handler.DemoHandler"/>
@@ -149,7 +149,7 @@
                         </template>
                     </el-upload>
                 </el-form-item>      
-                <el-form-item label="协议描述" prop="description">
+                <el-form-item label="解析器描述" prop="description">
                     <el-input v-model="formData.description" placeholder="" type="textarea"/>
                 </el-form-item>
                 <el-form-item label="启用状态" prop="enabled" >
@@ -210,9 +210,9 @@ const data = reactive({
         pageOrderBy: ''
     },
     formRules: {
-        name: [{ required: true, message: "协议名称不能为空", trigger: ["blur","change"] }],
+        name: [{ required: true, message: "解析器名称不能为空", trigger: ["blur","change"] }],
         code: [
-            { required: true, message: "协议标识不能为空", trigger: ["blur","change"] },
+            { required: true, message: "解析器标识不能为空", trigger: ["blur","change"] },
             { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母或小写字母、下划线和数字的组合，并以小写字母开头", trigger: "blur" }
         ],
         classPath: [
@@ -226,9 +226,9 @@ const data = reactive({
 const { queryParams, formData, formRules } = toRefs(data)
 
 const columns = ref([
-    { prop: 'name', label: `协议名称`, show: true, fixed: false },
-    { prop: 'code', label: `协议标识`, show: true, fixed: false },
-    { prop: 'description', label: `协议描述`, show: true, fixed: false },
+    { prop: 'name', label: `解析器名称`, show: true, fixed: false },
+    { prop: 'code', label: `解析器标识`, show: true, fixed: false },
+    { prop: 'description', label: `解析器描述`, show: true, fixed: false },
     { prop: 'enabled', label: `启用状态`, show: true, fixed: false },
     { prop: 'updatedAt', label: `更新时间`, show: true, fixed: false }
 ])

@@ -1,4 +1,5 @@
 export const API_DEVICE_DEVTYPE_INIT = '/device/admin/devtype/init'
+export const API_DEVICE_DEVTYPE_SUBTYPE = '/device/admin/devtype/subtype/'
 export const API_DEVICE_DEVTYPE_LIST = '/device/admin/devtype/list'
 export const API_DEVICE_DEVTYPE_GET = '/device/admin/devtype/get/'
 export const API_DEVICE_DEVTYPE_CREATE = '/device/admin/devtype/create'
@@ -10,6 +11,13 @@ import request from '/@/utils/request'
 export function getInit() {
     return request({
         url: API_DEVICE_DEVTYPE_INIT,
+        method: 'GET'
+    })
+}
+
+export function getSubType(pid: string) {
+    return request({
+        url: API_DEVICE_DEVTYPE_SUBTYPE + pid,
         method: 'GET'
     })
 }

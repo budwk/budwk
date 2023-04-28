@@ -21,6 +21,7 @@ import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -46,6 +47,21 @@ public class DeviceTypeController {
     @SaCheckLogin
     public Result<?> init() {
         return Result.success().addData(NutMap.NEW().addv("DeviceType", DeviceType.values()));
+    }
+
+    @At("/subtype/{pid}")
+    @Ok("json")
+    @GET
+    @ApiOperation(name = "获取子设备类型")
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(name = "id", required = true, in = ParamIn.PATH)
+            }
+    )
+    @ApiResponses
+    @SaCheckLogin
+    public Result<?> getSubType(String pid) {
+        return Result.success().addData(deviceTypeService.query(Cnd.where("parentId", "=", pid)));
     }
 
     @At
@@ -77,7 +93,7 @@ public class DeviceTypeController {
     @ApiResponses
     @SLog("新增设备类型:${deviceType.name}")
     @SaCheckPermission("device.settings.devtype.create")
-    public Result<?> create(@Param("..") Device_type deviceType,@Param("parentId") String parentId, HttpServletRequest req) {
+    public Result<?> create(@Param("..") Device_type deviceType, @Param("parentId") String parentId, HttpServletRequest req) {
         deviceType.setCreatedBy(SecurityUtil.getUserId());
         deviceTypeService.save(deviceType, parentId);
         return Result.success();
