@@ -9,6 +9,7 @@ import org.nutz.dao.entity.annotation.*;
 import org.nutz.dao.interceptor.annotation.PrevInsert;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 供应商信息
@@ -35,4 +36,8 @@ public class Device_supplier extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 50)
     @ApiModelProperty(name = "name", description = "厂家名称", required = true)
     private String name;
+
+    @Many(field = "supplierId")
+    @ApiModelProperty(description = "设备型号")
+    private List<Device_supplier_code> codeList;
 }

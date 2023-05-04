@@ -3,7 +3,9 @@ package com.budwk.app.device.controllers.admin;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.budwk.app.device.enums.IotPlatform;
+import com.budwk.app.device.enums.ProtocolType;
 import com.budwk.app.device.models.Device_product;
+import com.budwk.app.device.services.DeviceHandlerService;
 import com.budwk.app.device.services.DeviceProductService;
 import com.budwk.app.device.services.DeviceSupplierService;
 import com.budwk.app.device.services.DeviceTypeService;
@@ -41,6 +43,8 @@ public class DeviceProductController {
     private DeviceTypeService deviceTypeService;
     @Inject
     private DeviceSupplierService supplierService;
+    @Inject
+    private DeviceHandlerService deviceHandlerService;
 
     @At
     @Ok("json")
@@ -57,9 +61,11 @@ public class DeviceProductController {
     @SaCheckLogin
     public Result<?> init(HttpServletRequest req) {
         NutMap map = NutMap.NEW();
-        map.addv("typeList", deviceTypeService.query(Cnd.where("parentId", "is", null).or("parentId", "=", "")));
-        map.addv("supplierList", supplierService.query(Cnd.NEW()));
+        map.addv("typeList", deviceTypeService.query(Cnd.NEW()));
+        map.addv("supplierList", supplierService.query(Cnd.NEW(), "codeList"));
+        map.addv("handlerList", deviceHandlerService.query(Cnd.NEW()));
         map.addv("iotPlatform", IotPlatform.values());
+        map.addv("protocolType", ProtocolType.values());
         return Result.success(map);
     }
 
@@ -96,7 +102,7 @@ public class DeviceProductController {
         if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
             cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
         }
-        return Result.data(deviceProductService.listPage(pageNo, pageSize, cnd));
+        return Result.data(deviceProductService.listPageLinks(pageNo, pageSize, cnd,"deviceType"));
     }
 
     @At

@@ -109,4 +109,7 @@ public class Device_product extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 300)
     @ApiModelProperty(name = "description", description = "备注")
     private String description;
+
+    @One(field = "typeId")
+    private Device_type deviceType;
 }
