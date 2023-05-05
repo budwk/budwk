@@ -93,10 +93,16 @@ public class Device_product extends BaseModel implements Serializable {
     private IotPlatform iotPlatform;
 
     @Column
-    @Comment("解析处理器")
+    @Comment("解析处理器ID")
     @ColDefine(type = ColType.VARCHAR, width = 20)
-    @ApiModelProperty(name = "handler", description = "解析处理器")
-    private String handler;
+    @ApiModelProperty(name = "handlerId", description = "解析处理器ID")
+    private String handlerId;
+
+    @Column
+    @Comment("解析处理器标识")
+    @ColDefine(type = ColType.VARCHAR, width = 20)
+    @ApiModelProperty(name = "handlerCode", description = "解析处理器标识")
+    private String handlerCode;
 
     @Column
     @Comment("认证信息")
@@ -112,4 +118,10 @@ public class Device_product extends BaseModel implements Serializable {
 
     @One(field = "typeId")
     private Device_type deviceType;
+
+    @One(field = "supplierId")
+    private Device_supplier deviceSupplier;
+
+    @One(field = "handlerId")
+    private Device_handler deviceHandler;
 }

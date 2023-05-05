@@ -102,7 +102,7 @@ public class DeviceProductController {
         if (Strings.isNotBlank(pageOrderName) && Strings.isNotBlank(pageOrderBy)) {
             cnd.orderBy(pageOrderName, PageUtil.getOrder(pageOrderBy));
         }
-        return Result.data(deviceProductService.listPageLinks(pageNo, pageSize, cnd,"deviceType"));
+        return Result.data(deviceProductService.listPageLinks(pageNo, pageSize, cnd,"^(deviceType|deviceSupplier|deviceHandler)$"));
     }
 
     @At

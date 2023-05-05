@@ -53,7 +53,7 @@
                                 </el-col>
                             </el-row>
                             <el-row>
-                                <span class="product-title">测试产品</span>
+                                <span class="product-title">{{ product.name }}</span>
                             </el-row>
                         </div>
                     </template>
@@ -65,22 +65,22 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="接入平台：" class="product-field-item">
-                                其他
+                                {{ product?.iotPlatform?.text }}
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="网络协议：" class="product-field-item">
-                                HTTP
+                                {{ product?.protocolType?.text }}
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="协议解析：" class="product-field-item">
-                                demo_http
+                                {{ product?.deviceHandler?.name }}
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="设备厂家：" class="product-field-item">
-                                金卡
+                                {{ product?.deviceSupplier?.name }}
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -118,8 +118,8 @@
                         <el-option v-for="item in protocolType" :key="item.value" :label="item.text" :value="item.value" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="协议解析器" prop="handler">
-                    <el-select v-model="formData.handler" placeholder="请选择协议解析器" clearable style="width: 100%;">
+                <el-form-item label="协议解析器" prop="handlerId">
+                    <el-select v-model="formData.handlerId" @change="handlerChange" placeholder="请选择协议解析器" clearable style="width: 100%;">
                         <el-option v-for="item in handlerList" :key="item.id" :label="item.name" :value="item.id" />
                     </el-select>
                 </el-form-item>
@@ -184,8 +184,8 @@
                         <el-option v-for="item in protocolType" :key="item.value" :label="item.text" :value="item.value" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="协议解析器" prop="handler">
-                    <el-select v-model="formData.handler" placeholder="请选择协议解析器" clearable style="width: 100%;">
+                <el-form-item label="协议解析器" prop="handlerId">
+                    <el-select v-model="formData.handlerId" @change="handlerChange" placeholder="请选择协议解析器" clearable style="width: 100%;">
                         <el-option v-for="item in handlerList" :key="item.id" :label="item.name" :value="item.id" />
                     </el-select>
                 </el-form-item>
@@ -231,7 +231,7 @@ import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
 import { doCreate, doUpdate, getInfo, getList, doDelete, getInit, auth_MQTT, auth_AEP_HTTP, auth_AEP_MQ } from '/@/api/platform/device/product'
 import { toRefs } from '@vueuse/core'
-import { handleTree } from '/@/utils/common'
+import { handleTree, findOneValue } from '/@/utils/common'
 import { ElForm, ElUpload } from 'element-plus'
 
 const createRef = ref<InstanceType<typeof ElForm>>()
@@ -266,7 +266,8 @@ const data = reactive({
         supplierCode: '',
         iotPlatform: '',
         protocolType: '',
-        handler: '',
+        handlerId: '',
+        handlerCode: '',
         valveControl: false,
         authJson: '',
         description: ''
@@ -288,16 +289,7 @@ const data = reactive({
         supplierCode: [{ required: true, message: "厂家型号不能为空", trigger: ["blur", "change"] }],
         iotPlatform: [{ required: true, message: "接入平台不能为空", trigger: ["blur", "change"] }],
         protocolType: [{ required: true, message: "接入协议不能为空", trigger: ["blur", "change"] }],
-        handler: [{ required: true, message: "协议解析器不能为空", trigger: ["blur", "change"] }],
-        code: [
-            { required: true, message: "协议标识不能为空", trigger: ["blur", "change"] },
-            { pattern: /^[a-z][a-z0-9_]+$/, message: "为小写字母或小写字母、下划线和数字的组合，并以小写字母开头", trigger: "blur" }
-        ],
-        classPath: [
-            { required: true, message: "入口类不能为空", trigger: ["blur", "change"] },
-            { pattern: /^[A-Za-z][A-Za-z0-9.]+$/, message: "请输入正确的类路径", trigger: "blur" }
-        ],
-        filePath: [{ required: true, message: "jar文件不能为空", trigger: ["blur", "change"] }],
+        handlerId: [{ required: true, message: "协议解析器不能为空", trigger: ["blur", "change"] }],
     },
 })
 
@@ -314,7 +306,8 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         supplierCode: '',
         iotPlatform: 'DIRECT',
         protocolType: '',
-        handler: '',
+        handlerId: '',
+        handlerCode: '',
         valveControl: false,
         authJson: '',
         description: ''
@@ -395,6 +388,11 @@ const supplierChange = (val: any) => {
         formData.value.supplierId = ''
         formData.value.supplierCode = ''
     }
+}
+
+// 协议解析器改变
+const handlerChange = (val: any) => {
+    formData.value.handlerCode = findOneValue(handlerList.value, val, 'code', 'id')
 }
 
 // 获取auth数据
