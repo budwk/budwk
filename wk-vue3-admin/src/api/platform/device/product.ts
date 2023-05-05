@@ -54,5 +54,5 @@ export function doDelete(id: string) {
 }
 
 export const auth_MQTT = [{name:'username',value:'',note:'用户名' },{name:'password',value:'',note:'密码' }]
-export const auth_AEP_HTTP = [{name:'masterKey',value:'',note:'AEP产品masterKey' },{name:'productId',value:'',note:'AEP产品productId' }]
+export const auth_AEP_HTTP = [{name:'masterKey',value:'',note:'AEP产品masterKey' },{name:'productId',value:'',note:'AEP产品productId' },{name:'hasProfile',value:'',note:'AEP产品是否有Profile文件(true|false)' }]
 export const auth_AEP_MQ = [{name:'productId',value:'',note:'AEP产品productId' }]

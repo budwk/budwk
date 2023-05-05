@@ -313,6 +313,15 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         description: ''
     }
     formEl?.resetFields()
+    ref_auth_MQTT.value.forEach(element => {
+        element.value = ''
+    })
+    ref_auth_AEP_MQ.value.forEach(element => {
+        element.value = ''
+    })
+    ref_auth_AEP_HTTP.value.forEach(element => {
+        element.value = ''
+    })
 }
 
 const showButton = (val: any) => {
