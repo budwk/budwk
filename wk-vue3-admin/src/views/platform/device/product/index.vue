@@ -482,6 +482,7 @@ const handleUpdate = (row: any) => {
         formData.value.protocolType = res.data.protocolType.value
         formDataSupplier.value = [res.data.supplierId, res.data.supplierCode] as never
         formDataType.value = [res.data.typeId, res.data.subTypeId] as never
+        formData.value.typeEnumValue = findOneValue(typeList.value, res.data.typeId, 'type', 'id')?.value
         parseAuth()
         showUpdate.value = true
     })
