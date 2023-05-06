@@ -14,6 +14,7 @@ import java.io.Serializable;
 
 /**
  * 产品信息
+ *
  * @author wizzer.cn
  */
 @Data
@@ -103,6 +104,18 @@ public class Device_product extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 20)
     @ApiModelProperty(name = "handlerCode", description = "解析处理器标识")
     private String handlerCode;
+
+    @Column
+    @Comment("计费方式(1=表端计费,2=平台计费)")
+    @ColDefine(type = ColType.INT)
+    @ApiModelProperty(name = "payMode", description = "计费方式(1=表端计费,2=平台计费)")
+    private Integer payMode;
+
+    @Column
+    @Comment("结算方式(1=后付费,2=预付费)")
+    @ColDefine(type = ColType.INT)
+    @ApiModelProperty(name = "settleMode", description = "结算方式(1=后付费,2=预付费)")
+    private Integer settleMode;
 
     @Column
     @Comment("认证信息")

@@ -18,13 +18,13 @@ public class ProductInfo implements Serializable {
     private String id;
     private String name;
     /**
-     * 计费方式：0 表端计费，1 平台计费
+     * 计费方式：0 无 ，1 表端计费，2 平台计费
      */
-    //private Integer payMode;
+    private Integer payMode;
     /**
-     * 结算模式 0 后付费，1 预付费
+     * 结算模式 0 无 ，1 后付费，2 预付费
      */
-    //private Integer settleMode;
+    private Integer settleMode;
     /**
      * 传输协议
      */
