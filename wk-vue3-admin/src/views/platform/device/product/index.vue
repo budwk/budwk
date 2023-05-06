@@ -147,6 +147,20 @@
                         <el-radio :label="true">有</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="计费方式" prop="payMode" v-if="formData.typeEnumValue=='METER'">
+                    <el-radio-group v-model="formData.payMode">
+                        <el-radio :label="0">无</el-radio>
+                        <el-radio :label="1">表端计费</el-radio>
+                        <el-radio :label="2">平台计费</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="结算方式" prop="settleMode" v-if="formData.typeEnumValue=='METER'">
+                    <el-radio-group v-model="formData.settleMode">
+                        <el-radio :label="0">无</el-radio>
+                        <el-radio :label="1">后付费</el-radio>
+                        <el-radio :label="2">预付费</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="产品描述" prop="description">
                     <el-input v-model="formData.description" placeholder="" type="textarea" />
                 </el-form-item>
@@ -213,6 +227,20 @@
                         <el-radio :label="true">有</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="计费方式" prop="payMode" v-if="formData.typeEnumValue=='METER'">
+                    <el-radio-group v-model="formData.payMode">
+                        <el-radio :label="0">无</el-radio>
+                        <el-radio :label="1">表端计费</el-radio>
+                        <el-radio :label="2">平台计费</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="结算方式" prop="settleMode" v-if="formData.typeEnumValue=='METER'">
+                    <el-radio-group v-model="formData.settleMode">
+                        <el-radio :label="0">无</el-radio>
+                        <el-radio :label="1">后付费</el-radio>
+                        <el-radio :label="2">预付费</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="产品描述" prop="description">
                     <el-input v-model="formData.description" placeholder="" type="textarea" />
                 </el-form-item>
@@ -261,6 +289,7 @@ const data = reactive({
         id: '',
         name: '',
         typeId: '',
+        typeEnumValue: '',
         subTypeId: '',
         supplierId: '',
         supplierCode: '',
@@ -270,7 +299,9 @@ const data = reactive({
         handlerCode: '',
         valveControl: false,
         authJson: '',
-        description: ''
+        description: '',
+        payMode: 0,
+        settleMode: 0
     },
     queryParams: {
         typeId: '',
@@ -301,6 +332,7 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         id: '',
         name: '',
         typeId: '',
+        typeEnumValue: '',
         subTypeId: '',
         supplierId: '',
         supplierCode: '',
@@ -310,7 +342,9 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         handlerCode: '',
         valveControl: false,
         authJson: '',
-        description: ''
+        description: '',
+        payMode: 0,
+        settleMode: 0
     }
     formEl?.resetFields()
     ref_auth_MQTT.value.forEach(element => {
@@ -373,16 +407,20 @@ const quickSearch = (data: any) => {
 
 // 设备类型改变
 const typeChange = (val: any) => {
+    var tmp = ''
     if (val.length > 1) {
         formData.value.typeId = val[0]
         formData.value.subTypeId = val[1]
+        tmp = val[0]
     } else if (val.length == 1) {
         formData.value.typeId = val[0]
         formData.value.subTypeId = ''
+        tmp = val[0]
     } else {
         formData.value.typeId = ''
         formData.value.subTypeId = ''
     }
+    formData.value.typeEnumValue = findOneValue(typeList.value, tmp, 'type', 'id')?.value
 }
 
 // 厂家型号改变
