@@ -12,4 +12,20 @@
     <groupId>com.budwk.app</groupId>
     <artifactId>wk-device-gateway</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-config</artifactId>
+        </dependency>
+        <!-- nutz -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-core</artifactId>
+        </dependency>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 </project>
