@@ -7,5 +7,7 @@ public enum TransportType {
     TCP,
     UDP,
     HTTP,
-    MQTT
+    MQTT,
+    COAP,
+    MODBUS
 }

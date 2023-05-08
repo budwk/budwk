@@ -1,7 +1,7 @@
 package com.budwk.app.device.handler.common.message.codec;
 
 
-import com.budwk.app.device.handler.common.utils.ByteConvert;
+import com.budwk.app.device.handler.common.utils.ByteConvertUtil;
 import lombok.Data;
 
 /**
@@ -25,7 +25,7 @@ public class TcpMessage implements EncodedMessage {
     @Override
     public String payloadAsString() {
         if ("hex".equals(payloadType)) {
-            return ByteConvert.bytesToHex(getPayload());
+            return ByteConvertUtil.bytesToHex(getPayload());
         }
         return EncodedMessage.super.payloadAsString();
     }

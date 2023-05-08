@@ -13,6 +13,7 @@ import java.io.Serializable;
 
 /**
  * 设备信息
+ *
  * @author wizzer.cn
  */
 @Data
@@ -76,6 +77,13 @@ public class Device_info extends BaseModel implements Serializable {
     @ApiModelProperty(description = "设备编号（铭牌号）")
     @Excel(name = "设备编号（铭牌号）")
     private String nameplateNo;
+
+    @Column
+    @ColDefine(type = ColType.VARCHAR, width = 50)
+    @Comment("第三方平台设备ID")
+    @ApiModelProperty(description = "第三方平台设备ID")
+    @Excel(name = "第三方平台设备ID")
+    private String platformDeviceId;
 
     /**
      * @see Device_type id

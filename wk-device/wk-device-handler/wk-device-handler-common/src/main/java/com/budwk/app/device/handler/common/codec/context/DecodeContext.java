@@ -2,6 +2,7 @@ package com.budwk.app.device.handler.common.codec.context;
 
 import com.budwk.app.device.handler.common.codec.CacheStore;
 import com.budwk.app.device.handler.common.codec.DeviceOperator;
+import com.budwk.app.device.handler.common.codec.DeviceRegistry;
 import com.budwk.app.device.handler.common.message.codec.EncodedMessage;
 
 /**
@@ -9,6 +10,13 @@ import com.budwk.app.device.handler.common.message.codec.EncodedMessage;
  * @author wizzer.cn
  */
 public interface DecodeContext {
+    /**
+     * 获取资源装载对象
+     * @return
+     */
+    default DeviceRegistry getDeviceRegistry() {
+        return null;
+    }
     /**
      * 获取上报的消息
      *

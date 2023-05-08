@@ -8,14 +8,14 @@ import java.io.Serializable;
 public interface DeviceMessage extends Serializable {
 
     /**
-     * 消息组ID 用于区分不同类型数据的组
+     * 消息类型
      */
-    default String getGroupId() {
+    default String getMessageType() {
         return null;
     }
 
     /**
-     * 消息ID
+     * 消息ID,用于请求响应模式下关联,可能大部分设备通信用不到此
      */
     String getMessageId();
 

@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
 /**
  * @author wizzer.cn
  */
-public class ByteConvert {
+public class ByteConvertUtil {
     public static final char[] HEX_ARRAY = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     public static final Pattern HEX_PATTERN = Pattern.compile("[\\dA-Fa-f]+");
 
-    public ByteConvert() {
+    public ByteConvertUtil() {
     }
 
     /**

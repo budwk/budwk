@@ -1,9 +1,7 @@
 package com.budwk.app.device.handler.common.codec;
 
-import com.budwk.app.device.handler.common.codec.context.DeviceEventContext;
+import com.budwk.app.device.handler.common.codec.context.DeviceContext;
 import com.budwk.app.device.handler.common.enums.TransportType;
-
-import java.util.List;
 
 /**
  * 解析器
@@ -36,7 +34,7 @@ public interface Handler {
      * @param context        事件上下文
      * @param deviceOperator 设备操作类
      */
-    default void onDeviceRegistered(DeviceEventContext context, DeviceOperator deviceOperator) {
+    default void onDeviceRegistered(DeviceContext context, DeviceOperator deviceOperator) {
     }
 
     /**
@@ -45,6 +43,6 @@ public interface Handler {
      * @param context        事件上下文
      * @param deviceOperator 设备操作类
      */
-    default void onDeviceUnRegistered(DeviceEventContext context, DeviceOperator deviceOperator) {
+    default void onDeviceUnRegistered(DeviceContext context, DeviceOperator deviceOperator) {
     }
 }
