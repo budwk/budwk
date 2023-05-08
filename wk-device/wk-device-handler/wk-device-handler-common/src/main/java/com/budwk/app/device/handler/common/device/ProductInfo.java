@@ -41,4 +41,8 @@ public class ProductInfo implements Serializable {
      * auth配置信息
      */
     private Map<String, String> authConfig;
+    /**
+     * 配置文件配置信息
+     */
+    private Map<String, String> fileConfig;
 }

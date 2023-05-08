@@ -24,7 +24,7 @@ public class AepPlatformHelper {
 
     private final AepConfig aepConfig;
 
-    public AepPlatformHelper(Map<String, Object> configs) {
+    public AepPlatformHelper(Map<String, String> configs) {
         this.aepConfig = newAepConfig(configs);
         this.aepApiClient = getAepApiClient();
     }
@@ -65,17 +65,12 @@ public class AepPlatformHelper {
      * @param platformDeviceId AEP平台设备ID=platformDeviceId
      * @return
      */
-    public void deleteDevice(DeviceOperator deviceOperator, String platformDeviceId) {
+    public void deleteDevice(String masterKey, String productId, String platformDeviceId) {
         DeleteDeviceRequest request = new DeleteDeviceRequest(aepConfig.apiBaseUrl, aepConfig.appKey,
                 aepConfig.appSecret);
-        ProductInfo productInfo = deviceOperator.getProduct();
-        Map<String, String> authConfig = new HashMap<>();
-        if (productInfo != null) {
-            authConfig = productInfo.getAuthConfig();
-        }
-        request.setMasterKey(authConfig.get("masterKey"));
+        request.setMasterKey(masterKey);
         request.setDeviceId(platformDeviceId);
-        request.setProductId(authConfig.get("productId"));
+        request.setProductId(productId);
         AepResult aepResult = aepApiClient.deleteDevice(request);
         log.debugf("AEP 删除设备结果: %s", aepResult.toString());
     }
@@ -88,17 +83,12 @@ public class AepPlatformHelper {
      * @param payload          指令内容
      * @return 返回指令id
      */
-    public String createCommand(DeviceOperator deviceOperator, String platformDeviceId, Object payload) {
+    public String createCommand(String masterKey, String productId, String platformDeviceId, Object payload) {
         CreateCommandRequest request = new CreateCommandRequest(aepConfig.apiBaseUrl, aepConfig.appKey,
                 aepConfig.appSecret);
-        ProductInfo productInfo = deviceOperator.getProduct();
-        Map<String, String> authConfig = new HashMap<>();
-        if (productInfo != null) {
-            authConfig = productInfo.getAuthConfig();
-        }
-        request.setMasterKey(authConfig.get("masterKey"));
+        request.setMasterKey(masterKey);
         CmdInfo cmdInfo = request.createCmdInfo();
-        cmdInfo.setProductId(authConfig.get("productId"));
+        cmdInfo.setProductId(productId);
         cmdInfo.setDeviceId(platformDeviceId);
         cmdInfo.setOperator(Strings.sBlank(aepConfig.appId, "API"));
         Map content = new HashMap();
@@ -123,17 +113,12 @@ public class AepPlatformHelper {
      * @param command
      * @return
      */
-    public String createCommandProfile(DeviceOperator deviceOperator, String platformDeviceId, Object command) {
+    public String createCommandProfile(String masterKey, String productId, String platformDeviceId, Object command) {
         CreateCommandLwmProfileRequest request = new CreateCommandLwmProfileRequest(aepConfig.apiBaseUrl, aepConfig.appKey,
                 aepConfig.appSecret);
-        ProductInfo productInfo = deviceOperator.getProduct();
-        Map<String, String> authConfig = new HashMap<>();
-        if (productInfo != null) {
-            authConfig = productInfo.getAuthConfig();
-        }
-        request.setMasterKey(authConfig.get("masterKey"));
+        request.setMasterKey(masterKey);
         CmdBody cmdBody = request.createCmdBody();
-        cmdBody.setProductId(authConfig.get("productId"));
+        cmdBody.setProductId(productId);
         cmdBody.setDeviceId(platformDeviceId);
         cmdBody.setOperator(Strings.sBlank(aepConfig.appId, "API"));
         NutMap map = NutMap.NEW();
@@ -157,7 +142,7 @@ public class AepPlatformHelper {
         return new AepApiClient();
     }
 
-    public AepConfig newAepConfig(Map<String, Object> conf) {
+    public AepConfig newAepConfig(Map<String, String> conf) {
         return new AepConfig(conf, "aep");
     }
 
@@ -166,11 +151,11 @@ public class AepPlatformHelper {
 
         }
 
-        public AepConfig(Map<String, Object> conf, String configPrefix) {
-            this.apiBaseUrl = (String) conf.get(configPrefix + ".url");
-            this.appId = (String) conf.get(configPrefix + ".appId");
-            this.appKey = (String) conf.get(configPrefix + ".appKey");
-            this.appSecret = (String) conf.get(configPrefix + ".appSecret");
+        public AepConfig(Map<String, String> conf, String configPrefix) {
+            this.apiBaseUrl = conf.get(configPrefix + ".url");
+            this.appId = conf.get(configPrefix + ".appId");
+            this.appKey = conf.get(configPrefix + ".appKey");
+            this.appSecret = conf.get(configPrefix + ".appSecret");
         }
 
         /**
@@ -180,10 +165,5 @@ public class AepPlatformHelper {
         String appId;
         String appKey;
         String appSecret;
-        /**
-         * 对应的电信平台产品型号
-         */
-        String masterKey;
-        String productId;
     }
 }

@@ -186,49 +186,6 @@
           ]
         }
       ]
-    },
-    {
-      "code": "COMM_PARAM_SET",
-      "name": "通讯参数设置",
-      "description": "设置表具的一些通讯参数",
-      "params": [
-        {
-          "code": "meter_no",
-          "name": "表具通讯号",
-          "description": "表具通讯号，默认取当前表具的通讯号",
-          "dataType": "string",
-          "dataLen": 32,
-          "required": false
-        },
-        {
-          "code": "ip1",
-          "name": "IP地址1",
-          "dataType": "string",
-          "dataLen": 15,
-          "required": false
-        },
-        {
-          "code": "port1",
-          "name": "端口1",
-          "dataType": "int",
-          "dataLen": 2,
-          "required": false
-        },
-        {
-          "code": "ip2",
-          "name": "IP地址2",
-          "dataType": "string",
-          "dataLen": 15,
-          "required": false
-        },
-        {
-          "code": "port2",
-          "name": "端口2",
-          "dataType": "int",
-          "dataLen": 2,
-          "required": false
-        }
-      ]
     }
   ],
   "alarmType": [
