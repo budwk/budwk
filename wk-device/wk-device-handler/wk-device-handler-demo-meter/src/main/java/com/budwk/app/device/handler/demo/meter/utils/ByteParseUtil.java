@@ -6,9 +6,11 @@ import com.budwk.app.device.handler.common.device.CommandInfo;
 import com.budwk.app.device.handler.common.utils.ByteConvertUtil;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
+import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 
 import java.nio.ByteBuffer;
+import java.util.Date;
 
 /**
  * @author wizzer.cn
@@ -117,6 +119,55 @@ public class ByteParseUtil {
                 throw new MessageCodecException("阀控指令参数错误");
 
         }
+        return buffer.array();
+    }
+
+    /**
+     * 自动回复
+     *
+     * @param respCode 错误码(1=正常)
+     * @param hasMore  是否有下一条指令
+     */
+    public static byte[] buildRespCommand(byte cmdType,
+                                          byte ver,
+                                          String iccid,
+                                          String deviceNo,
+                                          int respCode,
+                                          boolean hasMore) {
+
+        byte[] dataBytes;
+        byte orderId;
+        boolean active = false;
+
+        switch (cmdType) {
+            case OrderIdConstant.ONE_DATA_PUSH:
+                orderId = OrderIdConstant.ONE_DATA_RESP;
+                dataBytes = oneDataResp(deviceNo, respCode);
+                break;
+            case OrderIdConstant.ALARM_REPORT:
+                orderId = OrderIdConstant.ALARM_RESP;
+                dataBytes = alarmResp(deviceNo, respCode);
+                break;
+            default:
+                throw new RuntimeException("暂不支持的指令");
+        }
+        return fillFrame(orderId, ver, iccid, dataBytes, active, hasMore);
+    }
+
+
+    private static byte[] oneDataResp(String deviceNo, int respCode) {
+        ByteBuffer buffer = ByteBuffer.allocate(23);
+        buffer.put(ByteConvertUtil.ascii2Bytes(Strings.alignRight(deviceNo, 16, ' ')));
+        buffer.put((byte) respCode);
+        buffer.put(ByteConvertUtil.strToBcd(Times.format("yyMMddHHmmss", new Date())));
+        return buffer.array();
+    }
+
+    private static byte[] alarmResp(String deviceNo, int respCode) {
+        ByteBuffer buffer = ByteBuffer.allocate(23);
+        buffer.put(ByteConvertUtil.ascii2Bytes(Strings.alignRight(deviceNo, 16, ' ')));
+        buffer.put((byte) respCode);
+        buffer.put(ByteConvertUtil.strToBcd(Times.format("yyMMddHHmmss", new Date())));
         return buffer.array();
     }
 
