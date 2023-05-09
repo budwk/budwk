@@ -3,22 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wk-device</artifactId>
+        <artifactId>wk-starter</artifactId>
         <groupId>com.budwk</groupId>
         <version>8.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.budwk.app</groupId>
-    <artifactId>wk-device-cache</artifactId>
+    <groupId>com.budwk.starter</groupId>
+    <artifactId>wk-starter-redisjson</artifactId>
 
     <dependencies>
+        <!-- nutz -->
         <dependency>
-            <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-common</artifactId>
-            <version>8.2.0-SNAPSHOT</version>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
     </dependencies>
-
-
 </project>

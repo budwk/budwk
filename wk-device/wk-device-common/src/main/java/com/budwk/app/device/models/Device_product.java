@@ -1,7 +1,9 @@
 package com.budwk.app.device.models;
 
 import com.budwk.app.device.enums.IotPlatform;
+import com.budwk.app.device.enums.PayMode;
 import com.budwk.app.device.enums.ProtocolType;
+import com.budwk.app.device.enums.SettleMode;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
@@ -109,13 +111,13 @@ public class Device_product extends BaseModel implements Serializable {
     @Comment("计费方式(1=表端计费,2=平台计费)")
     @ColDefine(type = ColType.INT)
     @ApiModelProperty(name = "payMode", description = "计费方式(1=表端计费,2=平台计费)")
-    private Integer payMode;
+    private PayMode payMode;
 
     @Column
     @Comment("结算方式(1=后付费,2=预付费)")
     @ColDefine(type = ColType.INT)
     @ApiModelProperty(name = "settleMode", description = "结算方式(1=后付费,2=预付费)")
-    private Integer settleMode;
+    private SettleMode settleMode;
 
     @Column
     @Comment("认证信息")
@@ -137,4 +139,5 @@ public class Device_product extends BaseModel implements Serializable {
 
     @One(field = "handlerId")
     private Device_handler deviceHandler;
+
 }
