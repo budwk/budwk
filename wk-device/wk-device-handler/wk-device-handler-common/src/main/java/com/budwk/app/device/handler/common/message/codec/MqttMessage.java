@@ -1,7 +1,6 @@
 package com.budwk.app.device.handler.common.message.codec;
 
 
-import com.budwk.app.device.handler.common.utils.ByteConvertUtil;
 import lombok.Data;
 
 /**

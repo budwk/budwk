@@ -3,7 +3,6 @@ package com.budwk.app.device.handler.demo.meter;
 import com.budwk.app.device.handler.common.codec.DeviceOperator;
 import com.budwk.app.device.handler.common.codec.Handler;
 import com.budwk.app.device.handler.common.codec.MessageCodec;
-import com.budwk.app.device.handler.common.codec.context.DeviceContext;
 import com.budwk.app.device.handler.common.device.ProductInfo;
 import com.budwk.app.device.handler.common.enums.TransportType;
 import com.budwk.app.device.handler.common.utils.aep.AepPlatformHelper;

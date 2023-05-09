@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.budwk.app</groupId>
-    <artifactId>wk-device-handler</artifactId>
+    <artifactId>wk-device-container</artifactId>
 
 
 </project>

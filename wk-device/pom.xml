@@ -15,7 +15,7 @@
         <module>wk-device-cache</module>
         <module>wk-device-storage</module>
         <module>wk-device-processor</module>
-        <module>wk-device-handler</module>
+        <module>wk-device-container</module>
     </modules>
 
     <packaging>pom</packaging>
