@@ -54,48 +54,6 @@
           "dataLen": 8
         },
         {
-          "code": "signal_strength",
-          "name": "信号强度",
-          "dataType": "float",
-          "paramType": "index",
-          "dataLen": 4,
-          "scale": 1,
-          "unit": "asu"
-        },
-        {
-          "code": "meter_type",
-          "name": "表具类型",
-          "dataType": "int",
-          "dataLen": 1,
-          "paramType": "info",
-          "enum": [
-            {
-              "value": 0,
-              "text": "无"
-            },
-            {
-              "value": 1,
-              "text": "皮膜表"
-            },
-            {
-              "value": 2,
-              "text": "罗茨/腰轮表"
-            },
-            {
-              "value": 3,
-              "text": "超声波表"
-            },
-            {
-              "value": 4,
-              "text": "涡轮表"
-            },
-            {
-              "value": 5,
-              "text": "其它类型表"
-            }
-          ]
-        },
-        {
           "code": "valve_state",
           "name": "阀门状态",
           "dataType": "int",
@@ -127,24 +85,6 @@
               "text": "阀门故障"
             }
           ]
-        },
-        {
-          "code": "temperature",
-          "name": "温度",
-          "dataType": "float",
-          "paramType": "index",
-          "dataLen": 4,
-          "scale": 1,
-          "unit": "℃"
-        },
-        {
-          "code": "pressure",
-          "name": "压力",
-          "dataType": "float",
-          "paramType": "index",
-          "dataLen": 4,
-          "scale": 1,
-          "unit": "kPa"
         }
       ]
     }

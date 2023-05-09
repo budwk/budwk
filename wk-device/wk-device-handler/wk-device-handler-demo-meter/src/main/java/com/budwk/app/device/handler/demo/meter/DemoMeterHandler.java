@@ -12,11 +12,14 @@ import com.budwk.app.device.handler.demo.meter.codec.HttpMessageCodec;
 import org.nutz.lang.Strings;
 
 /**
+ * 演示表具协议解析(支持TCP/UDP 和 AEP平台HTTP)
+ *
  * @author wizzer.cn
  */
 public class DemoMeterHandler implements Handler {
     public static final String HANDLER_CODE = "DEMO_METER";
     public static final String HANDLER_NAME = "演示表具协议";
+
     @Override
     public String getCode() {
         return HANDLER_CODE;
@@ -65,7 +68,7 @@ public class DemoMeterHandler implements Handler {
         // AEP平台
         if ("AEP".equalsIgnoreCase(product.getPlatform())) {
             AepPlatformHelper aepPlatformHelper = new AepPlatformHelper(product.getFileConfig());
-            aepPlatformHelper.deleteDevice(product.getAuthConfig().get("masterKey"),product.getAuthConfig().get("productId"),platformDeviceId);
+            aepPlatformHelper.deleteDevice(product.getAuthConfig().get("masterKey"), product.getAuthConfig().get("productId"), platformDeviceId);
         }
     }
 }

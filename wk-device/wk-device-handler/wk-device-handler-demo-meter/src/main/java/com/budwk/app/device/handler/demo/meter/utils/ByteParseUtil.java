@@ -3,19 +3,135 @@ package com.budwk.app.device.handler.demo.meter.utils;
 import com.budwk.app.device.handler.common.codec.DeviceOperator;
 import com.budwk.app.device.handler.common.codec.exception.MessageCodecException;
 import com.budwk.app.device.handler.common.device.CommandInfo;
+import com.budwk.app.device.handler.common.device.ValueItem;
+import com.budwk.app.device.handler.common.enums.ValveState;
+import com.budwk.app.device.handler.common.message.DeviceEventMessage;
+import com.budwk.app.device.handler.common.message.DeviceMeterMessage;
+import com.budwk.app.device.handler.common.message.DeviceResponseMessage;
 import com.budwk.app.device.handler.common.utils.ByteConvertUtil;
+import com.budwk.app.device.handler.demo.meter.enums.AlarmType;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.lang.util.NutMap;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.ByteBuffer;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author wizzer.cn
  */
 public class ByteParseUtil {
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("yyMMddHHmmss");
+
+    /**
+     * 获取设备号
+     *
+     * @param bytes
+     * @return
+     */
+    public static String getDeviceNo(byte[] bytes) {
+        return ByteConvertUtil.bytes2Ascii(bytes, 31, 16).trim();
+    }
+
+    /**
+     * 单条数据上报解析
+     */
+    public static DeviceMeterMessage parseOneDataReport(byte[] dataRegion, Map<String, Object> commonProperties) {
+        DeviceMeterMessage message = new DeviceMeterMessage();
+        message.setMessageId("one_data_report");
+        message.setTimestamp(System.currentTimeMillis());
+        message.getProperties().putAll(commonProperties);
+        int p = 0;
+        // 表具通信号
+        String deviceNo = ByteConvertUtil.bytes2Ascii(dataRegion, p, 16);
+        message.addProperty("meter_no", deviceNo.trim());
+        p += 16;
+        // 上报时间(HHmm)
+        String reportTime = ByteConvertUtil.bcb2String(dataRegion, p, 2);
+        message.addProperty("report_time", reportTime);
+        p += 2;
+        // 抄表时间(yyMMddhhmmss)
+        String deviceTime = ByteConvertUtil.bytes2String(dataRegion, p, 6);
+        long meterTimeMs = LocalDateTime.parse(deviceTime, TIME_FORMAT).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L;
+        message.setReadingTime(meterTimeMs);
+        p += 6;
+        // 标况总量
+        int standardNum = ByteConvertUtil.bytes2IntSmall(dataRegion, p, 4);
+        double value = BigDecimal.valueOf(standardNum).divide(BigDecimal.TEN, 2, RoundingMode.HALF_UP).doubleValue();
+        message.addProperty("report_reading", value);
+        message.setReadingNumber(value);
+        int valveState = dataRegion[p++];
+        message.setValveState(ValveState.from(valveState));
+        message.addProperty("reading_time", message.getReadingTime());
+        message.addProperty("valve_state", valveState);
+        return message;
+    }
+
+    /**
+     * 报警上报
+     */
+    public static DeviceEventMessage parseAlarm(byte[] dataRegion, Map<String, Object> commonProperties) {
+        int p = 0;
+        // 表具通信号
+        String deviceNo = ByteConvertUtil.bytes2Ascii(dataRegion, p, 16);
+        p += 16;
+        // 报警时间(yyMMddhhmmss)
+        String deviceTime = ByteConvertUtil.bytes2String(dataRegion, p, 6);
+        p += 6;
+        // 报警位 0-报警恢复 1-报警
+        byte alarmState = dataRegion[p++];
+        // 报警类型
+        AlarmType alarmType = AlarmType.from(dataRegion[p++]);
+        DeviceEventMessage eventMessage = new DeviceEventMessage();
+        eventMessage.setEventType(String.valueOf(alarmType.value()));
+        eventMessage.setEventName(String.valueOf(alarmType.text()));
+        eventMessage.setType(alarmState == 0 ? DeviceEventMessage.Type.ALARM_RECOVER : DeviceEventMessage.Type.ALARM);
+        eventMessage.setTimestamp(LocalDateTime.parse(deviceTime, TIME_FORMAT).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L);
+        eventMessage.setContent(alarmType.text() + (alarmState == 0 ? "恢复" : ""));
+        // 0-无阀门
+        // 1-阀门开
+        // 2-阀门临时关(用户可手动打开)
+        // 3-阀门强制关(用户无法手动打开)
+        // 4-阀门状态未知
+        // 5-阀门异常
+        int alarmValveState = dataRegion[p++];
+        String prefix = "报警" + (alarmState == 0 ? "恢复" : "") + "时";
+        eventMessage.addProperty("valve_state", prefix + "阀门状态", ValveState.from(alarmValveState).text());
+        ValueItem<? extends Serializable> dto = eventMessage.getProperties().stream().filter(it -> it.getCode().equalsIgnoreCase(alarmType.propKey())).findFirst().orElse(null);
+        eventMessage.setWarningValue(dto == null ? "" : Strings.sBlank(dto.getValue()));
+        return eventMessage;
+    }
+
+    /**
+     * 回复阀门控制
+     */
+    public static DeviceResponseMessage parseValveResp(byte[] dataRegion, Map<String, Object> commonProperties) {
+        int p = 0;
+        p += 16;
+        // 回复结果 1-成功
+        byte respResult = dataRegion[p++];
+        // 0-无阀门
+        // 1-阀门开
+        // 2-阀门临时关(用户可手动打开)
+        // 3-阀门强制关(用户无法手动打开)
+        // 4-阀门状态未知
+        // 5-阀门异常
+        int valveState = dataRegion[p];
+        DeviceResponseMessage message = new DeviceResponseMessage();
+        message.setSuccess(respResult == 1);
+        message.setCommandCode(DeviceCommand.VALVE_CONTROL.name());
+        message.addProperty("valve_state", valveState);
+        return message;
+    }
+
     /**
      * 生成指令
      *
@@ -140,7 +256,7 @@ public class ByteParseUtil {
         boolean active = false;
 
         switch (cmdType) {
-            case OrderIdConstant.ONE_DATA_PUSH:
+            case OrderIdConstant.ONE_DATA_REPORT:
                 orderId = OrderIdConstant.ONE_DATA_RESP;
                 dataBytes = oneDataResp(deviceNo, respCode);
                 break;
@@ -190,7 +306,6 @@ public class ByteParseUtil {
         /**
          * 通讯参数设置
          */
-        COMM_PARAM_SET,
         END;
 
         public static DeviceCommand from(String name) {
@@ -206,7 +321,7 @@ public class ByteParseUtil {
         /**
          * 单条数据上报
          */
-        public static final byte ONE_DATA_PUSH = 0x07;
+        public static final byte ONE_DATA_REPORT = 0x07;
         /**
          * 回复单条数据上报
          */
@@ -227,13 +342,5 @@ public class ByteParseUtil {
          * 回复阀门控制
          */
         public static final byte VALVE_RESP = 0x10;
-        /**
-         * 通讯参数设置
-         */
-        public static final byte COMM_PARAM_SET = 0x15;
-        /**
-         * 回复通讯参数设置/时间参数设置
-         */
-        public static final byte COMM_PARAM_RESP = 0x16;
     }
 }

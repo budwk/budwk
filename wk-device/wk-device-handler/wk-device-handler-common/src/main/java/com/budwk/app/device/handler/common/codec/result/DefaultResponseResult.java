@@ -1,7 +1,7 @@
 package com.budwk.app.device.handler.common.codec.result;
 
 import com.budwk.app.device.handler.common.message.DeviceMessage;
-import com.budwk.app.device.handler.common.message.ResponseMessage;
+import com.budwk.app.device.handler.common.message.DeviceResponseMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +10,13 @@ import java.util.List;
 
 /**
  * 指令回复结果
+ *
  * @author wizzer.cn
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CmdResponseResult implements DecodeResult {
+public class DefaultResponseResult implements DecodeResult {
     private static final long serialVersionUID = -3532992412392691183L;
     /**
      * 指令ID
@@ -43,15 +44,16 @@ public class CmdResponseResult implements DecodeResult {
      */
     private String handlerCode;
 
-    public CmdResponseResult(String commandId, ResponseMessage responseMessage) {
+    public DefaultResponseResult(String commandId, String commandCode, DeviceResponseMessage responseMessage) {
         this.commandId = commandId;
+        this.commandCode = commandCode;
         this.success = responseMessage.isSuccess();
         this.commandCode = responseMessage.getCommandCode();
         this.deviceId = responseMessage.getDeviceId();
         this.messages = List.of(responseMessage);
     }
 
-    public CmdResponseResult(String commandId, String deviceId, String commandCode, boolean success, List<DeviceMessage> messages) {
+    public DefaultResponseResult(String commandId, String deviceId, String commandCode, boolean success, List<DeviceMessage> messages) {
         this.commandId = commandId;
         this.deviceId = deviceId;
         this.commandCode = commandCode;

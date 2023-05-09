@@ -6,14 +6,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 回复消息(指令消息)
+ * 回复消息
  *
  * @author wizzer.cn
  */
 @Data
-public class ResponseMessage implements DeviceMessage {
+public class DeviceResponseMessage implements DeviceMessage {
     private static final long serialVersionUID = -3546777340652167412L;
-    private String messageType = "command";
+    private String messageType = "response";
     /**
      * 回复的消息ID
      */
@@ -55,7 +55,7 @@ public class ResponseMessage implements DeviceMessage {
         return timestamp == 0 ? System.currentTimeMillis() : timestamp;
     }
 
-    public ResponseMessage addProperty(String code, Object value) {
+    public DeviceResponseMessage addProperty(String code, Object value) {
         properties.put(code, value);
         return this;
     }
