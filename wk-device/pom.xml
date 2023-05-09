@@ -11,11 +11,10 @@
         <module>wk-device-common</module>
         <module>wk-device-server</module>
         <module>wk-device-gateway</module>
-        <module>wk-device-network</module>
         <module>wk-device-cache</module>
         <module>wk-device-storage</module>
         <module>wk-device-processor</module>
-        <module>wk-device-container</module>
+        <module>wk-device-handler</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -4,16 +4,20 @@
 
 模块名称 | 模块功能 | 部署运行 | 说明 |
 ----|------|----|----
-wk-device-handler | 设备协议解析 | | 独立项目以便协议开发者只用关心协议本身 
-&nbsp;&nbsp;&nbsp;wk-device-handler-common | 协议解析核心包  | |
-&nbsp;&nbsp;&nbsp;wk-device-handler-demo-meter | 模拟表具通信  | | 演示TCP/UDP 和 AEP HTTP的解析过程
-&nbsp;&nbsp;&nbsp;wk-device-handler-demo-tcp | 模拟TCP通信 | | 演示TCP温度计解析过程
-wk-device-container | 协议解析加载  | 是 | 加载 handler 设备协议解析包，提供各类接口实现
-wk-device-network | 网络协议支持  ||
-&nbsp;&nbsp;&nbsp;wk-device-network-tcp | TCP协议  ||
-&nbsp;&nbsp;&nbsp;wk-device-network-udp | UDP协议  ||
-&nbsp;&nbsp;&nbsp;wk-device-network-http | HTTP协议  ||
-wk-device-gateway | 设备通信网关 | 是 | 加载 network 模块提供通信接入服务
+wk-device-handlers | 设备协议解析器 | | 独立项目以便协议开发者只用关心协议本身 
+&nbsp;&nbsp;&nbsp;wk-device-handlers-demo-meter | 模拟表具通信  | | 演示TCP/UDP 和 AEP HTTP的解析过程
+&nbsp;&nbsp;&nbsp;wk-device-handlers-demo-tcp | 模拟TCP通信 | | 演示TCP温度计解析过程
+&nbsp;&nbsp;&nbsp;wk-device-handlers-xxx | 其他设备解析器 | | 
+wk-device-handler | 协议解析服务  |  | 加载 handler 设备协议解析包，提供各类接口实现
+&nbsp;&nbsp;&nbsp;wk-device-handler-common | 协议解析公共类  | | 
+&nbsp;&nbsp;&nbsp;wk-device-handler-server | 协议解析服务  | 是 | 
+wk-device-gateway | 设备通信网关 |  | 加载 network 模块提供通信接入服务
+&nbsp;&nbsp;&nbsp;wk-device-gateway-tcp | TCP协议  | |
+&nbsp;&nbsp;&nbsp;wk-device-gateway-udp | UDP协议  | |
+&nbsp;&nbsp;&nbsp;wk-device-gateway-http | HTTP协议  | | 暂仅实现AEP的接口
+&nbsp;&nbsp;&nbsp;wk-device-gateway-mqtt | MQTT协议  | |
+&nbsp;&nbsp;&nbsp;wk-device-gateway-commom | 网关公共类  | |
+&nbsp;&nbsp;&nbsp;wk-device-gateway-server | 网络服务  | 是 |
 wk-device-processor | 业务处理  | 是 | 业务处理、规则引擎、支持拓展计费等自定义业务
 wk-device-cache | 设备缓存  | | 产品信息缓存、设备基本信息缓存
 wk-device-storage | 数据存储  | | 原始报文存储、上报数据存储、事件数据存储

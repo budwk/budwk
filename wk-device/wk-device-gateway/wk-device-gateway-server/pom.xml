@@ -3,30 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wk-device-handler</artifactId>
+        <artifactId>wk-device-gateway</artifactId>
         <groupId>com.budwk.app</groupId>
         <version>8.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.budwk.app.device</groupId>
-    <artifactId>wk-device-handler-demo-meter</artifactId>
+    <artifactId>wk-device-gateway-server</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutz</artifactId>
-            <scope>provided</scope>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-config</artifactId>
         </dependency>
+        <!-- nutz -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-core</artifactId>
+        </dependency>
+        <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-handler-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
