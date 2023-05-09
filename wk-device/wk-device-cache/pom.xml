@@ -16,7 +16,11 @@
         <dependency>
             <groupId>com.budwk.app</groupId>
             <artifactId>wk-device-common</artifactId>
-            <version>8.2.0-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-redisjson</artifactId>
         </dependency>
     </dependencies>
 
