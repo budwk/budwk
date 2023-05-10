@@ -13,8 +13,22 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-gateway-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-log</artifactId>
         </dependency>
         <!-- nutz -->
         <dependency>

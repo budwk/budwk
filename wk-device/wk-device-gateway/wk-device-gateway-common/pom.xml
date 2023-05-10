@@ -11,4 +11,21 @@
 
     <artifactId>wk-device-gateway-common</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutz</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,0 +1,27 @@
+asddcnutz:
+  application:
+    name: wk-device-gateway
+gateway:
+  demo_tcp:
+    protocolType: TCP
+    handlerCode: demo_meter # 对应的协议解析包的标识
+    properties: # 网关的配置参数
+      port: 9320 # 端口号
+      host: 0.0.0.0 # 绑定的host，默认 0.0.0.0
+      payloadType: hex # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
+  demo_http:
+    # http 网关如果同一个jvm实例种配置的端口一致，那么将会复用相同的 HttpServer，默认的路由地址为 /网关id/接入平台/up
+    protocolType: HTTP
+    handlerCode: demo_meter
+    properties:
+      port: 9330
+      # 是否启用ssl
+      ssl: false
+      # 接入的平台，默认值为 设备直连
+      platform: AEP
+      # 如果配置了path，那么将会使用这个作为路由。如果相同的HttpServer存在多个出现重复的path，只会第一个生效，其他的将会采用默认路由
+      path: /aep/up
+      # 是否等待响应。如果为 true，HttpServer 将不会立即返回响应，将会等待后续下发的响应信息
+      waitResponse: false
+      # 等待的超时时间，单位为秒。默认为30秒
+      waitTimeout: 30
