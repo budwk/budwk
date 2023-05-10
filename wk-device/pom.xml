@@ -49,7 +49,6 @@
             <url>https://jfrog.nutz.cn/artifactory/snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>false</enabled>

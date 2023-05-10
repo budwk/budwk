@@ -72,13 +72,13 @@ public class AepMessageCodec implements MessageCodec {
             public void sendToDevice(byte[] replyBytes) {
                 DeviceOperator deviceOperator = context.getDevice();
                 ProductInfo product = deviceOperator.getProduct();
-                Map<String, String> configs = product.getFileConfig();
-                Map<String, String> authConfig = product.getAuthConfig();
-                AepPlatformHelper aepPlatformHelper = new AepPlatformHelper(configs);
+                NutMap authConfig = product.getAuthConfig();
+                NutMap fileConfig = product.getFileConfig();
+                AepPlatformHelper aepPlatformHelper = new AepPlatformHelper(fileConfig);
                 if (Strings.sBlank(authConfig.get("hasProfile")).equals("true")) {
-                    aepPlatformHelper.createCommandProfile(authConfig.get("masterKey"), authConfig.get("productId"), (String) deviceOperator.getProperty("platformDeviceId"), ByteConvertUtil.bytesToHex(replyBytes));
+                    aepPlatformHelper.createCommandProfile(authConfig.getString("masterKey"), authConfig.getString("productId"), (String) deviceOperator.getProperty("platformDeviceId"), ByteConvertUtil.bytesToHex(replyBytes));
                 } else {
-                    aepPlatformHelper.createCommand(authConfig.get("masterKey"), authConfig.get("productId"), (String) deviceOperator.getProperty("platformDeviceId"), ByteConvertUtil.bytesToHex(replyBytes));
+                    aepPlatformHelper.createCommand(authConfig.getString("masterKey"), authConfig.getString("productId"), (String) deviceOperator.getProperty("platformDeviceId"), ByteConvertUtil.bytesToHex(replyBytes));
                 }
                 // 标记已经发送过了，调用这个用来保存发送日志
                 context.send(new HttpMessage() {
@@ -97,14 +97,14 @@ public class AepMessageCodec implements MessageCodec {
         byte[] bytes = ByteParseUtil.buildCommand(commandInfo, context.getDeviceOperator());
         DeviceOperator deviceOperator = context.getDeviceOperator();
         ProductInfo product = deviceOperator.getProduct();
-        Map<String, String> authConfig = product.getAuthConfig();
-        Map<String, String> fileConfig = product.getFileConfig();
+        NutMap authConfig = product.getAuthConfig();
+        NutMap fileConfig = product.getFileConfig();
         AepPlatformHelper aepPlatformHelper = new AepPlatformHelper(fileConfig);
         String result;
         if (Strings.sBlank(authConfig.get("hasProfile")).equals("true")) {
-            result = aepPlatformHelper.createCommandProfile(authConfig.get("masterKey"), authConfig.get("productId"), (String) deviceOperator.getProperty("iotDevId"), ByteConvertUtil.bytesToHex(bytes));
+            result = aepPlatformHelper.createCommandProfile(authConfig.getString("masterKey"), authConfig.getString("productId"), (String) deviceOperator.getProperty("iotDevId"), ByteConvertUtil.bytesToHex(bytes));
         } else {
-            result = aepPlatformHelper.createCommand(authConfig.get("masterKey"), authConfig.get("productId"), (String) deviceOperator.getProperty("iotDevId"), ByteConvertUtil.bytesToHex(bytes));
+            result = aepPlatformHelper.createCommand(authConfig.getString("masterKey"), authConfig.getString("productId"), (String) deviceOperator.getProperty("iotDevId"), ByteConvertUtil.bytesToHex(bytes));
         }
         TcpMessage tcpMessage = new TcpMessage(bytes);
         return EncodeResult.createDefault(true, Arrays.asList(tcpMessage));

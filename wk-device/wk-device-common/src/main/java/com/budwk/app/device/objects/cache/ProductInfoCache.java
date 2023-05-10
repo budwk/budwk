@@ -5,6 +5,7 @@ import com.budwk.app.device.enums.PayMode;
 import com.budwk.app.device.enums.ProtocolType;
 import com.budwk.app.device.enums.SettleMode;
 import lombok.Data;
+import org.nutz.lang.util.NutMap;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -22,15 +23,15 @@ public class ProductInfoCache implements Serializable {
     private String bizCode;
     private PayMode payMode;
     private SettleMode settleMode;
-    private ProtocolType transportType;
+    private ProtocolType protocolType;
     private String handlerCode;
     private IotPlatform platform;
     /**
      * 产品的配置文件配置信息
      */
-    private Map<String, String> fileConfig;
+    private NutMap fileConfig;
     /**
      * 产品的认证配置信息
      */
-    private Map<String, String> authConfig;
+    private NutMap authConfig;
 }

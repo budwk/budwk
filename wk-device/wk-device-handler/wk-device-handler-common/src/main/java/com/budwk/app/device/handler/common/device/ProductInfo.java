@@ -1,12 +1,13 @@
 package com.budwk.app.device.handler.common.device;
 
 import lombok.Data;
+import org.nutz.lang.util.NutMap;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * 产品信息
+ *
  * @author wizzer.cn
  * @author zyang
  */
@@ -40,9 +41,9 @@ public class ProductInfo implements Serializable {
     /**
      * auth配置信息
      */
-    private Map<String, String> authConfig;
+    private NutMap authConfig;
     /**
      * 配置文件配置信息
      */
-    private Map<String, String> fileConfig;
+    private NutMap fileConfig;
 }

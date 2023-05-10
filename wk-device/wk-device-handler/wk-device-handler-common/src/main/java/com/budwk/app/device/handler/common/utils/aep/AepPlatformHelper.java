@@ -24,7 +24,7 @@ public class AepPlatformHelper {
 
     private final AepConfig aepConfig;
 
-    public AepPlatformHelper(Map<String, String> configs) {
+    public AepPlatformHelper(NutMap configs) {
         this.aepConfig = newAepConfig(configs);
         this.aepApiClient = getAepApiClient();
     }
@@ -36,13 +36,13 @@ public class AepPlatformHelper {
         CreateDeviceRequest request = new CreateDeviceRequest(aepConfig.apiBaseUrl, aepConfig.appKey,
                 aepConfig.appSecret);
         ProductInfo productInfo = deviceOperator.getProduct();
-        Map<String, String> authConfig = new HashMap<>();
+        NutMap authConfig = NutMap.NEW();
         if (productInfo != null) {
             authConfig = productInfo.getAuthConfig();
         }
-        request.setMasterKey(authConfig.get("masterKey"));
+        request.setMasterKey(authConfig.getString("masterKey"));
         DeviceInfo apiDeviceInfo = request.createDevice();
-        apiDeviceInfo.setProductId(authConfig.get("productId"));
+        apiDeviceInfo.setProductId(authConfig.getString("productId"));
         apiDeviceInfo.setAutoObserver(true);
         apiDeviceInfo.setDeviceName(Strings.sBlank(deviceOperator.getProperty("deviceNo"), deviceOperator.getDeviceId()));
         apiDeviceInfo.setDeviceSn(deviceOperator.getDeviceId());
@@ -142,7 +142,7 @@ public class AepPlatformHelper {
         return new AepApiClient();
     }
 
-    public AepConfig newAepConfig(Map<String, String> conf) {
+    public AepConfig newAepConfig(NutMap conf) {
         return new AepConfig(conf, "aep");
     }
 
@@ -151,11 +151,11 @@ public class AepPlatformHelper {
 
         }
 
-        public AepConfig(Map<String, String> conf, String configPrefix) {
-            this.apiBaseUrl = conf.get(configPrefix + ".url");
-            this.appId = conf.get(configPrefix + ".appId");
-            this.appKey = conf.get(configPrefix + ".appKey");
-            this.appSecret = conf.get(configPrefix + ".appSecret");
+        public AepConfig(NutMap conf, String configPrefix) {
+            this.apiBaseUrl = conf.getString(configPrefix + ".url");
+            this.appId = conf.getString(configPrefix + ".appId");
+            this.appKey = conf.getString(configPrefix + ".appKey");
+            this.appSecret = conf.getString(configPrefix + ".appSecret");
         }
 
         /**

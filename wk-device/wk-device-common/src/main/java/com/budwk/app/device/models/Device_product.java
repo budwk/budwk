@@ -1,9 +1,6 @@
 package com.budwk.app.device.models;
 
-import com.budwk.app.device.enums.IotPlatform;
-import com.budwk.app.device.enums.PayMode;
-import com.budwk.app.device.enums.ProtocolType;
-import com.budwk.app.device.enums.SettleMode;
+import com.budwk.app.device.enums.*;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
@@ -45,10 +42,16 @@ public class Device_product extends BaseModel implements Serializable {
      * @see Device_type id
      */
     @Column
-    @Comment("类型ID")
+    @Comment("设备类型ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     @ApiModelProperty(name = "typeId", description = "类型ID", required = true)
     private String typeId;
+
+    @Column
+    @Comment("设备类型")
+    @ColDefine(type = ColType.VARCHAR, width = 20)
+    @ApiModelProperty(name = "deviceType", description = "设备类型")
+    private DeviceType deviceType;
 
     /**
      * @see Device_type id
@@ -132,12 +135,12 @@ public class Device_product extends BaseModel implements Serializable {
     private String description;
 
     @One(field = "typeId")
-    private Device_type deviceType;
+    private Device_type device_type;
 
     @One(field = "supplierId")
-    private Device_supplier deviceSupplier;
+    private Device_supplier device_supplier;
 
     @One(field = "handlerId")
-    private Device_handler deviceHandler;
+    private Device_handler device_handler;
 
 }

@@ -2,17 +2,20 @@ package com.budwk.app.device.cache;
 
 import com.budwk.app.device.models.Device_product;
 import com.budwk.app.device.objects.cache.ProductInfoCache;
+import org.nutz.lang.util.NutMap;
+
+import java.util.Map;
 
 /**
  * 产品缓存
  * @author wizzer.cn
  */
 public interface ProductCaching {
-    ProductInfoCache cache(Device_product product);
+    ProductInfoCache cache(Device_product product, NutMap fileConfig);
 
-    boolean update(Device_product product);
+    boolean update(Device_product product,NutMap fileConfig);
 
-    ProductInfoCache get(String productId);
+    ProductInfoCache getProductCache(String productId);
 
-    boolean delete(String productId);
+    boolean deleteProductCache(String productId);
 }

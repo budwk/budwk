@@ -68,7 +68,7 @@ public class DemoMeterHandler implements Handler {
         // AEP平台
         if ("AEP".equalsIgnoreCase(product.getPlatform())) {
             AepPlatformHelper aepPlatformHelper = new AepPlatformHelper(product.getFileConfig());
-            aepPlatformHelper.deleteDevice(product.getAuthConfig().get("masterKey"), product.getAuthConfig().get("productId"), platformDeviceId);
+            aepPlatformHelper.deleteDevice(product.getAuthConfig().getString("masterKey"), product.getAuthConfig().getString("productId"), platformDeviceId);
         }
     }
 }

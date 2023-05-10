@@ -39,7 +39,7 @@
                         <div class="card-header">
                             <el-row>
                                 <el-col :span="12">
-                                    <el-tag :color="product.deviceType?.color" effect="dark" class="type-tag">{{product.deviceType?.name}}</el-tag>
+                                    <el-tag :color="product.device_type?.color" effect="dark" class="type-tag">{{product.device_type?.name}}</el-tag>
                                 </el-col>
                                 <el-col :span="12" style="text-align: right" v-show="showButtonIdx == idx">
                                     <el-tooltip content="修改" placement="top">
@@ -75,12 +75,12 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="协议解析：" class="product-field-item">
-                                {{ product?.deviceHandler?.name }}
+                                {{ product?.device_handler?.name }}
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="设备厂家：" class="product-field-item">
-                                {{ product?.deviceSupplier?.name }}
+                                {{ product?.device_supplier?.name }}
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -147,14 +147,14 @@
                         <el-radio :label="true">有</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="计费方式" prop="payMode" v-if="formData.typeEnumValue=='METER'">
+                <el-form-item label="计费方式" prop="payMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.payMode">
                         <el-radio :label="0">无</el-radio>
                         <el-radio :label="1">表端计费</el-radio>
                         <el-radio :label="2">平台计费</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="结算方式" prop="settleMode" v-if="formData.typeEnumValue=='METER'">
+                <el-form-item label="结算方式" prop="settleMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.settleMode">
                         <el-radio :label="0">无</el-radio>
                         <el-radio :label="1">后付费</el-radio>
@@ -227,14 +227,14 @@
                         <el-radio :label="true">有</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="计费方式" prop="payMode" v-if="formData.typeEnumValue=='METER'">
+                <el-form-item label="计费方式" prop="payMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.payMode">
                         <el-radio :label="0">无</el-radio>
                         <el-radio :label="1">表端计费</el-radio>
                         <el-radio :label="2">平台计费</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="结算方式" prop="settleMode" v-if="formData.typeEnumValue=='METER'">
+                <el-form-item label="结算方式" prop="settleMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.settleMode">
                         <el-radio :label="0">无</el-radio>
                         <el-radio :label="1">后付费</el-radio>
@@ -289,7 +289,7 @@ const data = reactive({
         id: '',
         name: '',
         typeId: '',
-        typeEnumValue: '',
+        deviceType: '',
         subTypeId: '',
         supplierId: '',
         supplierCode: '',
@@ -332,7 +332,7 @@ const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
         id: '',
         name: '',
         typeId: '',
-        typeEnumValue: '',
+        deviceType: '',
         subTypeId: '',
         supplierId: '',
         supplierCode: '',
@@ -420,7 +420,7 @@ const typeChange = (val: any) => {
         formData.value.typeId = ''
         formData.value.subTypeId = ''
     }
-    formData.value.typeEnumValue = findOneValue(typeList.value, tmp, 'type', 'id')?.value
+    formData.value.deviceType = findOneValue(typeList.value, tmp, 'type', 'id')?.value
 }
 
 // 厂家型号改变
@@ -480,9 +480,9 @@ const handleUpdate = (row: any) => {
         formData.value = res.data
         formData.value.iotPlatform = res.data.iotPlatform.value
         formData.value.protocolType = res.data.protocolType.value
+        formData.value.deviceType = res.data.deviceType.value
         formDataSupplier.value = [res.data.supplierId, res.data.supplierCode] as never
         formDataType.value = [res.data.typeId, res.data.subTypeId] as never
-        formData.value.typeEnumValue = findOneValue(typeList.value, res.data.typeId, 'type', 'id')?.value
         parseAuth()
         showUpdate.value = true
     })
