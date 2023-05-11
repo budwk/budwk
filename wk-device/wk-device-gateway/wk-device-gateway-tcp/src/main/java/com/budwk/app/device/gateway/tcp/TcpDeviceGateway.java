@@ -62,7 +62,7 @@ public class TcpDeviceGateway implements DeviceGateway {
                                 MqMessage<EncodedMessage> mqMessage =
                                         new MqMessage<>(MqTopic.DEVICE_DATA_UP, newTcpMessage(bytes));
                                 mqMessage.setSender(getInstanceId());
-                                mqMessage.setReplyTopic(getReplyTopic());
+                                mqMessage.setReplyAddress(getInstanceAddress());
                                 mqMessage.addHeader("sessionId", tcpClient.getId());
                                 messageTransfer.publish(mqMessage);
                             })
@@ -85,7 +85,7 @@ public class TcpDeviceGateway implements DeviceGateway {
 
     private void startCmdListener() {
         //tcp是长链接,连上哪个实例不确定,所以采用 广播模式 消费
-        messageTransfer.subscribe(this.configuration.getId(), getReplyTopic(), "*", MessageModel.BROADCASTING, ConsumeMode.CONCURRENTLY,
+        messageTransfer.subscribe(this.configuration.getId(), getInstanceAddress(), "*", MessageModel.BROADCASTING, ConsumeMode.CONCURRENTLY,
                 mqMessage -> {
                     Object body = mqMessage.getBody();
                     EncodedMessage message = Castors.me().castTo(body, EncodedMessage.class);
@@ -99,14 +99,14 @@ public class TcpDeviceGateway implements DeviceGateway {
                     if (null != client && null != bytes) {
                         client.send(bytes).whenComplete((unused, throwable) -> {
                             if (null == throwable) {
-                                replyCmdSendResult(mqMessage.getReplyTopic(), result, mqMessage.getHeaders());
+                                replyCmdSendResult(mqMessage.getReplyAddress(), result, mqMessage.getHeaders());
                             } else {
-                                replyCmdSendResult(mqMessage.getReplyTopic(), result.setv("result", -1).setv("msg", "发送数据到设备失败"), mqMessage.getHeaders());
+                                replyCmdSendResult(mqMessage.getReplyAddress(), result.setv("result", -1).setv("msg", "发送数据到设备失败"), mqMessage.getHeaders());
                             }
                         });
                     } else {
                         result.setv("result", -1).setv("msg", "未找到设备会话信息");
-                        replyCmdSendResult(mqMessage.getReplyTopic(), result, mqMessage.getHeaders());
+                        replyCmdSendResult(mqMessage.getReplyAddress(), result, mqMessage.getHeaders());
                     }
                 });
     }
@@ -121,7 +121,7 @@ public class TcpDeviceGateway implements DeviceGateway {
         messageTransfer.publish(replyMqMessage);
     }
 
-    private String getReplyTopic() {
+    private String getInstanceAddress() {
         return String.format(this.configuration.getId() + ":%s.%s", MqTopic.DEVICE_CMD_DOWN, getInstanceId());
     }
 

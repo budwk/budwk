@@ -13,23 +13,23 @@ import java.util.Map;
  * @author wizzer.cn
  */
 @Data
-public class MqMessage <T extends Serializable> implements Serializable {
-    private static final long serialVersionUID = 1626610483526112039L;
+public class MqMessage<T extends Serializable> implements Serializable {
+    private static final long serialVersionUID = -1160683315647739543L;
     @Getter
     @Setter(AccessLevel.NONE)
     private Map<String, String> headers = new LinkedHashMap<>();
     /**
-     * 消息主题
+     * 目的地址
      */
-    private final String topic;
+    private final String adress;
     /**
      * 消息体
      */
     private final T body;
     /**
-     * 回复主题
+     * 回复地址
      */
-    private String replyTopic;
+    private String replyAddress;
     /**
      * 发送者的标识
      */

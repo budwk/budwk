@@ -49,9 +49,9 @@ public class RMQMessageTransfer implements MessageTransfer {
     @Override
     public <T extends Serializable> void publish(MqMessage<T> mqMessage) {
         try {
-            rocketMQServer.send(mqMessage.getTopic(), FastSerializeUtil.serialize(mqMessage), 0);
+            rocketMQServer.sendVoid(mqMessage.getAdress(), FastSerializeUtil.serialize(mqMessage), 0);
         } catch (Exception e) {
-            log.error("topic {} 消息发送失败: {}", mqMessage.getTopic(), e.getMessage());
+            log.error("topic {} 消息发送失败: {}", mqMessage.getAdress(), e.getMessage());
         }
     }
 

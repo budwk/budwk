@@ -68,8 +68,16 @@ public class RocketMQServer implements ServerFace {
         return this.send(topic, "", msg, timeout);
     }
 
+    public void sendVoid(String topic, byte[] msg, long timeout) throws Exception {
+        this.send(topic, "", msg, timeout);
+    }
+
     public SendResult send(String topic, String tags, byte[] msg, long timeout) throws Exception {
         return this.send(topic, tags, "", msg, DelayTimeLevel.ZERO, timeout);
+    }
+
+    public void sendVoid(String topic, String tags, byte[] msg, long timeout) throws Exception {
+        this.send(topic, tags, "", msg, DelayTimeLevel.ZERO, timeout);
     }
 
     public SendResult send(String topic, String tags, String keys, byte[] msg, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
