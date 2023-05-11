@@ -1,5 +1,7 @@
-package com.budwk.app.device.gateway;
+package com.budwk.app.device.gateway.server;
 
+import com.budwk.app.device.gateway.DeviceGateway;
+import com.budwk.app.device.gateway.DeviceGatewayManager;
 import org.nutz.boot.starter.ServerFace;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

@@ -1,5 +1,8 @@
-package com.budwk.app.device.gateway;
+package com.budwk.app.device.gateway.manager;
 
+import com.budwk.app.device.gateway.DeviceGateway;
+import com.budwk.app.device.gateway.DeviceGatewayBuilder;
+import com.budwk.app.device.gateway.DeviceGatewayManager;
 import com.budwk.app.device.gateway.config.DeviceGatewayConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.ioc.Ioc;

@@ -14,17 +14,13 @@
     <dependencies>
         <dependency>
             <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-gateway-common</artifactId>
+            <artifactId>wk-device-gateway-tcp</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-common</artifactId>
+            <artifactId>wk-device-gateway-common</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.budwk.starter</groupId>
-            <artifactId>wk-starter-config</artifactId>
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>

@@ -25,6 +25,7 @@
         <dependency>
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-database</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>

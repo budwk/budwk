@@ -1,4 +1,4 @@
-asddcnutz:
+nutz:
   application:
     name: wk-device-gateway
 
@@ -35,3 +35,7 @@ rocketmq:
   producer-group: wk_local_producer
   consumer-thread-max: 300
   consumer-thread-min: 10
+
+log:
+  level: debug
+  color: true

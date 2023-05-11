@@ -7,6 +7,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 import lombok.extern.slf4j.Slf4j;
+import org.nutz.json.Json;
 import org.nutz.lang.util.NutMap;
 
 import java.util.function.Consumer;
@@ -26,7 +27,7 @@ public class VertxTcpServer implements TcpServer {
     }
 
     public TcpServer start() {
-        NetServerOptions options = new NetServerOptions(JsonObject.mapFrom(config));
+        NetServerOptions options = new NetServerOptions(new JsonObject(Json.toJson(config)));
         options.setHost(config.getString("host", "0.0.0.0"));
         options.setPort(config.getInt("port", 0));
         options.setSsl(config.getBoolean("ssl", false));
