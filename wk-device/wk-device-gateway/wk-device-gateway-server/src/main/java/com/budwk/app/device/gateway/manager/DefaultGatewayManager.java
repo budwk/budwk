@@ -40,14 +40,10 @@ public class DefaultGatewayManager implements DeviceGatewayManager {
     public List<DeviceGateway> loadGateway() {
         List<DeviceGateway> gatewayList = new ArrayList<>();
         NutMap gatewayConfig = loadGatewayConfig();
-        String instanceId = conf.get("message.transfer.instanceId");
         for (String gatewayId : gatewayConfig.keySet()) {
             NutMap config = gatewayConfig.getAs(gatewayId, NutMap.class);
             DeviceGatewayConfiguration configuration = Lang.map2Object(config, DeviceGatewayConfiguration.class);
             configuration.setId(gatewayId);
-            if (Strings.isBlank(configuration.getInstanceId())) {
-                configuration.setInstanceId(instanceId);
-            }
             DeviceGateway gateway = createGateway(configuration);
             if (null != gateway) {
                 gatewayList.add(gateway);

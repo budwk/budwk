@@ -4,6 +4,7 @@ nutz:
 
 gateway:
   demo_tcp:
+    instanceId: #实例ID,不填写则默认生成,配置成固定值可方便日志跟踪
     protocolType: tcp # wk-device-gateway-tcp
     handlerCode: demo_meter # 对应的协议解析包的标识
     properties: # 网关的配置参数
@@ -12,6 +13,7 @@ gateway:
       payloadType: hex # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
       keepAliveTimeout:
   demo_http:
+    instanceId: #实例ID,不填写则默认生成,配置成固定值可方便日志跟踪
     # http 网关如果同一个jvm实例种配置的端口一致，那么将会复用相同的 HttpServer，默认的路由地址为 /网关id/接入平台/up
     protocolType: http # wk-device-gateway-http
     handlerCode: demo_meter
