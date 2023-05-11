@@ -40,6 +40,8 @@
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
         <hutool.version>5.8.11</hutool.version>
         <poi.version>4.1.2</poi.version>
+        <vertx.version>4.2.6</vertx.version>
+        <fst.version>2.57</fst.version>
         <oshi-core.version>5.7.3</oshi-core.version>
         <emoji-java.veision>5.1.1</emoji-java.veision>
         <maven.plugin.version>3.8.1</maven.plugin.version>
@@ -340,6 +342,25 @@
                    <artifactId>poi-ooxml-schemas</artifactId>
                    <version>${poi.version}</version>
             </dependency>
+            <!-- vertx -->
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-core</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+            <!-- fst 序列化工具 -->
+            <dependency>
+                <groupId>de.ruedigermoeller</groupId>
+                <artifactId>fst</artifactId>
+                <version>${fst.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <dependency>
                 <groupId>org.nutz</groupId>
                 <artifactId>nutzboot-parent</artifactId>

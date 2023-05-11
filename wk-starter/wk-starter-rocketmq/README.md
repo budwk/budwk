@@ -51,8 +51,8 @@ RocketMQServer rocketMQServer;
 public class ConsumerExample1 implements RMQConsumerListener {
 
     @Override
-    public void onMessage(String message) {
-        System.out.println("ConsumerExample1 监听到消息==> " + message);
+    public void onMessage(byte[] message) {
+        System.out.println("ConsumerExample1 监听到消息==> " + new String(message, StandardCharsets.UTF_8));
     }
 }
 
@@ -61,8 +61,8 @@ public class ConsumerExample1 implements RMQConsumerListener {
 public class ConsumerExample2 implements RMQConsumerListener {
 
     @Override
-    public void onMessage(String message) {
-        System.out.println("ConsumerExample2 监听到消息==> " + message);
+    public void onMessage(byte[] message) {
+        System.out.println("ConsumerExample2 监听到消息==> " + new String(message, StandardCharsets.UTF_8));
     }
 }
 ```

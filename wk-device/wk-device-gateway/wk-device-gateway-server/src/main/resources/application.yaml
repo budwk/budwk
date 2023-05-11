@@ -1,17 +1,19 @@
 asddcnutz:
   application:
     name: wk-device-gateway
+
 gateway:
   demo_tcp:
-    protocolType: TCP
+    protocolType: tcp # wk-device-gateway-tcp
     handlerCode: demo_meter # 对应的协议解析包的标识
     properties: # 网关的配置参数
       port: 9320 # 端口号
       host: 0.0.0.0 # 绑定的host，默认 0.0.0.0
       payloadType: hex # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
+      keepAliveTimeout:
   demo_http:
     # http 网关如果同一个jvm实例种配置的端口一致，那么将会复用相同的 HttpServer，默认的路由地址为 /网关id/接入平台/up
-    protocolType: HTTP
+    protocolType: http # wk-device-gateway-http
     handlerCode: demo_meter
     properties:
       port: 9330
@@ -25,3 +27,11 @@ gateway:
       waitResponse: false
       # 等待的超时时间，单位为秒。默认为30秒
       waitTimeout: 30
+
+rocketmq:
+  # 集群环境多个nameserver用;分割
+  nameserver-address: 127.0.0.1:9876
+  # 生产者组
+  producer-group: wk_local_producer
+  consumer-thread-max: 300
+  consumer-thread-min: 10

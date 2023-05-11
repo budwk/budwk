@@ -3,33 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wk-device-gateway</artifactId>
-        <groupId>com.budwk.app</groupId>
+        <artifactId>wk-device</artifactId>
+        <groupId>com.budwk</groupId>
         <version>8.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wk-device-gateway-tcp</artifactId>
+    <groupId>com.budwk.app</groupId>
+    <artifactId>wk-device-message</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-gateway-common</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-rocketmq</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-handler-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-message</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
+            <groupId>de.ruedigermoeller</groupId>
+            <artifactId>fst</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
@@ -42,4 +38,5 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
 </project>

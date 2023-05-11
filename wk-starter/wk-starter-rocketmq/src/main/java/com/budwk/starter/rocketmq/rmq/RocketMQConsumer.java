@@ -11,12 +11,10 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.nutz.boot.AppContext;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class RocketMQConsumer {
     private int consumeThreadMin = 0;
     private List<DefaultMQPushConsumer> consumerList = new ArrayList<>();
 
-    public void init(String namesrvAddr,int consumeThreadMax,int consumeThreadMin) {
+    public void init(String namesrvAddr, int consumeThreadMax, int consumeThreadMin) {
         this.namesrvAddr = namesrvAddr;
         this.consumeThreadMax = consumeThreadMax;
         this.consumeThreadMin = consumeThreadMin;
@@ -61,10 +59,10 @@ public class RocketMQConsumer {
 
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroup);
         consumer.setNamesrvAddr(namesrvAddr);
-        if(consumeThreadMax>0) {
+        if (consumeThreadMax > 0) {
             consumer.setConsumeThreadMax(consumeThreadMax);
         }
-        if(consumeThreadMin>0) {
+        if (consumeThreadMin > 0) {
             consumer.setConsumeThreadMin(consumeThreadMin);
         }
         try {
@@ -85,7 +83,7 @@ public class RocketMQConsumer {
                 consumer.registerMessageListener((MessageListenerOrderly) (msgs, context) -> {
                     for (MessageExt ext : msgs) {
                         log.info("Orderly message, {}", ext);
-                        listener.onMessage(new String(ext.getBody(), StandardCharsets.UTF_8));
+                        listener.onMessage(ext.getBody());
                     }
                     return ConsumeOrderlyStatus.SUCCESS;
                 });
@@ -94,7 +92,7 @@ public class RocketMQConsumer {
                 consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
                     for (MessageExt ext : msgs) {
                         log.info("Concurrently message, {}", ext);
-                        listener.onMessage(new String(ext.getBody(), StandardCharsets.UTF_8));
+                        listener.onMessage(ext.getBody());
                     }
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 });
@@ -109,8 +107,10 @@ public class RocketMQConsumer {
 
     public void close() {
         for (DefaultMQPushConsumer consumer : consumerList) {
-            consumer.shutdown();
-            log.info("consumer shutdown consumerGroup {}", consumer.getConsumerGroup());
+            if (consumer != null) {
+                consumer.shutdown();
+                log.info("consumer shutdown consumerGroup {}", consumer.getConsumerGroup());
+            }
         }
     }
 }

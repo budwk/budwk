@@ -25,7 +25,4 @@ public @interface RMQConsumer {
     MessageModel messageModel() default MessageModel.BROADCASTING;
 
     ConsumeMode consumeMode() default ConsumeMode.CONCURRENTLY;
-
-    //
-    String instanceName() default "";
 }

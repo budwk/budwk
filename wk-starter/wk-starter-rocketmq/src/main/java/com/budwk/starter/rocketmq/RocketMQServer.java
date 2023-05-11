@@ -13,7 +13,6 @@ import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -65,43 +64,43 @@ public class RocketMQServer implements ServerFace {
         rmqConsumer.close();
     }
 
-    public SendResult send(String topic, String msg, long timeout) throws Exception {
+    public SendResult send(String topic, byte[] msg, long timeout) throws Exception {
         return this.send(topic, "", msg, timeout);
     }
 
-    public SendResult send(String topic, String tags, String msg, long timeout) throws Exception {
+    public SendResult send(String topic, String tags, byte[] msg, long timeout) throws Exception {
         return this.send(topic, tags, "", msg, DelayTimeLevel.ZERO, timeout);
     }
 
-    public SendResult send(String topic, String tags, String keys, String msg, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
+    public SendResult send(String topic, String tags, String keys, byte[] msg, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
         return this.sendMsg(topic, tags, keys, msg, null, false, delayTimeLevel, timeout);
     }
 
-    public void sendAsync(String topic, String msg, SendCallback sendCallback, long timeout) throws Exception {
+    public void sendAsync(String topic, byte[] msg, SendCallback sendCallback, long timeout) throws Exception {
         this.sendAsync(topic, "", msg, sendCallback, timeout);
     }
 
-    public void sendAsync(String topic, String tags, String msg, SendCallback sendCallback, long timeout) throws Exception {
+    public void sendAsync(String topic, String tags, byte[] msg, SendCallback sendCallback, long timeout) throws Exception {
         this.sendAsync(topic, tags, "", msg, sendCallback, DelayTimeLevel.ZERO, timeout);
     }
 
-    public void sendAsync(String topic, String tags, String keys, String msg, SendCallback sendCallback, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
+    public void sendAsync(String topic, String tags, String keys, byte[] msg, SendCallback sendCallback, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
         this.sendMsg(topic, tags, keys, msg, sendCallback, false, delayTimeLevel, timeout);
     }
 
-    public void sendOneway(String topic, String msg, long timeout) throws Exception {
+    public void sendOneway(String topic, byte[] msg, long timeout) throws Exception {
         this.sendOneway(topic, "", msg, timeout);
     }
 
-    public void sendOneway(String topic, String tags, String msg, long timeout) throws Exception {
+    public void sendOneway(String topic, String tags, byte[] msg, long timeout) throws Exception {
         this.sendOneway(topic, tags, "", msg, DelayTimeLevel.ZERO, timeout);
     }
 
-    public void sendOneway(String topic, String tags, String keys, String msg, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
+    public void sendOneway(String topic, String tags, String keys, byte[] msg, DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
         this.sendMsg(topic, tags, keys, msg, null, true, delayTimeLevel, timeout);
     }
 
-    public SendResult send(String topic, String tags, String msg, MessageQueueSelector selector, Object arg) throws Exception {
+    public SendResult send(String topic, String tags, byte[] msg, MessageQueueSelector selector, Object arg) throws Exception {
         return this.sendMsg(topic, tags, "", msg, null, false, DelayTimeLevel.ZERO, 0, selector, arg);
     }
 
@@ -117,9 +116,9 @@ public class RocketMQServer implements ServerFace {
         }
     }
 
-    private Message createMessage(String topic, String tags, String keys, String msg, SendCallback sendCallback, boolean isOneway,
+    private Message createMessage(String topic, String tags, String keys, byte[] msg, SendCallback sendCallback, boolean isOneway,
                                   DelayTimeLevel delayTimeLevel, long timeout) {
-        Message message = new Message(topic, tags, keys, msg.getBytes(StandardCharsets.UTF_8));
+        Message message = new Message(topic, tags, keys, msg);
         message.setDelayTimeLevel(delayTimeLevel.getLevel());
         if (timeout > 0) {
             message.setDeliverTimeMs(timeout);
@@ -138,7 +137,7 @@ public class RocketMQServer implements ServerFace {
      * @param delayTimeLevel 延时消息等级，大于0才起作用，级别： 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
      * @param timeout        定时时间戳，单位毫秒
      */
-    private SendResult sendMsg(String topic, String tags, String keys, String msg, SendCallback sendCallback, boolean isOneway,
+    private SendResult sendMsg(String topic, String tags, String keys, byte[] msg, SendCallback sendCallback, boolean isOneway,
                                DelayTimeLevel delayTimeLevel, long timeout) throws Exception {
         Message message = createMessage(topic, tags, keys, msg, sendCallback, isOneway, delayTimeLevel, timeout);
         log.info("监听到消息发送, topic={}, tags={}, keys={}, msg={}, isOneway={}, delayTimeLevel={}, timeout={}",
@@ -162,7 +161,7 @@ public class RocketMQServer implements ServerFace {
      * @param selector 消息队列选择器，根据业务唯一标识自定义队列选择算法
      * @param arg      选择队列的业务标识
      */
-    private SendResult sendMsg(String topic, String tags, String keys, String msg, SendCallback sendCallback, boolean isOneway,
+    private SendResult sendMsg(String topic, String tags, String keys, byte[] msg, SendCallback sendCallback, boolean isOneway,
                                DelayTimeLevel delayTimeLevel, long timeout, MessageQueueSelector selector, Object arg) throws Exception {
         Message message = createMessage(topic, tags, keys, msg, sendCallback, isOneway, delayTimeLevel, timeout);
         log.info("监听到消息发送, message={}", message);
