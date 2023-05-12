@@ -82,6 +82,8 @@ public class NacosRegistryFactory extends AbstractRegistryFactory {
 
     private void setProperties(URL url, Properties properties) {
         putPropertyIfAbsent(url, properties, NAMESPACE);
+        putPropertyIfAbsent(url, properties, USERNAME);
+        putPropertyIfAbsent(url, properties, PASSWORD);
         putPropertyIfAbsent(url, properties, NACOS_NAMING_LOG_NAME);
         putPropertyIfAbsent(url, properties, ENDPOINT);
         putPropertyIfAbsent(url, properties, ACCESS_KEY);

@@ -111,10 +111,6 @@
             <artifactId>nutzboot-starter-nacos-discovery</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nacos-config</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
