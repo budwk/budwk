@@ -111,11 +111,11 @@ public class TcpDeviceGateway implements DeviceGateway {
                 });
     }
 
-    private void replyCmdSendResult(String replyTopic, NutMap result, Map<String, String> headers) {
-        if (Strings.isBlank(replyTopic)) {
+    private void replyCmdSendResult(String replyAddress, NutMap result, Map<String, String> headers) {
+        if (Strings.isBlank(replyAddress)) {
             return;
         }
-        MqMessage<NutMap> replyMqMessage = new MqMessage<>(replyTopic, result);
+        MqMessage<NutMap> replyMqMessage = new MqMessage<>(replyAddress, result);
         replyMqMessage.setSender(getInstanceId());
         replyMqMessage.getHeaders().putAll(headers);
         messageTransfer.publish(replyMqMessage);

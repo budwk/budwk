@@ -22,7 +22,7 @@ public class MqttMessage implements EncodedMessage {
 
     private int qosLevel;
 
-    private int messageId;
+    private String messageId;
 
     private boolean will;
 

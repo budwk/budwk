@@ -12,6 +12,18 @@ gateway:
       host: 0.0.0.0 # 绑定的host，默认 0.0.0.0
       payloadType: hex # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
       keepAliveTimeout:
+  demo_mqtt:
+    instanceId: #实例ID,不填写则默认生成,配置成固定值可方便日志跟踪
+    protocolType: mqtt # wk-device-gateway-tcp
+    handlerCode: demo_mqtt # 对应的协议解析包的标识
+    properties: # MQTT borker配置参数
+      port: 9320 # 端口号
+      host: 127.0.0.1 # MQTT borker的host，默认 0.0.0.0
+      payloadType: string # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
+      username: demo
+      password: 8F3B8DE2FDC8BD3D792BE77EAC412010971765E5BDD6C499ADCEE840CE441BDEF17E30684BD95CA708F55022222CC6161D0D23C2DFCB12F8AC998F59E7213393
+      clientId: #不填写则等于 instanceId
+      topic: /mqtt/device/#
   demo_http:
     instanceId: #实例ID,不填写则默认生成,配置成固定值可方便日志跟踪
     # http 网关如果同一个jvm实例种配置的端口一致，那么将会复用相同的 HttpServer，默认的路由地址为 /网关id/接入平台/up

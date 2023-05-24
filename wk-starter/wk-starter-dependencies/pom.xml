@@ -348,6 +348,11 @@
                 <artifactId>vertx-core</artifactId>
                 <version>${vertx.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-mqtt</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
             <!-- fst 序列化工具 -->
             <dependency>
                 <groupId>de.ruedigermoeller</groupId>
