@@ -77,6 +77,18 @@ public class TcpDeviceGateway implements DeviceGateway {
         startCmdListener();
     }
 
+    @Override
+    public void stop() {
+        if (isAlive()) {
+
+        }
+    }
+
+    @Override
+    public boolean isAlive() {
+        return tcpServer != null;
+    }
+
     private TcpMessage newTcpMessage(byte[] bytes) {
         TcpMessage tcpMessage = new TcpMessage(bytes);
         tcpMessage.setPayloadType(Strings.sBlank(configuration.getProperties().get("payloadType"), "hex"));

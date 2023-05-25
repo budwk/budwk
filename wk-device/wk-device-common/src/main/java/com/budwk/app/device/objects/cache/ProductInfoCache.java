@@ -1,14 +1,10 @@
 package com.budwk.app.device.objects.cache;
 
-import com.budwk.app.device.enums.IotPlatform;
-import com.budwk.app.device.enums.PayMode;
-import com.budwk.app.device.enums.ProtocolType;
-import com.budwk.app.device.enums.SettleMode;
+import com.budwk.app.device.enums.*;
 import lombok.Data;
 import org.nutz.lang.util.NutMap;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @author wizzer.cn
@@ -18,9 +14,9 @@ public class ProductInfoCache implements Serializable {
     private static final long serialVersionUID = -6680588310568121435L;
     private String id;
     private String name;
-    private String type;
-    private String secondType;
-    private String bizCode;
+    private String type;//一级分类ID
+    private String subType;//二级分类ID
+    private DeviceType deviceType;//设备业务类型
     private PayMode payMode;
     private SettleMode settleMode;
     private ProtocolType protocolType;

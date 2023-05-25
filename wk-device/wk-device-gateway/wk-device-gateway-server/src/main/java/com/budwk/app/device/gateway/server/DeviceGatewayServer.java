@@ -22,7 +22,17 @@ public class DeviceGatewayServer implements ServerFace {
         gatewayList.forEach(this::startGateway);
     }
 
+    @Override
+    public void stop() throws Exception {
+        List<DeviceGateway> gatewayList = deviceGatewayManager.loadGateway();
+        gatewayList.forEach(this::stopGateway);
+    }
+
     private void startGateway(DeviceGateway deviceGateway) {
         deviceGateway.start();
+    }
+
+    private void stopGateway(DeviceGateway deviceGateway) {
+        deviceGateway.stop();
     }
 }

@@ -30,6 +30,8 @@ public class ProductCachingImpl implements ProductCaching {
         cache.setId(product.getId());
         cache.setName(product.getName());
         cache.setType(product.getTypeId());
+        cache.setSubType(product.getSubTypeId());
+        cache.setDeviceType(product.getDeviceType());
         cache.setHandlerCode(product.getHandlerCode());
         cache.setPayMode(product.getPayMode());
         cache.setSettleMode(product.getSettleMode());

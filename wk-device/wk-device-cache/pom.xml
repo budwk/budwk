@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-database</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-redisjson</artifactId>
         </dependency>
     </dependencies>

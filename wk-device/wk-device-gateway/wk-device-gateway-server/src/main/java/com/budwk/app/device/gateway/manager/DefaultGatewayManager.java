@@ -10,12 +10,10 @@ import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
-import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author wizzer.cn
@@ -27,7 +25,7 @@ public class DefaultGatewayManager implements DeviceGatewayManager {
     @Inject
     private PropertiesProxy conf;
 
-    private CopyOnWriteArrayList<DeviceGateway> startedGatewayList = new CopyOnWriteArrayList<>();
+    private List<DeviceGateway> startedGatewayList = new ArrayList<>();
 
     @Inject
     private Ioc ioc;
@@ -38,18 +36,19 @@ public class DefaultGatewayManager implements DeviceGatewayManager {
 
     @Override
     public List<DeviceGateway> loadGateway() {
-        List<DeviceGateway> gatewayList = new ArrayList<>();
-        NutMap gatewayConfig = loadGatewayConfig();
-        for (String gatewayId : gatewayConfig.keySet()) {
-            NutMap config = gatewayConfig.getAs(gatewayId, NutMap.class);
-            DeviceGatewayConfiguration configuration = Lang.map2Object(config, DeviceGatewayConfiguration.class);
-            configuration.setId(gatewayId);
-            DeviceGateway gateway = createGateway(configuration);
-            if (null != gateway) {
-                gatewayList.add(gateway);
+        if (startedGatewayList.size() == 0) {
+            NutMap gatewayConfig = loadGatewayConfig();
+            for (String gatewayId : gatewayConfig.keySet()) {
+                NutMap config = gatewayConfig.getAs(gatewayId, NutMap.class);
+                DeviceGatewayConfiguration configuration = Lang.map2Object(config, DeviceGatewayConfiguration.class);
+                configuration.setId(gatewayId);
+                DeviceGateway gateway = createGateway(configuration);
+                if (null != gateway) {
+                    startedGatewayList.add(gateway);
+                }
             }
         }
-        return gatewayList;
+        return startedGatewayList;
     }
 
     private DeviceGateway createGateway(DeviceGatewayConfiguration configuration) {

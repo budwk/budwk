@@ -49,4 +49,8 @@ public class Device_info_state extends BaseModel implements Serializable {
     @Default("NOTACTIVE")
     private DeviceOnline online;
 
+    @Column
+    @Comment("接收时间")
+    @ApiModelProperty(description = "接收时间")
+    private Long receiveTime;
 }

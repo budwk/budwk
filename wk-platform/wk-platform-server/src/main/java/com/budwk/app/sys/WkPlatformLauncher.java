@@ -156,6 +156,14 @@ public class WkPlatformLauncher {
                 conf = new Sys_config();
                 conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
                 conf.setType(SysConfigType.TEXT);
+                conf.setConfigKey("AppFileDomainIn");
+                conf.setConfigValue("http://127.0.0.1:9900");
+                conf.setNote("文件访问内网域名");
+                conf.setOpened(true);
+                dao.insert(conf);
+                conf = new Sys_config();
+                conf.setAppId(GlobalConstant.DEFAULT_COMMON_APPID);
+                conf.setType(SysConfigType.TEXT);
                 conf.setConfigKey("AppUploadBase");
                 conf.setConfigValue("/upload");
                 conf.setNote("文件访问路径");

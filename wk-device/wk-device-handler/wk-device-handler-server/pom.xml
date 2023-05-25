@@ -13,6 +13,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-handler-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutz</artifactId>
         </dependency>
@@ -24,6 +29,26 @@
             <groupId>com.budwk.app</groupId>
             <artifactId>wk-device-handler-common</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-common</artifactId>
+            <version>8.2.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-dubbo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-database</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-cache</artifactId>
+            <version>8.2.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

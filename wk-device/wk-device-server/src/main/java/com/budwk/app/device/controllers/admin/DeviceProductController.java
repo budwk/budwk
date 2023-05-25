@@ -117,7 +117,7 @@ public class DeviceProductController {
     @SaCheckPermission("devcie.manage.product.create")
     public Result<?> create(@Param("..") Device_product deviceProduct, HttpServletRequest req) {
         deviceProduct.setCreatedBy(SecurityUtil.getUserId());
-        deviceProductService.insert(deviceProduct);
+        deviceProductService.createProduct(deviceProduct);
         return Result.success();
     }
 
@@ -133,7 +133,7 @@ public class DeviceProductController {
     @SaCheckPermission("devcie.manage.product.update")
     public Result<?> update(@Param("..") Device_product deviceProduct, HttpServletRequest req) {
         deviceProduct.setUpdatedBy(SecurityUtil.getUserId());
-        deviceProductService.updateIgnoreNull(deviceProduct);
+        deviceProductService.updateProduct(deviceProduct);
         return Result.success();
     }
 

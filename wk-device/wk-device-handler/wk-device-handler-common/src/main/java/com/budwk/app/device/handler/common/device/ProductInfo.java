@@ -18,6 +18,9 @@ public class ProductInfo implements Serializable {
 
     private String id;
     private String name;
+    private String typeId;//一级分类ID
+    private String subTypeId;//二级分类ID
+    private String deviceType;//设备业务类型
     /**
      * 计费方式：0 无 ，1 表端计费，2 平台计费
      */
@@ -29,7 +32,7 @@ public class ProductInfo implements Serializable {
     /**
      * 传输协议
      */
-    private String transportType;
+    private String protocolType;
     /**
      * 解析协议标识
      */

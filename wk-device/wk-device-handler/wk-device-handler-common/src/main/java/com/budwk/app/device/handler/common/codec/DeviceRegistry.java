@@ -4,6 +4,7 @@ import com.budwk.app.device.handler.common.device.CommandInfo;
 
 /**
  * 资源装载类
+ *
  * @author wizzer.cn
  */
 public interface DeviceRegistry {
@@ -29,14 +30,23 @@ public interface DeviceRegistry {
     /**
      * 通过设备id获取设备
      *
-     * @param deviceId 设备id
+     * @param deviceId 设备ID
      * @return
      */
     DeviceOperator getDeviceOperator(String deviceId);
 
+    /**
+     * 获取最早待下发指令
+     *
+     * @param deviceId 设备ID
+     * @return
+     */
     CommandInfo getDeviceCommand(String deviceId);
 
+    /**
+     * 设置设备在线状态
+     *
+     * @param deviceId 设备ID
+     */
     void updateDeviceOnline(String deviceId);
-
-    DeviceOperator getLastData(String deviceId, DeviceOperator operator);
 }

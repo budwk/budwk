@@ -17,7 +17,7 @@ gateway:
     protocolType: mqtt # wk-device-gateway-tcp
     handlerCode: demo_mqtt # 对应的协议解析包的标识
     properties: # MQTT borker配置参数
-      port: 9320 # 端口号
+      port: 9320 # MQTT borker的端口号
       host: 127.0.0.1 # MQTT borker的host，默认 0.0.0.0
       payloadType: string # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
       username: demo

@@ -104,6 +104,23 @@ public class MqttDeviceGateway implements DeviceGateway {
 
     }
 
+    @Override
+    public void stop() {
+        if (isAlive()) {
+            try {
+                client.disconnect();
+            } catch (Exception ignore) {
+
+            }
+            client = null;
+        }
+    }
+
+    @Override
+    public boolean isAlive() {
+        return client != null && client.isConnected();
+    }
+
     private void startCmdListener() {
         messageTransfer.subscribe(this.configuration.getId(), getInstanceAddress(), "*", MessageModel.BROADCASTING, ConsumeMode.CONCURRENTLY,
                 mqMessage -> {

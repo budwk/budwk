@@ -17,4 +17,14 @@ public interface DeviceGateway {
      * 启动
      */
     void start();
+
+    /**
+     * 停止
+     */
+    void stop();
+
+    /**
+     * @return 是否存活
+     */
+    boolean isAlive();
 }
