@@ -21,7 +21,7 @@ redis:
   max_redir: 10
   database: 0
   maxTotal: 100
-  #password: 123
+  password: pass123
   pool:
     maxTotal: 100
     maxIdle: 50
@@ -30,6 +30,14 @@ redis:
   mode: normal
   # cluster 集群模式
   #nodes:
+redisson:
+  # 集群/分片/主从等配置见 https://github.com/nutzam/nutzmore/tree/master/nutz-integration-redisson
+  mode: single
+  single:
+    address: redis://127.0.0.1:6379
+    password: pass123
+    database: 0
+
 nacos:
   discovery:
     server-addr: 10.10.10.10:8848
