@@ -41,6 +41,7 @@
         <hutool.version>5.8.11</hutool.version>
         <poi.version>4.1.2</poi.version>
         <vertx.version>4.2.6</vertx.version>
+        <neo4j.version>4.4.11</neo4j.version>
         <fst.version>2.57</fst.version>
         <oshi-core.version>5.7.3</oshi-core.version>
         <emoji-java.veision>5.1.1</emoji-java.veision>
@@ -352,6 +353,12 @@
                 <groupId>io.vertx</groupId>
                 <artifactId>vertx-mqtt</artifactId>
                 <version>${vertx.version}</version>
+            </dependency>
+            <!-- neo4j -->
+            <dependency>
+                <groupId>org.neo4j.driver</groupId>
+                <artifactId>neo4j-java-driver</artifactId>
+                <version>${neo4j.version}</version>
             </dependency>
             <!-- fst 序列化工具 -->
             <dependency>

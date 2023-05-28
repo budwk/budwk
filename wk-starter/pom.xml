@@ -28,6 +28,7 @@
         <module>wk-starter-rocketmq</module>
         <module>wk-starter-tdengine</module>
         <module>wk-starter-redisjson</module>
+        <module>wk-starter-neo4j</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

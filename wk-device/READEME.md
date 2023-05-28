@@ -37,5 +37,5 @@ MongoDB 或 TDengine | 时序数据库 | 是 | MongoDB 6.0 或 TDengine 3.0.4.0 
 ## 启动步骤
 
 * 管理后台，依次启动 `wk-gateway` `wk-platform-server` `wk-ucenter-server` `wk-device-server`
-* 设备接入，依次启动 `wk-device-gateway` `wk-device-handlers` `wk-device-processor`
+* 设备接入，依次启动 `wk-device-gateway` `wk-device-handler-server` `wk-device-processor`
 
