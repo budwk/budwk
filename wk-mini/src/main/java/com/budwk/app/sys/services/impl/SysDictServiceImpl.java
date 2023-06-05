@@ -72,6 +72,13 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
         return dict == null ? new ArrayList<>() : this.query(Cnd.where("parentId", "=", Strings.sNull(dict.getId())).asc("location"));
     }
 
+    @Override
+    @CacheResult
+    public List<Sys_dict> getSubListByCode(String filedName, String code) {
+        Sys_dict dict = this.fetch(Cnd.where("code", "=", code));
+        return dict == null ? new ArrayList<>() : this.query(filedName, Cnd.where("parentId", "=", Strings.sNull(dict.getId())).asc("location"));
+    }
+    
     /**
      * 通过父id获取下级列表
      *
