@@ -44,6 +44,17 @@ public class SysAreaServiceImpl extends BaseServiceImpl<Sys_area> implements Sys
 
     @Override
     @CacheResult
+    public List<Sys_area> getSubListByCode(String filedName, String code) {
+        if (Strings.isNotBlank(code)) {
+            Sys_area dict = this.fetch(Cnd.where("code", "=", code));
+            return dict == null ? new ArrayList<>() : this.query(filedName, Cnd.where("parentId", "=", Strings.sNull(dict.getId())).asc("location"));
+        } else {
+            return this.query(filedName, Cnd.where("parentId", "=", "").asc("location"));
+        }
+    }
+
+    @Override
+    @CacheResult
     public NutMap getSubMapByCode(String code) {
         if (Strings.isNotBlank(code)) {
             Sys_area area = this.fetch(Cnd.where("code", "=", code));

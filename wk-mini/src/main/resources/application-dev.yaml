@@ -1,6 +1,6 @@
 nutz:
   application:
-    name: wk-platform
+    name: wk-mini
 server:
   port: 9900
   host: 0.0.0.0

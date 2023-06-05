@@ -19,6 +19,14 @@ public interface SysAreaService extends BaseService<Sys_area> {
      */
     List<Sys_area> getSubListByCode(String code);
 
+    /**
+     * 通过code获取子级
+     *
+     * @param filedName 字段名
+     * @param code 标识
+     * @return
+     */
+    List<Sys_area> getSubListByCode(String filedName, String code);
 
     /**
      * 通过code获取子级

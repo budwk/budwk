@@ -43,6 +43,15 @@ public interface ISysDictProvider {
     List<Sys_dict> getSubListByCode(String code);
 
     /**
+     * 通过code获取子级
+     *
+     * @param filedName 字段名
+     * @param code 标识
+     * @return
+     */
+    List<Sys_dict> getSubListByCode(String filedName, String code);
+
+    /**
      * 通过父id获取下级列表
      *
      * @param id ID

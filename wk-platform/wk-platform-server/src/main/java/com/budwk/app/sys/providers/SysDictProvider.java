@@ -39,6 +39,11 @@ public class SysDictProvider implements ISysDictProvider {
     }
 
     @Override
+    public List<Sys_dict> getSubListByCode(String filedName, String code) {
+        return sysDictService.getSubListByCode(filedName, code);
+    }
+
+    @Override
     public List<Sys_dict> getSubListById(String id) {
         return sysDictService.getSubListById(id);
     }

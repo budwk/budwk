@@ -25,6 +25,17 @@ public class SysAreaProvider implements ISysAreaProvider {
         return sysAreaService.getSubListByCode(code);
     }
 
+    /**
+     * 通过code获取子级(code为空返回第一级)
+     *
+     * @param filedName 字段名
+     * @param code 标识
+     * @return
+     */
+    public List<Sys_area> getSubListByCode(String filedName, String code) {
+        return sysAreaService.getSubListByCode(filedName, code);
+    }
+
 
     /**
      * 通过code获取子级(code为空返回第一级)
