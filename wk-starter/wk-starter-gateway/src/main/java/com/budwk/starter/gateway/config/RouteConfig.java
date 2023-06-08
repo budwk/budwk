@@ -1,8 +1,8 @@
 package com.budwk.starter.gateway.config;
 
+import com.budwk.starter.config.NacosConfigureLoader;
 import com.budwk.starter.gateway.route.Router;
 import org.nutz.boot.AppContext;
-import org.nutz.boot.starter.nacos.NacosConfigureLoader;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
