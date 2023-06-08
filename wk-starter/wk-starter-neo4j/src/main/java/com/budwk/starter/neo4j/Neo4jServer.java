@@ -7,10 +7,7 @@ import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wizzer.cn
@@ -253,6 +250,28 @@ public class Neo4jServer {
         parameters.put(propertyKey, propertyValue);
 
         return executeReadQuery(query.toString(), parameters);
+    }
+
+    /**
+     * 查询是否存在某个属性的节点
+     *
+     * @param label         标签
+     * @param propertyKey   属性Key
+     * @param propertyValue 属性值
+     * @return
+     */
+    public boolean isNodeWithPropertyExists(String label, String propertyKey, Object propertyValue) {
+        String query = "MATCH (n:" + label + ") WHERE n." + propertyKey + " = $propertyValue RETURN COUNT(n) AS count";
+        Map<String, Object> parameters = Collections.singletonMap("propertyValue", propertyValue);
+
+        List<Map<String, Object>> result = executeReadQuery(query, parameters);
+        if (!result.isEmpty()) {
+            Map<String, Object> record = result.get(0);
+            long count = (long) record.get("count");
+            return count > 0;
+        }
+
+        return false;
     }
 
     public void close() {

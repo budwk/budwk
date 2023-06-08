@@ -23,13 +23,21 @@
 
     <dependencies>
         <!-- dm -->
-        <dependency>
+        <!--dependency>
             <groupId>com.dm</groupId>
             <artifactId>DmJdbcDriver</artifactId>
             <version>1.8</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/lib/DmJdbcDriver18.jar</systemPath>
-        </dependency>
+        </dependency-->
+        <!-- kingbase8 -->
+        <!--dependency>
+            <groupId>com.kingbase8</groupId>
+            <artifactId>kingbase8Driver</artifactId>
+            <version>8.6.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/kingbase8-8.6.0.jar</systemPath>
+        </dependency-->
         <!-- wk-starter -->
         <dependency>
             <groupId>com.budwk.starter</groupId>
