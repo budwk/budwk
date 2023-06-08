@@ -1,5 +1,6 @@
 package com.budwk.starter.neo4j;
 
+import com.budwk.starter.common.exception.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.neo4j.driver.*;
 import org.nutz.boot.annotation.PropDoc;
@@ -31,7 +32,7 @@ public class Neo4jServer {
     @PropDoc(value = "Neo4j 密码", defaultValue = "")
     public static final String PROP_PASSWORD = PRE + "password";
 
-    private Driver driver;
+    public Driver driver;
 
     public void init() {
         driver = GraphDatabase.driver(conf.get(PROP_URL), AuthTokens.basic(conf.get(PROP_USERNAME), conf.get(PROP_PASSWORD)));
@@ -58,8 +59,8 @@ public class Neo4jServer {
                 return resultList;
             });
         } catch (Exception e) {
-            log.error("Failed to execute query: " + e.getMessage());
-            return new ArrayList<>();
+            log.error(e.getMessage());
+            throw new BaseException("执行失败");
         }
     }
 
@@ -83,8 +84,8 @@ public class Neo4jServer {
                 return resultList;
             });
         } catch (Exception e) {
-            log.error("Failed to execute query: " + e.getMessage());
-            return new ArrayList<>();
+            log.error(e.getMessage());
+            throw new BaseException("执行失败");
         }
     }
 
@@ -94,7 +95,7 @@ public class Neo4jServer {
      * @param label      标签
      * @param properties 属性
      */
-    public String createNode(String label, Map<String, Object> properties) {
+    public void createNode(String label, Map<String, Object> properties) {
         StringBuilder query = new StringBuilder("CREATE (n:");
         query.append(label);
         query.append(" {");
@@ -111,51 +112,48 @@ public class Neo4jServer {
         query.append("})");
 
         try (Session session = driver.session()) {
-            return session.writeTransaction(tx -> {
+            session.writeTransaction(tx -> {
                 Result result = tx.run(query.toString(), properties);
-                return result.single().get("nodeId").asString();
+                return result.consume();
             });
         } catch (Exception e) {
-            log.error("Failed to execute query: " + e.getMessage());
-            return null;
+            log.error(e.getMessage());
+            throw new BaseException("创建失败");
         }
     }
+
 
     /**
-     * 更新节点
+     * 更新节点属性
      *
-     * @param label      标签
-     * @param id         主键
-     * @param properties 属性
+     * @param label       节点标签
+     * @param property    属性名
+     * @param value       属性值
+     * @param properties 更新的属性键值对
      */
-    public void updateNode(String label, String id, Map<String, Object> properties) {
-        StringBuilder query = new StringBuilder("MATCH (n:");
-        query.append(label);
-        query.append(" {id: $id}) SET ");
-        int i = 0;
-        for (Map.Entry<String, Object> entry : properties.entrySet()) {
-            query.append("n.");
-            query.append(entry.getKey());
-            query.append(" = $");
-            query.append(entry.getKey());
-            if (i < properties.size() - 1) {
-                query.append(", ");
-            }
-            i++;
+    public void updateNode(String label, String property, Object value, Map<String, Object> properties) {
+        try (Session session = driver.session()) {
+            session.writeTransaction(tx -> {
+                Result result = tx.run(
+                        "MATCH (node:" + label + "{" + property + ": $value}) " +
+                                "SET node += $props",
+                        parameters("value", value, "props", properties)
+                );
+                return result.consume();
+            });
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new BaseException("更新失败");
         }
-
-        Map<String, Object> parameters = new HashMap<>(properties);
-        parameters.put("id", id);
-
-        executeWriteQuery(query.toString(), parameters);
     }
+
 
     /**
      * 删除节点及其相关关系
      *
-     * @param label      节点标签
-     * @param property   属性名
-     * @param value      属性值
+     * @param label    节点标签
+     * @param property 属性名
+     * @param value    属性值
      */
     public void deleteNode(String label, String property, Object value) {
         try (Session session = driver.session()) {
@@ -168,7 +166,8 @@ public class Neo4jServer {
                 return result.consume();
             });
         } catch (Exception e) {
-            log.error("Failed to delete node: " + e.getMessage());
+            log.error(e.getMessage());
+            throw new BaseException("删除失败");
         }
     }
 
@@ -202,13 +201,13 @@ public class Neo4jServer {
     /**
      * 创建关系并指定属性
      *
-     * @param startNodeLabel     起始节点标签
-     * @param startNodeProperty  起始节点属性名
-     * @param startNodeValue     起始节点属性值
-     * @param endNodeLabel       结束节点标签
-     * @param endNodeProperty    结束节点属性名
-     * @param endNodeValue       结束节点属性值
-     * @param relationshipType   关系类型
+     * @param startNodeLabel         起始节点标签
+     * @param startNodeProperty      起始节点属性名
+     * @param startNodeValue         起始节点属性值
+     * @param endNodeLabel           结束节点标签
+     * @param endNodeProperty        结束节点属性名
+     * @param endNodeValue           结束节点属性值
+     * @param relationshipType       关系类型
      * @param relationshipProperties 关系属性
      */
     public void createRelationshipByProperty(String startNodeLabel, String startNodeProperty, Object startNodeValue,
@@ -225,7 +224,8 @@ public class Neo4jServer {
                 return result.consume();
             });
         } catch (Exception e) {
-            log.error("Failed to create relationship: " + e.getMessage());
+            log.error(e.getMessage());
+            throw new BaseException("建立关系失败");
         }
     }
 
