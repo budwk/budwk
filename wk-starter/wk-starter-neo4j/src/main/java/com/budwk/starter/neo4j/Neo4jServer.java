@@ -9,6 +9,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import java.util.*;
 
+import static org.neo4j.driver.Values.parameters;
+
 /**
  * @author wizzer.cn
  */
@@ -149,16 +151,25 @@ public class Neo4jServer {
     }
 
     /**
-     * 删除节点
+     * 删除节点及其相关关系
      *
-     * @param label 标签
-     * @param id    主键
+     * @param label      节点标签
+     * @param property   属性名
+     * @param value      属性值
      */
-    public void deleteNode(String label, String id) {
-        String query = "MATCH (n:" + label + " {id: $id}) DETACH DELETE n";
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("id", id);
-        executeWriteQuery(query, parameters);
+    public void deleteNode(String label, String property, Object value) {
+        try (Session session = driver.session()) {
+            session.writeTransaction(tx -> {
+                Result result = tx.run(
+                        "MATCH (node:" + label + "{" + property + ": $value}) " +
+                                "DETACH DELETE node",
+                        parameters("value", value)
+                );
+                return result.consume();
+            });
+        } catch (Exception e) {
+            log.error("Failed to delete node: " + e.getMessage());
+        }
     }
 
     /**
@@ -186,6 +197,36 @@ public class Neo4jServer {
         query.append(" RETURN n");
 
         return executeReadQuery(query.toString(), properties);
+    }
+
+    /**
+     * 创建关系并指定属性
+     *
+     * @param startNodeLabel     起始节点标签
+     * @param startNodeProperty  起始节点属性名
+     * @param startNodeValue     起始节点属性值
+     * @param endNodeLabel       结束节点标签
+     * @param endNodeProperty    结束节点属性名
+     * @param endNodeValue       结束节点属性值
+     * @param relationshipType   关系类型
+     * @param relationshipProperties 关系属性
+     */
+    public void createRelationshipByProperty(String startNodeLabel, String startNodeProperty, Object startNodeValue,
+                                             String endNodeLabel, String endNodeProperty, Object endNodeValue,
+                                             String relationshipType, Map<String, Object> relationshipProperties) {
+        try (Session session = driver.session()) {
+            session.writeTransaction(tx -> {
+                Result result = tx.run(
+                        "MATCH (start:" + startNodeLabel + "{" + startNodeProperty + ": $startValue}), " +
+                                "(end:" + endNodeLabel + "{" + endNodeProperty + ": $endValue}) " +
+                                "CREATE (start)-[r:" + relationshipType + "]->(end) SET r = $props",
+                        parameters("startValue", startNodeValue, "endValue", endNodeValue, "props", relationshipProperties)
+                );
+                return result.consume();
+            });
+        } catch (Exception e) {
+            log.error("Failed to create relationship: " + e.getMessage());
+        }
     }
 
     /**
