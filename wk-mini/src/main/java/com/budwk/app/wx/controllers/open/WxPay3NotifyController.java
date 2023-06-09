@@ -26,7 +26,7 @@ public class WxPay3NotifyController {
     private String mchid;
 
     public void init() {
-        mchid = ""; //商户号:可从配置文件或者 wx_pay 表里获取
+        mchid = ""; //商户号:可从配置文件或者 wx_mina/wx_config 表里获取
     }
 
     @At("/notify")
