@@ -37,12 +37,10 @@ public class NutzPropertyAction extends Action {
     }
 
     private String getValue(String source, String defaultValue) {
-        System.out.println("source:::"+source);
         if (this.conf == null) {
             System.out.println("No Properties available to resolve " + source);
             return defaultValue;
         }
-        System.out.println("value:::"+this.conf.get(source, defaultValue));
         return this.conf.get(source, defaultValue);
     }
 
