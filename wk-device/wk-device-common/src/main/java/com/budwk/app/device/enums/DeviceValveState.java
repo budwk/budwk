@@ -8,7 +8,7 @@ import org.nutz.lang.util.NutMap;
  * @author wizzer.cn
  */
 @JsonShape(JsonShape.Type.OBJECT)
-public enum ValveState {
+public enum DeviceValveState {
     NONE(-2, "无阀门"),
     UNKNOWN(-1, "未知"),
     ON(0, "开启"),
@@ -22,13 +22,13 @@ public enum ValveState {
     private int value;
     private String text;
 
-    ValveState(int value, String text) {
+    DeviceValveState(int value, String text) {
         this.value = value;
         this.text = text;
     }
 
-    public static ValveState from(int value) {
-        for (ValveState c : ValveState.values()) {
+    public static DeviceValveState from(int value) {
+        for (DeviceValveState c : DeviceValveState.values()) {
             if (value == c.value) {
                 return c;
             }
@@ -38,7 +38,7 @@ public enum ValveState {
 
     public static NutMap toMap() {
         NutMap map = NutMap.NEW();
-        for (ValveState v : ValveState.values()) {
+        for (DeviceValveState v : DeviceValveState.values()) {
             map.put(String.valueOf(v.getValue()), v.getText());
         }
         return map;

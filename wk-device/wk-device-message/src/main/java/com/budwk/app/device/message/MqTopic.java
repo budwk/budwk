@@ -17,7 +17,7 @@ public class MqTopic {
     // 设备告警topic
     public static final String SERVICE_NOTIFY_ALARM = "device.notify.alarm";
     // 解析器修改topic
-    public static final String SERVICE_PROTOCOL_EVENT = "device.handler.event";
+    public static final String SERVICE_HANDLER_EVENT = "device.handler.event";
     // 解析器重载事件topic
-    public static final String SERVICE_PROTOCOL_RELOAD = "device.handler.reload";
+    public static final String SERVICE_HANDLER_RELOAD = "device.handler.reload";
 }

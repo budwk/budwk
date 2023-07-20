@@ -32,6 +32,11 @@
             <artifactId>wk-device-storage-mongodb</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-message</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- wk-starter -->
         <dependency>
             <groupId>com.budwk.starter</groupId>

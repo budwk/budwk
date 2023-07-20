@@ -2,6 +2,7 @@ package com.budwk.app.device.providers;
 
 import com.budwk.app.device.enums.DeviceOnline;
 import com.budwk.app.device.enums.DeviceState;
+import com.budwk.app.device.enums.DeviceValveState;
 import com.budwk.app.device.models.Device_info;
 import com.budwk.app.device.models.Device_product;
 import org.nutz.dao.Cnd;
@@ -48,4 +49,14 @@ public interface IDeviceInfoProvider {
      * @param online   在线状态
      */
     void updateDeviceState(String deviceId, DeviceState state, DeviceOnline online);
+
+    /**
+     * 更新表具设备阀门状态
+     *
+     * @param deviceId 设备ID
+     * @param state    阀门状态
+     */
+    void updateMeterValveState(String deviceId, DeviceValveState state);
+
+    void updateIgnoreNull(Device_info deviceInfo);
 }

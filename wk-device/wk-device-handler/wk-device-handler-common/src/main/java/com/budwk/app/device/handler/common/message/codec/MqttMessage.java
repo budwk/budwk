@@ -1,6 +1,7 @@
 package com.budwk.app.device.handler.common.message.codec;
 
 
+import com.budwk.app.device.handler.common.enums.TransportType;
 import com.budwk.app.device.handler.common.utils.ByteConvertUtil;
 import lombok.Data;
 
@@ -29,6 +30,23 @@ public class MqttMessage implements EncodedMessage {
     private boolean dup;
 
     private boolean retain;
+
+    private final String handlerCode;
+
+    @Override
+    public String getMessageId() {
+        return messageId;
+    }
+
+    @Override
+    public TransportType getTransportType() {
+        return TransportType.MQTT;
+    }
+
+    @Override
+    public String getHandlerCode() {
+        return handlerCode;
+    }
 
 
     @Override

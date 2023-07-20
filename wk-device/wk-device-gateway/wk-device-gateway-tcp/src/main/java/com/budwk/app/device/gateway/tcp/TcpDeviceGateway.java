@@ -90,7 +90,7 @@ public class TcpDeviceGateway implements DeviceGateway {
     }
 
     private TcpMessage newTcpMessage(byte[] bytes) {
-        TcpMessage tcpMessage = new TcpMessage(bytes);
+        TcpMessage tcpMessage = new TcpMessage(bytes, configuration.getHandlerCode());
         tcpMessage.setPayloadType(Strings.sBlank(configuration.getProperties().get("payloadType"), "hex"));
         return tcpMessage;
     }

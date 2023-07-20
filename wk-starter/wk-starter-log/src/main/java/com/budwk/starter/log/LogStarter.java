@@ -51,10 +51,11 @@ public class LogStarter {
     protected PropertiesProxy conf;
 
     public void init() {
-        System.out.println("load pid ...");
+        System.out.println("logback load pid ...");
         conf.set("nutz.application.pid", Lang.JdkTool.getProcessId("0"));
-        conf.set(PROP_PATH, conf.get(PROP_PATH, "logs"));
-        URL fn = getClass().getClassLoader().getResource(conf.getBoolean(PROP_COLOR) ? "logback-color.xml" : "logback-no-color.xml");
+        conf.set("log.path", conf.get(PROP_PATH, "logs"));
+
+        URL fn = getClass().getClassLoader().getResource(conf.getBoolean(PROP_COLOR,false) ? "logback-color.xml" : "logback-no-color.xml");
         try {
             LoggerContext loggerContext = (LoggerContext) StaticLoggerBinder.getSingleton().getLoggerFactory();
             loggerContext.reset();
@@ -67,6 +68,8 @@ public class LogStarter {
             log.info("loaded slf4j configure file from {}", fn);
         } catch (JoranException e) {
             log.error("can loading slf4j configure file from " + fn, e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

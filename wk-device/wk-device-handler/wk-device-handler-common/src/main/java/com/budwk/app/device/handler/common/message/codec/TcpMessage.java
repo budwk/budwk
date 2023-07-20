@@ -1,6 +1,7 @@
 package com.budwk.app.device.handler.common.message.codec;
 
 
+import com.budwk.app.device.handler.common.enums.TransportType;
 import com.budwk.app.device.handler.common.utils.ByteConvertUtil;
 import lombok.Data;
 
@@ -16,6 +17,23 @@ public class TcpMessage implements EncodedMessage {
      * 数据格式，默认是16进制，可选：hex 16进制（默认），string 字符串
      */
     private String payloadType = "hex";
+    private String messageId;
+    private final String handlerCode;
+
+    @Override
+    public String getMessageId() {
+        return messageId;
+    }
+
+    @Override
+    public TransportType getTransportType() {
+        return TransportType.TCP;
+    }
+
+    @Override
+    public String getHandlerCode() {
+        return handlerCode;
+    }
 
     @Override
     public byte[] getPayload() {

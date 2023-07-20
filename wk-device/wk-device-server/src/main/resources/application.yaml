@@ -1,4 +1,4 @@
-asddcnutz:
+nutz:
   application:
     name: wk-device
 server:
@@ -113,3 +113,15 @@ storage:
 job:
   # 定时任务所在的包名 多个包名用,分割
   package: com.budwk.app.device.commons.task
+
+rocketmq:
+  # 集群环境多个nameserver用;分割
+  nameserver-address: 127.0.0.1:9876
+  # 生产者组
+  producer-group: wk_local_producer
+  consumer-thread-max: 0
+  consumer-thread-min: 0
+
+log:
+  level: debug
+  color: true

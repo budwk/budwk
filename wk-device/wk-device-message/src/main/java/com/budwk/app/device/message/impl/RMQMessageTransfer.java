@@ -103,6 +103,11 @@ public class RMQMessageTransfer implements MessageTransfer {
         }
     }
 
+    @Override
+    public <T extends Serializable> void subscribe(String consumerGroup, String topic, Consumer<MqMessage<T>> consumer) {
+        this.subscribe(consumerGroup, topic, "*", MessageModel.CLUSTERING, ConsumeMode.CONCURRENTLY, consumer);
+    }
+
     public void close() {
         for (DefaultMQPushConsumer consumer : consumerList) {
             if (consumer != null) {

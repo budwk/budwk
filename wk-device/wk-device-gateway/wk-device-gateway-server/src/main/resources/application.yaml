@@ -8,7 +8,7 @@ gateway:
     protocolType: tcp # wk-device-gateway-tcp
     handlerCode: demo_meter # 对应的协议解析包的标识
     properties: # 网关的配置参数
-      port: 9320 # 端口号
+      port: 9310 # 端口号
       host: 0.0.0.0 # 绑定的host，默认 0.0.0.0
       payloadType: hex # 数据类型，可选 hex 和string 默认是 hex。hex 16进制字符串，string 常规字符串
       keepAliveTimeout:

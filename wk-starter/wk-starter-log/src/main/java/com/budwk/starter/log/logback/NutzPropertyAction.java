@@ -6,6 +6,7 @@ import ch.qos.logback.core.joran.spi.ActionException;
 import ch.qos.logback.core.joran.spi.InterpretationContext;
 import ch.qos.logback.core.util.OptionHelper;
 import org.nutz.ioc.impl.PropertiesProxy;
+import org.nutz.json.Json;
 import org.xml.sax.Attributes;
 
 /**
@@ -30,16 +31,18 @@ public class NutzPropertyAction extends Action {
         ActionUtil.Scope scope = ActionUtil.stringToScope(attributes.getValue(SCOPE_ATTRIBUTE));
         String defaultValue = attributes.getValue(DEFAULT_VALUE_ATTRIBUTE);
         if (OptionHelper.isEmpty(name) || OptionHelper.isEmpty(source)) {
-            addError("The \"name\" and \"source\" attributes of <nutzProperty> must be set");
+            System.out.println("The \"name\" and \"source\" attributes of <nutzProperty> must be set");
         }
         ActionUtil.setProperty(context, name, getValue(source, defaultValue), scope);
     }
 
     private String getValue(String source, String defaultValue) {
+        System.out.println("source:::"+source);
         if (this.conf == null) {
-            addWarn("No Properties available to resolve " + source);
+            System.out.println("No Properties available to resolve " + source);
             return defaultValue;
         }
+        System.out.println("value:::"+this.conf.get(source, defaultValue));
         return this.conf.get(source, defaultValue);
     }
 

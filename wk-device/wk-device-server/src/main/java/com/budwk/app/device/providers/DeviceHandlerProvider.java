@@ -1,5 +1,6 @@
 package com.budwk.app.device.providers;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.device.models.Device_handler;
 import com.budwk.app.device.objects.dto.DeviceHandlerDTO;
@@ -19,6 +20,7 @@ import static com.budwk.starter.common.constant.GlobalConstant.DEFAULT_COMMON_AP
 @IocBean
 public class DeviceHandlerProvider implements IDeviceHandlerProvider {
     @Inject
+    @Reference(check = false)
     private ISysConfigProvider sysConfigProvider;
     @Inject
     private DeviceHandlerService deviceHandlerService;

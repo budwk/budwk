@@ -32,4 +32,7 @@ public interface MessageTransfer {
      * @param <T>
      */
     <T extends Serializable> void subscribe(String consumerGroup, String topic, String tag, MessageModel messageModel, ConsumeMode consumeMode, Consumer<MqMessage<T>> consumer);
+
+
+    <T extends Serializable> void subscribe(String consumerGroup, String topic, Consumer<MqMessage<T>> consumer);
 }

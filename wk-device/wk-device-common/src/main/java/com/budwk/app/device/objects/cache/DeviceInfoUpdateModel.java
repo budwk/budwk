@@ -1,6 +1,6 @@
 package com.budwk.app.device.objects.cache;
 
-import com.budwk.app.device.enums.ValveState;
+import com.budwk.app.device.enums.DeviceValveState;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,6 +20,6 @@ public class DeviceInfoUpdateModel implements Serializable {
     // 上次接收时间
     private Long lastReceiveTime;
     // 阀门状态
-    private ValveState lastValveState;
+    private DeviceValveState lastDeviceValveState;
 
 }

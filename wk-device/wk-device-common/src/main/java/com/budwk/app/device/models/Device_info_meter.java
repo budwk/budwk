@@ -1,6 +1,6 @@
 package com.budwk.app.device.models;
 
-import com.budwk.app.device.enums.ValveState;
+import com.budwk.app.device.enums.DeviceValveState;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
@@ -20,14 +20,11 @@ import java.io.Serializable;
 @Table
 @TableMeta("{'mysql-charset':'utf8mb4'}")
 @TableIndexes({
-        @Index(name = "IDX_DEVICE_CODE", fields = "deviceCode"),
-        @Index(name = "IDX_DEVICE_CONNET_NO", fields = "deviceNo", unique = false),
-        @Index(name = "IDX_DEVICE_NO", fields = "deviceNo", unique = false),
-        @Index(name = "IDX_DEVICE_IMEI", fields = "imei", unique = false),
-        @Index(name = "IDX_DEVICE_PRODUCT_ID", fields = "productId", unique = false),
+        @Index(name = "IDX_DEVICE_METER_ID", fields = "deviceId"),
+        @Index(name = "IDX_DEVICE_METER_TIME", fields = "receiveTime", unique = false),
 })
-@Comment("设备信息")
-@ApiModel(description = "设备信息")
+@Comment("表具设备信息")
+@ApiModel(description = "表具设备信息")
 public class Device_info_meter extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -62,5 +59,5 @@ public class Device_info_meter extends BaseModel implements Serializable {
     @Comment("阀门状态")
     @ApiModelProperty(description = "阀门状态")
     @ColDefine(type = ColType.INT, width = 1)
-    private ValveState valveState;
+    private DeviceValveState deviceValveState;
 }

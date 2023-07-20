@@ -3,12 +3,15 @@ package com.budwk.app.device.providers;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.device.enums.DeviceOnline;
 import com.budwk.app.device.enums.DeviceState;
+import com.budwk.app.device.enums.DeviceValveState;
 import com.budwk.app.device.models.Device_info;
 import com.budwk.app.device.models.Device_info_state;
 import com.budwk.app.device.models.Device_product;
+import com.budwk.app.device.services.DeviceInfoMeterService;
 import com.budwk.app.device.services.DeviceInfoService;
 import com.budwk.app.device.services.DeviceInfoStateService;
 import com.budwk.app.device.services.DeviceProductService;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -25,6 +28,8 @@ public class DeviceInfoProvider implements IDeviceInfoProvider {
     private DeviceInfoService deviceInfoService;
     @Inject
     private DeviceInfoStateService deviceInfoStateService;
+    @Inject
+    private DeviceInfoMeterService deviceInfoMeterService;
 
     @Override
     public Device_product getProduct(String productId) {
@@ -89,5 +94,14 @@ public class DeviceInfoProvider implements IDeviceInfoProvider {
             deviceInfoState.setReceiveTime(System.currentTimeMillis());
             deviceInfoStateService.updateIgnoreNull(deviceInfoState);
         }
+    }
+
+    public void updateMeterValveState(String deviceId, DeviceValveState state){
+        deviceInfoMeterService.update(Chain.make("deviceValveState",state),Cnd.where("deviceId","=",deviceId));
+    }
+
+    @Override
+    public void updateIgnoreNull(Device_info updateDeviceInfo) {
+        deviceInfoService.updateIgnoreNull(updateDeviceInfo);
     }
 }

@@ -13,4 +13,10 @@ public interface DeviceCommandRecordService extends BaseService<Device_cmd_recor
      * @return
      */
     Device_cmd_record getNeedSendCommand(String deviceId);
+
+    Device_cmd_record getById(String commandId);
+
+    void updateField(Device_cmd_record cmdRecord);
+
+    void save(Device_cmd_record command);
 }

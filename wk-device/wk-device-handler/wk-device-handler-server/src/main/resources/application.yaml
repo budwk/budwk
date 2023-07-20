@@ -13,6 +13,13 @@ platform:
 database:
   enable: false #是否启用数据库功能
 
+rocketmq:
+  # 集群环境多个nameserver用;分割
+  nameserver-address: 127.0.0.1:9876
+  # 生产者组
+  producer-group: wk_local_producer
+  consumer-thread-max: 0
+  consumer-thread-min: 0
 
 redis:
   host: 127.0.0.1
@@ -66,3 +73,7 @@ dubbo:
 # log存储方式为 mongodb 设置
 mongodb:
   url: mongodb://10.10.10.10:27017/budwk_v8
+
+log:
+  level: debug
+  color: true

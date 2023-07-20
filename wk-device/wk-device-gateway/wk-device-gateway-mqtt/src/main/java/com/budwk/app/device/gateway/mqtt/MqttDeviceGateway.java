@@ -66,7 +66,7 @@ public class MqttDeviceGateway implements DeviceGateway {
         client.publishHandler(s -> {
             try {
                 // 根据实际情况修改
-                MqttMessage mqttMessage = new MqttMessage(s.payload().getBytes());
+                MqttMessage mqttMessage = new MqttMessage(s.payload().getBytes(), configuration.getHandlerCode());
                 mqttMessage.setMessageId(s.messageId() + "");
                 mqttMessage.setClientId(client.clientId());
                 mqttMessage.setPayloadType(Strings.sNull(configuration.getProperties().get("payloadType")));

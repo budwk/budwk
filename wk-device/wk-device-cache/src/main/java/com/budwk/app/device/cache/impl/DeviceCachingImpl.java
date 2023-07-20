@@ -59,7 +59,7 @@ public class DeviceCachingImpl implements DeviceCaching {
             cache.setLastReadNumber(deviceInfoMeter.getReadNumber());
             cache.setLastReceiveTime(deviceInfoMeter.getReceiveTime());
             cache.setLastReadTime(deviceInfoMeter.getReadTime());
-            cache.setLastValveState(deviceInfoMeter.getValveState());
+            cache.setLastDeviceValveState(deviceInfoMeter.getDeviceValveState());
         }
         String ok = redisJsonService.setObject(CacheConstant.DEVICE_CACHE_KEY.concat(deviceInfo.getId()), cache);
         return ok.equals(CacheConstant.SUCCESS);
