@@ -29,6 +29,7 @@
         <module>wk-starter-tdengine</module>
         <module>wk-starter-redisjson</module>
         <module>wk-starter-neo4j</module>
+        <module>wk-starter-elasticsearch</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

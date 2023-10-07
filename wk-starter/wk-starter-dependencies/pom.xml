@@ -45,6 +45,8 @@
         <fst.version>2.57</fst.version>
         <oshi-core.version>5.7.3</oshi-core.version>
         <emoji-java.veision>5.1.1</emoji-java.veision>
+        <elasticsearch.veision>8.9.0</elasticsearch.veision>
+
         <maven.plugin.version>3.8.1</maven.plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
@@ -158,6 +160,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>wk-starter-neo4j</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-elasticsearch</artifactId>
                 <version>${budwk.version}</version>
             </dependency>
             <!-- nutz -->
@@ -364,6 +371,32 @@
                 <groupId>org.neo4j.driver</groupId>
                 <artifactId>neo4j-java-driver</artifactId>
                 <version>${neo4j.version}</version>
+            </dependency>
+            <!-- neo4j -->
+            <dependency>
+                <groupId>org.neo4j.driver</groupId>
+                <artifactId>neo4j-java-driver</artifactId>
+                <version>${neo4j.version}</version>
+            </dependency>
+            <!-- elasticsearch -->
+            <dependency>
+                <groupId>co.elastic.clients</groupId>
+                <artifactId>elasticsearch-java</artifactId>
+                <version>${elasticsearch.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpcore-nio</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!-- fst 序列化工具 -->
             <dependency>
