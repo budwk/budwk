@@ -37,7 +37,9 @@ const appName = computed(() => getAppName(useClient().appId ? useClient().appId 
 const getAppName = (id: string) => {
     if (apps.value && apps.value.length > 0) {
         var index = apps.value.findIndex(obj => obj.id === id)
-        return apps.value[index].name
+        if (apps.value[index]) {
+            return apps.value[index].name
+        }
     }
     return ''
 }
@@ -45,7 +47,9 @@ const getAppName = (id: string) => {
 const getAppPath = (id: string) => {
     if (apps.value && apps.value.length > 0) {
         var index = apps.value.findIndex(obj => obj.id === id)
-        return apps.value[index].path
+        if (apps.value[index]) {
+            return apps.value[index].path
+        }
     }
     return ''
 }

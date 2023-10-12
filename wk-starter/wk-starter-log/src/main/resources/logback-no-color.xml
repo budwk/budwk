@@ -52,7 +52,7 @@
     <logger name="ch.qos.logback" level="ERROR"/>
     <logger name="org.redisson" level="INFO"/>
     <logger name="org.quartz" level="INFO"/>
-    
+
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ASYNC"/>
