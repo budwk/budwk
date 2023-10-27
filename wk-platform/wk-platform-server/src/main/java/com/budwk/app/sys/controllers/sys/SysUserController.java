@@ -234,7 +234,7 @@ public class SysUserController {
     @ApiResponses
     @SaCheckPermission("sys.manage.user")
     public Result<?> number(HttpServletRequest req) {
-        Sql sql = Sqls.create("select max(serialNo) from sys_user");
+        Sql sql = Sqls.create("select max(CAST(serialNo AS SIGNED)) from sys_user");
         sql.setCallback(Sqls.callback.integer());
         sysUserService.dao().execute(sql);
         return Result.data(sql.getInt() + 1);
