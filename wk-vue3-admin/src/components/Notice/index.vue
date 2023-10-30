@@ -23,7 +23,7 @@ link type="primary"
              >
   
               <el-row>
-                <el-col :span="24" style="padding-bottom: 5px;">{{ item.title }}</el-col>
+                <el-col :span="24" style="padding-bottom: 5px;white-space: normal;">{{ item.title }}</el-col>
                 <el-col :span="24" style="color: #00c1de;">{{ item.time }}</el-col>
               </el-row>
             </el-button>
