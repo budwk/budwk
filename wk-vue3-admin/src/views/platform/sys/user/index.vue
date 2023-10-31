@@ -754,6 +754,8 @@ const create = () => {
                 showCreate.value = false
                 queryParams.value.pageNo = 1
                 list()
+            }).catch(() => {
+                btnLoading.value = false
             })
         }
     })
@@ -770,6 +772,8 @@ const update = () => {
                 modal.msgSuccess(res.msg)
                 showUpdate.value = false
                 list()
+            }).catch(() => {
+                btnLoading.value = false
             })
         }
     })
