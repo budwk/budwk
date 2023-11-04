@@ -1,5 +1,5 @@
 <template>
-    <transition-group name="fade-transform" mode="out-in">
+    <transition-group name="fade-transform">
       <inner-link
         v-for="(item, index) in tagsViewStore.iframeViews"
         :key="item.path"
@@ -9,13 +9,12 @@
       ></inner-link>
     </transition-group>
   </template>
-  
+
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import InnerLink from '../InnerLink/index.vue'
 import { useTagsView } from '/@/stores/tagsView'
-  
+
 const route = useRoute()
 const tagsViewStore = useTagsView()
 </script>
-  
