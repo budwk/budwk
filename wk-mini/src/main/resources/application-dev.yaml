@@ -74,7 +74,7 @@ redisson:
   mode: single
   single:
     address: redis://127.0.0.1:6379
-    password: 'pass123'
+    password: ''
 
 redis:
   host: 127.0.0.1
@@ -83,7 +83,7 @@ redis:
   max_redir: 10
   database: 0
   maxTotal: 100
-  password: 'pass123'
+  #password: 'pass123'
   pool:
     maxTotal: 100
     maxIdle: 50

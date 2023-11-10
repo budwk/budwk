@@ -3,6 +3,7 @@ package com.budwk.app.sys.models;
 import com.budwk.starter.common.openapi.annotation.ApiModel;
 import com.budwk.starter.common.openapi.annotation.ApiModelProperty;
 import com.budwk.starter.database.model.BaseModel;
+import com.budwk.starter.excel.annotation.Excel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nutz.dao.DB;
@@ -37,12 +38,14 @@ public class Sys_post extends BaseModel implements Serializable {
     @Column
     @Comment("职务名称")
     @ApiModelProperty(description = "职务名称",required = true,check = true)
+    @Excel(name = "职务名称", cellType = Excel.ColumnType.STRING, prompt = "职务名称")
     @ColDefine(type = ColType.VARCHAR, width = 50)
     private String name;
 
     @Column
     @Comment("职务编号")
     @ApiModelProperty(description = "职务编号")
+    @Excel(name = "职务编号", cellType = Excel.ColumnType.STRING, prompt = "职务编号")
     @ColDefine(type = ColType.VARCHAR, width = 25)
     private String code;
 

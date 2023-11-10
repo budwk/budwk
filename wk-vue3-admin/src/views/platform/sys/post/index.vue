@@ -5,6 +5,15 @@
                 <el-button plain type="primary" icon="Plus" @click="handleCreate" v-permission="['sys.manage.post.create']">新增
                 </el-button>
             </el-col>
+            <el-col :span="1.5">
+                <import
+                        v-permission="['sys.manage.post.create']"
+                        btn-text="导 入"
+                        :action="API_SYS_POST_IMPORT"
+                        temp-url="/tpl/template_post.xlsx"
+                        @refresh="quickSearch"
+                    />
+            </el-col>
             <right-toolbar @quickSearch="quickSearch" />
         </el-row>
         <el-table v-loading="tableLoading" :data="tableData" row-key="id">
@@ -84,7 +93,7 @@
 <script setup lang="ts" name="platform-sys-post">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import modal from '/@/utils/modal'
-import { doCreate, doUpdate, getInfo, getList, doDelete, doLocation } from '/@/api/platform/sys/post'
+import { doCreate, doUpdate, getInfo, getList, doDelete, doLocation, API_SYS_POST_IMPORT } from '/@/api/platform/sys/post'
 import { toRefs } from '@vueuse/core'
 import { ElForm } from 'element-plus'
 

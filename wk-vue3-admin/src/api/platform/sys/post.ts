@@ -4,6 +4,7 @@ export const API_SYS_POST_CREATE = '/platform/sys/post/create'
 export const API_SYS_POST_DELETE = '/platform/sys/post/delete/'
 export const API_SYS_POST_UPDATE = '/platform/sys/post/update'
 export const API_SYS_POST_LOCATION = '/platform/sys/post/location'
+export const API_SYS_POST_IMPORT = '/platform/sys/post/import'
 
 import request from '/@/utils/request'
 

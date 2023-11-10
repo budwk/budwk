@@ -1,13 +1,16 @@
 package com.budwk.app.sys.controllers.sys;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.budwk.app.sys.models.Sys_post;
 import com.budwk.app.sys.services.SysPostService;
+import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.openapi.enums.ParamIn;
 import com.budwk.starter.common.page.Pagination;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.common.result.ResultCode;
+import com.budwk.starter.excel.utils.ExcelUtil;
 import com.budwk.starter.log.annotation.SLog;
 import com.budwk.starter.security.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +19,12 @@ import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.impl.AdaptorErrorContext;
+import org.nutz.mvc.upload.TempFile;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author wizzer@qq.com
@@ -30,6 +37,42 @@ import javax.servlet.http.HttpServletRequest;
 public class SysPostController {
     @Inject
     private SysPostService sysPostService;
+
+    @At("/import")
+    @POST
+    @Ok("json:full")
+    @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
+    @SaCheckLogin
+    @ApiOperation(name = "导入数据")
+    @ApiFormParams(
+            value = {
+                    @ApiFormParam(name = "Filedata", example = "", description = "文件表单对象名"),
+                    @ApiFormParam(name = "cover", example = "", description = "是否覆盖"),
+            },
+            mediaType = "multipart/form-data"
+    )
+    @ApiResponses
+    public Result<?> importData(@Param("Filedata") TempFile tf, @Param(value = "cover", df = "false") boolean cover, HttpServletRequest req, AdaptorErrorContext err) {
+        if (err != null && err.getAdaptorErr() != null) {
+            return Result.error("上传文件错误");
+        } else if (tf == null) {
+            return Result.error("未上传文件");
+        } else {
+            String suffixName = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().lastIndexOf(".")).toLowerCase();
+            if (!".xls".equalsIgnoreCase(suffixName) && !".xlsx".equalsIgnoreCase(suffixName)) {
+                return Result.error("请上传.xls/.xlsx格式文件");
+            }
+            try {
+                ExcelUtil<Sys_post> util = new ExcelUtil<>(Sys_post.class);
+                List<Sys_post> list = util.importExcel(tf.getInputStream());
+                sysPostService.importData(tf.getSubmittedFileName(), list, cover, SecurityUtil.getUserId(), SecurityUtil.getUserLoginname());
+                return Result.success("文件上传成功，处理结果将通过站内信通知");
+            } catch (Exception e) {
+                throw new BaseException("文件处理失败");
+            }
+        }
+
+    }
 
     @At
     @Ok("json")
