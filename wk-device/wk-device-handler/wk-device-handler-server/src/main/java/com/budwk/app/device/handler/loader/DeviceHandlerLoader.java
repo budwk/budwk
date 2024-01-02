@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DeviceHandlerLoader implements HandlerLoader {
 
     @Inject
-    @Reference
+    @Reference(check = false)
     private IDeviceHandlerProvider deviceHandlerProvider;
 
     private final ConcurrentHashMap<String, ClassLoader> classLoaders = new ConcurrentHashMap<>();

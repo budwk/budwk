@@ -16,7 +16,7 @@ import java.util.Map;
 @IocBean
 public class DefaultDeviceEventContext implements DeviceEventContext {
     @Inject
-    @Reference
+    @Reference(check = false)
     private IDeviceInfoProvider deviceInfoProvider;
 
     @Override

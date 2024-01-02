@@ -48,7 +48,12 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.app</groupId>
-            <artifactId>wk-device-storage-common</artifactId>
+            <artifactId>wk-device-storage-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-storage-mongodb</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

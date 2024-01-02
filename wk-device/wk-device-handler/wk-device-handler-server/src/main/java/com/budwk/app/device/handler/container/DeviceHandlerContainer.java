@@ -123,7 +123,7 @@ public class DeviceHandlerContainer {
             // 下发一个结束指令
             delayTaskHelper.delayRun(() -> {
                 noMoreCommand(deviceOperator);
-            }, 3);
+            }, 5);
             return;
         }
         // 构造指令
