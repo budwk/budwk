@@ -8,6 +8,11 @@
     <artifactId>wk-device-storage-starter</artifactId>
     <version>${project.version}</version>
 </dependency>
+<dependency>
+    <groupId>com.budwk.app</groupId>
+    <artifactId>wk-device-storage-mongodb</artifactId>
+    <version>${project.version}</version>
+</dependency>
 ```
 
 * 设备数据存储配置

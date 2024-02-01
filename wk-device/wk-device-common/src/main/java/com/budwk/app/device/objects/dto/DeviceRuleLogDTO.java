@@ -1,7 +1,13 @@
 package com.budwk.app.device.objects.dto;
 
+import lombok.Data;
+
+import java.io.Serializable;
+
 /**
  * @author wizzer.cn
  */
-public class DeviceRuleLogDTO {
+@Data
+public class DeviceRuleLogDTO implements Serializable {
+
 }

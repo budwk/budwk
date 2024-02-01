@@ -124,6 +124,12 @@ public class Device_info extends BaseModel implements Serializable {
     private String lat;
 
     @Column
+    @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Comment("用户号(预留)")
+    @ApiModelProperty(description = "用户号")
+    private String accountNo;
+
+    @Column
     @ColDefine(type = ColType.VARCHAR, width = 10)
     @Comment("出厂日期")
     @ApiModelProperty(description = "出厂日期")

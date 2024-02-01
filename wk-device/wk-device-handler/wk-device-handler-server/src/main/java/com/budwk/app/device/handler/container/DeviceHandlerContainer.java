@@ -103,7 +103,7 @@ public class DeviceHandlerContainer {
 
     public void init() {
         // 初始化缓存
-        cacheMap = redissonClient.getMapCache("protocol_container");
+        cacheMap = redissonClient.getMapCache("device_handler_container");
         deviceSessionCache = redissonClient.getMapCache("device_addr");
     }
 
@@ -136,10 +136,11 @@ public class DeviceHandlerContainer {
             this.buildCommand(waitCommand);
             return;
         }
-        // 优化以下代码
+        // 默认下发END指令
         CommandInfo end = new CommandInfo();
         end.setDeviceId(deviceOperator.getDeviceId());
         end.setCommandCode("END");
+        // 如果是表具设备默认下发余额同步指令
         if (deviceOperator instanceof MeterOperator) {
             MeterBillingInfo billingInfo = ((MeterOperator) deviceOperator).getMeterBillingInfo();
             if (null != billingInfo) {

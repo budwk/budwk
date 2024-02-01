@@ -88,13 +88,13 @@ public class ReflectUtils {
                             args[i] = StringUtils.substringBefore((String) args[i], ".0");
                         }
                     } else if (cs[i] == Integer.class) {
-                        args[i] = args[i] == null ? null : Integer.parseInt(Strings.sNull(args[i]));
+                        args[i] = args[i] == null ? null : Integer.parseInt(Strings.sBlank(args[i],"0"));
                     } else if (cs[i] == Long.class) {
-                        args[i] = args[i] == null ? null : Long.parseLong(Strings.sNull(args[i]));
+                        args[i] = args[i] == null ? null : Long.parseLong(Strings.sBlank(args[i],"0"));
                     } else if (cs[i] == Double.class) {
-                        args[i] = args[i] == null ? null : Double.parseDouble(Strings.sNull(args[i]));
+                        args[i] = args[i] == null ? null : Double.parseDouble(Strings.sBlank(args[i],"0"));
                     } else if (cs[i] == Float.class) {
-                        args[i] = args[i] == null ? null : Float.parseFloat(Strings.sNull(args[i]));
+                        args[i] = args[i] == null ? null : Float.parseFloat(Strings.sBlank(args[i],"0"));
                     } else if (cs[i] == Date.class) {
                         if (args[i] instanceof String) {
                             args[i] = args[i] == null ? null : Times.D(Strings.sNull(args[i]));
@@ -102,7 +102,7 @@ public class ReflectUtils {
                             args[i] = DateUtil.getJavaDate((Double) args[i]);
                         }
                     } else if (cs[i] == boolean.class || cs[i] == Boolean.class) {
-                        args[i] = args[i] == null ? null : Boolean.parseBoolean(Strings.sNull(args[i]));
+                        args[i] = args[i] == null ? null : Boolean.parseBoolean(Strings.sBlank(args[i],"0"));
                     }
                 }
             }

@@ -22,10 +22,10 @@ public class DeviceHandlerLauncher {
 
 
     public void init() throws Exception {
-        //container.start();
+        container.start();
     }
 
     public void close() throws Exception {
-        //container.stop();
+        container.stop();
     }
 }

@@ -17,4 +17,26 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-handler-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-storage-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.app</groupId>
+            <artifactId>wk-device-storage-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

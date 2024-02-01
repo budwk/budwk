@@ -70,9 +70,17 @@ dubbo:
     qos:
       enable: false
 
-# log存储方式为 mongodb 设置
+device:
+  storage:
+    # 原始报文存储时间(单位天,默认30天  仅对mongodb有效)
+    raw-save-ttl: 30
+    # 解析后数据存储时间(单位天,默认0=永久存储  仅对mongodb有效,tdengine 是建库语句设置)
+    data-save-ttl: 0
+    # 解析后数据存储方式(mongodb/tdengine)
+    data-save-type: mongodb
+
 mongodb:
-  url: mongodb://10.10.10.10:27017/budwk_v8
+  url: mongodb://127.0.0.1:27017/budwk_v8_device
 
 log:
   level: debug
