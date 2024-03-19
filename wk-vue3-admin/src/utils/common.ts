@@ -10,6 +10,32 @@ import { i18n } from '../lang'
 import { getUrl } from './request'
 import { env } from 'echarts'
 import { isNavigationFailure, NavigationFailureType, RouteLocationRaw, RouteRecordRaw } from 'vue-router'
+import { isUndefined, isNumber, isNull } from "lodash-es"
+
+const isEmpty = (value: any) => {
+    return value === "" || isNull(value)
+}
+
+/**
+ * 字段格式化
+ * @param {*} value 过滤器值
+ * @param {*} isRating 是否是百分比
+ * @param {*} unit 百分比单位
+ * @returns
+ */
+export const formatField = (value: any, isRating = false, unit = "") => {
+    // 值为数字类型
+    if (isNumber(value)) {
+        return `${isRating ? `${value * 100}` : value}${unit}`
+    }
+
+    // 值为空字符串,null,undefined
+    if (isEmpty(value) || isUndefined(value)) {
+        return "--"
+    }
+
+    return value
+}
 
 /**
  * 从数组中查找某个对象属性值
