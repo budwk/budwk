@@ -110,10 +110,10 @@
                 </el-form-item>      
                 <el-form-item label="是否隐藏" prop="hidden">
                     <el-radio-group v-model="formData.hidden">
-                        <el-radio :label="false">
+                        <el-radio :value="false">
                             显示
                         </el-radio>
-                        <el-radio :label="true">
+                        <el-radio :value="true">
                             隐藏
                         </el-radio>
                     </el-radio-group>
@@ -179,10 +179,10 @@
                 </el-form-item>    
                 <el-form-item label="是否隐藏" prop="hidden">
                     <el-radio-group v-model="formData.hidden">
-                        <el-radio :label="false">
+                        <el-radio :value="false">
                             显示
                         </el-radio>
-                        <el-radio :label="true">
+                        <el-radio :value="true">
                             隐藏
                         </el-radio>
                     </el-radio-group>

@@ -57,7 +57,7 @@
                     <el-col :span="12">
                         <el-form-item label="参数类型" prop="name">
                             <el-radio-group v-model="formData.type">
-                                <el-radio :label="item.value" v-for="(item) in types" :key="item.value">
+                                <el-radio :value="item.value" v-for="(item) in types" :key="item.value">
                                     {{ item.text }}
                                 </el-radio>
                             </el-radio-group>
@@ -84,8 +84,8 @@
                     <el-col :span="24" v-if="formData.type === 'BOOL'">
                         <el-form-item prop="configValue" label="参数值">
                             <el-radio-group v-model="formData.configValue">
-                                <el-radio label="true">是</el-radio>
-                                <el-radio label="false">否</el-radio>
+                                <el-radio value="true">是</el-radio>
+                                <el-radio value="false">否</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -114,10 +114,10 @@
                     <el-col :span="24">
                         <el-form-item label="是否开放" prop="opened">
                             <el-radio-group v-model="formData.opened">
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     是
                                 </el-radio>
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     否
                                 </el-radio>
                             </el-radio-group>
@@ -139,7 +139,7 @@
                     <el-col :span="12">
                         <el-form-item label="参数类型" prop="name">
                             <el-radio-group v-model="formData.type">
-                                <el-radio :label="item.value" v-for="(item) in types" :key="item.value">
+                                <el-radio :value="item.value" v-for="(item) in types" :key="item.value">
                                     {{ item.text }}
                                 </el-radio>
                             </el-radio-group>
@@ -166,8 +166,8 @@
                     <el-col :span="24" v-if="formData.type === 'BOOL'">
                         <el-form-item prop="configValue" label="参数值">
                             <el-radio-group v-model="formData.configValue">
-                                <el-radio label="true">是</el-radio>
-                                <el-radio label="false">否</el-radio>
+                                <el-radio value="true">是</el-radio>
+                                <el-radio value="false">否</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -196,10 +196,10 @@
                     <el-col :span="24">
                         <el-form-item label="是否开放" prop="opened">
                             <el-radio-group v-model="formData.opened">
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     是
                                 </el-radio>
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     否
                                 </el-radio>
                             </el-radio-group>

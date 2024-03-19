@@ -103,10 +103,10 @@
                     <el-col :span="12">
                         <el-form-item label="栏目类型" prop="type">
                           <el-radio-group v-model="formData.type">
-                                <el-radio :label="'ARTICLE'">
+                                <el-radio :value="'ARTICLE'">
                                   文章
                                 </el-radio>
-                                <el-radio :label="'PHOTO'">
+                                <el-radio :value="'PHOTO'">
                                   相册
                                 </el-radio>
                             </el-radio-group>
@@ -120,10 +120,10 @@
                     <el-col :span="12">
                         <el-form-item label="打开方式" prop="href">
                           <el-radio-group v-model="formData.target">
-                                <el-radio :label="'_blank'">
+                                <el-radio :value="'_blank'">
                                     新页面
                                 </el-radio>
-                                <el-radio :label="'_self'">
+                                <el-radio :value="'_self'">
                                     本页面
                                 </el-radio>
                             </el-radio-group>
@@ -132,10 +132,10 @@
                     <el-col :span="12">
                         <el-form-item label="是否显示" prop="showit">
                             <el-radio-group v-model="formData.showit">
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     显示
                                 </el-radio>
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     隐藏
                                 </el-radio>
                             </el-radio-group>
@@ -173,10 +173,10 @@
                     <el-col :span="12">
                         <el-form-item label="栏目类型" prop="type">
                           <el-radio-group v-model="formData.type">
-                                <el-radio :label="'ARTICLE'">
+                                <el-radio :value="'ARTICLE'">
                                   文章
                                 </el-radio>
-                                <el-radio :label="'PHOTO'">
+                                <el-radio :value="'PHOTO'">
                                   相册
                                 </el-radio>
                             </el-radio-group>
@@ -190,10 +190,10 @@
                     <el-col :span="12">
                         <el-form-item label="打开方式" prop="href">
                           <el-radio-group v-model="formData.target">
-                                <el-radio :label="'_blank'">
+                                <el-radio :value="'_blank'">
                                     新页面
                                 </el-radio>
-                                <el-radio :label="'_self'">
+                                <el-radio :value="'_self'">
                                     本页面
                                 </el-radio>
                             </el-radio-group>
@@ -202,10 +202,10 @@
                     <el-col :span="12">
                         <el-form-item label="是否显示" prop="showit">
                             <el-radio-group v-model="formData.showit">
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     显示
                                 </el-radio>
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     隐藏
                                 </el-radio>
                             </el-radio-group>

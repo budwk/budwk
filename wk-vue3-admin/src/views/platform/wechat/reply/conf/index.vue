@@ -87,9 +87,9 @@
                     <el-col :span="24">
                         <el-form-item class="is-required" prop="scope" label="消息类型">
                             <el-radio-group v-model="formData.msgType" @change="msgTypeChange">
-                                <el-radio label="txt">文本</el-radio>
-                                <el-radio label="news">图文</el-radio>
-                                <el-radio label="image">图片</el-radio>
+                                <el-radio value="txt">文本</el-radio>
+                                <el-radio value="news">图文</el-radio>
+                                <el-radio value="image">图片</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -150,9 +150,9 @@
                     <el-col :span="24">
                         <el-form-item class="is-required" prop="scope" label="消息类型">
                             <el-radio-group v-model="formData.msgType" @change="msgTypeChange">
-                                <el-radio label="txt">文本</el-radio>
-                                <el-radio label="news">图文</el-radio>
-                                <el-radio label="image">图片</el-radio>
+                                <el-radio value="txt">文本</el-radio>
+                                <el-radio value="news">图文</el-radio>
+                                <el-radio value="image">图片</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>

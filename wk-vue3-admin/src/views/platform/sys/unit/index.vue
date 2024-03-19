@@ -88,10 +88,10 @@
                     <el-col :span="12">
                         <el-form-item label="单位类型" prop="type">
                             <el-radio-group v-model="formData.type" @change="typeChange">
-                                <el-radio key="COMPANY" label="COMPANY" v-if="formData.parentType?.value == 'GROUP'">
+                                <el-radio key="COMPANY" value="COMPANY" v-if="formData.parentType?.value == 'GROUP'">
                                     分公司
                                 </el-radio>
-                                <el-radio key="UNIT" label="UNIT">
+                                <el-radio key="UNIT" value="UNIT">
                                     部门
                                 </el-radio>
                             </el-radio-group>
@@ -145,10 +145,10 @@
                     <el-col :span="12">
                         <el-form-item label="单位状态" prop="disabled">
                             <el-radio-group v-model="formData.disabled">
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     启用
                                 </el-radio>
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     禁用
                                 </el-radio>
                             </el-radio-group>
@@ -258,10 +258,10 @@
                     <el-col :span="12">
                         <el-form-item label="单位状态" prop="disabled">
                             <el-radio-group v-model="formData.disabled">
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     启用
                                 </el-radio>
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     禁用
                                 </el-radio>
                             </el-radio-group>

@@ -140,8 +140,8 @@
             <el-form ref="createRef" :model="formData" :rules="formRules" label-width="100px">
                 <el-form-item prop="type" label="分类">
                     <el-radio-group v-model="formData.type" @change="typeChange">
-                        <el-radio label="role">角色</el-radio>
-                        <el-radio label="group">角色组</el-radio>
+                        <el-radio value="role">角色</el-radio>
+                        <el-radio value="group">角色组</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item v-if="formData.type === 'role'" prop="groupId" label="所属角色组" :rules="funRules('groupId')">

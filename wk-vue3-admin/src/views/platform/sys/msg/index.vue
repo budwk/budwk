@@ -78,7 +78,7 @@
                     <el-col :span="24">
                         <el-form-item label="消息类型" prop="type">
                             <el-radio-group v-model="formData.type">
-                                <el-radio v-for="obj in types" :key="obj.value" :label="obj.value">{{ obj.text }}
+                                <el-radio v-for="obj in types" :key="obj.value" :value="obj.value">{{ obj.text }}
                                 </el-radio>
                             </el-radio-group>
                         </el-form-item>

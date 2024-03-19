@@ -152,10 +152,10 @@
                     <el-col :span="12">
                         <el-form-item label="是否显示" prop="showit">
                             <el-radio-group v-model="formData.showit">
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     显示
                                 </el-radio>
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     隐藏
                                 </el-radio>
                             </el-radio-group>
@@ -170,8 +170,8 @@
                     <el-col :span="16">
                         <el-form-item prop="type" label="有子权限">
                             <el-radio-group v-model="formData.children" @change="formRadioChange">
-                                <el-radio label="false">否</el-radio>
-                                <el-radio label="true">是</el-radio>
+                                <el-radio value="false">否</el-radio>
+                                <el-radio value="true">是</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -255,10 +255,10 @@
                     <el-col :span="12">
                         <el-form-item label="是否显示" prop="showit">
                             <el-radio-group v-model="formData.showit">
-                                <el-radio :label="true">
+                                <el-radio :value="true">
                                     显示
                                 </el-radio>
-                                <el-radio :label="false">
+                                <el-radio :value="false">
                                     隐藏
                                 </el-radio>
                             </el-radio-group>
@@ -273,8 +273,8 @@
                     <el-col :span="16">
                         <el-form-item prop="type" label="有子权限">
                             <el-radio-group v-model="formData.children" @change="formRadioChange">
-                                <el-radio label="false">否</el-radio>
-                                <el-radio label="true">是</el-radio>
+                                <el-radio value="false">否</el-radio>
+                                <el-radio value="true">是</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>

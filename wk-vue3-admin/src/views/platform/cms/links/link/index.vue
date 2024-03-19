@@ -68,10 +68,10 @@
                     <el-col :span="24">
                         <el-form-item label="打开方式" prop="target">
                             <el-radio-group v-model="formData.target">
-                                <el-radio :label="'_self'">
+                                <el-radio :value="'_self'">
                                   本页面
                                 </el-radio>
-                                <el-radio :label="'_blank'">
+                                <el-radio :value="'_blank'">
                                   新页面
                                 </el-radio>
                             </el-radio-group>
@@ -80,10 +80,10 @@
                     <el-col :span="24">
                         <el-form-item label="链接类型" prop="type">
                             <el-radio-group v-model="formData.type" @change="typeChange">
-                                <el-radio :label="'txt'">
+                                <el-radio :value="'txt'">
                                   文本链接
                                 </el-radio>
-                                <el-radio :label="'img'">
+                                <el-radio :value="'img'">
                                   图片链接
                                 </el-radio>
                             </el-radio-group>
@@ -130,10 +130,10 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                     <el-col :span="24">
                         <el-form-item label="打开方式" prop="target">
                             <el-radio-group v-model="formData.target">
-                                <el-radio :label="'_self'">
+                                <el-radio :value="'_self'">
                                   本页面
                                 </el-radio>
-                                <el-radio :label="'_blank'">
+                                <el-radio :value="'_blank'">
                                   新页面
                                 </el-radio>
                             </el-radio-group>
@@ -142,10 +142,10 @@ action="#" :auto-upload="false" :on-change="uploadPic" :show-file-list="false"
                     <el-col :span="24">
                         <el-form-item label="链接类型" prop="type">
                             <el-radio-group v-model="formData.type" @change="typeChange">
-                                <el-radio :label="'txt'">
+                                <el-radio :value="'txt'">
                                   文本链接
                                 </el-radio>
-                                <el-radio :label="'img'">
+                                <el-radio :value="'img'">
                                   图片链接
                                 </el-radio>
                             </el-radio-group>

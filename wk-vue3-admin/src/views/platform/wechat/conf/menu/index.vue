@@ -90,10 +90,10 @@
                     <el-col :span="24">
                         <el-form-item class="is-required" prop="menuType" label="菜单类型">
                             <el-radio-group v-model="formData.menuType">
-                                <el-radio label="">菜单</el-radio>
-                                <el-radio label="view">链接</el-radio>
-                                <el-radio label="click">事件</el-radio>
-                                <el-radio label="miniprogram">小程序</el-radio>
+                                <el-radio value="">菜单</el-radio>
+                                <el-radio value="view">链接</el-radio>
+                                <el-radio value="click">事件</el-radio>
+                                <el-radio value="miniprogram">小程序</el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item v-if="formData.menuType == 'view'" class="is-required" prop="url" label="URL">
@@ -155,10 +155,10 @@
                     <el-col :span="24">
                         <el-form-item class="is-required" prop="menuType" label="菜单类型">
                             <el-radio-group v-model="formData.menuType">
-                                <el-radio label="">菜单</el-radio>
-                                <el-radio label="view">链接</el-radio>
-                                <el-radio label="click">事件</el-radio>
-                                <el-radio label="miniprogram">小程序</el-radio>
+                                <el-radio value="">菜单</el-radio>
+                                <el-radio value="view">链接</el-radio>
+                                <el-radio value="click">事件</el-radio>
+                                <el-radio value="miniprogram">小程序</el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item v-if="formData.menuType == 'view'" class="is-required" prop="url" label="URL">

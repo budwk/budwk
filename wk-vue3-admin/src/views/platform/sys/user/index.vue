@@ -252,13 +252,13 @@ v-model="formData.disabled" :active-value="false" :inactive-value="true"
                     <el-col :span="12">
                         <el-form-item label="用户性别" prop="sex">
                             <el-radio-group v-model="formData.sex">
-                                <el-radio :label="1">
+                                <el-radio :value="1">
                                     男
                                 </el-radio>
-                                <el-radio :label="2">
+                                <el-radio :value="2">
                                     女
                                 </el-radio>
-                                <el-radio :label="0">
+                                <el-radio :value="0">
                                     未知
                                 </el-radio>
                             </el-radio-group>
@@ -347,13 +347,13 @@ v-model="formData.disabled" :active-value="false" :inactive-value="true"
                     <el-col :span="12">
                         <el-form-item label="用户性别" prop="sex">
                             <el-radio-group v-model="formData.sex">
-                                <el-radio :label="1">
+                                <el-radio :value="1">
                                     男
                                 </el-radio>
-                                <el-radio :label="2">
+                                <el-radio :value="2">
                                     女
                                 </el-radio>
-                                <el-radio :label="0">
+                                <el-radio :value="0">
                                     未知
                                 </el-radio>
                             </el-radio-group>

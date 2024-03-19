@@ -143,22 +143,22 @@
                 </el-form-item>
                 <el-form-item label="是否有阀门" prop="enabled">
                     <el-radio-group v-model="formData.valveControl">
-                        <el-radio :label="false">无</el-radio>
-                        <el-radio :label="true">有</el-radio>
+                        <el-radio :value="false">无</el-radio>
+                        <el-radio :value="true">有</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="计费方式" prop="payMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.payMode">
-                        <el-radio :label="0">无</el-radio>
-                        <el-radio :label="1">表端计费</el-radio>
-                        <el-radio :label="2">平台计费</el-radio>
+                        <el-radio :value="0">无</el-radio>
+                        <el-radio :value="1">表端计费</el-radio>
+                        <el-radio :value="2">平台计费</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="结算方式" prop="settleMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.settleMode">
-                        <el-radio :label="0">无</el-radio>
-                        <el-radio :label="1">后付费</el-radio>
-                        <el-radio :label="2">预付费</el-radio>
+                        <el-radio :value="0">无</el-radio>
+                        <el-radio :value="1">后付费</el-radio>
+                        <el-radio :value="2">预付费</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="产品描述" prop="description">
@@ -223,22 +223,22 @@
                 </el-form-item>
                 <el-form-item label="是否有阀门" prop="enabled">
                     <el-radio-group v-model="formData.valveControl">
-                        <el-radio :label="false">无</el-radio>
-                        <el-radio :label="true">有</el-radio>
+                        <el-radio :value="false">无</el-radio>
+                        <el-radio :value="true">有</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="计费方式" prop="payMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.payMode">
-                        <el-radio :label="0">无</el-radio>
-                        <el-radio :label="1">表端计费</el-radio>
-                        <el-radio :label="2">平台计费</el-radio>
+                        <el-radio :value="0">无</el-radio>
+                        <el-radio :value="1">表端计费</el-radio>
+                        <el-radio :value="2">平台计费</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="结算方式" prop="settleMode" v-if="formData.deviceType=='METER'">
                     <el-radio-group v-model="formData.settleMode">
-                        <el-radio :label="0">无</el-radio>
-                        <el-radio :label="1">后付费</el-radio>
-                        <el-radio :label="2">预付费</el-radio>
+                        <el-radio :value="0">无</el-radio>
+                        <el-radio :value="1">后付费</el-radio>
+                        <el-radio :value="2">预付费</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="产品描述" prop="description">
