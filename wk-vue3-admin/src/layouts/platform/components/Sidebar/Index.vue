@@ -42,12 +42,6 @@ const isCollapse = computed(() => !useClient().sidebar.opened)
 
 const activeMenu = computed(() => {
     const { meta, path } = useRoute()
-    if (meta.activeMenu) {
-        return meta.activeMenu
-    }
-    if (meta.tree) {
-        return meta.tree
-    }
-    return '0'
+    return meta.activeMenu || path
 })
 </script>

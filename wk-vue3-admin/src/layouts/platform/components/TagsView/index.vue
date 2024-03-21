@@ -87,7 +87,9 @@ onMounted(() => {
 })
 
 function isActive(r:any) {
-    return r.path === route.path
+    if (route.path && route.path.indexOf(r.path) === 0) {
+        return true
+    }
 }
 function activeStyle(tag:any) {
     if (!isActive(tag)) return {};

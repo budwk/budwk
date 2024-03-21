@@ -61,6 +61,37 @@ const staticRoutes: Array<RouteRecordRaw> = [
             return { path: '/platform/loading', query: { url: to.path, query: JSON.stringify(to.query) } }
         },
     },
+    // {
+    //     path: '/platform/iot/device/product/:id',
+    //     component: () => import('/@/views/platform/iot/device/product/id.vue'),
+    //     meta: {
+    //         title: '产品详情',
+    //         jump: true,
+    //         layout: "platform/index"
+    //     },
+    //     children: [
+    //         {
+    //             path: 'detail',
+    //             component: () => import('/@/views/platform/iot/device/product/detail/index.vue'),
+    //             meta: {
+    //                 title: '产品详情',
+    //                 jump: true,
+    //                 layout: "platform/index",
+    //                 activeMenu: '/platform/iot/device/product'
+    //             },
+    //         },
+    //         {
+    //             path: 'device',
+    //             component: () => import('/@/views/platform/iot/device/product/device/index.vue'),
+    //             meta: {
+    //                 title: '设备列表',
+    //                 jump: true,
+    //                 layout: "platform/index",
+    //                 activeMenu: '/platform/iot/device/product'
+    //             },
+    //         },
+    //     ]
+    // },//子路由配置示例，jump=为跳过后台权限验证，activeMenu=当前路由的父级菜单
 ]
 
 /*

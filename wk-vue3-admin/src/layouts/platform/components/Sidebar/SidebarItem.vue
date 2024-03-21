@@ -2,7 +2,7 @@
     <div v-if="!item.hidden">
       <template v-if="hasOneShowingChild(item.children, item) && (!onlyOneChild.children || onlyOneChild.noShowingChildren)">
         <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
-          <el-menu-item :index="onlyOneChild.tree" :class="{ 'submenu-title-noDropdown': !isNest }">
+          <el-menu-item :index="getIndex(onlyOneChild)" :class="{ 'submenu-title-noDropdown': !isNest }">
             <svg-icon v-if="onlyOneChild.meta&&onlyOneChild.meta.icon" :icon-class="onlyOneChild.meta.icon"/>
             <svg-icon v-else icon-class=""/>
             <template #title><span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span></template>
@@ -10,7 +10,7 @@
         </app-link>
       </template>
       
-      <el-sub-menu v-else ref="subMenu" :index="item.tree" :class="isTop?'top-nav-submenu':''">
+      <el-sub-menu v-else ref="subMenu" :index="getIndex(item)" :class="isTop?'top-nav-submenu':''">
         <template v-if="item.meta" #title>
           <svg-icon v-if="item.meta&&item.meta.icon" :icon-class="item.meta.icon" />
           <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
@@ -32,7 +32,8 @@
 import AppLink from './Link.vue'
 import { ref } from 'vue'
 import { isExternal, getNormalPath } from '/@/utils/common' 
-
+import { useRoute } from 'vue-router'
+const { path } = useRoute()
 
 const props = defineProps({
     // route object
@@ -52,6 +53,13 @@ const props = defineProps({
 
 const onlyOneChild = ref({});
 
+const getIndex = (item: any) => {
+    if (item.path && path.indexOf(item.path) === 0) {
+        return item.path
+    } else {
+        return item.path ? item.path : item.tree
+    }
+}
 
 function hasOneShowingChild(children = [], parent: any) {
     if (!children) {
