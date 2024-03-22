@@ -47,7 +47,7 @@ v-model="dateRange" type="daterange" range-separator="-"
                             <el-radio-button :label="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}</el-radio-button>
                 </el-radio-group>
             </el-col>
-            <el-col :span="1.5">
+            <el-col :span="3">
                 <el-select v-model="appId" class="m-2" placeholder="选择应用" @change="appChange" clearable>
                     <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
                 </el-select>

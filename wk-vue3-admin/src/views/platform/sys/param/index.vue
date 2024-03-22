@@ -6,7 +6,7 @@
                     v-permission="['sys.config.param.create']">新增
                 </el-button>
             </el-col>
-            <el-col :span="1.5">
+            <el-col :span="3">
                 <el-select v-model="appId" class="m-2" placeholder="切换应用" @change="appChange">
                     <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
                 </el-select>
