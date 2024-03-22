@@ -26,7 +26,7 @@
                 <el-button plain v-if="isExpandAll" icon="FolderOpened" @click="toggleExpandAll">展开</el-button>
                 <el-button plain v-else icon="Folder" @click="toggleExpandAll">折叠</el-button>
             </el-col>
-            <el-col :span="1.5">
+            <el-col :span="3">
                 <el-select v-model="appId" class="m-2" placeholder="切换应用" @change="appChange">
                     <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
                 </el-select>
