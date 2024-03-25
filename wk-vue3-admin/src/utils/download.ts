@@ -5,12 +5,12 @@ import { useUserInfo } from '/@/stores/userInfo'
 import { blobValidate } from '/@/utils/common'
 
 const baseURL = '' + import.meta.env.VITE_AXIOS_BASE_URL
-const userInfo = useUserInfo()
 let downloadLoadingInstance: any
   
 export default {
     name(name: string, isDelete = true) {
         const url = baseURL + "/common/download?fileName=" + encodeURI(name) + "&delete=" + isDelete
+        const userInfo = useUserInfo()
         axios({
             method: 'get',
             url: url,
@@ -28,6 +28,7 @@ export default {
     },
     resource(resource: any) {
         const url = baseURL + "/common/download/resource?resource=" + encodeURI(resource);
+        const userInfo = useUserInfo()
         axios({
             method: 'get',
             url: url,
@@ -45,6 +46,8 @@ export default {
     },
     zip(url: string, name: string) {
         const newurl = baseURL + url
+        const userInfo = useUserInfo()
+
         axios({
             method: 'get',
             url: newurl,
@@ -77,6 +80,8 @@ export default {
     },
     // 通用下载方法
     download(url: string, params: any, filename: string, config = undefined) {
+        const userInfo = useUserInfo()
+
         downloadLoadingInstance = ElLoading.service({ text: "正在下载数据，请稍候", background: "rgba(0, 0, 0, 0.7)", })
         const service = axios.create({
             // axios中请求配置有baseURL选项，表示请求URL公共部分
@@ -90,9 +95,9 @@ export default {
             responseType: 'blob',
             ...config
         }).then(async (res: any) => {
-            console.log(res)
+            //console.log(res)
             const isLogin = await blobValidate(res)
-            console.log(isLogin)
+            //console.log(isLogin)
 
             if (isLogin) {
                 const blob = new Blob([res.data])

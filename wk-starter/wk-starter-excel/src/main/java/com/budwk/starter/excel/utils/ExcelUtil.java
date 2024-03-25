@@ -50,6 +50,10 @@ public class ExcelUtil<T> {
      */
     private String sheetName;
     /**
+     * 导出的字段名
+     */
+    private List<String> fieldNames;
+    /**
      * 标题
      */
     private String title;
@@ -146,28 +150,42 @@ public class ExcelUtil<T> {
     /**
      * 对list数据源将其里面的数据导入到excel表单
      *
-     * @param response  返回数据
-     * @param list      导出数据集合
-     * @param sheetName 工作表的名称
+     * @param response   返回数据
+     * @param list       导出数据集合
+     * @param sheetName  工作表的名称
+     * @param fieldNames 导出的字段名
      * @return 结果
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
-        exportExcel(response, list, sheetName, StringUtils.EMPTY);
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String[] fieldNames) {
+        exportExcel(response, list, sheetName, StringUtils.EMPTY, fieldNames);
     }
+
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
+        exportExcel(response, list, sheetName, StringUtils.EMPTY, null);
+    }
+
 
     /**
      * 对list数据源将其里面的数据导入到excel表单
      *
-     * @param response  返回数据
-     * @param list      导出数据集合
-     * @param sheetName 工作表的名称
-     * @param title     标题
+     * @param response   返回数据
+     * @param list       导出数据集合
+     * @param sheetName  工作表的名称
+     * @param title      标题
+     * @param fieldNames 导出的字段名
      * @return 结果
      */
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title, String[] fieldNames) {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        this.init(list, fieldNames, sheetName, title, Excel.Type.EXPORT);
+        exportExcel(response);
+    }
+
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title) {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(list, sheetName, title, Excel.Type.EXPORT);
+        this.init(list, null, sheetName, title, Excel.Type.EXPORT);
         exportExcel(response);
     }
 
@@ -187,12 +205,15 @@ public class ExcelUtil<T> {
         }
     }
 
-    public void init(List<T> list, String sheetName, String title, Excel.Type type) {
+    public void init(List<T> list, String[] fieldNames, String sheetName, String title, Excel.Type type) {
         if (list == null) {
             list = new ArrayList<T>();
         }
         this.list = list;
         this.sheetName = sheetName;
+        if (fieldNames != null) {
+            this.fieldNames = Arrays.stream(fieldNames).collect(Collectors.toList());
+        }
         this.title = title;
         this.type = type;
         createExcelField();
@@ -225,7 +246,11 @@ public class ExcelUtil<T> {
                     Excel attr = field.getAnnotation(Excel.class);
                     if (attr != null && (attr.type() == Excel.Type.ALL || attr.type() == type)) {
                         field.setAccessible(true);
-                        fields.add(new Object[]{field, attr});
+                        if (fieldNames == null) {
+                            fields.add(new Object[]{field, attr});
+                        } else if (fieldNames.contains(field.getName())) {
+                            fields.add(new Object[]{field, attr});
+                        }
                     }
                     if (Collection.class.isAssignableFrom(field.getType())) {
                         subMethod = getSubMethod(field.getName(), clazz);
@@ -241,7 +266,11 @@ public class ExcelUtil<T> {
                     for (Excel attr : excels) {
                         if (attr != null && (attr.type() == Excel.Type.ALL || attr.type() == type)) {
                             field.setAccessible(true);
-                            fields.add(new Object[]{field, attr});
+                            if (fieldNames == null) {
+                                fields.add(new Object[]{field, attr});
+                            } else if (fieldNames.contains(field.getName())) {
+                                fields.add(new Object[]{field, attr});
+                            }
                         }
                     }
                 }
@@ -752,13 +781,13 @@ public class ExcelUtil<T> {
             String key = String.format("data_%s_%s_%s", Strings.sNull(excel.align()), Strings.sNull(excel.color()), Strings.sNull(excel.backgroundColor()));
             if (!styles.containsKey(key)) {
                 CellStyle style = wb.createCellStyle();
-                if("CENTER".equalsIgnoreCase(excel.align())) {
+                if ("CENTER".equalsIgnoreCase(excel.align())) {
                     style.setAlignment(HorizontalAlignment.CENTER);
                 }
-                if("RIGHT".equalsIgnoreCase(excel.align())) {
+                if ("RIGHT".equalsIgnoreCase(excel.align())) {
                     style.setAlignment(HorizontalAlignment.RIGHT);
                 }
-                if("LEFT".equalsIgnoreCase(excel.align())) {
+                if ("LEFT".equalsIgnoreCase(excel.align())) {
                     style.setAlignment(HorizontalAlignment.LEFT);
                 }
                 style.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -925,8 +954,7 @@ public class ExcelUtil<T> {
      * @param sheetName 工作表的名称
      * @return 结果
      */
-    public void importTemplateExcel(HttpServletResponse response, String sheetName)
-    {
+    public void importTemplateExcel(HttpServletResponse response, String sheetName) {
         importTemplateExcel(response, sheetName, StringUtils.EMPTY);
     }
 
@@ -934,14 +962,13 @@ public class ExcelUtil<T> {
      * 对list数据源将其里面的数据导入到excel表单
      *
      * @param sheetName 工作表的名称
-     * @param title 标题
+     * @param title     标题
      * @return 结果
      */
-    public void importTemplateExcel(HttpServletResponse response, String sheetName, String title)
-    {
+    public void importTemplateExcel(HttpServletResponse response, String sheetName, String title) {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        this.init(null, sheetName, title, Excel.Type.IMPORT);
+        this.init(null, null, sheetName, title, Excel.Type.IMPORT);
         exportExcel(response);
     }
 
@@ -1008,7 +1035,7 @@ public class ExcelUtil<T> {
                     Excel attr = (Excel) entry.getValue()[1];
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
-                    if(StringUtils.isEmpty(attr.dict())) {
+                    if (StringUtils.isEmpty(attr.dict())) {
                         if (String.class == fieldType) {
                             String s = Strings.sNull(val);
                             if (StringUtils.endsWith(s, ".0")) {
