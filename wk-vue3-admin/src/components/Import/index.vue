@@ -44,7 +44,7 @@
                 <div v-if="status === 3" class="upload-result">
                     <div class="upload-result__message">
                         <i :class="result.success ? 'el-icon-ext-success' : 'el-icon-ext-error-outline'" />
-                        {{ result.message }}
+                        <div v-html="result.message"></div>
                     </div>
                 </div>
             </div>
