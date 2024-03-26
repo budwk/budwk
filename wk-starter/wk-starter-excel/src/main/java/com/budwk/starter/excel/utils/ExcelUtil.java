@@ -400,7 +400,24 @@ public class ExcelUtil<T> {
                 cell.setCellStyle(styles.get(String.format("data_%s_%s_%s", Strings.sNull(attr.align()), Strings.sNull(attr.color()), Strings.sNull(attr.backgroundColor()))));
 
                 // 用于读取对象中的属性
-                Object value = getTargetValue(vo, field, attr);
+                Object value = null;
+                if(field.getType().isEnum()){
+                    field.setAccessible(true);
+                    try{
+                        Method[] methods = field.getType().getDeclaredMethods();
+                        for (Method method: methods){
+                            if(method.getName().equals("text")){
+                                method.setAccessible(true);
+                                value = method.invoke(field.get(vo));
+                                break;
+                            }
+                        }
+                    }catch (Exception e){
+                        value = getTargetValue(vo, field, attr);
+                    }
+                }else {
+                    value = getTargetValue(vo, field, attr);
+                }
                 String dateFormat = attr.dateFormat();
                 String readConverterExp = attr.dict();
                 String separator = attr.separator();
@@ -1066,6 +1083,19 @@ public class ExcelUtil<T> {
                             }
                         } else if (Boolean.TYPE == fieldType || Boolean.class == fieldType) {
                             val = Boolean.parseBoolean(Strings.sNull(val, "false"));
+                        } else if (fieldType.isEnum()) {
+                            try{
+                                Method[] methods = fieldType.getDeclaredMethods();
+                                for (Method method: methods){
+                                    if(method.getName().equals("fromText")){
+                                        method.setAccessible(true);
+                                        val = method.invoke(null, val);
+                                        break;
+                                    }
+                                }
+                            }catch (Exception e){
+                                val = null;
+                            }
                         }
                     }
                     if (fieldType != null) {
@@ -1076,6 +1106,25 @@ public class ExcelUtil<T> {
                             val = reverseByExp(Strings.sNull(val), attr.dict(), attr.separator());
                             if (Boolean.TYPE == fieldType || Boolean.class == fieldType) {
                                 val = Boolean.parseBoolean(Strings.sNull(val, "false"));
+                            }
+                            if (fieldType.isEnum()) {
+                                 try{
+                                     Field valueField = fieldType.getDeclaredField("value");
+                                     Method[] methods = fieldType.getDeclaredMethods();
+                                     for (Method method: methods){
+                                         if(method.getName().equals("from")){
+                                             method.setAccessible(true);
+                                             if(Integer.TYPE == valueField.getType() || Integer.class == valueField.getType()) {
+                                                 val = method.invoke(null, Integer.parseInt(Strings.sNull(val)));
+                                             }else {
+                                                 val = method.invoke(null, val);
+                                             }
+                                             break;
+                                         }
+                                     }
+                                 }catch (Exception e){
+                                     val = null;
+                                 }
                             }
                         } else if (!attr.handler().equals(ExcelHandlerAdapter.class)) {
                             val = dataFormatHandlerAdapter(val, attr);
