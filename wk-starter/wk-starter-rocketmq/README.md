@@ -32,6 +32,7 @@ $ ./mqadmin updatetopic -n localhost:9876 -t DemoTopic -c DefaultCluster -r 10 -
 
 ```yaml
 rocketmq:
+  enable: true
   # 集群环境多个nameserver用;分割
   nameserver-address: 127.0.0.1:9876
   # 生产者组

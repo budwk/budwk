@@ -9,6 +9,7 @@ import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.nutz.boot.annotation.PropDoc;
 import org.nutz.boot.starter.ServerFace;
+import org.nutz.ioc.Ioc;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -21,6 +22,8 @@ import java.util.List;
 @IocBean
 @Slf4j
 public class RocketMQServer implements ServerFace {
+    @Inject("refer:$ioc")
+    protected Ioc ioc;
     @Inject
     private PropertiesProxy conf;
 
@@ -44,9 +47,7 @@ public class RocketMQServer implements ServerFace {
     @PropDoc(value = "RocketMQ 消费者最小线程数", defaultValue = "")
     public static final String PROP_CONSUMER_THREAD_MIN = PRE + "consumer-thread-min";
 
-    @Inject
     private RocketMQProducer rmqProducer;
-    @Inject
     private RocketMQConsumer rmqConsumer;
 
     private DefaultMQProducer defaultMQProducer;
@@ -55,6 +56,12 @@ public class RocketMQServer implements ServerFace {
 
     @Override
     public void start() throws Exception {
+        if (!conf.getBoolean(PROP_ENABLE, false)) {
+            log.info("RocketMQ 未启用");
+            return;
+        }
+        rmqProducer = ioc.get(RocketMQProducer.class);
+        rmqConsumer = ioc.get(RocketMQConsumer.class);
         rmqProducer.init(conf.get(PROP_NAMESERVER_ADDRESS), conf.get(PROP_PRODUCER_GROUP));
         rmqConsumer.init(conf.get(PROP_NAMESERVER_ADDRESS), conf.getInt(PROP_CONSUMER_THREAD_MAX, 0), conf.getInt(PROP_CONSUMER_THREAD_MIN, 0));
         defaultMQProducer = rmqProducer.getDefaultMQProducer();
@@ -63,6 +70,9 @@ public class RocketMQServer implements ServerFace {
 
     @Override
     public void stop() throws Exception {
+        if (!conf.getBoolean(PROP_ENABLE, false)) {
+            return;
+        }
         rmqProducer.close();
         rmqConsumer.close();
     }
