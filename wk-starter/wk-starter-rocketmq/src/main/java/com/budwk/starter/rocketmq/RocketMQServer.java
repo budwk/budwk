@@ -57,7 +57,6 @@ public class RocketMQServer implements ServerFace {
     @Override
     public void start() throws Exception {
         if (!conf.getBoolean(PROP_ENABLE, false)) {
-            log.info("RocketMQ 未启用");
             return;
         }
         rmqProducer = ioc.get(RocketMQProducer.class);
