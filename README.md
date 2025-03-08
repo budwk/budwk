@@ -12,9 +12,14 @@
 
 **[官网](https://budwk.com)** |
 **[V8演示地址](https://demo.budwk.com)** |
-**[V8开发指南](https://budwk.com)** |
-**[V5演示地址](https://nutzwk.wizzer.cn)** |
-**[捐赠清单](https://budwk.com/donation)** |
+**[捐赠清单](https://budwk.com/donation)**  
+
+</div>
+
+<div align="right">
+语言: 中文 | <a href="README_EN.md">English</a>
+<br>
+<br>
 
 </div>
 
@@ -106,15 +111,15 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 ## 简易开发指南
 
 ### Java后端
-*   确保 MySql、Redis、Nacos 默认端口配置并已启动
-*   MySql 创建名为 `budwk_v8` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
-*   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
-*   在后端项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
-*   分别启动jar文件 `nohup java -jar budwk.jar >/dev/null 2>&1 &`
-*   正常启动前端后访问 `http://127.0.0.1:8800` 用户名 superadmin 密码 1
-*   API调试 `http://127.0.0.1:9900/platform/openapi` `http://127.0.0.1:9900/ucenter/openapi` 等 
-*   wk-mini 单应用版本API调试路径为 `http://127.0.0.1:9900/openapi`
-*   IDEA命令行参数增加 `--nutz.profiles.active=dev` 可以指定加载 `application-dev.yaml` 配置文件
+*   确保 MySql、Redis、Nacos 默认端口配置并已启动
+*    MySql 创建名为 `budwk_v8` 的空数据库,在每个微服务模块启动时会自动建表,同时初始化数据
+*   在单个NB模块下执行 `mvn compile nutzboot:run` 运行或 `mvn package nutzboot:shade` 生成可执行jar包
+*   在后端项目根目录执行 `mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -Dnutzboot.dst=E:/dst clean package nutzboot:shade` 可将所有可运行jar包生成到指定位置
+*   分别启动jar文件 `nohup java -jar budwk.jar >/dev/null 2>&1 &`
+*   正常启动前端后访问 `http://127.0.0.1:8800` 用户名 superadmin 密码 1
+*    API调试 `http://127.0.0.1:9900/platform/openapi` `http://127.0.0.1:9900/ucenter/openapi` 等 
+*    wk-mini 单应用版本API调试路径为 `http://127.0.0.1:9900/openapi`
+*    IDEA命令行参数增加 `--nutz.profiles.active=dev` 可以指定加载 `application-dev.yaml` 配置文件
 
 ### Vue3前端(wk-vue3-admin)
 
@@ -130,8 +135,8 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 ### jar 运行
 
-*   指定jar中配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-mini.jar >/dev/null 2>&1 &`
-*   加载文件夹中配置文件运行 `nohup java -jar -Dnutz.boot.configure.yaml.dir=/data/budwk/ -Xmx450m wk-mini.jar >/dev/null 2>&1 &`
+*   指定jar中配置文件运行 `nohup java -jar -Dnutz.profiles.active=pro -Xmx450m wk-mini.jar >/dev/null 2>&1 &`
+*   加载文件夹中配置文件运行 `nohup java -jar -Dnutz.boot.configure.yaml.dir=/data/budwk/ -Xmx450m wk-mini.jar >/dev/null 2>&1 &`
 
 ### docker 部署示例
 
@@ -157,12 +162,12 @@ Font-awesome | 字体图标  | [https://fontawesome.com](https://fontawesome.com
 
 # 🤝 鸣谢
 
-*   [@wendal](https://github.com/wendal) 代码贡献者,Nutz/LuatOS主要作者
-*   [@rekoe](https://github.com/Rekoe) 代码贡献者
-*   [@enilu](https://github.com/enilu) IDEA插件代码贡献者
-*   [@threefish](https://github.com/threefish) IDEA插件代码贡献者
-*   [@loyalove](https://github.com/loyalove) 前端代码贡献者
-*   [@syrxw](https://github.com/syrxw) 前端代码贡献者
+*   [@wendal](https://github.com/wendal) 代码贡献者,Nutz/LuatOS主要作者
+*   [@rekoe](https://github.com/Rekoe) 代码贡献者
+*   [@enilu](https://github.com/enilu) IDEA插件代码贡献者
+*   [@threefish](https://github.com/threefish) IDEA插件代码贡献者
+*   [@loyalove](https://github.com/loyalove) 前端代码贡献者
+*   [@syrxw](https://github.com/syrxw) 前端代码贡献者
 
 <br/>
 
