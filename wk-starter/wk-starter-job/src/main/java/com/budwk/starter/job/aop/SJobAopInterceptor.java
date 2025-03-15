@@ -6,7 +6,7 @@ import com.budwk.starter.job.annotation.SJob;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.aop.InterceptorChain;
 import org.nutz.aop.MethodInterceptor;
-import org.nutz.integration.jedis.pubsub.PubSubService;
+import com.budwk.starter.redis.pubsub.PubSubService;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

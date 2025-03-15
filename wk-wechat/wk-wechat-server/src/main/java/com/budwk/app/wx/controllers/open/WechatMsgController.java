@@ -13,7 +13,7 @@ import org.nutz.mvc.adaptor.XmlAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Fail;
-import org.nutz.weixin.util.Wxs;
+import com.budwk.starter.wechat.util.Wxs;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;

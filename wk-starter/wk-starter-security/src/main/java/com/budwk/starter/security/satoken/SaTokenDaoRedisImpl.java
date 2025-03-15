@@ -3,7 +3,7 @@ package com.budwk.starter.security.satoken;
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.util.SaFoxUtil;
 import com.budwk.starter.common.constant.RedisConstant;
-import org.nutz.integration.jedis.RedisService;
+import com.budwk.starter.redis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;

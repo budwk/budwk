@@ -39,16 +39,13 @@ public abstract class BaseModel implements Serializable {
 
     @Column
     @Comment("删除标记")
-    @PrevInsert(els = @EL("$me.flag()"))
     @ColDefine(type = ColType.BOOLEAN)
+    @Default("false")
     private Boolean delFlag;
 
     public String toJsonString() {
         return Json.toJson(this, JsonFormat.compact());
     }
 
-    public Boolean flag() {
-        return false;
-    }
 
 }

@@ -22,7 +22,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
-import org.nutz.plugins.wkcache.annotation.CacheDefaults;
+import com.budwk.starter.rediscache.annotation.CacheDefaults;
 
 import java.util.ArrayList;
 import java.util.List;

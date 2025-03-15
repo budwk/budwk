@@ -5,8 +5,8 @@ import com.budwk.app.sys.commons.oshi.OshiServer;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.log.annotation.SLog;
+import com.budwk.starter.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -44,7 +44,7 @@ public class SysMonitorController {
                 nutMap.put(v[0], v[1]);
             }
         }
-        nutMap.addv("dbSize", redisService.dbSize());
+        nutMap.addv("dbSize",redisService.dbSize());
         return Result.data(nutMap);
     }
 
@@ -97,7 +97,7 @@ public class SysMonitorController {
     )
     @ApiResponses
     @SaCheckRole("sysadmin")
-    public Result<?> service( @Param("serviceName") String serviceName, @Param("groupName") String groupName) {
+    public Result<?> service(@Param("serviceName") String serviceName, @Param("groupName") String groupName) {
         return Result.error();
     }
 }

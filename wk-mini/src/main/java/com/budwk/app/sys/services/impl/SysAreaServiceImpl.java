@@ -14,9 +14,9 @@ import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
-import org.nutz.plugins.wkcache.annotation.CacheDefaults;
-import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
-import org.nutz.plugins.wkcache.annotation.CacheResult;
+import com.budwk.starter.rediscache.annotation.CacheDefaults;
+import com.budwk.starter.rediscache.annotation.CacheRemoveAll;
+import com.budwk.starter.rediscache.annotation.CacheResult;
 
 import java.util.ArrayList;
 import java.util.List;

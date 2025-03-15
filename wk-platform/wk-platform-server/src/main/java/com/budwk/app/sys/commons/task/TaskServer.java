@@ -2,8 +2,8 @@ package com.budwk.app.sys.commons.task;
 
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.job.JobInfo;
+import com.budwk.starter.redis.pubsub.PubSubService;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.integration.quartz.QuartzJob;
 import org.nutz.integration.quartz.QuartzManager;
 import org.nutz.ioc.loader.annotation.Inject;

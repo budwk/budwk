@@ -9,7 +9,7 @@ import com.budwk.starter.log.annotation.SLog;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.http.Http;
 import org.nutz.http.Response;
-import org.nutz.integration.jedis.RedisService;
+import com.budwk.starter.redis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.ioc.loader.annotation.Value;

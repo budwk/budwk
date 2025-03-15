@@ -5,14 +5,15 @@ import com.budwk.app.sys.services.SysTaskHistoryService;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.job.JobInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.integration.jedis.pubsub.PubSub;
-import org.nutz.integration.jedis.pubsub.PubSubService;
+import com.budwk.starter.redis.pubsub.PubSub;
+import com.budwk.starter.redis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import redis.clients.jedis.UnifiedJedis;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +29,8 @@ public class TaskHistory implements PubSub {
     private RedissonClient redissonClient;
     @Inject
     private SysTaskHistoryService sysTaskHistoryService;
+    @Inject
+    private UnifiedJedis unifiedJedis;
 
     public void init() {
         pubSubService.reg(RedisConstant.JOB_SUBSCRIBE, this);
@@ -49,6 +52,7 @@ public class TaskHistory implements PubSub {
         history.setTookTime(jobInfo.getTookTime());
         // 多实例会收到重复的多条,只需插入一条即可
         try {
+
             RLock rLock = redissonClient.getLock(RedisConstant.JOB_HISTORY + jobInfo.getTaskId());
             if (rLock.tryLock(3, TimeUnit.SECONDS)) {
                 sysTaskHistoryService.save(history);

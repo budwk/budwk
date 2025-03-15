@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.plugins.wkcache.annotation.CacheDefaults;
-import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
-import org.nutz.plugins.wkcache.annotation.CacheResult;
+import com.budwk.starter.rediscache.annotation.CacheDefaults;
+import com.budwk.starter.rediscache.annotation.CacheRemoveAll;
+import com.budwk.starter.rediscache.annotation.CacheResult;
 
 /**
  * @author wizzer@qq.com

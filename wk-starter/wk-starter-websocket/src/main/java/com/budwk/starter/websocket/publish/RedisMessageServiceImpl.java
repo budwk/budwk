@@ -1,8 +1,8 @@
 package com.budwk.starter.websocket.publish;
 
 import com.budwk.starter.common.constant.RedisConstant;
-import org.nutz.integration.jedis.RedisService;
-import org.nutz.integration.jedis.pubsub.PubSubService;
+import com.budwk.starter.redis.RedisService;
+import com.budwk.starter.redis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 

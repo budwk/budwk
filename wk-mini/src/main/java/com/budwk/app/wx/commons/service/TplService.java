@@ -11,9 +11,9 @@ import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
-import org.nutz.weixin.bean.WxTemplateData;
-import org.nutz.weixin.spi.WxApi2;
-import org.nutz.weixin.spi.WxResp;
+import com.budwk.starter.wechat.bean.WxTemplateData;
+import com.budwk.starter.wechat.spi.WxApi2;
+import com.budwk.starter.wechat.spi.WxResp;
 
 import java.util.Map;
 

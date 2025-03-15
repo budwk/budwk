@@ -8,7 +8,7 @@ import com.budwk.app.ucenter.services.AuthService;
 import com.budwk.app.ucenter.services.ValidateService;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.exception.BaseException;
-import org.nutz.integration.jedis.RedisService;
+import com.budwk.starter.redis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>wk-platform</artifactId>
         <groupId>com.budwk</groupId>
-        <version>8.3.0-SNAPSHOT</version>
+        <version>8.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -73,6 +73,18 @@
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-excel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-rediscache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-redisson</artifactId>
+        </dependency>
         <!-- nutz -->
         <dependency>
             <groupId>org.nutz</groupId>
@@ -119,23 +131,11 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-wkcache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-nacos-discovery</artifactId>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-redisson</artifactId>
         </dependency>
         <!-- oshi -->
         <dependency>

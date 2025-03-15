@@ -25,10 +25,10 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.*;
-import org.nutz.weixin.bean.WxMassArticle;
-import org.nutz.weixin.bean.WxOutMsg;
-import org.nutz.weixin.spi.WxApi2;
-import org.nutz.weixin.spi.WxResp;
+import com.budwk.starter.wechat.bean.WxMassArticle;
+import com.budwk.starter.wechat.bean.WxOutMsg;
+import com.budwk.starter.wechat.spi.WxApi2;
+import com.budwk.starter.wechat.spi.WxResp;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;

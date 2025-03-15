@@ -13,7 +13,7 @@ import com.budwk.starter.sms.SmsSendServer;
 import com.budwk.starter.sms.enums.SmsType;
 import com.wf.captcha.*;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.integration.jedis.RedisService;
+import com.budwk.starter.redis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;

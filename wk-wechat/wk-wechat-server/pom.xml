@@ -5,7 +5,7 @@
     <parent>
         <artifactId>wk-wechat</artifactId>
         <groupId>com.budwk</groupId>
-        <version>8.3.0-SNAPSHOT</version>
+        <version>8.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,16 +23,24 @@
             <artifactId>wk-platform-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzwx</artifactId>
-        </dependency>
         <!-- emoji -->
         <dependency>
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
         </dependency>
         <!-- wk-starter -->
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-rediscache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-wechat</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-common</artifactId>
@@ -108,14 +116,6 @@
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-wkcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>

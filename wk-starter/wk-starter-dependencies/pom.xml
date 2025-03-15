@@ -10,16 +10,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <version>8.3.0-SNAPSHOT</version>
+    <version>8.4.0-SNAPSHOT</version>
     <groupId>com.budwk.starter</groupId>
     <artifactId>wk-starter-dependencies</artifactId>
 
     <properties>
-        <budwk.version>8.3.0-SNAPSHOT</budwk.version>
+        <budwk.version>8.4.0-SNAPSHOT</budwk.version>
         <lombok.version>1.18.18</lombok.version>
         <nutz.version>1.r.70-SNAPSHOT</nutz.version>
         <nutzmore.version>1.r.70-SNAPSHOT</nutzmore.version>
-        <budwk-jedis.version>4.4.0-SNAPSHOT</budwk-jedis.version>
         <swagger.version>2.1.7</swagger.version>
         <yitter-idgenerator.version>1.0.6</yitter-idgenerator.version>
         <sa-token.version>1.26.0</sa-token.version>
@@ -36,6 +35,8 @@
         <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <rocketmq.version>5.2.0</rocketmq.version>
         <tdengine.version>3.1.0</tdengine.version>
+        <jedis.version>5.2.0</jedis.version>
+        <redisson.version>3.45.0</redisson.version>
         <gson.version>2.2.4</gson.version>
         <ctyun-oss.version>6.6.0</ctyun-oss.version>
         <hutool.version>5.8.11</hutool.version>
@@ -155,7 +156,17 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>wk-starter-redisjson</artifactId>
+                <artifactId>wk-starter-redis</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-rediscache</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-redisson</artifactId>
                 <version>${budwk.version}</version>
             </dependency>
             <dependency>
@@ -171,6 +182,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>wk-starter-mongodb</artifactId>
+                <version>${budwk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wk-starter-wechat</artifactId>
                 <version>${budwk.version}</version>
             </dependency>
             <!-- nutz -->
@@ -283,9 +299,15 @@
             </dependency>
             <!-- jedis -->
             <dependency>
-                <groupId>com.budwk</groupId>
+                <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
-                <version>${budwk-jedis.version}</version>
+                <version>${jedis.version}</version>
+            </dependency>
+            <!-- redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
             <!-- swagger -->
             <dependency>

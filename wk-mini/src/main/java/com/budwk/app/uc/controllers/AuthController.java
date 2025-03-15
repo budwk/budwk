@@ -24,7 +24,7 @@ import com.budwk.starter.log.enums.LogType;
 import com.budwk.starter.security.utils.SecurityUtil;
 import com.budwk.starter.sms.enums.SmsType;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.integration.jedis.RedisService;
+import com.budwk.starter.redis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;

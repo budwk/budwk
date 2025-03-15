@@ -25,9 +25,9 @@ import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.annotation.*;
-import org.nutz.weixin.bean.WxMenu;
-import org.nutz.weixin.spi.WxApi2;
-import org.nutz.weixin.spi.WxResp;
+import com.budwk.starter.wechat.bean.WxMenu;
+import com.budwk.starter.wechat.spi.WxApi2;
+import com.budwk.starter.wechat.spi.WxResp;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;

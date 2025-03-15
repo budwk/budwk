@@ -21,8 +21,8 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.weixin.spi.WxApi2;
-import org.nutz.weixin.spi.WxResp;
+import com.budwk.starter.wechat.spi.WxApi2;
+import com.budwk.starter.wechat.spi.WxResp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

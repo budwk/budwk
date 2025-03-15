@@ -9,9 +9,9 @@ import org.nutz.aop.interceptor.async.Async;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.plugins.wkcache.annotation.CacheDefaults;
-import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
-import org.nutz.plugins.wkcache.annotation.CacheResult;
+import com.budwk.starter.rediscache.annotation.CacheDefaults;
+import com.budwk.starter.rediscache.annotation.CacheRemoveAll;
+import com.budwk.starter.rediscache.annotation.CacheResult;
 
 
 /**

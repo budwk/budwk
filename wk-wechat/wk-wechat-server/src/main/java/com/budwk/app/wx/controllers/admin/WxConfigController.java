@@ -15,7 +15,7 @@ import com.budwk.starter.log.annotation.SLog;
 import com.budwk.starter.security.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.dao.Cnd;
-import org.nutz.integration.jedis.pubsub.PubSubService;
+import com.budwk.starter.redis.pubsub.PubSubService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;

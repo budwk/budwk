@@ -1,10 +1,10 @@
 package com.budwk.starter.database.ig;
 
+import com.budwk.starter.redis.RedisService;
 import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
 import com.budwk.starter.common.constant.RedisConstant;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.integration.jedis.RedisService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;

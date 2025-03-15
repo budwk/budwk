@@ -23,8 +23,8 @@ import org.nutz.mvc.annotation.*;
 import org.nutz.mvc.impl.AdaptorErrorContext;
 import org.nutz.mvc.upload.TempFile;
 import org.nutz.mvc.upload.UploadAdaptor;
-import org.nutz.weixin.spi.WxApi2;
-import org.nutz.weixin.spi.WxResp;
+import com.budwk.starter.wechat.spi.WxApi2;
+import com.budwk.starter.wechat.spi.WxResp;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
