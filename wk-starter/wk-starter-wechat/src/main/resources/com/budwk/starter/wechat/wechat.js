@@ -1,6 +1,6 @@
 var ioc = {
 	wxApi2 : {
-		type : "org.nutz.weixin.impl.WxApi2Impl",
+		type : "com.budwk.starter.wechat.impl.WxApi2Impl",
 		fields : {
 			conf : {refer:"conf"},
 			accessTokenStore : {refer : "wxAccessTokenStore"}
@@ -10,13 +10,13 @@ var ioc = {
 		}
 	},
 	wxLogin : {
-		type : "org.nutz.weixin.impl.WxLoginImpl",
+		type : "com.budwk.starter.wechat.impl.WxLoginImpl",
 		factory : "$conf#make",
-		args : ["org.nutz.weixin.impl.WxLoginImpl", "wxlogin."]
+		args : ["com.budwk.starter.wechat.impl.WxLoginImpl", "wxlogin."]
 	},
 	wxAccessTokenStore : {
-		type : "org.nutz.weixin.spi.WxAccessTokenStore",
+		type : "com.budwk.starter.wechat.spi.WxAccessTokenStore",
 		args : [{java:"$conf.get('weixin.atstore')"}, {refer:"$ioc"}],
-		factory : "org.nutz.weixin.at.impl.WxAccessTokenStoreFactory#make"
+		factory : "com.budwk.starter.wechat.at.impl.WxAccessTokenStoreFactory#make"
 	}
 };
