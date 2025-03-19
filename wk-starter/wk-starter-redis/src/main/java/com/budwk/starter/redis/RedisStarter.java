@@ -9,6 +9,7 @@ import redis.clients.jedis.*;
 import redis.clients.jedis.providers.ClusterConnectionProvider;
 import redis.clients.jedis.providers.PooledConnectionProvider;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,8 +56,7 @@ public class RedisStarter {
             for (String address : hosts) {
                 config.add(HostAndPort.from(address));
             }
-            ClusterConnectionProvider provider = new ClusterConnectionProvider(config, jedisClientConfig);
-            client = new UnifiedJedis(provider);
+            client = new UnifiedJedis(config, jedisClientConfig, poolConfig, 3, Duration.ofSeconds(10));
         }
         return client;
     }
