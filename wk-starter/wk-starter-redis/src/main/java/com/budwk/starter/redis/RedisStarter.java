@@ -56,7 +56,7 @@ public class RedisStarter {
             for (String address : hosts) {
                 config.add(HostAndPort.from(address));
             }
-            client = new UnifiedJedis(config, jedisClientConfig, poolConfig, 3, Duration.ofSeconds(10));
+            client = new JedisCluster(config, jedisClientConfig, poolConfig);
         }
         return client;
     }
