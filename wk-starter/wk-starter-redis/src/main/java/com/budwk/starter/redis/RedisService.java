@@ -1643,7 +1643,6 @@ public class RedisService {
      * @return
      */
     public long dbSize() {
-        System.out.println("client.dbSize():::"+client.dbSize());
         return client.dbSize();
     }
     // ============== 通用方法 ==============
