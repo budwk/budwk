@@ -95,7 +95,10 @@ public class WkcacheRemoveEntryInterceptor extends AbstractWkcacheInterceptor {
                     Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
                     for (ConnectionPool pool : nodes.values()) {
                         try (Jedis jedis = new Jedis(pool.getResource())) {
-                            jedis.eval(lua, Collections.singletonList(cacheName), Collections.singletonList(cacheKey.substring(0, cacheKey.lastIndexOf("*"))));
+                            boolean isMaster = Strings.sNull(jedis.info("replication")).contains("role:master");
+                            if(isMaster) {
+                                jedis.eval(lua, Collections.singletonList(cacheName), Collections.singletonList(cacheKey.substring(0, cacheKey.lastIndexOf("*"))));
+                            }
                         }
                     }
                 } else {
@@ -112,7 +115,10 @@ public class WkcacheRemoveEntryInterceptor extends AbstractWkcacheInterceptor {
                     Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
                     for (ConnectionPool pool : nodes.values()) {
                         try (Jedis jedis = new Jedis(pool.getResource())) {
-                            jedis.eval(lua, 0, cacheName + ":" + cacheKey);
+                            boolean isMaster = Strings.sNull(jedis.info("replication")).contains("role:master");
+                            if(isMaster) {
+                                jedis.eval(lua, 0, cacheName + ":" + cacheKey);
+                            }
                         }
                     }
                 } else {

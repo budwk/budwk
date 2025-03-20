@@ -58,7 +58,10 @@ public class WkcacheRemoveAllInterceptor extends AbstractWkcacheInterceptor {
             Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
             for (ConnectionPool pool : nodes.values()) {
                 try (Jedis jedis = new Jedis(pool.getResource())) {
-                    jedis.eval(lua, 0, cacheName + ":*");
+                    boolean isMaster = Strings.sNull(jedis.info("replication")).contains("role:master");
+                    if(isMaster) {
+                        jedis.eval(lua, 0, cacheName + ":*");
+                    }
                 }
             }
         } else {
