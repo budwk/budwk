@@ -6,14 +6,14 @@
 
     <groupId>com.budwk</groupId>
     <artifactId>wk-platform</artifactId>
-    <version>8.4.0-SNAPSHOT</version>
+    <version>8.5.0-SNAPSHOT</version>
     <modules>
         <module>wk-platform-common</module>
         <module>wk-platform-server</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
-        <budwk.version>8.4.0-SNAPSHOT</budwk.version>
+        <budwk.version>8.5.0-SNAPSHOT</budwk.version>
         <nutzboot.version>2.6.0-SNAPSHOT</nutzboot.version>
         <postgresql.version>42.7.3</postgresql.version>
         <maven.compiler.source>11</maven.compiler.source>
