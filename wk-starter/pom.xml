@@ -16,6 +16,7 @@
         <module>wk-starter-web</module>
         <module>wk-starter-security</module>
         <module>wk-starter-log</module>
+        <module>wk-starter-dao</module>
         <module>wk-starter-database</module>
         <module>wk-starter-gateway</module>
         <module>wk-starter-dubbo</module>

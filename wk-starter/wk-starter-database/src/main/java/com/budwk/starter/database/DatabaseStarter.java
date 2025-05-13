@@ -71,7 +71,6 @@ public class DatabaseStarter {
         if (!conf.getBoolean(PROP_DATABASE_ENABLE, false)) {
             return;
         }
-        Dao dao = ioc.get(Dao.class);
         if (conf.getBoolean(PROP_DATABASE_IG_SNOWFLAKE, false)) {
             CustomMake.me().register("snowflake", ioc.get(SnowFlakeIdGenerator.class));
         }
@@ -87,6 +86,7 @@ public class DatabaseStarter {
         if (conf.getBoolean(PROP_DATABASE_GLOBAL_FORCEHUMPCOLUMNNAME, false)) {
             Daos.FORCE_HUMP_COLUMN_NAME = true;
         }
+        Dao dao = ioc.get(Dao.class);
         List<String> packages = conf.getList(PROP_DATABASE_TABLE_PACKAGE);
         packages.forEach(pkg -> {
             if (conf.getBoolean(PROP_DATABASE_TABLE_CREATE, false)) {

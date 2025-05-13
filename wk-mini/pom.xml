@@ -56,6 +56,10 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-database</artifactId>
         </dependency>
         <dependency>
@@ -135,15 +139,7 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-mongodb-plus</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nutz-dao</artifactId>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
@@ -226,6 +222,10 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-quartz</artifactId>
         </dependency>
     </dependencies>
 

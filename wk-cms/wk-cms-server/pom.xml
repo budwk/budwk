@@ -37,6 +37,10 @@
         </dependency>
         <dependency>
             <groupId>com.budwk.starter</groupId>
+            <artifactId>wk-starter-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.budwk.starter</groupId>
             <artifactId>wk-starter-database</artifactId>
         </dependency>
         <dependency>
@@ -74,10 +78,6 @@
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-jetty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nutz-dao</artifactId>
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>

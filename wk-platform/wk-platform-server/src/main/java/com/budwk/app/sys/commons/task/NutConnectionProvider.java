@@ -1,6 +1,7 @@
 package com.budwk.app.sys.commons.task;
 
 import org.nutz.boot.AppContext;
+import org.nutz.dao.impl.NutDao;
 import org.nutz.ioc.Ioc;
 import org.quartz.utils.ConnectionProvider;
 
@@ -14,24 +15,25 @@ import java.sql.SQLException;
 public class NutConnectionProvider implements ConnectionProvider {
 
     protected DataSource dataSource;
-    protected String iocname = "dataSource";
 
     @Override
     public Connection getConnection() throws SQLException {
+        if (dataSource == null) {
+            Ioc ioc = AppContext.getDefault().getIoc();
+            dataSource = ioc.get(NutDao.class, "dao").getDataSource();
+        }
         return dataSource.getConnection();
     }
 
     @Override
-    public void shutdown() throws SQLException {}
+    public void shutdown() throws SQLException {
+
+    }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void initialize() throws SQLException {
-        if (dataSource != null) {
-            return;
-        }
-        Ioc ioc = AppContext.getDefault().getIoc();
-        dataSource = ioc.get(DataSource.class, iocname);
+        // 初始化获取不到dao对象，改在 getConnection() 里获取数据源
     }
+
 
 }
