@@ -121,8 +121,9 @@ da:
     password: nacos
 
 jdbc:
+  default: A
   mode: da
-  # da=双活模式(支持AB机房数据源同时在线、通过nacos可动态切换,命名必须为A/B,默认A)
+  # da=双活模式(支持AB机房数据源同时在线、通过nacos可动态切换,默认数据源为default)
   # many=多数据源模式(支持多数据源同时在线,ADao BDao CDao,命名为英文字母,dao 数据源为 jdbc.url 配置)
   # ''=单数据源模式,dao 数据源为 jdbc.url 配置
   many:
@@ -132,20 +133,20 @@ jdbc:
       password: "root"
       validationQuery: select 1
       maxActive: 100
-      testWhileIdle: true
+      testWhileIdle: false
       connectionProperties: druid.stat.slowSqlMillis=2000
-      defaultAutoCommit: true
+      defaultAutoCommit: false
       slave:
         url: jdbc:mysql://127.0.0.1:3306/budwk_a?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password: "root"
         validationQuery: select 1
         maxActive: 100
-        testWhileIdle: true
+        testWhileIdle: false
         connectionProperties: druid.stat.slowSqlMillis=2000
-        defaultAutoCommit: true
+        defaultAutoCommit: false
     B:
-      url: jdbc:mysql://127.0.0.1:3306/budwk_b?useUnicode=true&characterEncoding=utf8&useSSL=false
+      url: jdbc:mysql://10.10.10.10:3306/budwk_b?useUnicode=true&characterEncoding=utf8&useSSL=false
       username: root
       password: "root"
       validationQuery: select 1
@@ -154,7 +155,7 @@ jdbc:
       connectionProperties: druid.stat.slowSqlMillis=2000
       defaultAutoCommit: true
       slave:
-        url: jdbc:mysql://127.0.0.1:3306/budwk_b?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://10.10.10.10:3306/budwk_b?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password: "root"
         validationQuery: select 1

@@ -19,8 +19,9 @@ da:
     password: nacos
 
 jdbc:
+  default: A
   mode: da 
-  # da=双活模式(支持AB机房数据源同时在线、通过nacos可动态切换,命名必须为A/B,默认A)
+  # da=双活模式(支持AB机房数据源同时在线、通过nacos可动态切换,默认数据源为default)
   # many=多数据源模式(支持多数据源同时在线,ADao BDao CDao,命名为英文字母,dao 数据源为 jdbc.url 配置) 
   # ''=单数据源模式,dao 数据源为 jdbc.url 配置
   many:

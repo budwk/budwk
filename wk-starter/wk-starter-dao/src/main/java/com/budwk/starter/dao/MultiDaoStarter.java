@@ -59,6 +59,7 @@ public class MultiDaoStarter {
     private Listener configListener;
 
     public void init() {
+        DEFAULT_DATASOURCE = conf.get("jdbc.default", DEFAULT_DATASOURCE);
         if ("da".equalsIgnoreCase(conf.get("jdbc.mode"))) {
             log.info("双活数据源模式..");
             initDADataSource();
@@ -113,32 +114,25 @@ public class MultiDaoStarter {
     }
 
     private void initDADataSource() {
-        if (conf.has("jdbc.many.A.url")) {
-            try {
-                masterDataSources.put("A", DataSourceStarter.createManyDataSource(ioc, conf, "jdbc.many.A."));
-            } catch (Exception e) {
-                throw new RuntimeException("datasource init error A", e);
-            }
-        }
-        if (conf.has("jdbc.many.A.slave.url")) {
-            try {
-                slaveDataSources.put("A", DataSourceStarter.createManyDataSource(ioc, conf, "jdbc.many.A.slave."));
-            } catch (Exception e) {
-                throw new RuntimeException("datasource init error A.slave", e);
-            }
-        }
-        if (conf.has("jdbc.many.B.url")) {
-            try {
-                masterDataSources.put("B", DataSourceStarter.createManyDataSource(ioc, conf, "jdbc.many.B."));
-            } catch (Exception e) {
-                throw new RuntimeException("datasource init error B", e);
-            }
-        }
-        if (conf.has("jdbc.many.B.slave.url")) {
-            try {
-                slaveDataSources.put("B", DataSourceStarter.createManyDataSource(ioc, conf, "jdbc.many.B.slave."));
-            } catch (Exception e) {
-                throw new RuntimeException("datasource init error B.slave", e);
+        // 正则匹配多数据库url
+        String regex = "jdbc\\.many\\.(\\w*)\\.url";
+        for (String key : conf.getKeys()) {
+            Pattern pattern = Regex.getPattern(regex);
+            Matcher match = pattern.matcher(key);
+            if (match.find()) {
+                // 获取数据库名称
+                String name = match.group(1);
+                String prefix_name = "jdbc.many." + name + ".";
+                try {
+                    masterDataSources.put(name, DataSourceStarter.createManyDataSource(ioc, conf, prefix_name));
+                    // 处理对应的从库
+                    String slave_prefix = prefix_name + "slave.";
+                    if (conf.has(slave_prefix + "url")) {
+                        slaveDataSources.put(name, DataSourceStarter.createManyDataSource(ioc, conf, slave_prefix));
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("datasource init error " + prefix_name, e);
+                }
             }
         }
     }
