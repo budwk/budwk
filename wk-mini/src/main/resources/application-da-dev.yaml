@@ -72,21 +72,32 @@ security:
 
 
 redis:
-  host: 127.0.0.1
-  port: 6379
-  timeout: 2000
-  max_redir: 10
-  database: 0
-  maxTotal: 100
-  #password: 'pass123'
-  pool:
-    maxTotal: 100
-    maxIdle: 50
-    minIdle: 10
-  # cluster 集群模式
-  mode: normal
-  # cluster 集群模式
-  #nodes:
+  default: A
+  mode: da
+  many:
+     A:
+        host: 127.0.0.1
+        port: 6379
+        timeout: 2000
+        max_redir: 10
+        database: 0
+        maxTotal: 100
+        #password: 'pass123'
+        pool:
+          maxTotal: 100
+          maxIdle: 50
+          minIdle: 10
+        # cluster 集群模式
+        mode: normal
+        # cluster 集群模式
+        #nodes:
+     B:
+        host: 192.168.6.29
+        port: 6379
+        database: 0
+        password: Tcp567
+        # cluster 集群模式
+        mode: normal
 
 log:
   # database=存数据库,mongodb=mongodb 此配置项只需要在 wk-platform 配置即可
@@ -136,6 +147,7 @@ jdbc:
       testWhileIdle: false
       connectionProperties: druid.stat.slowSqlMillis=2000
       defaultAutoCommit: false
+      maxWait: 3000
       slave:
         url: jdbc:mysql://127.0.0.1:3306/budwk_a?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root

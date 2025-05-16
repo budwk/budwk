@@ -25,14 +25,14 @@ public class WxService implements PubSub {
     @Inject
     private WxConfigService wxConfigService;
     @Inject
-    private UnifiedJedis unifiedJedis;
+    private RedisService redisService;
     private NutMap WxMap = NutMap.NEW();
 
     public synchronized WxApi2 getWxApi2(String wxid) {
         WxApi2Impl wxApi2 = WxMap.getAs(wxid, WxApi2Impl.class);
         if (wxApi2 == null) {
             Wx_config appInfo = wxConfigService.fetch(Cnd.where("id", "=", wxid));
-            JedisAgenAccessTokenStore redisAccessTokenStore = new JedisAgenAccessTokenStore(RedisConstant.PRE + ":wxtoken:" + wxid, unifiedJedis);
+            JedisAgenAccessTokenStore redisAccessTokenStore = new JedisAgenAccessTokenStore(RedisConstant.PRE + ":wxtoken:" + wxid, redisService.getClient());
             wxApi2 = new WxApi2Impl();
             wxApi2.setAppid(appInfo.getAppid());
             wxApi2.setAppsecret(appInfo.getAppsecret());

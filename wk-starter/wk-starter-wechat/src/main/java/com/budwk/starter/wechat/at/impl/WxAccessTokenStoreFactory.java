@@ -1,5 +1,6 @@
 package com.budwk.starter.wechat.at.impl;
 
+import com.budwk.starter.redis.RedisService;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.impl.PropertiesProxy;
@@ -26,7 +27,7 @@ public class WxAccessTokenStoreFactory {
         if ("jedis".equals(type)) {
             PropertiesProxy conf = ioc.get(PropertiesProxy.class, "conf");
             return new JedisAgenAccessTokenStore(conf.get("weixin.redis.key"),
-                                                 ioc.get(UnifiedJedis.class));
+                                                 ioc.get(RedisService.class).getClient());
         }
         throw new RuntimeException("unsupport type=" + type);
     }

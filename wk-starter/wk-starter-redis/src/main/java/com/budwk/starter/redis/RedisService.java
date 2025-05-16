@@ -3,11 +3,10 @@ package com.budwk.starter.redis;
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.json.Json;
-import redis.clients.jedis.*;
-import redis.clients.jedis.commands.ProtocolCommand;
-import redis.clients.jedis.params.SetParams;
+import redis.clients.jedis.Protocol;
+import redis.clients.jedis.UnifiedJedis;
 import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.params.SetParams;
 import redis.clients.jedis.params.ZAddParams;
 import redis.clients.jedis.resps.ScanResult;
 import redis.clients.jedis.resps.Tuple;
@@ -23,12 +22,16 @@ import java.util.Set;
 @IocBean
 public class RedisService {
     @Inject
-    private UnifiedJedis client;
+    private RedisStarter redisStarter;
     @Inject
     private PropertiesProxy conf;
-
+    
     public boolean isCluster() {
-        return "cluster".equalsIgnoreCase(conf.get("redis.mode"));
+        if ("da".equalsIgnoreCase(conf.get("redis.mode"))) {
+            return "cluster".equalsIgnoreCase(conf.get("redis.many." + redisStarter.getCurrentDatasource() + ".mode"));
+        } else {
+            return "cluster".equalsIgnoreCase(conf.get("redis.mode"));
+        }
     }
 
     // ============== 键值操作 ==============
@@ -40,7 +43,7 @@ public class RedisService {
      * @param value 值
      */
     public void set(String key, String value) {
-        client.set(key, value);
+        redisStarter.getUnifiedJedis().set(key, value);
     }
 
     /**
@@ -50,7 +53,7 @@ public class RedisService {
      * @param value 值
      */
     public void set(byte[] key, byte[] value) {
-        client.set(key, value);
+        redisStarter.getUnifiedJedis().set(key, value);
     }
 
     /**
@@ -61,7 +64,7 @@ public class RedisService {
      * @param seconds 过期时间（秒）
      */
     public void setex(String key, String value, int seconds) {
-        client.setex(key, seconds, value);
+        redisStarter.getUnifiedJedis().setex(key, seconds, value);
     }
 
     /**
@@ -72,7 +75,7 @@ public class RedisService {
      * @param seconds 过期时间（秒）
      */
     public void setex(byte[] key, byte[] value, int seconds) {
-        client.setex(key, seconds, value);
+        redisStarter.getUnifiedJedis().setex(key, seconds, value);
     }
 
     /**
@@ -83,7 +86,7 @@ public class RedisService {
      * @param value   值
      */
     public void setex(String key, int seconds, String value) {
-        client.setex(key, seconds, value);
+        redisStarter.getUnifiedJedis().setex(key, seconds, value);
     }
 
     /**
@@ -94,7 +97,7 @@ public class RedisService {
      * @param value   值
      */
     public void setex(byte[] key, int seconds, byte[] value) {
-        client.setex(key, seconds, value);
+        redisStarter.getUnifiedJedis().setex(key, seconds, value);
     }
 
     /**
@@ -105,7 +108,7 @@ public class RedisService {
      * @return 设置成功返回1，失败返回0
      */
     public long setnx(String key, String value) {
-        return client.setnx(key, value);
+        return redisStarter.getUnifiedJedis().setnx(key, value);
     }
 
     /**
@@ -116,7 +119,7 @@ public class RedisService {
      * @return 设置成功返回1，失败返回0
      */
     public long setnx(byte[] key, byte[] value) {
-        return client.setnx(key, value);
+        return redisStarter.getUnifiedJedis().setnx(key, value);
     }
 
     /**
@@ -128,7 +131,7 @@ public class RedisService {
      * @return 设置结果
      */
     public String set(String key, String value, SetParams params) {
-        return client.set(key, value, params);
+        return redisStarter.getUnifiedJedis().set(key, value, params);
     }
 
     /**
@@ -140,7 +143,7 @@ public class RedisService {
      * @return 设置结果
      */
     public String set(byte[] key, byte[] value, SetParams params) {
-        return client.set(key, value, params);
+        return redisStarter.getUnifiedJedis().set(key, value, params);
     }
 
     /**
@@ -150,7 +153,7 @@ public class RedisService {
      * @return 值
      */
     public String get(String key) {
-        return client.get(key);
+        return redisStarter.getUnifiedJedis().get(key);
     }
 
     /**
@@ -160,7 +163,7 @@ public class RedisService {
      * @return 值
      */
     public byte[] get(byte[] key) {
-        return client.get(key);
+        return redisStarter.getUnifiedJedis().get(key);
     }
 
     /**
@@ -170,7 +173,7 @@ public class RedisService {
      * @return 成功删除的key数量
      */
     public long del(String key) {
-        return client.del(key);
+        return redisStarter.getUnifiedJedis().del(key);
     }
 
     /**
@@ -180,7 +183,7 @@ public class RedisService {
      * @return 成功删除的key数量
      */
     public long del(byte[] key) {
-        return client.del(key);
+        return redisStarter.getUnifiedJedis().del(key);
     }
 
     /**
@@ -190,7 +193,7 @@ public class RedisService {
      * @return 成功删除的key数量
      */
     public long del(String... keys) {
-        return client.del(keys);
+        return redisStarter.getUnifiedJedis().del(keys);
     }
 
     /**
@@ -200,7 +203,7 @@ public class RedisService {
      * @return 成功删除的key数量
      */
     public long del(byte[]... keys) {
-        return client.del(keys);
+        return redisStarter.getUnifiedJedis().del(keys);
     }
 
     /**
@@ -210,7 +213,7 @@ public class RedisService {
      * @return 存在返回true，否则返回false
      */
     public boolean exists(String key) {
-        return client.exists(key);
+        return redisStarter.getUnifiedJedis().exists(key);
     }
 
     /**
@@ -220,7 +223,7 @@ public class RedisService {
      * @return 存在返回true，否则返回false
      */
     public boolean exists(byte[] key) {
-        return client.exists(key);
+        return redisStarter.getUnifiedJedis().exists(key);
     }
 
     /**
@@ -231,7 +234,7 @@ public class RedisService {
      * @return 设置成功返回1，失败返回0
      */
     public long expire(String key, int seconds) {
-        return client.expire(key, seconds);
+        return redisStarter.getUnifiedJedis().expire(key, seconds);
     }
 
     /**
@@ -242,7 +245,7 @@ public class RedisService {
      * @return 设置成功返回1，失败返回0
      */
     public long expire(byte[] key, int seconds) {
-        return client.expire(key, seconds);
+        return redisStarter.getUnifiedJedis().expire(key, seconds);
     }
 
     /**
@@ -252,7 +255,7 @@ public class RedisService {
      * @return 剩余时间（秒），key不存在返回-2，key存在但没有设置过期时间返回-1
      */
     public long ttl(String key) {
-        return client.ttl(key);
+        return redisStarter.getUnifiedJedis().ttl(key);
     }
 
     /**
@@ -262,7 +265,7 @@ public class RedisService {
      * @return 剩余时间（秒），key不存在返回-2，key存在但没有设置过期时间返回-1
      */
     public long ttl(byte[] key) {
-        return client.ttl(key);
+        return redisStarter.getUnifiedJedis().ttl(key);
     }
 
     /**
@@ -272,7 +275,7 @@ public class RedisService {
      * @return 类型字符串
      */
     public String type(String key) {
-        return client.type(key);
+        return redisStarter.getUnifiedJedis().type(key);
     }
 
     /**
@@ -282,7 +285,7 @@ public class RedisService {
      * @return 类型字符串
      */
     public String type(byte[] key) {
-        return client.type(key);
+        return redisStarter.getUnifiedJedis().type(key);
     }
 
     /**
@@ -293,7 +296,7 @@ public class RedisService {
      * @return 成功返回OK
      */
     public String rename(String oldKey, String newKey) {
-        return client.rename(oldKey, newKey);
+        return redisStarter.getUnifiedJedis().rename(oldKey, newKey);
     }
 
     /**
@@ -304,7 +307,7 @@ public class RedisService {
      * @return 成功返回OK
      */
     public String rename(byte[] oldKey, byte[] newKey) {
-        return client.rename(oldKey, newKey);
+        return redisStarter.getUnifiedJedis().rename(oldKey, newKey);
     }
 
     /**
@@ -315,7 +318,7 @@ public class RedisService {
      * @return 成功返回1，失败返回0
      */
     public long renamenx(String oldKey, String newKey) {
-        return client.renamenx(oldKey, newKey);
+        return redisStarter.getUnifiedJedis().renamenx(oldKey, newKey);
     }
 
     /**
@@ -326,7 +329,7 @@ public class RedisService {
      * @return 成功返回1，失败返回0
      */
     public long renamenx(byte[] oldKey, byte[] newKey) {
-        return client.renamenx(oldKey, newKey);
+        return redisStarter.getUnifiedJedis().renamenx(oldKey, newKey);
     }
 
     /**
@@ -336,7 +339,7 @@ public class RedisService {
      * @return 匹配的key集合
      */
     public Set<String> keys(String pattern) {
-        return client.keys(pattern);
+        return redisStarter.getUnifiedJedis().keys(pattern);
     }
 
     /**
@@ -346,7 +349,7 @@ public class RedisService {
      * @return 匹配的key集合
      */
     public Set<byte[]> keys(byte[] pattern) {
-        return client.keys(pattern);
+        return redisStarter.getUnifiedJedis().keys(pattern);
     }
 
     /**
@@ -357,7 +360,7 @@ public class RedisService {
      * @return 扫描结果
      */
     public ScanResult<String> scan(String cursor, ScanParams params) {
-        return client.scan(cursor, params);
+        return redisStarter.getUnifiedJedis().scan(cursor, params);
     }
 
     /**
@@ -368,7 +371,7 @@ public class RedisService {
      * @return 扫描结果
      */
     public ScanResult<byte[]> scan(byte[] cursor, ScanParams params) {
-        return client.scan(cursor, params);
+        return redisStarter.getUnifiedJedis().scan(cursor, params);
     }
 
     // ============== 字符串操作 ==============
@@ -381,7 +384,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public long incrBy(String key, long increment) {
-        return client.incrBy(key, increment);
+        return redisStarter.getUnifiedJedis().incrBy(key, increment);
     }
 
     /**
@@ -392,7 +395,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public long incrBy(byte[] key, long increment) {
-        return client.incrBy(key, increment);
+        return redisStarter.getUnifiedJedis().incrBy(key, increment);
     }
 
     /**
@@ -402,7 +405,7 @@ public class RedisService {
      * @return 加1后的值
      */
     public long incr(String key) {
-        return client.incr(key);
+        return redisStarter.getUnifiedJedis().incr(key);
     }
 
     /**
@@ -412,7 +415,7 @@ public class RedisService {
      * @return 加1后的值
      */
     public long incr(byte[] key) {
-        return client.incr(key);
+        return redisStarter.getUnifiedJedis().incr(key);
     }
 
     /**
@@ -423,7 +426,7 @@ public class RedisService {
      * @return 减去减量后的值
      */
     public long decrBy(String key, long decrement) {
-        return client.decrBy(key, decrement);
+        return redisStarter.getUnifiedJedis().decrBy(key, decrement);
     }
 
     /**
@@ -434,7 +437,7 @@ public class RedisService {
      * @return 减去减量后的值
      */
     public long decrBy(byte[] key, long decrement) {
-        return client.decrBy(key, decrement);
+        return redisStarter.getUnifiedJedis().decrBy(key, decrement);
     }
 
     /**
@@ -444,7 +447,7 @@ public class RedisService {
      * @return 减1后的值
      */
     public long decr(String key) {
-        return client.decr(key);
+        return redisStarter.getUnifiedJedis().decr(key);
     }
 
     /**
@@ -454,7 +457,7 @@ public class RedisService {
      * @return 减1后的值
      */
     public long decr(byte[] key) {
-        return client.decr(key);
+        return redisStarter.getUnifiedJedis().decr(key);
     }
 
     /**
@@ -465,7 +468,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public double incrByFloat(String key, double increment) {
-        return client.incrByFloat(key, increment);
+        return redisStarter.getUnifiedJedis().incrByFloat(key, increment);
     }
 
     /**
@@ -476,7 +479,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public double incrByFloat(byte[] key, double increment) {
-        return client.incrByFloat(key, increment);
+        return redisStarter.getUnifiedJedis().incrByFloat(key, increment);
     }
 
     /**
@@ -487,7 +490,7 @@ public class RedisService {
      * @return 追加后字符串的长度
      */
     public long append(String key, String value) {
-        return client.append(key, value);
+        return redisStarter.getUnifiedJedis().append(key, value);
     }
 
     /**
@@ -498,7 +501,7 @@ public class RedisService {
      * @return 追加后字符串的长度
      */
     public long append(byte[] key, byte[] value) {
-        return client.append(key, value);
+        return redisStarter.getUnifiedJedis().append(key, value);
     }
 
     /**
@@ -508,7 +511,7 @@ public class RedisService {
      * @return 字符串长度
      */
     public long strlen(String key) {
-        return client.strlen(key);
+        return redisStarter.getUnifiedJedis().strlen(key);
     }
 
     /**
@@ -518,7 +521,7 @@ public class RedisService {
      * @return 字符串长度
      */
     public long strlen(byte[] key) {
-        return client.strlen(key);
+        return redisStarter.getUnifiedJedis().strlen(key);
     }
 
     // ============== 哈希操作 ==============
@@ -532,7 +535,7 @@ public class RedisService {
      * @return 如果字段是新创建的，返回1，如果字段已经存在，返回0
      */
     public long hset(String key, String field, String value) {
-        return client.hset(key, field, value);
+        return redisStarter.getUnifiedJedis().hset(key, field, value);
     }
 
     /**
@@ -544,7 +547,7 @@ public class RedisService {
      * @return 如果字段是新创建的，返回1，如果字段已经存在，返回0
      */
     public long hset(byte[] key, byte[] field, byte[] value) {
-        return client.hset(key, field, value);
+        return redisStarter.getUnifiedJedis().hset(key, field, value);
     }
 
     /**
@@ -555,7 +558,7 @@ public class RedisService {
      * @return 成功设置的字段数量
      */
     public long hset(String key, Map<String, String> hash) {
-        return client.hset(key, hash);
+        return redisStarter.getUnifiedJedis().hset(key, hash);
     }
 
     /**
@@ -566,7 +569,7 @@ public class RedisService {
      * @return 成功设置的字段数量
      */
     public long hset(byte[] key, Map<byte[], byte[]> hash) {
-        return client.hset(key, hash);
+        return redisStarter.getUnifiedJedis().hset(key, hash);
     }
 
     /**
@@ -578,7 +581,7 @@ public class RedisService {
      * @return 设置成功返回1，失败返回0
      */
     public long hsetnx(String key, String field, String value) {
-        return client.hsetnx(key, field, value);
+        return redisStarter.getUnifiedJedis().hsetnx(key, field, value);
     }
 
     /**
@@ -590,7 +593,7 @@ public class RedisService {
      * @return 设置成功返回1，失败返回0
      */
     public long hsetnx(byte[] key, byte[] field, byte[] value) {
-        return client.hsetnx(key, field, value);
+        return redisStarter.getUnifiedJedis().hsetnx(key, field, value);
     }
 
     /**
@@ -601,7 +604,7 @@ public class RedisService {
      * @return 值，字段不存在返回null
      */
     public String hget(String key, String field) {
-        return client.hget(key, field);
+        return redisStarter.getUnifiedJedis().hget(key, field);
     }
 
     /**
@@ -612,7 +615,7 @@ public class RedisService {
      * @return 值，字段不存在返回null
      */
     public byte[] hget(byte[] key, byte[] field) {
-        return client.hget(key, field);
+        return redisStarter.getUnifiedJedis().hget(key, field);
     }
 
     /**
@@ -623,7 +626,7 @@ public class RedisService {
      * @return 值列表
      */
     public List<String> hmget(String key, String... fields) {
-        return client.hmget(key, fields);
+        return redisStarter.getUnifiedJedis().hmget(key, fields);
     }
 
     /**
@@ -634,7 +637,7 @@ public class RedisService {
      * @return 值列表
      */
     public List<byte[]> hmget(byte[] key, byte[]... fields) {
-        return client.hmget(key, fields);
+        return redisStarter.getUnifiedJedis().hmget(key, fields);
     }
 
     /**
@@ -644,7 +647,7 @@ public class RedisService {
      * @return 字段和值的映射
      */
     public Map<String, String> hgetAll(String key) {
-        return client.hgetAll(key);
+        return redisStarter.getUnifiedJedis().hgetAll(key);
     }
 
     /**
@@ -654,7 +657,7 @@ public class RedisService {
      * @return 字段和值的映射
      */
     public Map<byte[], byte[]> hgetAll(byte[] key) {
-        return client.hgetAll(key);
+        return redisStarter.getUnifiedJedis().hgetAll(key);
     }
 
     /**
@@ -665,7 +668,7 @@ public class RedisService {
      * @return 成功删除的字段数量
      */
     public long hdel(String key, String... fields) {
-        return client.hdel(key, fields);
+        return redisStarter.getUnifiedJedis().hdel(key, fields);
     }
 
     /**
@@ -676,7 +679,7 @@ public class RedisService {
      * @return 成功删除的字段数量
      */
     public long hdel(byte[] key, byte[]... fields) {
-        return client.hdel(key, fields);
+        return redisStarter.getUnifiedJedis().hdel(key, fields);
     }
 
     /**
@@ -687,7 +690,7 @@ public class RedisService {
      * @return 存在返回true，否则返回false
      */
     public boolean hexists(String key, String field) {
-        return client.hexists(key, field);
+        return redisStarter.getUnifiedJedis().hexists(key, field);
     }
 
     /**
@@ -698,7 +701,7 @@ public class RedisService {
      * @return 存在返回true，否则返回false
      */
     public boolean hexists(byte[] key, byte[] field) {
-        return client.hexists(key, field);
+        return redisStarter.getUnifiedJedis().hexists(key, field);
     }
 
     /**
@@ -708,7 +711,7 @@ public class RedisService {
      * @return 所有字段集合
      */
     public Set<String> hkeys(String key) {
-        return client.hkeys(key);
+        return redisStarter.getUnifiedJedis().hkeys(key);
     }
 
     /**
@@ -718,7 +721,7 @@ public class RedisService {
      * @return 所有字段集合
      */
     public Set<byte[]> hkeys(byte[] key) {
-        return client.hkeys(key);
+        return redisStarter.getUnifiedJedis().hkeys(key);
     }
 
     /**
@@ -728,7 +731,7 @@ public class RedisService {
      * @return 所有值列表
      */
     public List<String> hvals(String key) {
-        return client.hvals(key);
+        return redisStarter.getUnifiedJedis().hvals(key);
     }
 
     /**
@@ -738,7 +741,7 @@ public class RedisService {
      * @return 所有值列表
      */
     public List<byte[]> hvals(byte[] key) {
-        return client.hvals(key);
+        return redisStarter.getUnifiedJedis().hvals(key);
     }
 
     /**
@@ -748,7 +751,7 @@ public class RedisService {
      * @return 字段数量
      */
     public long hlen(String key) {
-        return client.hlen(key);
+        return redisStarter.getUnifiedJedis().hlen(key);
     }
 
     /**
@@ -758,7 +761,7 @@ public class RedisService {
      * @return 字段数量
      */
     public long hlen(byte[] key) {
-        return client.hlen(key);
+        return redisStarter.getUnifiedJedis().hlen(key);
     }
 
     /**
@@ -770,7 +773,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public long hincrBy(String key, String field, long increment) {
-        return client.hincrBy(key, field, increment);
+        return redisStarter.getUnifiedJedis().hincrBy(key, field, increment);
     }
 
     /**
@@ -782,7 +785,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public long hincrBy(byte[] key, byte[] field, long increment) {
-        return client.hincrBy(key, field, increment);
+        return redisStarter.getUnifiedJedis().hincrBy(key, field, increment);
     }
 
     /**
@@ -794,7 +797,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public double hincrByFloat(String key, String field, double increment) {
-        return client.hincrByFloat(key, field, increment);
+        return redisStarter.getUnifiedJedis().hincrByFloat(key, field, increment);
     }
 
     /**
@@ -806,7 +809,7 @@ public class RedisService {
      * @return 加上增量后的值
      */
     public double hincrByFloat(byte[] key, byte[] field, double increment) {
-        return client.hincrByFloat(key, field, increment);
+        return redisStarter.getUnifiedJedis().hincrByFloat(key, field, increment);
     }
 
     // ============== 列表操作 ==============
@@ -819,7 +822,7 @@ public class RedisService {
      * @return 执行LPUSH命令后，列表的长度
      */
     public long lpush(String key, String... values) {
-        return client.lpush(key, values);
+        return redisStarter.getUnifiedJedis().lpush(key, values);
     }
 
     /**
@@ -830,7 +833,7 @@ public class RedisService {
      * @return 执行LPUSH命令后，列表的长度
      */
     public long lpush(byte[] key, byte[]... values) {
-        return client.lpush(key, values);
+        return redisStarter.getUnifiedJedis().lpush(key, values);
     }
 
     /**
@@ -841,7 +844,7 @@ public class RedisService {
      * @return 执行RPUSH命令后，列表的长度
      */
     public long rpush(String key, String... values) {
-        return client.rpush(key, values);
+        return redisStarter.getUnifiedJedis().rpush(key, values);
     }
 
     /**
@@ -852,7 +855,7 @@ public class RedisService {
      * @return 执行RPUSH命令后，列表的长度
      */
     public long rpush(byte[] key, byte[]... values) {
-        return client.rpush(key, values);
+        return redisStarter.getUnifiedJedis().rpush(key, values);
     }
 
     /**
@@ -862,7 +865,7 @@ public class RedisService {
      * @return 列表的头元素，列表为空返回null
      */
     public String lpop(String key) {
-        return client.lpop(key);
+        return redisStarter.getUnifiedJedis().lpop(key);
     }
 
     /**
@@ -872,7 +875,7 @@ public class RedisService {
      * @return 列表的头元素，列表为空返回null
      */
     public byte[] lpop(byte[] key) {
-        return client.lpop(key);
+        return redisStarter.getUnifiedJedis().lpop(key);
     }
 
     /**
@@ -882,7 +885,7 @@ public class RedisService {
      * @return 列表的尾元素，列表为空返回null
      */
     public String rpop(String key) {
-        return client.rpop(key);
+        return redisStarter.getUnifiedJedis().rpop(key);
     }
 
     /**
@@ -892,7 +895,7 @@ public class RedisService {
      * @return 列表的尾元素，列表为空返回null
      */
     public byte[] rpop(byte[] key) {
-        return client.rpop(key);
+        return redisStarter.getUnifiedJedis().rpop(key);
     }
 
     /**
@@ -903,7 +906,7 @@ public class RedisService {
      * @return 第一个元素，超时返回null
      */
     public List<String> blpop(int timeout, String key) {
-        return client.blpop(timeout, key);
+        return redisStarter.getUnifiedJedis().blpop(timeout, key);
     }
 
     /**
@@ -914,7 +917,7 @@ public class RedisService {
      * @return 第一个元素，超时返回null
      */
     public List<byte[]> blpop(int timeout, byte[] key) {
-        return client.blpop(timeout, key);
+        return redisStarter.getUnifiedJedis().blpop(timeout, key);
     }
 
     /**
@@ -925,7 +928,7 @@ public class RedisService {
      * @return 最后一个元素，超时返回null
      */
     public List<String> brpop(int timeout, String key) {
-        return client.brpop(timeout, key);
+        return redisStarter.getUnifiedJedis().brpop(timeout, key);
     }
 
     /**
@@ -936,7 +939,7 @@ public class RedisService {
      * @return 最后一个元素，超时返回null
      */
     public List<byte[]> brpop(int timeout, byte[] key) {
-        return client.brpop(timeout, key);
+        return redisStarter.getUnifiedJedis().brpop(timeout, key);
     }
 
     /**
@@ -946,7 +949,7 @@ public class RedisService {
      * @return 列表长度
      */
     public long llen(String key) {
-        return client.llen(key);
+        return redisStarter.getUnifiedJedis().llen(key);
     }
 
     /**
@@ -956,7 +959,7 @@ public class RedisService {
      * @return 列表长度
      */
     public long llen(byte[] key) {
-        return client.llen(key);
+        return redisStarter.getUnifiedJedis().llen(key);
     }
 
     /**
@@ -968,8 +971,9 @@ public class RedisService {
      * @return 指定范围内的元素列表
      */
     public List<String> lrange(String key, long start, long stop) {
-        return client.lrange(key, start, stop);
+        return redisStarter.getUnifiedJedis().lrange(key, start, stop);
     }
+
     /**
      * 获取列表指定范围内的元素
      *
@@ -979,8 +983,9 @@ public class RedisService {
      * @return 指定范围内的元素列表
      */
     public List<byte[]> lrange(byte[] key, long start, long stop) {
-        return client.lrange(key, start, stop);
+        return redisStarter.getUnifiedJedis().lrange(key, start, stop);
     }
+
     /**
      * 根据参数count的值，移除列表中与参数value相等的元素
      *
@@ -990,7 +995,7 @@ public class RedisService {
      * @return 被移除元素的数量
      */
     public long lrem(String key, long count, String value) {
-        return client.lrem(key, count, value);
+        return redisStarter.getUnifiedJedis().lrem(key, count, value);
     }
 
     /**
@@ -1002,7 +1007,7 @@ public class RedisService {
      * @return 被移除元素的数量
      */
     public long lrem(byte[] key, long count, byte[] value) {
-        return client.lrem(key, count, value);
+        return redisStarter.getUnifiedJedis().lrem(key, count, value);
     }
 
     /**
@@ -1014,7 +1019,7 @@ public class RedisService {
      * @return 成功返回OK
      */
     public String ltrim(String key, long start, long stop) {
-        return client.ltrim(key, start, stop);
+        return redisStarter.getUnifiedJedis().ltrim(key, start, stop);
     }
 
 
@@ -1027,8 +1032,9 @@ public class RedisService {
      * @return 成功返回OK
      */
     public String ltrim(byte[] key, long start, long stop) {
-        return client.ltrim(key, start, stop);
+        return redisStarter.getUnifiedJedis().ltrim(key, start, stop);
     }
+
     /**
      * 将列表key下标为index的元素的值设置为value
      *
@@ -1038,7 +1044,7 @@ public class RedisService {
      * @return 成功返回OK
      */
     public String lset(String key, long index, String value) {
-        return client.lset(key, index, value);
+        return redisStarter.getUnifiedJedis().lset(key, index, value);
     }
 
     /**
@@ -1050,7 +1056,7 @@ public class RedisService {
      * @return 成功返回OK
      */
     public String lset(byte[] key, long index, byte[] value) {
-        return client.lset(key, index, value);
+        return redisStarter.getUnifiedJedis().lset(key, index, value);
     }
 
     /**
@@ -1061,7 +1067,7 @@ public class RedisService {
      * @return 元素值
      */
     public String lindex(String key, long index) {
-        return client.lindex(key, index);
+        return redisStarter.getUnifiedJedis().lindex(key, index);
     }
 
     /**
@@ -1072,7 +1078,7 @@ public class RedisService {
      * @return 元素值
      */
     public byte[] lindex(byte[] key, long index) {
-        return client.lindex(key, index);
+        return redisStarter.getUnifiedJedis().lindex(key, index);
     }
 
 
@@ -1086,7 +1092,7 @@ public class RedisService {
      * @return 加入到集合中的新元素的数量
      */
     public long sadd(String key, String... members) {
-        return client.sadd(key, members);
+        return redisStarter.getUnifiedJedis().sadd(key, members);
     }
 
     /**
@@ -1097,7 +1103,7 @@ public class RedisService {
      * @return 加入到集合中的新元素的数量
      */
     public long sadd(byte[] key, byte[]... members) {
-        return client.sadd(key, members);
+        return redisStarter.getUnifiedJedis().sadd(key, members);
     }
 
     /**
@@ -1108,7 +1114,7 @@ public class RedisService {
      * @return 成功移除的元素的数量
      */
     public long srem(String key, String... members) {
-        return client.srem(key, members);
+        return redisStarter.getUnifiedJedis().srem(key, members);
     }
 
     /**
@@ -1119,7 +1125,7 @@ public class RedisService {
      * @return 成功移除的元素的数量
      */
     public long srem(byte[] key, byte[]... members) {
-        return client.srem(key, members);
+        return redisStarter.getUnifiedJedis().srem(key, members);
     }
 
     /**
@@ -1129,7 +1135,7 @@ public class RedisService {
      * @return 成员集合
      */
     public Set<String> smembers(String key) {
-        return client.smembers(key);
+        return redisStarter.getUnifiedJedis().smembers(key);
     }
 
     /**
@@ -1139,7 +1145,7 @@ public class RedisService {
      * @return 成员集合
      */
     public Set<byte[]> smembers(byte[] key) {
-        return client.smembers(key);
+        return redisStarter.getUnifiedJedis().smembers(key);
     }
 
     /**
@@ -1150,7 +1156,7 @@ public class RedisService {
      * @return 是集合成员返回true，否则返回false
      */
     public boolean sismember(String key, String member) {
-        return client.sismember(key, member);
+        return redisStarter.getUnifiedJedis().sismember(key, member);
     }
 
     /**
@@ -1161,7 +1167,7 @@ public class RedisService {
      * @return 是集合成员返回true，否则返回false
      */
     public boolean sismember(byte[] key, byte[] member) {
-        return client.sismember(key, member);
+        return redisStarter.getUnifiedJedis().sismember(key, member);
     }
 
     /**
@@ -1171,7 +1177,7 @@ public class RedisService {
      * @return 集合的基数
      */
     public long scard(String key) {
-        return client.scard(key);
+        return redisStarter.getUnifiedJedis().scard(key);
     }
 
     /**
@@ -1181,7 +1187,7 @@ public class RedisService {
      * @return 集合的基数
      */
     public long scard(byte[] key) {
-        return client.scard(key);
+        return redisStarter.getUnifiedJedis().scard(key);
     }
 
     /**
@@ -1191,7 +1197,7 @@ public class RedisService {
      * @return 随机元素
      */
     public String srandmember(String key) {
-        return client.srandmember(key);
+        return redisStarter.getUnifiedJedis().srandmember(key);
     }
 
     /**
@@ -1201,7 +1207,7 @@ public class RedisService {
      * @return 随机元素
      */
     public byte[] srandmember(byte[] key) {
-        return client.srandmember(key);
+        return redisStarter.getUnifiedJedis().srandmember(key);
     }
 
     /**
@@ -1212,7 +1218,7 @@ public class RedisService {
      * @return 随机元素列表
      */
     public List<String> srandmember(String key, int count) {
-        return client.srandmember(key, count);
+        return redisStarter.getUnifiedJedis().srandmember(key, count);
     }
 
     /**
@@ -1223,7 +1229,7 @@ public class RedisService {
      * @return 随机元素列表
      */
     public List<byte[]> srandmember(byte[] key, int count) {
-        return client.srandmember(key, count);
+        return redisStarter.getUnifiedJedis().srandmember(key, count);
     }
 
     /**
@@ -1233,7 +1239,7 @@ public class RedisService {
      * @return 被移除的随机元素
      */
     public String spop(String key) {
-        return client.spop(key);
+        return redisStarter.getUnifiedJedis().spop(key);
     }
 
     /**
@@ -1243,7 +1249,7 @@ public class RedisService {
      * @return 被移除的随机元素
      */
     public byte[] spop(byte[] key) {
-        return client.spop(key);
+        return redisStarter.getUnifiedJedis().spop(key);
     }
 
     /**
@@ -1253,7 +1259,7 @@ public class RedisService {
      * @return 交集成员的集合
      */
     public Set<String> sinter(String... keys) {
-        return client.sinter(keys);
+        return redisStarter.getUnifiedJedis().sinter(keys);
     }
 
     /**
@@ -1263,7 +1269,7 @@ public class RedisService {
      * @return 交集成员的集合
      */
     public Set<byte[]> sinter(byte[]... keys) {
-        return client.sinter(keys);
+        return redisStarter.getUnifiedJedis().sinter(keys);
     }
 
     /**
@@ -1273,7 +1279,7 @@ public class RedisService {
      * @return 并集成员的集合
      */
     public Set<String> sunion(String... keys) {
-        return client.sunion(keys);
+        return redisStarter.getUnifiedJedis().sunion(keys);
     }
 
     /**
@@ -1283,7 +1289,7 @@ public class RedisService {
      * @return 并集成员的集合
      */
     public Set<byte[]> sunion(byte[]... keys) {
-        return client.sunion(keys);
+        return redisStarter.getUnifiedJedis().sunion(keys);
     }
 
     /**
@@ -1293,7 +1299,7 @@ public class RedisService {
      * @return 差集成员的集合
      */
     public Set<String> sdiff(String... keys) {
-        return client.sdiff(keys);
+        return redisStarter.getUnifiedJedis().sdiff(keys);
     }
 
     /**
@@ -1303,7 +1309,7 @@ public class RedisService {
      * @return 差集成员的集合
      */
     public Set<byte[]> sdiff(byte[]... keys) {
-        return client.sdiff(keys);
+        return redisStarter.getUnifiedJedis().sdiff(keys);
     }
 
     // ============== 有序集合操作 ==============
@@ -1317,7 +1323,7 @@ public class RedisService {
      * @return 新添加的元素数量
      */
     public long zadd(String key, double score, String member) {
-        return client.zadd(key, score, member);
+        return redisStarter.getUnifiedJedis().zadd(key, score, member);
     }
 
     /**
@@ -1329,7 +1335,7 @@ public class RedisService {
      * @return 新添加的元素数量
      */
     public long zadd(byte[] key, double score, byte[] member) {
-        return client.zadd(key, score, member);
+        return redisStarter.getUnifiedJedis().zadd(key, score, member);
     }
 
     /**
@@ -1340,7 +1346,7 @@ public class RedisService {
      * @return 新添加的元素数量
      */
     public long zadd(String key, Map<String, Double> scoreMembers) {
-        return client.zadd(key, scoreMembers);
+        return redisStarter.getUnifiedJedis().zadd(key, scoreMembers);
     }
 
     /**
@@ -1351,7 +1357,7 @@ public class RedisService {
      * @return 新添加的元素数量
      */
     public long zadd(byte[] key, Map<byte[], Double> scoreMembers) {
-        return client.zadd(key, scoreMembers);
+        return redisStarter.getUnifiedJedis().zadd(key, scoreMembers);
     }
 
     /**
@@ -1363,7 +1369,7 @@ public class RedisService {
      * @return 新添加的元素数量
      */
     public long zadd(String key, Map<String, Double> scoreMembers, ZAddParams params) {
-        return client.zadd(key, scoreMembers, params);
+        return redisStarter.getUnifiedJedis().zadd(key, scoreMembers, params);
     }
 
     /**
@@ -1375,7 +1381,7 @@ public class RedisService {
      * @return 新添加的元素数量
      */
     public long zadd(byte[] key, Map<byte[], Double> scoreMembers, ZAddParams params) {
-        return client.zadd(key, scoreMembers, params);
+        return redisStarter.getUnifiedJedis().zadd(key, scoreMembers, params);
     }
 
     /**
@@ -1386,7 +1392,7 @@ public class RedisService {
      * @return 被成功移除的成员的数量
      */
     public long zrem(String key, String... members) {
-        return client.zrem(key, members);
+        return redisStarter.getUnifiedJedis().zrem(key, members);
     }
 
     /**
@@ -1397,8 +1403,9 @@ public class RedisService {
      * @return 被成功移除的成员的数量
      */
     public long zrem(byte[] key, byte[]... members) {
-        return client.zrem(key, members);
+        return redisStarter.getUnifiedJedis().zrem(key, members);
     }
+
     /**
      * 返回有序集key中，指定区间内的成员
      *
@@ -1408,7 +1415,7 @@ public class RedisService {
      * @return 指定区间内的成员列表
      */
     public List<String> zrange(String key, long start, long stop) {
-        return client.zrange(key, start, stop);
+        return redisStarter.getUnifiedJedis().zrange(key, start, stop);
     }
 
     /**
@@ -1420,7 +1427,7 @@ public class RedisService {
      * @return 指定区间内的成员列表
      */
     public List<byte[]> zrange(byte[] key, long start, long stop) {
-        return client.zrange(key, start, stop);
+        return redisStarter.getUnifiedJedis().zrange(key, start, stop);
     }
 
     /**
@@ -1432,7 +1439,7 @@ public class RedisService {
      * @return 指定区间内的成员列表
      */
     public List<String> zrevrange(String key, long start, long stop) {
-        return client.zrevrange(key, start, stop);
+        return redisStarter.getUnifiedJedis().zrevrange(key, start, stop);
     }
 
     /**
@@ -1444,7 +1451,7 @@ public class RedisService {
      * @return 指定区间内的成员列表
      */
     public List<byte[]> zrevrange(byte[] key, long start, long stop) {
-        return client.zrevrange(key, start, stop);
+        return redisStarter.getUnifiedJedis().zrevrange(key, start, stop);
     }
 
     /**
@@ -1456,7 +1463,7 @@ public class RedisService {
      * @return 指定分数范围内的成员列表
      */
     public List<String> zrangeByScore(String key, double min, double max) {
-        return client.zrangeByScore(key, min, max);
+        return redisStarter.getUnifiedJedis().zrangeByScore(key, min, max);
     }
 
     /**
@@ -1468,7 +1475,7 @@ public class RedisService {
      * @return 指定分数范围内的成员列表
      */
     public List<byte[]> zrangeByScore(byte[] key, double min, double max) {
-        return client.zrangeByScore(key, min, max);
+        return redisStarter.getUnifiedJedis().zrangeByScore(key, min, max);
     }
 
     /**
@@ -1480,7 +1487,7 @@ public class RedisService {
      * @return 成员和分数的元组列表
      */
     public List<Tuple> zrangeWithScores(String key, long start, long stop) {
-        return client.zrangeWithScores(key, start, stop);
+        return redisStarter.getUnifiedJedis().zrangeWithScores(key, start, stop);
     }
 
     /**
@@ -1492,7 +1499,7 @@ public class RedisService {
      * @return 成员和分数的元组列表
      */
     public List<Tuple> zrangeWithScores(byte[] key, long start, long stop) {
-        return client.zrangeWithScores(key, start, stop);
+        return redisStarter.getUnifiedJedis().zrangeWithScores(key, start, stop);
     }
 
     /**
@@ -1503,7 +1510,7 @@ public class RedisService {
      * @return 排名，从0开始，不存在返回null
      */
     public Long zrank(String key, String member) {
-        return client.zrank(key, member);
+        return redisStarter.getUnifiedJedis().zrank(key, member);
     }
 
     /**
@@ -1514,7 +1521,7 @@ public class RedisService {
      * @return 排名，从0开始，不存在返回null
      */
     public Long zrank(byte[] key, byte[] member) {
-        return client.zrank(key, member);
+        return redisStarter.getUnifiedJedis().zrank(key, member);
     }
 
     /**
@@ -1525,7 +1532,7 @@ public class RedisService {
      * @return 排名，从0开始，不存在返回null
      */
     public Long zrevrank(String key, String member) {
-        return client.zrevrank(key, member);
+        return redisStarter.getUnifiedJedis().zrevrank(key, member);
     }
 
     /**
@@ -1536,7 +1543,7 @@ public class RedisService {
      * @return 排名，从0开始，不存在返回null
      */
     public Long zrevrank(byte[] key, byte[] member) {
-        return client.zrevrank(key, member);
+        return redisStarter.getUnifiedJedis().zrevrank(key, member);
     }
 
     /**
@@ -1547,7 +1554,7 @@ public class RedisService {
      * @return 分数值
      */
     public Double zscore(String key, String member) {
-        return client.zscore(key, member);
+        return redisStarter.getUnifiedJedis().zscore(key, member);
     }
 
     /**
@@ -1558,7 +1565,7 @@ public class RedisService {
      * @return 分数值
      */
     public Double zscore(byte[] key, byte[] member) {
-        return client.zscore(key, member);
+        return redisStarter.getUnifiedJedis().zscore(key, member);
     }
 
     /**
@@ -1568,7 +1575,7 @@ public class RedisService {
      * @return 有序集的基数
      */
     public long zcard(String key) {
-        return client.zcard(key);
+        return redisStarter.getUnifiedJedis().zcard(key);
     }
 
     /**
@@ -1578,7 +1585,7 @@ public class RedisService {
      * @return 有序集的基数
      */
     public long zcard(byte[] key) {
-        return client.zcard(key);
+        return redisStarter.getUnifiedJedis().zcard(key);
     }
 
     /**
@@ -1590,7 +1597,7 @@ public class RedisService {
      * @return 分数范围内的成员数量
      */
     public long zcount(String key, double min, double max) {
-        return client.zcount(key, min, max);
+        return redisStarter.getUnifiedJedis().zcount(key, min, max);
     }
 
     /**
@@ -1602,7 +1609,7 @@ public class RedisService {
      * @return 分数范围内的成员数量
      */
     public long zcount(byte[] key, double min, double max) {
-        return client.zcount(key, min, max);
+        return redisStarter.getUnifiedJedis().zcount(key, min, max);
     }
 
     /**
@@ -1614,7 +1621,7 @@ public class RedisService {
      * @return 加上增量后的分数值
      */
     public double zincrby(String key, double increment, String member) {
-        return client.zincrby(key, increment, member);
+        return redisStarter.getUnifiedJedis().zincrby(key, increment, member);
     }
 
     /**
@@ -1626,24 +1633,26 @@ public class RedisService {
      * @return 加上增量后的分数值
      */
     public double zincrby(byte[] key, double increment, byte[] member) {
-        return client.zincrby(key, increment, member);
+        return redisStarter.getUnifiedJedis().zincrby(key, increment, member);
     }
 
     /**
      * 返回服务端信息
+     *
      * @return
      */
     public String info() {
-        byte[] info = (byte[]) client.sendCommand(Protocol.Command.INFO);
+        byte[] info = (byte[]) redisStarter.getUnifiedJedis().sendCommand(Protocol.Command.INFO);
         return new String(info);
     }
 
     /**
      * 返回库大小
+     *
      * @return
      */
     public long dbSize() {
-        return client.dbSize();
+        return redisStarter.getUnifiedJedis().dbSize();
     }
     // ============== 通用方法 ==============
 
@@ -1653,6 +1662,6 @@ public class RedisService {
      * @return UnifiedJedis客户端
      */
     public UnifiedJedis getClient() {
-        return client;
+        return redisStarter.getUnifiedJedis();
     }
 }

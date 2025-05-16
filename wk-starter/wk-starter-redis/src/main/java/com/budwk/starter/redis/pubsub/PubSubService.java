@@ -1,10 +1,10 @@
 package com.budwk.starter.redis.pubsub;
 
+import com.budwk.starter.redis.RedisStarter;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import redis.clients.jedis.UnifiedJedis;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class PubSubService {
     private static final Log log = Logs.get();
 
     @Inject
-    protected UnifiedJedis unifiedJedis;
+    protected RedisStarter redisStarter;
 
     protected List<PubSubProxy> list = new ArrayList<PubSubProxy>();
     protected Set<String> patterns = new HashSet<String>();
@@ -28,7 +28,7 @@ public class PubSubService {
             public void run() {
                 while (patterns.contains(pattern)) {
                     try {
-                        unifiedJedis.psubscribe(proxy, pattern);
+                        redisStarter.getUnifiedJedis().psubscribe(proxy, pattern);
                     } catch (Exception e) {
                         if (!patterns.contains(pattern))
                             break;
@@ -48,7 +48,7 @@ public class PubSubService {
 
     public void fire(String channel, String message) {
         log.debugf("publish channel=%s msg=%s", channel, message);
-        unifiedJedis.publish(channel, message);
+        redisStarter.getUnifiedJedis().publish(channel, message);
     }
 
     public void depose() {

@@ -6,11 +6,15 @@ import redis.clients.jedis.UnifiedJedis;
 import redis.clients.jedis.json.Path;
 import redis.clients.jedis.json.Path2;
 
-@IocBean
+@IocBean(create = "init")
 public class RedisJsonService {
-
     @Inject
+    private RedisStarter redisStarter;
     private UnifiedJedis client;
+
+    public void init() {
+        client = redisStarter.getUnifiedJedis();
+    }
 
     public <T> String setObject(String key, T object) {
         return client.jsonSet(key, Path.ROOT_PATH, object);

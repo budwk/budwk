@@ -5,6 +5,7 @@ import com.budwk.app.sys.services.SysAreaService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.result.Result;
 import com.budwk.starter.log.annotation.SLog;
+import com.budwk.starter.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -26,6 +27,30 @@ import javax.servlet.http.HttpServletRequest;
 public class PubAreaController {
     @Inject
     private SysAreaService sysAreaService;
+    @Inject
+    private RedisService redisService;
+
+    @At("/redis")
+    @Ok("json")
+    @GET
+    public Result<?> getRedisInfo(HttpServletRequest req) {
+        return Result.data(redisService.info());
+    }
+
+    @At("/get")
+    @Ok("json")
+    @GET
+    public Result<?> getRedisSet(@Param("value") String value, HttpServletRequest req) {
+        return Result.data(redisService.get("test_redis"));
+    }
+
+    @At("/set")
+    @Ok("json")
+    @GET
+    public Result<?> setRedisSet(@Param("value") String value, HttpServletRequest req) {
+        redisService.set("test_redis", value);
+        return Result.success();
+    }
 
     @At("/list")
     @Ok("json")

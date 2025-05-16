@@ -4,6 +4,7 @@ import com.budwk.app.sys.models.Sys_task_history;
 import com.budwk.app.sys.services.SysTaskHistoryService;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.job.JobInfo;
+import com.budwk.starter.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import com.budwk.starter.redis.pubsub.PubSub;
 import com.budwk.starter.redis.pubsub.PubSubService;
@@ -30,7 +31,7 @@ public class TaskHistory implements PubSub {
     @Inject
     private SysTaskHistoryService sysTaskHistoryService;
     @Inject
-    private UnifiedJedis unifiedJedis;
+    private RedisService redisService;
 
     public void init() {
         pubSubService.reg(RedisConstant.JOB_SUBSCRIBE, this);
