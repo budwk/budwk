@@ -46,7 +46,7 @@ public class RedisStarter {
     public void init() {
         DEFAULT_DATASOURCE = conf.get("redis.default", DEFAULT_DATASOURCE);
         if ("da".equalsIgnoreCase(conf.get("redis.mode"))) {
-            log.info("双活数据源模式..");
+            log.info("Redis 双机房模式..");
             initDAClient();
             if (conf.getBoolean("da.nacos.enable", false)) {
                 registerNacosConfigListener();
@@ -111,7 +111,7 @@ public class RedisStarter {
                     }
                     masterDataSources.put(name, client);
                 } catch (Exception e) {
-                    throw new RuntimeException("datasource init error " + prefix_name, e);
+                    throw new RuntimeException("Redis init error " + prefix_name, e);
                 }
             }
         }
@@ -249,13 +249,17 @@ public class RedisStarter {
      */
     public void depose() {
         // 遍历masterDataSources
-        for (Map.Entry<String, UnifiedJedis> entry : masterDataSources.entrySet()) {
-            String name = entry.getKey();
-            UnifiedJedis jedis = entry.getValue();
-            if (jedis != null) {
-                jedis.close();
-                log.infof("Redis %s 关闭成功", name);
+        try {
+            for (Map.Entry<String, UnifiedJedis> entry : masterDataSources.entrySet()) {
+                String name = entry.getKey();
+                UnifiedJedis jedis = entry.getValue();
+                if (jedis != null) {
+                    jedis.close();
+                    log.infof("Redis %s 关闭成功", name);
+                }
             }
+        }catch (Exception e){
+            log.error("Redis 关闭失败", e);
         }
         if (nacosConfigService != null && configListener != null) {
             nacosConfigService.removeListener(conf.get("da.nacos.data-id"), conf.get("da.nacos.group", "DEFAULT_GROUP"), configListener);
