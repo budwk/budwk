@@ -13,6 +13,7 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import redis.clients.jedis.Protocol;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,7 +35,8 @@ public class PubAreaController {
     @Ok("json")
     @GET
     public Result<?> getRedisInfo(HttpServletRequest req) {
-        return Result.data(redisService.info());
+        byte[] info = (byte[]) redisService.getClient().sendCommand(Protocol.Command.INFO);
+        return Result.data(new String(info));
     }
 
     @At("/get")
