@@ -3,10 +3,10 @@ package com.budwk.starter.job.aop;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.job.JobInfo;
 import com.budwk.starter.job.annotation.SJob;
+import com.budwk.starter.redis.pubsub.PubSubService;
 import lombok.extern.slf4j.Slf4j;
 import org.nutz.aop.InterceptorChain;
 import org.nutz.aop.MethodInterceptor;
-import com.budwk.starter.redis.pubsub.PubSubService;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -49,11 +49,20 @@ public class SJobAopInterceptor implements MethodInterceptor {
         String jobId = R.UU32();
         try {
             RLock rLock = redissonClient.getLock(RedisConstant.JOB_EXECUTE + iocBean.name() + ":" + sJob.value());
-            if (rLock.tryLock(3, TimeUnit.SECONDS)) {
-                chain.doChain();
-                tookTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-                doSendMessage(null, tookTime, sJob.value(), taskId, instanceId, jobId);
-                log.info("SJob iocName:{} jobName:{} taskId:{} instanceId:{} jobId:{} - Success", iocBean.name(), sJob.value(), taskId, instanceId, jobId);
+            if (rLock.tryLock(10, TimeUnit.SECONDS)) {
+                try {
+                    chain.doChain();
+                    tookTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+                    doSendMessage(null, tookTime, sJob.value(), taskId, instanceId, jobId);
+                    log.info("SJob iocName:{} jobName:{} taskId:{} instanceId:{} jobId:{} - Success", iocBean.name(), sJob.value(), taskId, instanceId, jobId);
+                } finally {
+                    if (rLock.isHeldByCurrentThread()) {
+                        rLock.unlock();
+                        log.info("SJob iocName:{} jobName:{} Unlocked", iocBean.name(), sJob.value());
+                    } else {
+                        log.warn("SJob iocName:{} jobName:{} Lock not held by current thread", iocBean.name(), sJob.value());
+                    }
+                }
             } else {
                 log.info("SJob iocName:{} jobName:{} Locked", iocBean.name(), sJob.value());
             }
