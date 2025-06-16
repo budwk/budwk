@@ -29,7 +29,7 @@ Language: <a href="README.md">中文</a> | English
 
 # 🚀 Introduction
 
-BudWk, originally named NutzWk, is an open-source Java enterprise-level Web development framework based on the domestic framework nutzboot. It has nearly a decade of open-source history, has accumulated a large number of enterprise and individual users, and has gone through several iterations from V1 to V8.
+BudWk, originally named NutzWk, is an open-source Java enterprise-level Web development framework based on the domestic framework nutzboot. It has more than ten years a decade of open-source history, has accumulated a large number of enterprise and individual users, and has gone through several iterations from V1 to V8.
 
 V8 further upgrades and transforms the front-end and back-end functions on the basis of API gateway, component library, authentication center, control center, and other functions available in V7, improving user experience while greatly reducing development workload, improving development efficiency, and providing great convenience for product upgrades and iterations.
 
