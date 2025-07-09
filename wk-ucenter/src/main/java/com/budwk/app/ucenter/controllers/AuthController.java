@@ -5,7 +5,7 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import com.alibaba.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_unit;
 import com.budwk.app.sys.models.Sys_user;
@@ -56,26 +56,26 @@ public class AuthController {
     private ValidateService validateService;
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysUserProvider sysUserProvider;
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysUnitProvider sysUnitProvider;
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysConfigProvider sysConfigProvider;
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysMsgProvider sysMsgProvider;
 
     @Inject
     private RedisService redisService;
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysAppProvider sysAppProvider;
 
     @At

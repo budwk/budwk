@@ -3,7 +3,7 @@ package com.budwk.app.wx.controllers.pub;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import com.budwk.app.sys.providers.ISysConfigProvider;
 import com.budwk.app.wx.commons.service.WxService;
 import com.budwk.app.wx.services.WxConfigService;
@@ -49,7 +49,7 @@ public class WxFileUploadController {
     @Inject
     private PropertiesProxy conf;
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysConfigProvider sysConfigProvider;
 
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:imageUpload"})

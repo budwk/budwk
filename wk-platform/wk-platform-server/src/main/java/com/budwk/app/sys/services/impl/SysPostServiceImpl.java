@@ -1,12 +1,12 @@
 package com.budwk.app.sys.services.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.app.sys.enums.SysMsgType;
 import com.budwk.app.sys.models.Sys_post;
 import com.budwk.app.sys.providers.ISysMsgProvider;
 import com.budwk.app.sys.services.SysPostService;
 import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.database.service.BaseServiceImpl;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -26,7 +26,7 @@ public class SysPostServiceImpl extends BaseServiceImpl<Sys_post> implements Sys
     }
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysMsgProvider sysMsgProvider;
 
     public void importData(String fileName, List<Sys_post> list, boolean over, String userId, String loginname) {

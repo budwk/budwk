@@ -1,6 +1,6 @@
 package com.budwk.app.wx.controllers.open;
 
-import com.alibaba.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import com.budwk.app.sys.providers.ISysConfigProvider;
 import com.budwk.app.wx.commons.service.WxService;
 import com.budwk.app.wx.models.Wx_config;
@@ -45,7 +45,7 @@ public class WechatOauthController {
     @Inject
     private WxService wxService;
     @Inject
-    @Reference
+    @DubboReference(check = false)
     private ISysConfigProvider sysConfigProvider;
 
     @At("/{wxid}/oauth")

@@ -117,10 +117,6 @@
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nacos-discovery</artifactId>
-        </dependency>
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>

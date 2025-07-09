@@ -1,6 +1,6 @@
 package com.budwk.app.cms.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import com.budwk.app.cms.models.Cms_link;
 import com.budwk.app.cms.services.CmsLinkService;
 import com.budwk.starter.common.page.Pagination;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author caoshi
  */
-@Service(interfaceClass = ICmsLinkProvider.class)
+@DubboService(interfaceClass = ICmsLinkProvider.class)
 @IocBean
 public class CmsLinkProvider implements ICmsLinkProvider{
     @Inject

@@ -48,6 +48,8 @@
         <emoji-java.veision>5.1.1</emoji-java.veision>
         <elasticsearch.veision>8.9.0</elasticsearch.veision>
         <mongodb-driver-sync.version>5.0.1</mongodb-driver-sync.version>
+        <dubbo3.version>3.3.5</dubbo3.version>
+        <nacos3.version>3.0.2</nacos3.version>
 
         <maven.plugin.version>3.8.1</maven.plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
@@ -263,6 +265,26 @@
                 <version>${oshi-core.version}</version>
             </dependency>
             <!-- dubbo-nacos -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-config-api</artifactId>
+                <version>${dubbo3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>${dubbo3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos3.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>

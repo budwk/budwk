@@ -2,13 +2,13 @@ package com.budwk.starter.log;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.starter.log.enums.LogType;
 import com.budwk.starter.log.model.Sys_log;
 import com.budwk.starter.log.provider.ISysLogProvider;
 import com.budwk.starter.security.utils.SecurityUtil;
 import com.budwk.starter.web.wrapper.RequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.el.El;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -35,7 +35,7 @@ import java.util.Map;
 @Slf4j
 public class LogService {
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysLogProvider sysLogProvider;
     private static final int STATCK_TRACE_EL_NUMBER = 2;
 

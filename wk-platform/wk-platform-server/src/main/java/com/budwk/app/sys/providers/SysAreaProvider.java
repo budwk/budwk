@@ -1,15 +1,15 @@
 package com.budwk.app.sys.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.models.Sys_area;
 import com.budwk.app.sys.services.SysAreaService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.util.NutMap;
 
 import java.util.List;
 
-@Service(interfaceClass = ISysAreaProvider.class)
+@DubboService(interfaceClass = ISysAreaProvider.class)
 @IocBean
 public class SysAreaProvider implements ISysAreaProvider {
     @Inject

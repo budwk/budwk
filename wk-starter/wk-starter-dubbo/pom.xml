@@ -27,15 +27,24 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!-- dubbo -->
+        <!-- Dubbo 3.x 核心依赖 -->
         <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-dubbo</artifactId>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-config-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-registry-nacos</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
-            <version>2.5.1</version>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

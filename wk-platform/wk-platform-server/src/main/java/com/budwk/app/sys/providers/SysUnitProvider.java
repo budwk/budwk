@@ -1,15 +1,15 @@
 package com.budwk.app.sys.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.models.Sys_unit;
 import com.budwk.app.sys.services.SysUnitService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
  * @author wizzer@qq.com
  */
-@Service(interfaceClass = ISysUnitProvider.class)
+@DubboService(interfaceClass = ISysUnitProvider.class)
 @IocBean
 public class SysUnitProvider implements ISysUnitProvider {
     @Inject

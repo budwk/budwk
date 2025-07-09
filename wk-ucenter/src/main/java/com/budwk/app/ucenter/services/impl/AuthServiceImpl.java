@@ -1,6 +1,5 @@
 package com.budwk.app.ucenter.services.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.app.sys.models.Sys_user;
 import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.app.sys.providers.ISysUserProvider;
@@ -9,6 +8,7 @@ import com.budwk.app.ucenter.services.ValidateService;
 import com.budwk.starter.common.constant.RedisConstant;
 import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.redis.RedisService;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private ValidateService validateService;
 
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysUserProvider sysUserProvider;
 
     @Inject

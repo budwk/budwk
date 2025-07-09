@@ -1,6 +1,5 @@
 package com.budwk.app.ucenter.services.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.app.sys.providers.ISysUserProvider;
 import com.budwk.app.ucenter.services.ValidateService;
@@ -15,13 +14,12 @@ import com.budwk.starter.sms.SmsSendServer;
 import com.budwk.starter.sms.enums.SmsType;
 import com.wf.captcha.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
 import org.nutz.lang.util.NutMap;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
 
 /**
  * @author wizzer@qq.com
@@ -37,7 +35,7 @@ public class ValidateServiceImpl implements ValidateService {
     @Inject
     private EmailSendServer emailSendServer;
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysUserProvider sysUserProvider;
 
     /**

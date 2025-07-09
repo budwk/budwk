@@ -1,6 +1,6 @@
 package com.budwk.app.cms.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import com.budwk.app.cms.models.Cms_article;
 import com.budwk.app.cms.services.CmsArticleService;
 import com.budwk.starter.common.page.Pagination;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author caoshi
  * @date 2021年5月10日
  */
-@Service(interfaceClass = ICmsArticleProvider.class)
+@DubboService(interfaceClass = ICmsArticleProvider.class)
 @IocBean
 public class CmsArticleProvider implements ICmsArticleProvider{
 

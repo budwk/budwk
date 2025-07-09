@@ -1,8 +1,8 @@
 # wk-starter-dao
 
-* 支持双活切换、多数据源、单数据源模式
+* 支持双活切换、多数据源、单数据源模式，兼容老的单机配置
 * 需将引入的 `nutzboot-starter-nutz-dao` 替换为 `wk-starter-da-dao`
-* Nacos 版本 `2.5.1`
+* Nacos 版本 `3.0.2`
 
 ## 配置说明
 

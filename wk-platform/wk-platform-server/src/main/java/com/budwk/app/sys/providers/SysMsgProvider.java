@@ -1,7 +1,6 @@
 package com.budwk.app.sys.providers;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.enums.SysMsgScope;
 import com.budwk.app.sys.enums.SysMsgType;
 import com.budwk.app.sys.models.Sys_msg;
@@ -11,6 +10,7 @@ import com.budwk.app.sys.services.SysMsgUserService;
 import com.budwk.app.sys.services.SysUserService;
 import com.budwk.starter.common.exception.BaseException;
 import com.budwk.starter.websocket.publish.MessageSendServer;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author wizzer@qq.com
  */
-@Service(interfaceClass = ISysMsgProvider.class)
+@DubboService(interfaceClass = ISysMsgProvider.class)
 @IocBean
 public class SysMsgProvider implements ISysMsgProvider {
     @Inject

@@ -2,7 +2,7 @@ package com.budwk.app.cms.controllers.pub;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import com.budwk.app.sys.providers.ISysConfigProvider;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.result.Result;
@@ -34,7 +34,7 @@ public class PubFileController {
     @Inject
     private StorageServer storageServer;
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysConfigProvider sysConfigProvider;
 
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})

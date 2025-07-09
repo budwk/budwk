@@ -13,6 +13,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.IndexModel;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Sorts;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.nutz.boot.starter.mongodb.plus.ZMongoClient;
@@ -31,6 +32,7 @@ import java.util.List;
 /**
  * @author wizzer@qq.com
  */
+@DubboService(interfaceClass = ISysLogProvider.class)
 @IocBean(create = "init")
 public class SysLogProvider implements ISysLogProvider {
     @Inject

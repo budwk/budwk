@@ -1,6 +1,5 @@
 package com.budwk.app.sys.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.models.Sys_app;
 import com.budwk.app.sys.models.Sys_menu;
 import com.budwk.app.sys.models.Sys_user;
@@ -8,6 +7,7 @@ import com.budwk.app.sys.models.Sys_user_security;
 import com.budwk.app.sys.services.SysUserSecurityService;
 import com.budwk.app.sys.services.SysUserService;
 import com.budwk.starter.common.exception.BaseException;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author wizzer@qq.com
  */
-@Service(interfaceClass = ISysUserProvider.class)
+@DubboService(interfaceClass = ISysUserProvider.class)
 @IocBean
 public class SysUserProvider implements ISysUserProvider {
     @Inject

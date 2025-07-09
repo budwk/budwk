@@ -1,6 +1,6 @@
 package com.budwk.app.cms.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import com.budwk.app.cms.models.Cms_site;
 import com.budwk.app.cms.services.CmsSiteService;
 import com.budwk.starter.common.page.Pagination;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author caoshi
  */
-@Service(interfaceClass = ICmsSiteProvider.class)
+@DubboService(interfaceClass = ICmsSiteProvider.class)
 @IocBean
 public class CmsSiteProvider implements ICmsSiteProvider{
     @Inject

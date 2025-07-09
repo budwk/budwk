@@ -70,10 +70,6 @@
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-jetty</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nacos-discovery</artifactId>
-        </dependency>
         <!-- sms -->
         <dependency>
             <groupId>com.budwk.starter</groupId>

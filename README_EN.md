@@ -50,8 +50,9 @@ The framework provides both "microservice single application" and "microservice 
 
 *   JDK 11 + or OpenJDK 11 +
 *   Redis 6.x +
-*   MariaDB 10.x + or MySql 5.7, Oracle, SqlServer, DM, Kingbase, etc.
-*   Nacos 2.0.3 +
+*   MariaDB 10.x + or MySql 5.7/5.8, Oracle, SqlServer, DM, Kingbase, etc.
+*   Dubbo 3.3.5
+*   Nacos 3.0.2
 
 ## Development Tools
 *   IntelliJ IDEA

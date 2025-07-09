@@ -1,7 +1,7 @@
 package com.budwk.app.sys.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.services.SysConfigService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.util.NutMap;
@@ -9,7 +9,7 @@ import org.nutz.lang.util.NutMap;
 /**
  * @author wizzer@qq.com
  */
-@Service(interfaceClass = ISysConfigProvider.class)
+@DubboService(interfaceClass = ISysConfigProvider.class)
 @IocBean
 public class SysConfigProvider implements ISysConfigProvider {
     @Inject

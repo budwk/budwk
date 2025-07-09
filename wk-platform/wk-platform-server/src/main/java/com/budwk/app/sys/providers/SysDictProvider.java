@@ -1,8 +1,8 @@
 package com.budwk.app.sys.providers;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.budwk.app.sys.models.Sys_dict;
 import com.budwk.app.sys.services.SysDictService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author wizzer@qq.com
  */
-@Service(interfaceClass = ISysDictProvider.class)
+@DubboService(interfaceClass = ISysDictProvider.class)
 @IocBean
 public class SysDictProvider implements ISysDictProvider {
     @Inject

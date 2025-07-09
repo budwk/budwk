@@ -1,6 +1,6 @@
 package com.budwk.starter.log.logback.ansi;
 
-import org.springframework.util.Assert;
+import cn.hutool.core.lang.Assert;
 
 import java.util.Locale;
 

@@ -1,7 +1,7 @@
 package com.budwk.app.sys.controllers.sys;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.alibaba.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import com.budwk.app.sys.services.SysAppService;
 import com.budwk.starter.common.openapi.annotation.*;
 import com.budwk.starter.common.page.Pagination;
@@ -27,7 +27,7 @@ import org.nutz.mvc.annotation.*;
 @Slf4j
 public class SysLogController {
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysLogProvider sysLogProvider;
     @Inject
     private SysAppService sysAppService;

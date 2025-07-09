@@ -26,10 +26,6 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nacos-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-jetty</artifactId>
         </dependency>
         <dependency>

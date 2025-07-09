@@ -2,7 +2,7 @@ package com.budwk.app.wx.commons.service;
 
 
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import com.budwk.app.sys.providers.ISysConfigProvider;
 import com.budwk.app.wx.models.*;
 import com.budwk.app.wx.services.*;
@@ -66,7 +66,7 @@ public class WxHandler extends AbstractWxHandler {
     @Inject
     private WxService wxService;
     @Inject
-    @Reference(check = false)
+    @DubboReference(check = false)
     private ISysConfigProvider sysConfigProvider;
     @Inject
     private StorageServer storageServer;

@@ -51,8 +51,9 @@ V8 在 V7具备的API网关、组件库、认证中心、控制中心等功能�
 
 *   JDK 11 + 或 OpenJDK 11 +
 *   Redis 6.x +
-*   MariaDB 10.x + 或 MySql 5.7、Oracle、SqlServer、达梦、人大金仓等
-*   Nacos 2.0.3 +
+*   MariaDB 10.x + 或 MySql 5.7/5.8、Oracle、SqlServer、达梦、人大金仓等
+*   Dubbo 3.3.5
+*   Nacos 3.0.2
 
 ## 开发工具
 *   IntelliJ IDEA

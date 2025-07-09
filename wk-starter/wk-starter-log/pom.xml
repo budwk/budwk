@@ -24,6 +24,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>wk-starter-dubbo</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>wk-starter-web</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -41,12 +46,6 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
-        </dependency>
-        <!-- dubbo -->
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-dubbo</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

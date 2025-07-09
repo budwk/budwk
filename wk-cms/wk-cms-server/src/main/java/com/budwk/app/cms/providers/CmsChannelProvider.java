@@ -1,7 +1,7 @@
 package com.budwk.app.cms.providers;
 
 
-import com.alibaba.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import com.budwk.app.cms.models.Cms_channel;
 import com.budwk.app.cms.services.CmsChannelService;
 import com.budwk.starter.common.page.Pagination;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author caoshi
  */
-@Service(interfaceClass = ICmsChannelProvider.class)
+@DubboService(interfaceClass = ICmsChannelProvider.class)
 @IocBean
 public class CmsChannelProvider implements ICmsChannelProvider{
 
