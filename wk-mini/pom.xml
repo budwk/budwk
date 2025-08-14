@@ -39,6 +39,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/lib/kingbase8-8.6.0.jar</systemPath>
         </dependency-->
+        <dependency>
+            <groupId>com.yashandb</groupId>
+            <artifactId>yashandb-jdbc</artifactId>
+            <version>1.9.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/lib/yashandb-jdbc-1.9.5.jar</systemPath>
+        </dependency>
         <!-- PostgreSQL 驱动 -->
         <dependency>
             <groupId>org.postgresql</groupId>

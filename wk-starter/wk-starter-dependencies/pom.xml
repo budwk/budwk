@@ -17,7 +17,7 @@
     <properties>
         <budwk.version>8.5.0-SNAPSHOT</budwk.version>
         <lombok.version>1.18.18</lombok.version>
-        <nutz.version>1.r.70-SNAPSHOT</nutz.version>
+        <nutz.version>1.r.74-SNAPSHOT</nutz.version>
         <nutzmore.version>1.r.70-SNAPSHOT</nutzmore.version>
         <swagger.version>2.1.7</swagger.version>
         <yitter-idgenerator.version>1.0.6</yitter-idgenerator.version>
