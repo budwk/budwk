@@ -105,7 +105,8 @@ export const useUserInfo = defineStore('userInfo', {
             let tree:any = {}
             const obj = {}
             data.forEach((item: any) => {
-                if (item.parentId === pid && item.type === 'menu') {
+                const parentId = item.parentId || ''
+                if (parentId === pid && item.type === 'menu') {
                     let breadcrumb = item.name
                     if(pname){
                         breadcrumb = pname + "|" + breadcrumb

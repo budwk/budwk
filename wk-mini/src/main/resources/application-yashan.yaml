@@ -110,11 +110,11 @@ database:
       - com.budwk.app
 jdbc:
   driverClassName: com.yashandb.jdbc.Driver
-  url: jdbc:yasdb://192.168.6.92:1688/gas?connectTimeout=60&socketTimeout=120&loginTimeout=60
-  username: gas
+  url: jdbc:yasdb://192.168.6.92:1688/gas2?connectTimeout=60000&socketTimeout=12000&loginTimeout=6000
+  username: gas2
   password: "Tcp56789"
   validationQuery: select 1 from dual
-  maxActive: 10
+  maxActive: 20
   testWhileIdle: true
   connectionProperties: druid.stat.slowSqlMillis=2000
   defaultAutoCommit: true
