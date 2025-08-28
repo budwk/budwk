@@ -92,7 +92,11 @@ public class Wx_mass_news extends BaseModel implements Serializable {
     @Comment("排序字段")
     @Prev({
             @SQL(db = DB.MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM wx_mass_news"),
-            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM wx_mass_news")
+            @SQL(db = DB.DM_MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM wx_mass_news"),
+            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM wx_mass_news"),
+            @SQL(db = DB.YASHAN, value = "SELECT COALESCE(MAX(location),0)+1 FROM wx_mass_news"),
+            @SQL(db = DB.DM, value = "SELECT COALESCE(MAX(location),0)+1 FROM wx_mass_news"),
+            @SQL(db = DB.KINGBASE, value = "SELECT COALESCE(MAX(location),0)+1 FROM wx_mass_news")
     })
     private Integer location;
 

@@ -101,7 +101,11 @@ public class Cms_channel extends BaseModel implements Serializable {
     @Comment("排序字段")
     @Prev({
             @SQL(db = DB.MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM cms_channel"),
-            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_channel")
+            @SQL(db = DB.DM_MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM cms_channel"),
+            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_channel"),
+            @SQL(db = DB.YASHAN, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_channel"),
+            @SQL(db = DB.DM, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_channel"),
+            @SQL(db = DB.KINGBASE, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_channel")
     })
     @ApiModelProperty(description = "排序字段")
     private Integer location;

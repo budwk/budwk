@@ -127,10 +127,10 @@ quartz:
     skipUpdateCheck: true
   jobStore:
     class: org.quartz.impl.jdbcjobstore.JobStoreTX
-    driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+    #driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
     #不同数据库到适配
     #driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
-    #driverDelegateClass = org.quartz.impl.jdbcjobstore.oracle.OracleDelegate
+    driverDelegateClass: org.quartz.impl.jdbcjobstore.oracle.OracleDelegate
     dataSource: myDS                #数据源名称
     tablePrefix: SYS_QRTZ_          #表前缀
     isClustered: true               #启用集群模式

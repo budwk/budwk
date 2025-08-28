@@ -147,7 +147,11 @@ public class Sys_unit extends BaseModel implements Serializable {
     @ApiModelProperty(description = "排序字段")
     @Prev({
             @SQL(db = DB.MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM sys_unit"),
-            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM sys_unit")
+            @SQL(db = DB.DM_MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM sys_unit"),
+            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM sys_unit"),
+            @SQL(db = DB.YASHAN, value = "SELECT COALESCE(MAX(location),0)+1 FROM sys_unit"),
+            @SQL(db = DB.DM, value = "SELECT COALESCE(MAX(location),0)+1 FROM sys_unit"),
+            @SQL(db = DB.KINGBASE, value = "SELECT COALESCE(MAX(location),0)+1 FROM sys_unit")
     })
     private Integer location;
 
