@@ -71,7 +71,7 @@ dubbo:
     name: dubbo
     threads: 200
     #随机端口
-    port: 0
+    port: -1
     #默认关闭QOS服务
   application:
     qos:
