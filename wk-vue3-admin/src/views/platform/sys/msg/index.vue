@@ -3,8 +3,8 @@
         <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-radio-group v-model="queryParams.type" placeholder="消息类型" @change="typeChange">
-                    <el-radio-button :label="''">全部消息</el-radio-button>
-                    <el-radio-button :label="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}
+                    <el-radio-button :value="''">全部消息</el-radio-button>
+                    <el-radio-button :value="item.value" v-for="(item) in types" :key="item.value">{{ item.text }}
                     </el-radio-button>
                 </el-radio-group>
             </el-col>
@@ -86,7 +86,7 @@
                     <el-col :span="24">
                         <el-form-item label="发送范围" prop="scope">
                             <el-radio-group v-model="formData.scope">
-                                <el-radio-button v-for="obj in scopes" :key="obj.value" :label="obj.value">{{ obj.text
+                                <el-radio-button v-for="obj in scopes" :key="obj.value" :value="obj.value">{{ obj.text
                                 }}</el-radio-button>
                             </el-radio-group>
                             <el-tag v-if="'ALL' == formData.scope" style="margin-left:20px;">不含已被禁用用户</el-tag>

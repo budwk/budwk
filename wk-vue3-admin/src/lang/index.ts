@@ -12,7 +12,7 @@ import { useUserSettings } from '/@/stores/userSettings'
 import elementZhcnLocale from 'element-plus/es/locale/lang/zh-cn'
 import elementEnLocale from 'element-plus/es/locale/lang/en'
 
-export let i18n: I18n<{ [x: string]: any }, unknown, unknown, false>
+export let i18n: I18n
 
 interface assignLocale {
     [key: string]: any
@@ -32,14 +32,14 @@ export async function loadLang(app: App) {
     const message = lang.default ?? {}
 
     /*
-     * 0、加载页面语言包 import.meta.globEager 的路径不能使用变量
+     * 0、加载页面语言包 import.meta.glob 的路径不能使用变量
      * 1、vue3 setup 内只能使用 useI18n({messages:{}}) 来动态载入当前页面单独的语言包，不方便使用
      * 2、直接载入所有 /@/lang/pages/语言/*.ts 文件，若某页面有特别大量的语言配置，可在其他位置单独建立语言包文件，并在对应页面加载语言包
      */
     if (locale == 'zh-cn') {
-        assignLocale[locale].push(getLangFileMessage(import.meta.globEager('./pages/zh-cn/**/*.ts'), locale))
+        assignLocale[locale].push(getLangFileMessage(import.meta.glob('./pages/zh-cn/**/*.ts', { eager: true }), locale))
     } else if (locale == 'en') {
-        assignLocale[locale].push(getLangFileMessage(import.meta.globEager('./pages/en/**/*.ts'), locale))
+        assignLocale[locale].push(getLangFileMessage(import.meta.glob('./pages/en/**/*.ts', { eager: true }), locale))
     }
 
     const messages = {

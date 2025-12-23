@@ -50,6 +50,12 @@ const viteConfig = ({ mode }: ConfigEnv): UserConfig => {
             chunkSizeWarningLimit: 1500
         },
         css: {
+            preprocessorOptions: {
+                scss: {
+                    api: 'modern-compiler',
+                    silenceDeprecations: ['legacy-js-api', 'import'],
+                },
+            },
             postcss: {
                 plugins: [
                     {

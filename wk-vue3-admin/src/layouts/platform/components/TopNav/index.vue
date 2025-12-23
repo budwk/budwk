@@ -31,13 +31,16 @@ const setVisibleWdith = () =>{
     const width : number = document.body.getBoundingClientRect().width
     visibleWidth.value = parseInt(width/2)+'px'
 }
+
+const route = useRoute()
 // 默认激活的菜单
 const activeMenu = computed(() => {
-    const { meta, path } = useRoute()
-    if (meta.activeMenu) {
+    if (!route) return '0'
+    const { meta, path } = route
+    if (meta?.activeMenu) {
         return meta.activeMenu
     }
-    if (meta.tree) {
+    if (meta?.tree) {
         return meta.tree
     }
     return '0'

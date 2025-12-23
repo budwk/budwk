@@ -33,7 +33,8 @@ import AppLink from './Link.vue'
 import { ref } from 'vue'
 import { isExternal, getNormalPath } from '/@/utils/common' 
 import { useRoute } from 'vue-router'
-const { path } = useRoute()
+const route = useRoute()
+const path = route?.path || ''
 
 const props = defineProps({
     // route object

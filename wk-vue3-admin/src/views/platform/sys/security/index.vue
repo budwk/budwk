@@ -65,9 +65,9 @@
                     <el-col :span="24">
                         <el-form-item label="密码中不能包含的用户信息">
                             <el-checkbox-group v-model="pwdCharNot">
-                                <el-checkbox label="loginname">用户名</el-checkbox>
-                                <el-checkbox label="email">电子邮箱</el-checkbox>
-                                <el-checkbox label="mobile">手机号吗</el-checkbox>
+                                <el-checkbox value="loginname">用户名</el-checkbox>
+                                <el-checkbox value="email">电子邮箱</el-checkbox>
+                                <el-checkbox value="mobile">手机号吗</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
                     </el-col>

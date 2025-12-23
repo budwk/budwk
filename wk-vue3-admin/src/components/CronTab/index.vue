@@ -65,34 +65,38 @@
           <p class="title">时间表达式</p>
           <table>
             <thead>
-              <th v-for="item of tabTitles" width="40" :key="item">{{item}}</th>
-              <th>crontab完整表达式</th>
+              <tr>
+                <th v-for="item of tabTitles" width="40" :key="item">{{item}}</th>
+                <th>crontab完整表达式</th>
+              </tr>
             </thead>
             <tbody>
-              <td>
-                <span>{{contabValueObj.second}}</span>
-              </td>
-              <td>
-                <span>{{contabValueObj.min}}</span>
-              </td>
-              <td>
-                <span>{{contabValueObj.hour}}</span>
-              </td>
-              <td>
-                <span>{{contabValueObj.day}}</span>
-              </td>
-              <td>
-                <span>{{contabValueObj.mouth}}</span>
-              </td>
-              <td>
-                <span>{{contabValueObj.week}}</span>
-              </td>
-              <td>
-                <span>{{contabValueObj.year}}</span>
-              </td>
-              <td>
-                <span>{{contabValueString}}</span>
-              </td>
+              <tr>
+                <td>
+                  <span>{{contabValueObj.second}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueObj.min}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueObj.hour}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueObj.day}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueObj.mouth}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueObj.week}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueObj.year}}</span>
+                </td>
+                <td>
+                  <span>{{contabValueString}}</span>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

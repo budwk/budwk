@@ -39,8 +39,10 @@ const themeColor = computed(() =>  useUserSettings().themeColor)
 const sidebarHide = computed(() =>  useClient().sidebar.hide)
 const isCollapse = computed(() => !useClient().sidebar.opened)
 
+const route = useRoute()
 const activeMenu = computed(() => {
-    const { meta, path } = useRoute()
-    return meta.activeMenu || path
+    if (!route) return ''
+    const { meta, path } = route
+    return meta?.activeMenu || path
 })
 </script>

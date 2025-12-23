@@ -18,7 +18,10 @@ const router = useRouter()
 const levelList = ref([])
 const home = process.env.BASE_APP_HOME_PATH  
 function getBreadcrumb() {
-    const name = route && route.name?.toString()
+    if (!route) {
+        return
+    }
+    const name = route.name?.toString()
     if (!name) {
         return
     }
@@ -26,7 +29,7 @@ function getBreadcrumb() {
         levelList.value = []
         return
     } else if(name.trim().indexOf('dashboard') > 0){
-        levelList.value = [route.meta.breadcrumb]
+        levelList.value = [route.meta?.breadcrumb]
         return
     }
     if(route.meta && route.meta.breadcrumb && route.meta.breadcrumb.indexOf('|') > 0) {
@@ -45,7 +48,7 @@ function handleLink(item: any) {
 }
   
 watchEffect(() => {
-    if (route.path.startsWith('/redirect/')) {
+    if (!route || route.path?.startsWith('/redirect/')) {
         return
     }
     getBreadcrumb()
