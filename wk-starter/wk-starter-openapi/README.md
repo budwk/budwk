@@ -34,6 +34,41 @@ openapi:
       required: true
 ```
 
+## MCP 协议支持
+
+从 v8.5.0 开始,本组件支持 Model Context Protocol (MCP),允许 AI 应用通过标准化接口访问 API。
+
+### MCP 配置
+
+```yaml
+openapi:
+  enable: true
+  mcp:
+    # 是否启用 MCP 协议
+    enable: true
+    # MCP 服务器名称
+    name: "BudWk API Server"
+    # MCP 服务器版本
+    version: "1.0.0"
+```
+
+### MCP 端点
+
+启用 MCP 后,将在以下端点提供服务:
+
+- `POST /mcp` - MCP JSON-RPC 2.0 接口
+- `GET /mcp` - 服务状态检查
+
+### MCP 功能
+
+MCP 服务器提供三种主要能力:
+
+1. **Tools (工具)**: 将 API 操作暴露为 AI 可调用的工具
+2. **Resources (资源)**: 提供 API 文档作为上下文数据
+3. **Prompts (提示)**: 提供 API 使用指南模板
+
+详细使用说明请参考 MCP 官方文档: https://modelcontextprotocol.io
+
 ## 注解说明
 
 * [权限注解] 复用 sa-token 的注解,来生成接口权限说明

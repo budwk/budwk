@@ -14,6 +14,13 @@ jetty:
   staticPath: /data/files
 openapi:
   enable: true
+  mcp:
+    # 是否启用 MCP 协议
+    enable: true
+    # MCP 服务器名称
+    name: "BudWk API Server"
+    # MCP 服务器版本
+    version: "1.0.0"
   scanner:
     package: com.budwk.app
   info:
