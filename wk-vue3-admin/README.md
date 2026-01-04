@@ -4,6 +4,8 @@
 
 # 编译
 
+Node.js v22
+
 ## dev
 `npm install pnpm`
 
@@ -42,9 +44,8 @@
 
 ## 页面布局
 
+配置文件
+
 ```
-<route lang="yaml">
-    meta:
-      layout: platform/index
-</route>
+/plugins/pages.ts
 ```

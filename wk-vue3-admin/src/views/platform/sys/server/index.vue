@@ -239,11 +239,7 @@ onMounted(() => {
     initData()
 })
 </script>
-<!--定义布局-->
-<route lang="yaml">
-    meta:
-      layout: platform/index
-</route>
+
 <style scoped>
 .is-leaf {
     text-align: left;

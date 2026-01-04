@@ -399,11 +399,7 @@ const update = () => {
 
 
 </script>
-<!--定义布局-->
-<route lang="yaml">
-    meta:
-      layout: platform/index
-</route>
+
 <style scoped>
 .table-col-center {
     text-align: center;
