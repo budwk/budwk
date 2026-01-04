@@ -37,6 +37,7 @@ gateway:
 
 nacos:
   discovery:
+    enable: true
     server-addr: 10.10.10.3:8848
     namespace: dev
     username: nacos
