@@ -7,6 +7,16 @@ interface Window {
     eventSource: EventSource
 }
 
+// Vue 全局属性类型声明
+declare module 'vue' {
+    interface ComponentCustomProperties {
+        formatTime: (dateTime?: string | number | null, fmt?: string) => string
+        formatDate: (dateTime?: string | number | null, fmt?: string) => string
+        findOneValue: (list: any[], key: string, keyVal: any, valKey: string) => any
+        formatField: (data: any, field: string, defaultVal?: string) => string
+    }
+}
+
 interface anyObj {
     [key: string]: any
 }
