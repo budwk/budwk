@@ -47,7 +47,7 @@ public class WebSocketHandler extends AbstractWsHandler implements MessageHandle
         for (Object str : rooms.toArray()) {
             String room = String.valueOf(str);
             int index = room.lastIndexOf(":");
-            left(room.substring(0, index), room.substring(index + 1));
+            left(room.substring(RedisConstant.WS_ROOM.length(), index), room.substring(index + 1));
         }
     }
 }
