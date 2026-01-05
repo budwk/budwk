@@ -60,22 +60,36 @@ public abstract class AbstractWsEndpoint {
     public void onOpen(Session session, EndpointConfig config) {
         changeSessionId(session);
         String wsid = session.getId();
+
+        // 检查 HttpSession 是否存在
+        HttpSession httpSession = (HttpSession) config.getUserProperties().get("HttpSession");
+        if (httpSession == null) {
+            log.warn(String.format("WebSocket onOpen - HttpSession is NULL for wsid: %s. " +
+                    "This may cause the WebSocket connection to disconnect unexpectedly. " +
+                    "Please ensure HttpSessionInitializer is properly configured.", wsid));
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("WebSocket onOpen - wsid: %s, HttpSession ID: %s",
+                        wsid, httpSession.getId()));
+            }
+        }
+
         WsHandler handler = createHandler(session, config);
         handler.setRoomProvider(roomProvider);
         handler.setSession(session);
-        handler.setHttpSession((HttpSession) config.getUserProperties().get("HttpSession"));
+        handler.setHttpSession(httpSession);
         handler.setEndpoint(this);
         handler.init();
         if (!isUndertowSession(session))
             try {
                 session.addMessageHandler(handler);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 log.debug("skip addMessageHandler");
             }
         sessions.put(wsid, session);
         handlers.put(wsid, handler);
     }
+
     @OnOpen
     public void _onOpen(Session session, EndpointConfig config) {
         onOpen(session, config);
@@ -85,11 +99,21 @@ public abstract class AbstractWsEndpoint {
      * WebSocket会话关闭是调用本方法,通常是用户关闭浏览器. 移除session相关的资源
      */
     public void onClose(Session session, CloseReason closeReason) {
-        sessions.remove(session.getId());
-        WsHandler handler = handlers.remove(session.getId());
-        if (handler != null)
+        String wsid = session.getId();
+        if (log.isInfoEnabled()) {
+            log.info(String.format("WebSocket onClose triggered - wsid: %s, closeCode: %s, reason: %s",
+                    wsid,
+                    closeReason != null ? closeReason.getCloseCode() : "null",
+                    closeReason != null ? closeReason.getReasonPhrase() : "null"));
+        }
+
+        sessions.remove(wsid);
+        WsHandler handler = handlers.remove(wsid);
+        if (handler != null) {
             handler.depose();
+        }
     }
+
     @OnClose
     public void _onClose(Session session, CloseReason closeReason) {
         onClose(session, closeReason);
@@ -99,19 +123,27 @@ public abstract class AbstractWsEndpoint {
      * WebSocket会话出错时调用,默认调用onClose.
      */
     public void onError(Session session, Throwable throwable) {
+        if (log.isErrorEnabled()) {
+            log.error(String.format("WebSocket onError triggered - wsid: %s, error: %s",
+                            session.getId(),
+                            throwable != null ? throwable.getMessage() : "null"),
+                    throwable);
+        }
         onClose(session, null);
     }
+
     @OnError
     public void _onError(Session session, Throwable throwable) {
         onError(session, throwable);
     }
-    
+
     public void onMesssageString(Session session, String msg) {
         WsHandler handler = getHandler(session.getId());
         if (handler != null) {
             handler.onMessage(msg);
         }
     }
+
     @OnMessage
     public void _onMesssageString(Session session, String msg) {
         onMesssageString(session, msg);
@@ -131,8 +163,7 @@ public abstract class AbstractWsEndpoint {
                 idField.setAccessible(true);
             }
             idField.set(session, R.UU32());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.debug("change session id fail. " + e.getMessage());
         }
     }
@@ -147,9 +178,9 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 返回一个活跃的WebSocket Session对象
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      * @return 如果该wsid存在且处于活跃状态,返回session实例,否则返回null
      */
     public Session getSession(String wsid) {
@@ -158,11 +189,11 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 根据wsid获取一个Session对象.
-     * 
+     *
      * @param wsid
-     *            session的id
+     *               session的id
      * @param opened
-     *            是否检查活跃状态
+     *               是否检查活跃状态
      */
     public Session getSession(String wsid, boolean opened) {
         Session session = sessions.get(wsid);
@@ -175,9 +206,9 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 根据wsid获取其WsHandler实例
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      */
     public WsHandler getHandler(String wsid) {
         return handlers.get(wsid);
@@ -185,11 +216,11 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 异步非阻塞发送文本信息到指定的WebSocket Session
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      * @param text
-     *            文本信息
+     *             文本信息
      * @return session存活即返回true
      */
     public boolean sendText(String wsid, CharSequence text) {
@@ -202,11 +233,11 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * sendText的同步阻塞版本
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      * @param text
-     *            文本信息
+     *             文本信息
      * @return session存活且发送成功,返回true,否则返回false
      */
     public boolean sendTextSync(String wsid, CharSequence text) {
@@ -215,8 +246,7 @@ public abstract class AbstractWsEndpoint {
             return false;
         try {
             session.getBasicRemote().sendText(text.toString());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return false;
         }
         return true;
@@ -224,11 +254,11 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 异步非阻塞发送文本信息到指定的WebSocket Session
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      * @param msg
-     *            将转换为Json字符串的对象
+     *             将转换为Json字符串的对象
      * @return session存活即返回true
      */
     public boolean sendJson(String wsid, Object msg) {
@@ -241,11 +271,11 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * sendJson的同步阻塞版本
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      * @param msg
-     *            将转换为Json字符串的对象
+     *             将转换为Json字符串的对象
      * @return session存活且发送成功,返回true,否则返回false
      */
     public boolean sendJsonSync(String wsid, Object msg) {
@@ -254,8 +284,7 @@ public abstract class AbstractWsEndpoint {
             return false;
         try {
             session.getBasicRemote().sendText(Json.toJson(msg, JsonFormat.full()));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return false;
         }
         return true;
@@ -263,7 +292,7 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 把byte[]/InputStream/ByteBuffer转换为ByteBuffer,其他类型的实例将toString()然后转byte[]再封装为ByteBuffer
-     * 
+     *
      * @param msg
      *            byte[]/InputStream/ByteBuffer等对象
      * @return
@@ -285,11 +314,11 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 异步非阻塞发送一段二进制数据到指定的WebSocket Session
-     * 
+     *
      * @param wsid
-     *            session的id
+     *             session的id
      * @param msg
-     *            byte[]/InputStream/ByteBuffer等
+     *             byte[]/InputStream/ByteBuffer等
      * @return session存活且msg不是null,返回true,否则返回false
      */
     public boolean sendBinary(String wsid, Object msg) {
@@ -315,8 +344,7 @@ public abstract class AbstractWsEndpoint {
             return false;
         try {
             session.getBasicRemote().sendBinary(buf);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return false;
         }
         return true;
@@ -324,7 +352,7 @@ public abstract class AbstractWsEndpoint {
 
     /**
      * 按房间遍历活跃的session对象
-     * 
+     *
      * @param room
      * @param callback
      */
@@ -359,7 +387,7 @@ public abstract class AbstractWsEndpoint {
     public void setRoomPrefix(String roomPrefix) {
         this.roomPrefix = roomPrefix;
     }
-    
+
     public boolean isUndertowSession(Session session) {
         return session.getClass().getName().equals("io.undertow.websockets.jsr.UndertowSession");
     }

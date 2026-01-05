@@ -43,8 +43,6 @@ public class RedisMessagePubSub implements PubSub {
     public void onMessage(String room, String message) {
         log.debug("WkWebSocket GET PubSub room={} msg={}", room, message);
         Set<String> wsids = roomProvider.wsids(room);
-        log.debug(room);
-        log.debug(Json.toJson(wsids));
         if (wsids != null && !wsids.isEmpty()) {
             String[] tmp = wsids.toArray(new String[wsids.size()]);
             Lang.each(tmp, new Each<String>() {

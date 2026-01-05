@@ -14,6 +14,14 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-jetty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutzboot-starter-nutz-mvc</artifactId>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>wk-starter-common</artifactId>
         </dependency>
@@ -29,14 +37,6 @@
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutzboot-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-nutz-mvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-jetty</artifactId>
         </dependency>
         <!-- rabbitmq -->
         <dependency>
