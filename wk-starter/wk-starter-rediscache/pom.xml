@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.budwk</groupId>
         <artifactId>wk-starter</artifactId>
-        <version>8.5.0-SNAPSHOT</version>
+        <version>8.6.0-SNAPSHOT</version>
     </parent>
 
     <groupId>com.budwk.starter</groupId>
